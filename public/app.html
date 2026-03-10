@@ -177,7 +177,7 @@
       font-size: 0.18em; font-weight: 400;
       font-family: var(--mono);
       letter-spacing: 0.05em;
-      margin-top: 0.5rem;
+      margin-top: 1.2rem;
     }
     .change.up { color: var(--green); }
     .change.down { color: var(--red); }
@@ -917,6 +917,36 @@
       .freq-tab, .chart-tab, .cat-tab { min-height: 44px; }
     }
   </style>
+  <!-- OneSignal Web Push SDK -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: '528df914-2cb6-4e5b-af01-3c849ce8e393',
+        safari_web_id: '',
+        notifyButton: { enable: false }, // we use our own button
+        allowLocalhostAsSecureOrigin: true,
+      });
+
+      // Update button state based on current permission
+      async function updatePushBtn() {
+        const btn = document.getElementById('push-btn');
+        if (!btn) return;
+        const permission = await OneSignal.Notifications.permission;
+        if (permission) {
+          btn.textContent = '✓ Alerts enabled';
+          btn.style.opacity = '0.6';
+          btn.disabled = true;
+        }
+      }
+
+      await updatePushBtn();
+
+      // Listen for permission change
+      OneSignal.Notifications.addEventListener('permissionChange', updatePushBtn);
+    });
+  </script>
 </head>
 <body>
 
@@ -1134,7 +1164,7 @@
       <!-- Header: habit label + big number -->
       <div class="whatif-result-header">
         <p class="whatif-selected-label" id="whatif-selected-label">—</p>
-        <p class="whatif-headline">If you'd put that into Bitcoin weekly since 2015, you'd have</p>
+        <p class="whatif-headline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
         <div class="whatif-big-number" id="whatif-btc-value">—</div>
         <p class="whatif-big-sub">today — instead of nothing</p>
       </div>
@@ -1168,12 +1198,12 @@
       <!-- 4 key stats -->
       <div class="whatif-stats-grid">
         <div class="whatif-stat">
-          <p class="whatif-stat-label">Weekly amount</p>
-          <div class="whatif-stat-value" id="whatif-weekly">—</div>
-        </div>
-        <div class="whatif-stat">
           <p class="whatif-stat-label">Monthly amount</p>
           <div class="whatif-stat-value" id="whatif-monthly">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Total invested</p>
+          <div class="whatif-stat-value" id="whatif-invested">—</div>
         </div>
         <div class="whatif-stat">
           <p class="whatif-stat-label">Total gain</p>
@@ -1236,11 +1266,11 @@
   <div class="section-inner">
     <div class="push-inner reveal">
       <div class="push-left">
-        <p class="section-label">Get Alerted</p>
-        <h2 class="push-title">Know <em>exactly</em> when<br>the signal changes.</h2>
-        <p class="push-sub">Add this page to your home screen, then enable push alerts. We'll notify you when the signal shifts — so you don't have to keep checking.</p>
+        <p class="section-label">Alerts</p>
+        <h2 class="push-title">The signal, <em>the moment</em><br>it changes.</h2>
+        <p class="push-sub">Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.</p>
         <button class="btn-primary" id="push-btn" onclick="requestPush()">Enable Alerts</button>
-        <p style="font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; color: var(--grey); margin-top: 1rem;">First add to home screen · Then enable alerts · No email needed</p>
+        <p style="font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; color: var(--grey); margin-top: 1rem;">Free · No account needed · Turn off anytime</p>
       </div>
       <div class="push-mockup">
         <div class="push-notification">
@@ -1679,11 +1709,50 @@
 
   // ── WHAT IF CALCULATOR ──
   // Historical BTC weekly average prices in EUR (approximate yearly averages)
-  const BTC_YEARLY_EUR = {
-    2015: 280, 2016: 580, 2017: 4200, 2018: 6800,
-    2019: 7500, 2020: 11500, 2021: 42000, 2022: 28000,
-    2023: 27000, 2024: 57000, 2025: 72000
+  // Monthly BTC prices in EUR — fetched from /api/btc-history-monthly (auto-updates forever)
+  // Fallback hardcoded table used if API is unavailable
+  const BTC_MONTHLY_FALLBACK = {
+    '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
+    '2015-07':268,'2015-08':263,'2015-09':211,'2015-10':267,'2015-11':313,'2015-12':384,
+    '2016-01':378,'2016-02':355,'2016-03':388,'2016-04':395,'2016-05':433,'2016-06':568,
+    '2016-07':580,'2016-08':510,'2016-09':518,'2016-10':533,'2016-11':611,'2016-12':713,
+    '2017-01':795,'2017-02':897,'2017-03':940,'2017-04':1080,'2017-05':1630,'2017-06':2220,
+    '2017-07':1970,'2017-08':3250,'2017-09':3050,'2017-10':4400,'2017-11':6500,'2017-12':12800,
+    '2018-01':10200,'2018-02':7200,'2018-03':6700,'2018-04':6800,'2018-05':6700,'2018-06':5600,
+    '2018-07':5800,'2018-08':5500,'2018-09':5400,'2018-10':5500,'2018-11':3800,'2018-12':2950,
+    '2019-01':2900,'2019-02':3100,'2019-03':3300,'2019-04':4200,'2019-05':6500,'2019-06':9500,
+    '2019-07':8600,'2019-08':8900,'2019-09':7700,'2019-10':7400,'2019-11':6700,'2019-12':6300,
+    '2020-01':7500,'2020-02':8300,'2020-03':5200,'2020-04':6500,'2020-05':8100,'2020-06':8500,
+    '2020-07':9000,'2020-08':10500,'2020-09':9600,'2020-10':10800,'2020-11':14800,'2020-12':20500,
+    '2021-01':27000,'2021-02':38000,'2021-03':46000,'2021-04':47000,'2021-05':39000,'2021-06':28000,
+    '2021-07':26000,'2021-08':37000,'2021-09':36000,'2021-10':47000,'2021-11':51000,'2021-12':41000,
+    '2022-01':35000,'2022-02':33000,'2022-03':35000,'2022-04':36000,'2022-05':26000,'2022-06':18000,
+    '2022-07':18500,'2022-08':19000,'2022-09':17500,'2022-10':17000,'2022-11':14500,'2022-12':13500,
+    '2023-01':17500,'2023-02':20500,'2023-03':23000,'2023-04':24500,'2023-05':23500,'2023-06':22000,
+    '2023-07':25500,'2023-08':24000,'2023-09':23500,'2023-10':24000,'2023-11':30000,'2023-12':37000,
+    '2024-01':37000,'2024-02':43000,'2024-03':56000,'2024-04':54000,'2024-05':55000,'2024-06':55000,
+    '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
+    '2025-01':85000,'2025-02':77000,'2025-03':75000,'2025-04':74000,'2025-05':82000,'2025-06':84000,
+    '2025-07':88000,'2025-08':91000,'2025-09':86000,'2025-10':82000,'2025-11':78000,'2025-12':81000,
+    '2026-01':82000,'2026-02':72000,'2026-03':61000,
   };
+
+  // Loaded at init, updated from API
+  let BTC_MONTHLY_EUR = { ...BTC_MONTHLY_FALLBACK };
+
+  async function fetchMonthlyPrices() {
+    try {
+      const res = await fetch('/api/btc-history-monthly');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (data.monthly && Object.keys(data.monthly).length > 100) {
+        BTC_MONTHLY_EUR = data.monthly;
+        console.log(`Monthly prices loaded: ${Object.keys(BTC_MONTHLY_EUR).length} months (${data.source})`);
+      }
+    } catch (e) {
+      console.warn('Monthly prices API unavailable, using fallback table');
+    }
+  }
 
   // All amounts in monthly EUR
   const HABITS = {
@@ -1704,40 +1773,48 @@
 
     const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
-    const price = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
-    const weekly = Math.round(habit.monthly / 4.33);
+    const livePrice = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
 
-    const startYear = 2015;
-    const currentYear = new Date().getFullYear();
+    // True monthly DCA: iterate every month, buy at that month's actual price
     let totalInvested = 0;
     let totalBTC = 0;
+
+    // For chart: one data point per year (end-of-year snapshot)
     const chartLabels = [];
     const chartValues = [];
     const chartInvested = [];
+    let lastYear = null;
 
-    for (let year = startYear; year <= currentYear; year++) {
-      const btcPriceThisYear = BTC_YEARLY_EUR[year] || price;
-      const monthsThisYear = year === currentYear
-        ? Math.max(1, new Date().getMonth() + 1)
-        : 12;
-      totalInvested += habit.monthly * monthsThisYear;
-      totalBTC += (habit.monthly * monthsThisYear) / btcPriceThisYear;
+    for (const [monthKey, rawPrice] of Object.entries(BTC_MONTHLY_EUR)) {
+      const monthPrice = (rawPrice == null) ? livePrice : rawPrice;
+      const [yearStr] = monthKey.split('-');
+      const year = parseInt(yearStr);
 
-      // Show value at that year's BTC price (realistic), current year uses live price
-      const displayPrice = year === currentYear ? price : btcPriceThisYear;
-      chartLabels.push(year);
-      chartValues.push(Math.round(totalBTC * displayPrice));
-      chartInvested.push(Math.round(totalInvested));
+      totalInvested += habit.monthly;
+      totalBTC += habit.monthly / monthPrice;
+
+      // Push a chart point at year-end (or the last available month)
+      const isLastMonth = monthKey === Object.keys(BTC_MONTHLY_EUR).at(-1);
+      const nextKey = Object.keys(BTC_MONTHLY_EUR)[Object.keys(BTC_MONTHLY_EUR).indexOf(monthKey) + 1];
+      const nextYear = nextKey ? parseInt(nextKey.split('-')[0]) : null;
+
+      if (nextYear !== year || isLastMonth) {
+        // Use the last month's price for that year's display (year-end snapshot)
+        // Final point always uses live price so it matches the headline number
+        const displayPrice = isLastMonth ? livePrice : monthPrice;
+        chartLabels.push(year);
+        chartValues.push(Math.round(totalBTC * displayPrice));
+        chartInvested.push(Math.round(totalInvested));
+      }
     }
 
-    const valueToday = totalBTC * price;
+    const valueToday = totalBTC * livePrice;
     const gain = valueToday - totalInvested;
     const returnPct = ((valueToday - totalInvested) / totalInvested) * 100;
     const fmt = n => sym + Math.round(n).toLocaleString();
 
     document.getElementById('whatif-selected-label').textContent = habit.label.toUpperCase();
     document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
-    document.getElementById('whatif-weekly').textContent = sym + weekly;
     document.getElementById('whatif-monthly').textContent = sym + habit.monthly;
     document.getElementById('whatif-invested').textContent = fmt(totalInvested);
     document.getElementById('whatif-today').textContent = fmt(valueToday);
@@ -1880,18 +1957,40 @@
   }
 
   // ── PUSH ──
-  function requestPush() {
-    if (!('Notification' in window)) {
-      alert('Push notifications are not supported in this browser.');
+  async function requestPush() {
+    const btn = document.getElementById('push-btn');
+    if (!window.OneSignalDeferred) {
+      alert('Push notifications failed to load. Please try again.');
       return;
     }
-    Notification.requestPermission().then(perm => {
-      if (perm === 'granted') {
-        document.getElementById('push-btn').textContent = '✓ Alerts enabled';
-        document.getElementById('push-btn').style.opacity = '0.6';
-        document.getElementById('push-btn').disabled = true;
+    try {
+      btn.textContent = 'Enabling…';
+      btn.disabled = true;
+      await OneSignal.Notifications.requestPermission();
+      const granted = await OneSignal.Notifications.permission;
+      if (granted) {
+        // Tag the subscriber with their language so server can send localised pushes
+        await OneSignal.User.addTag('lang', currentLang);
+        btn.textContent = '✓ Alerts enabled';
+        btn.style.opacity = '0.6';
+      } else {
+        btn.textContent = 'Enable Alerts';
+        btn.disabled = false;
       }
-    });
+    } catch (e) {
+      console.error('OneSignal error:', e);
+      btn.textContent = 'Enable Alerts';
+      btn.disabled = false;
+    }
+  }
+
+  // If language is changed after subscribing, update the tag
+  const _origSetLang = setLang;
+  function setLang(lang) {
+    _origSetLang(lang);
+    if (window.OneSignal?.User) {
+      OneSignal.User.addTag('lang', lang).catch(() => {});
+    }
   }
 
   // ── SCROLL PROGRESS ──
@@ -1920,6 +2019,7 @@
   async function init() {
     await detectCurrency();
     await fetchPrice();
+    fetchMonthlyPrices(); // non-blocking — fallback table used instantly, API updates in background
     await fetchFearGreed();
     await fetchATH();
     await fetch200MA();
