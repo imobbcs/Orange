@@ -6,8 +6,11 @@
   <title>When to Buy BTC — Bitcoin Signal for Long-Term Thinkers</title>
   <meta name="description" content="A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice." />
   <meta name="keywords" content="when to buy bitcoin, bitcoin signal, bitcoin fear and greed, bitcoin 200 day average, bitcoin DCA, long term bitcoin" />
-  <meta name="author" content="whentobuybtc.xyz" />
+  <meta name="author" content="Imo Babics" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#080808" />
   <link rel="canonical" href="https://whentobuybtc.xyz/" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23080808'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='Arial' font-size='20' fill='%23F7931A'>&#x20BF;</text></svg>" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -32,13 +35,50 @@
     "description": "A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day moving average, and ATH distance into one clear signal.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "creator": {
+      "@type": "Person",
+      "name": "Imo Babics",
+      "url": "https://imobabics.com"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "When is the right time to buy Bitcoin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The signal combines three indicators: the Fear & Greed Index, Bitcoin's price relative to its 200-day moving average, and the distance from all-time high. When all three align in fear/below-average/deep-drawdown territory, conditions have historically been favourable for long-term accumulation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Bitcoin Fear & Greed Index?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Fear & Greed Index measures market sentiment on a scale of 0–100. Extreme Fear (0–25) has historically correlated with buying opportunities. Extreme Greed (75–100) has correlated with elevated risk."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Bitcoin 200-day moving average?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The 200-day moving average is the average Bitcoin price over the last 200 days. When price is below this line, Bitcoin is in a longer-term downtrend — historically one of the better times to accumulate."
+        }
+      }
+    ]
   }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;700;800&family=DM+Mono:wght@400&family=Lora:ital@1&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #080808;
@@ -270,10 +310,17 @@
       letter-spacing: 0.15em; color: var(--grey);
       text-transform: uppercase;
       animation: bounce 2s ease infinite;
+      opacity: 0.6;
+    }
+    .scroll-hint.hide {
+      animation: fadeOutHint 0.5s ease forwards;
     }
     @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+      50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+    }
+    @keyframes fadeOutHint {
+      to { opacity: 0; pointer-events: none; }
     }
 
     /* ── SIGNAL CARDS ── */
@@ -682,7 +729,6 @@
       justify-content: space-between; gap: 3rem;
       position: relative; z-index: 1;
     }
-    .relai-left {}
     .relai-eyebrow {
       font-family: var(--mono); font-size: 0.62rem;
       letter-spacing: 0.2em; text-transform: uppercase;
@@ -755,52 +801,6 @@
 
 
 
-    /* ── BLOG ── */
-    .blog-section { padding: 5rem 2rem; }
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-    .blog-card {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      padding: 1.75rem;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-decoration: none;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .blog-card:hover { border-color: var(--orange); transform: translateY(-2px); }
-    .blog-cat {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--orange);
-    }
-    .blog-card-title {
-      font-family: 'Lora', serif;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      color: var(--white);
-    }
-    .blog-card-excerpt {
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--grey);
-      flex: 1;
-    }
-    .blog-read {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--orange);
-    }
-
     /* ── FOOTER ── */
     footer {
       background: var(--bg);
@@ -838,8 +838,9 @@
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
       .nav-logo { font-size: 0.75rem; }
-      .nav-right { gap: 0.75rem; }
+      .nav-right { gap: 0.5rem; }
       .nav-cta { display: none; } /* hide nav CTA on mobile, rely on Relai section */
+      .lang-btn { padding: 0.25rem 0.4rem; font-size: 0.6rem; }
 
       .section { padding: 3.5rem 1.25rem; }
       .section-title { font-size: clamp(1.5rem, 6vw, 2.2rem); }
@@ -894,9 +895,7 @@
       /* Footer */
       footer { flex-direction: column; gap: 1rem; padding: 1.5rem 1.25rem; }
 
-      /* Blog */
-      .blog-grid { grid-template-columns: 1fr; }
-      .blog-section { padding: 3rem 1.25rem; }
+
 
       /* What If */
       .habit-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
@@ -924,27 +923,34 @@
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
         appId: '528df914-2cb6-4e5b-af01-3c849ce8e393',
-        safari_web_id: '',
-        notifyButton: { enable: false }, // we use our own button
+        notifyButton: { enable: false },
         allowLocalhostAsSecureOrigin: true,
       });
 
-      // Update button state based on current permission
-      async function updatePushBtn() {
+      // Store reference globally so requestPush() can access it
+      window._OneSignal = OneSignal;
+
+      // Update button if already subscribed
+      const permission = await OneSignal.Notifications.permission;
+      const btn = document.getElementById('push-btn');
+      if (btn && permission) {
+        btn.textContent = '✓ Alerts enabled';
+        btn.style.opacity = '0.6';
+        btn.disabled = true;
+      }
+
+      OneSignal.Notifications.addEventListener('permissionChange', async (granted) => {
         const btn = document.getElementById('push-btn');
         if (!btn) return;
-        const permission = await OneSignal.Notifications.permission;
-        if (permission) {
+        if (granted) {
           btn.textContent = '✓ Alerts enabled';
           btn.style.opacity = '0.6';
           btn.disabled = true;
+        } else {
+          btn.textContent = 'Enable Alerts';
+          btn.disabled = false;
         }
-      }
-
-      await updatePushBtn();
-
-      // Listen for permission change
-      OneSignal.Notifications.addEventListener('permissionChange', updatePushBtn);
+      });
     });
   </script>
 </head>
@@ -960,7 +966,7 @@
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
       <button class="lang-btn" onclick="setLang('de')">DE</button>
     </div>
-    <a href="https://relai.me/imo" class="nav-cta" target="_blank">Buy on Relai →</a>
+    <a href="https://relai.me/imo" class="nav-cta" target="_blank">Buy on Relai · <span style="color:var(--orange);font-weight:700;">IMO</span></a>
   </div>
 </nav>
 
@@ -979,6 +985,7 @@
       <div class="signal-dot"></div>
       <span class="signal-text" id="signal-text">Most Bitcoiners are buying</span>
     </div>
+    <p id="signal-updated" style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;color:var(--grey);margin-top:0.75rem;text-align:center;">Loading…</p>
   </div>
 
   <p class="signal-reason" id="signal-reason">
@@ -1036,7 +1043,10 @@
       <!-- 200-day MA -->
       <div class="signal-card">
         <p class="signal-card-label">vs. 200-Day Average</p>
-        <div class="signal-card-value" id="ma-value" style="color: var(--green);">—</div>
+        <div style="display:flex;align-items:baseline;gap:0.5rem;">
+          <div class="signal-card-value" id="ma-value" style="color: var(--green);">—</div>
+          <span id="ma-arrow" style="font-size:1.2rem;line-height:1;color:var(--green);"></span>
+        </div>
         <p class="signal-card-desc" id="ma-desc">Loading price data...</p>
         <div class="signal-card-bar" style="margin-top: 1.5rem;">
           <div class="signal-card-fill" id="ma-bar" style="width: 50%; background: var(--grey2);"></div>
@@ -1049,7 +1059,10 @@
       <!-- Price Drop from ATH -->
       <div class="signal-card">
         <p class="signal-card-label">From All-Time High</p>
-        <div class="signal-card-value" id="ath-value" style="color: var(--amber);">—</div>
+        <div style="display:flex;align-items:baseline;gap:0.5rem;">
+          <div class="signal-card-value" id="ath-value" style="color: var(--amber);">—</div>
+          <span id="ath-arrow" style="font-size:1.2rem;line-height:1;color:var(--amber);"></span>
+        </div>
         <p class="signal-card-desc" id="ath-desc">Loading ATH data...</p>
         <div class="signal-card-bar" style="margin-top: 1.5rem;">
           <div class="signal-card-fill" id="ath-bar" style="width: 0%; background: var(--amber);"></div>
@@ -1071,9 +1084,9 @@
     <p class="section-sub reveal">The orange line is Bitcoin's price. The white line is the 200-day average — when the price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
 
     <div class="chart-tabs reveal">
-      <button class="chart-tab" onclick="loadChart('30')">1M</button>
-      <button class="chart-tab" onclick="loadChart('90')">3M</button>
-      <button class="chart-tab active" onclick="loadChart('365')">1Y</button>
+      <button class="chart-tab" onclick="loadChart('30',this)">1M</button>
+      <button class="chart-tab" onclick="loadChart('90',this)">3M</button>
+      <button class="chart-tab active" onclick="loadChart('365',this)">1Y</button>
     </div>
 
     <div class="chart-legend reveal">
@@ -1116,48 +1129,49 @@
     <h2 class="section-title reveal">The money was always there.</h2>
     <p class="section-sub reveal">Small, regular spending adds up faster than most people realise. Pick a habit and see what ten years of putting that money into Bitcoin would have looked like instead.</p>
 
-    <div class="habit-grid reveal">
-      <button class="habit-card" onclick="selectHabit('coffee')">
+    <div class="habit-grid reveal" id="habit-grid">
+      <button class="habit-card" onclick="selectHabit('coffee',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
         <span class="habit-name">Daily latte</span>
         <span class="habit-cost">~€135/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('cigarettes')">
+      <button class="habit-card" onclick="selectHabit('cigarettes',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
         <span class="habit-name">Cigarettes</span>
         <span class="habit-cost">~€240/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('gym')">
+      <button class="habit-card" onclick="selectHabit('gym',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
         <span class="habit-name">Gym membership</span>
         <span class="habit-cost">~€45/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('netflix')">
+      <button class="habit-card" onclick="selectHabit('netflix',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
         <span class="habit-name">Netflix</span>
         <span class="habit-cost">~€18/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('spotify')">
+      <button class="habit-card" onclick="selectHabit('spotify',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
         <span class="habit-name">Spotify</span>
         <span class="habit-cost">~€11/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('zalando')">
+      <button class="habit-card" onclick="selectHabit('zalando',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
         <span class="habit-name">Online shopping</span>
         <span class="habit-cost">~€80/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('takeaway')">
+      <button class="habit-card" onclick="selectHabit('takeaway',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
         <span class="habit-name">Food delivery</span>
         <span class="habit-cost">~€173/mo</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('beer')">
+      <button class="habit-card" onclick="selectHabit('beer',this)">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M5 11h12v10H5z"/><path d="M5 7h14l-1 4H6L5 7z"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/></svg></span>
         <span class="habit-name">Nights out</span>
         <span class="habit-cost">~€120/mo</span>
       </button>
     </div>
+    <p id="whatif-nudge" style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);text-align:center;margin-top:-1.5rem;margin-bottom:2rem;animation:pulse 2s ease infinite;">↑ Pick a habit to see your number</p>
 
     <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
 
@@ -1184,7 +1198,7 @@
           <div class="whatif-bar-track">
             <div class="whatif-bar-fill" id="bar-invested" style="width:0%; background: rgba(240,237,232,0.25);"></div>
           </div>
-          <div class="whatif-bar-value" id="whatif-invested" style="color:var(--white);">—</div>
+          <div class="whatif-bar-value" id="whatif-invested-bar" style="color:var(--white);">—</div>
         </div>
         <div class="whatif-bar-item">
           <p class="whatif-bar-label">Value today</p>
@@ -1215,7 +1229,7 @@
         </div>
       </div>
 
-      <p class="whatif-disclaimer">Based on actual Bitcoin yearly average prices since 2015. Not financial advice — this is for perspective.</p>
+      <p class="whatif-disclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
       <div class="whatif-share-row">
         <button class="share-btn primary" onclick="shareWhatIfWhatsApp()">Share on WhatsApp</button>
         <button class="share-btn" onclick="shareWhatIfTwitter()">Share on X</button>
@@ -1311,58 +1325,10 @@
   </div>
 </section>
 
-<!-- BLOG -->
-<section class="blog-section reveal">
-  <div class="container">
-    <p class="section-eyebrow">Learn</p>
-    <h2 class="section-title">Understand the signal</h2>
-    <p class="section-sub">No speculation. No hype. Just the frameworks Bitcoiners actually use.</p>
-    <div class="blog-grid">
-      <a href="/blog/fear-greed-index" class="blog-card">
-        <span class="blog-cat">Fundamentals</span>
-        <h3 class="blog-card-title">Fear & Greed: the market's mood in one number</h3>
-        <p class="blog-card-excerpt">What the index actually measures, why it matters for timing, and where most people misread it.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/bitcoin-investment-dca-vs-lump" class="blog-card">
-        <span class="blog-cat">Strategy</span>
-        <h3 class="blog-card-title">DCA vs. lump sum: which approach actually works?</h3>
-        <p class="blog-card-excerpt">The data, the psychology, and the honest trade-offs. What experienced Bitcoiners choose — and why.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/bitcoin-investment-guide-beginners" class="blog-card">
-        <span class="blog-cat">Getting started</span>
-        <h3 class="blog-card-title">Your first Bitcoin investment: a clear, no-hype guide</h3>
-        <p class="blog-card-excerpt">Where to start, what to avoid, and how to think about Bitcoin as a long-term savings asset.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/bitcoin-volatility-explained" class="blog-card">
-        <span class="blog-cat">Mindset</span>
-        <h3 class="blog-card-title">Why Bitcoin is volatile — and why that's not the point</h3>
-        <p class="blog-card-excerpt">Volatility isn't a flaw. It's the price of access to the best-performing asset of the last decade.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/bitcoin-myths-busted" class="blog-card">
-        <span class="blog-cat">Education</span>
-        <h3 class="blog-card-title">Bitcoin myths, debunked with data</h3>
-        <p class="blog-card-excerpt">Too slow. Too risky. Bad for the environment. Here's what the evidence actually says.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/when-to-buy-bitcoin" class="blog-card">
-        <span class="blog-cat">Timing</span>
-        <h3 class="blog-card-title">When is the right time to buy Bitcoin?</h3>
-        <p class="blog-card-excerpt">Short answer: consistently. Long answer: here's how to think about market cycles without trying to time them.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer>
-  <p class="footer-copy">© 2026 whentobuybtc.xyz · Not financial advice</p>
+  <p class="footer-copy">© 2026 whentobuybtc.xyz · Built by <a href="https://imobabics.com" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;">Imo Babics</a> · Not financial advice</p>
   <div class="footer-links">
-    <a href="/blog">Blog</a>
     <a href="#top">↑ Top</a>
   </div>
 </footer>
@@ -1397,12 +1363,16 @@
 
   function setLang(lang) {
     currentLang = lang;
+    document.documentElement.lang = lang;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
     updateSignalText();
     document.querySelector('.hero-disclaimer').textContent = translations[lang].disclaimer;
     document.querySelector('.hero-label').textContent = translations[lang].heroLabel;
     document.querySelector('.scroll-hint').textContent = translations[lang].scrollHint;
+    if (window._OneSignal?.User) {
+      window._OneSignal.User.addTag('lang', lang).catch(() => {});
+    }
   }
 
   // ── CURRENCY DETECTION ──
@@ -1433,8 +1403,16 @@
       changeEl.textContent = `${sign}${change.toFixed(2)}% today`;
       changeEl.className = `change ${change >= 0 ? 'up' : 'down'}`;
       document.getElementById('share-price').textContent = sym + formatPrice(currentPrice);
+      // Update "last updated" timestamp
+      const now = new Date();
+      const t = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('signal-updated').textContent = `Updated at ${t}`;
     } catch (e) {
-      document.getElementById('price-value').textContent = 'Error loading';
+      document.getElementById('price-value').textContent = '—';
+      const changeEl = document.getElementById('price-change');
+      changeEl.textContent = 'Data temporarily unavailable';
+      changeEl.className = 'change';
+      changeEl.style.color = 'var(--grey)';
     }
   }
 
@@ -1513,6 +1491,8 @@
       document.getElementById('ath-value').style.color = color;
       document.getElementById('ath-bar').style.background = color;
       document.getElementById('ath-desc').textContent = desc;
+      document.getElementById('ath-arrow').textContent = dropPct >= 0 ? '↑' : '↓';
+      document.getElementById('ath-arrow').style.color = color;
     } catch (e) {
       document.getElementById('ath-desc').textContent = 'Could not load ATH data.';
     }
@@ -1541,7 +1521,7 @@
       let color, desc;
       if (diffPct < -10) {
         color = 'var(--green)';
-        desc = `Bitcoin is ${Math.abs(diffPct).toFixed(1)}% below its 200-day average. Historically, trading below this line has been one of the strongest strongest buy signals in Bitcoin's history.`;
+        desc = `Bitcoin is ${Math.abs(diffPct).toFixed(1)}% below its 200-day average. Historically, trading below this line has been one of the strongest buy signals in Bitcoin's history.`;
       } else if (diffPct < 10) {
         color = 'var(--amber)';
         desc = `Bitcoin is trading close to its 200-day average. This is considered a neutral zone — neither particularly expensive nor cheap on a historical basis.`;
@@ -1553,9 +1533,10 @@
       document.getElementById('ma-value').style.color = color;
       document.getElementById('ma-bar').style.background = color;
       document.getElementById('ma-desc').textContent = desc;
+      document.getElementById('ma-arrow').textContent = diffPct >= 0 ? '↑' : '↓';
+      document.getElementById('ma-arrow').style.color = color;
 
       updateSignal();
-      loadChart('30');
     } catch (e) {
       document.getElementById('ma-desc').textContent = 'Could not load moving average data.';
     }
@@ -1575,14 +1556,13 @@
     const shareSignal = document.getElementById('share-signal');
     const expertTag = document.getElementById('expert-tag');
     const expertText = document.getElementById('expert-text');
-    const shareEl = document.getElementById('share-signal');
 
     pill.className = 'signal-pill';
     if (score >= 2) {
       pill.classList.add('accumulate');
       text.textContent = translations[currentLang].signalAccumulate;
       shareSignal.style.color = 'var(--green)';
-      shareEl.textContent = '● ' + translations[currentLang].signalAccumulate;
+      shareSignal.textContent = '● ' + translations[currentLang].signalAccumulate;
       reason.textContent = `Fear & Greed is at ${fgValue} and Bitcoin is trading ${Math.abs(diffPct).toFixed(0)}% below its 200-day average. Historically, these are the conditions Bitcoiners act on.`;
       expertTag.textContent = 'Current signal: Accumulation zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
@@ -1591,7 +1571,7 @@
       pill.classList.add('hold');
       text.textContent = translations[currentLang].signalHold;
       shareSignal.style.color = 'var(--amber)';
-      shareEl.textContent = '● ' + translations[currentLang].signalHold;
+      shareSignal.textContent = '● ' + translations[currentLang].signalHold;
       reason.textContent = `Mixed signals — Fear & Greed at ${fgValue} with Bitcoin close to its 200-day average. Most Bitcoiners stick to their regular plan and wait for a clearer picture.`;
       expertTag.textContent = 'Current signal: Neutral zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
@@ -1600,7 +1580,7 @@
       pill.classList.add('caution');
       text.textContent = translations[currentLang].signalCaution;
       shareSignal.style.color = 'var(--red)';
-      shareEl.textContent = '● ' + translations[currentLang].signalCaution;
+      shareSignal.textContent = '● ' + translations[currentLang].signalCaution;
       reason.textContent = `Greed is elevated at ${fgValue} with Bitcoin ${diffPct.toFixed(0)}% above its 200-day average. Many Bitcoiners are cautious — not necessarily selling, but not aggressively buying either.`;
       expertTag.textContent = 'Current signal: Caution zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(248,113,113,0.3); background:var(--red-dim); color:var(--red); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
@@ -1630,10 +1610,10 @@
   }
 
   // ── CHART ──
-  async function loadChart(days) {
+  async function loadChart(days, triggerEl) {
     document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
-    event?.target?.classList.add('active');
-    const timeframeMap = { '7': '1w', '30': '1m', '90': '3m', '365': '1y' };
+    if (triggerEl) triggerEl.classList.add('active');
+    const timeframeMap = { '30': '1m', '90': '3m', '365': '1y' };
     const timeframe = timeframeMap[days] || '1m';
     try {
       const res = await fetch(`/api/history?timeframe=${timeframe}`);
@@ -1747,7 +1727,6 @@
       const data = await res.json();
       if (data.monthly && Object.keys(data.monthly).length > 100) {
         BTC_MONTHLY_EUR = data.monthly;
-        console.log(`Monthly prices loaded: ${Object.keys(BTC_MONTHLY_EUR).length} months (${data.source})`);
       }
     } catch (e) {
       console.warn('Monthly prices API unavailable, using fallback table');
@@ -1766,10 +1745,13 @@
     beer:       { label: 'Nights out',                     monthly: 120  },
   };
 
-  function selectHabit(key) {
+  function selectHabit(key, el) {
     if (!currentPrice) return;
     document.querySelectorAll('.habit-card').forEach(c => c.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    if (el) el.classList.add('active');
+    // Hide the nudge once a habit is selected
+    const nudge = document.getElementById('whatif-nudge');
+    if (nudge) nudge.style.display = 'none';
 
     const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
@@ -1817,6 +1799,7 @@
     document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
     document.getElementById('whatif-monthly').textContent = sym + habit.monthly;
     document.getElementById('whatif-invested').textContent = fmt(totalInvested);
+    document.getElementById('whatif-invested-bar').textContent = fmt(totalInvested);
     document.getElementById('whatif-today').textContent = fmt(valueToday);
     document.getElementById('whatif-gain').textContent = '+' + fmt(gain);
     document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct).toLocaleString() + '%';
@@ -1842,7 +1825,6 @@
     canvas.height = canvas.offsetHeight * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     const W = canvas.offsetWidth, H = canvas.offsetHeight;
-    const dpr = window.devicePixelRatio;
     const pad = { top: 20, right: 16, bottom: 28, left: 72 };
     const w = W - pad.left - pad.right;
     const h = H - pad.top - pad.bottom;
@@ -1959,18 +1941,19 @@
   // ── PUSH ──
   async function requestPush() {
     const btn = document.getElementById('push-btn');
-    if (!window.OneSignalDeferred) {
-      alert('Push notifications failed to load. Please try again.');
+    const OS = window._OneSignal;
+    if (!OS) {
+      btn.textContent = 'Loading…';
+      setTimeout(() => { btn.textContent = 'Enable Alerts'; btn.disabled = false; }, 1500);
       return;
     }
     try {
       btn.textContent = 'Enabling…';
       btn.disabled = true;
-      await OneSignal.Notifications.requestPermission();
-      const granted = await OneSignal.Notifications.permission;
+      await OS.Notifications.requestPermission();
+      const granted = await OS.Notifications.permission;
       if (granted) {
-        // Tag the subscriber with their language so server can send localised pushes
-        await OneSignal.User.addTag('lang', currentLang);
+        await OS.User.addTag('lang', currentLang);
         btn.textContent = '✓ Alerts enabled';
         btn.style.opacity = '0.6';
       } else {
@@ -1984,45 +1967,53 @@
     }
   }
 
-  // If language is changed after subscribing, update the tag
-  const _origSetLang = setLang;
-  function setLang(lang) {
-    _origSetLang(lang);
-    if (window.OneSignal?.User) {
-      OneSignal.User.addTag('lang', lang).catch(() => {});
-    }
-  }
 
-  // ── SCROLL PROGRESS ──
+  // ── SCROLL PROGRESS (throttled) ──
+  let scrollRaf = null;
+  let scrollHintHidden = false;
   window.addEventListener('scroll', () => {
-    const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-    document.getElementById('progress').style.width = pct + '%';
-  });
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(() => {
+      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+      document.getElementById('progress').style.width = pct + '%';
+      if (!scrollHintHidden && window.scrollY > 60) {
+        scrollHintHidden = true;
+        document.querySelector('.scroll-hint')?.classList.add('hide');
+      }
+      scrollRaf = null;
+    });
+  }, { passive: true });
 
   // ── REVEAL ──
   const reveals = document.querySelectorAll('.reveal');
   reveals.forEach(el => el.classList.add('hidden'));
+  let revealCounter = 0;
   const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
+        const delay = (revealCounter++ % 4) * 60;
         setTimeout(() => {
           entry.target.classList.remove('hidden');
           entry.target.classList.add('visible');
-        }, i * 60);
+        }, delay);
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  // ── INIT ──
+  // ── INIT (parallel where safe) ──
   async function init() {
     await detectCurrency();
+    // Price first (needed by ATH + MA calculations)
     await fetchPrice();
-    fetchMonthlyPrices(); // non-blocking — fallback table used instantly, API updates in background
-    await fetchFearGreed();
-    await fetchATH();
-    await fetch200MA();
+    // Monthly prices non-blocking — fallback table used instantly
+    fetchMonthlyPrices();
+    // Fear/Greed, ATH and MA can run in parallel after price is known
+    await Promise.all([fetchFearGreed(), fetchATH(), fetch200MA()]);
+    // Load default chart after MA is available (so 200MA line renders)
+    const defaultTab = document.querySelector('.chart-tab.active');
+    loadChart('365', defaultTab);
   }
 
   init();
