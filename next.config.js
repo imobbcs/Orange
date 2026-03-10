@@ -1,5 +1,4 @@
 const { i18n } = require('./next-i18next.config');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
@@ -24,6 +23,14 @@ const nextConfig = {
     '*.replit.dev',
     '*.riker.replit.dev'
   ],
+  async rewrites() {
+    return [
+      {
+        source: '/',
+        destination: '/app.html',
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -63,5 +70,4 @@ const nextConfig = {
     ];
   },
 };
-
 module.exports = nextConfig;
