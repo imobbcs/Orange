@@ -1,0 +1,35 @@
+{
+  "name": "Satoshi Assistant",
+  "short_name": "Satoshi Assistant",
+  "description": "Smart, beginner-friendly Bitcoin insights and real-time price tracking",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#F7931A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/bitcoin-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["finance", "productivity", "education"],
+  "lang": "en",
+  "dir": "ltr",
+  "shortcuts": [
+    {
+      "name": "Bitcoin Price",
+      "short_name": "Price",
+      "description": "Check current Bitcoin price",
+      "url": "/",
+      "icons": [{ "src": "/bitcoin-logo.svg", "sizes": "any" }]
+    }
+  ]
+}

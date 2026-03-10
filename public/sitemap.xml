@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://whentobuybtc.xyz/</loc>
+    <lastmod>2025-05-27T00:00:00+00:00</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://whentobuybtc.xyz/fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/de" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://whentobuybtc.xyz/it" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/en</loc>
+    <lastmod>2025-05-27T00:00:00+00:00</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://whentobuybtc.xyz/fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/de" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://whentobuybtc.xyz/it" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/fr</loc>
+    <lastmod>2025-05-27T00:00:00+00:00</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://whentobuybtc.xyz/fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/de" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://whentobuybtc.xyz/it" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/de</loc>
+    <lastmod>2025-05-27T00:00:00+00:00</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://whentobuybtc.xyz/fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/de" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://whentobuybtc.xyz/it" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/it</loc>
+    <lastmod>2025-05-27T00:00:00+00:00</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/en" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://whentobuybtc.xyz/fr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/de" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://whentobuybtc.xyz/it" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/blog</loc>
+    <lastmod>2025-01-15T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/blog/when-to-buy-bitcoin-2025</loc>
+    <lastmod>2025-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/blog/bitcoin-investment-guide-beginners</loc>
+    <lastmod>2025-01-10T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/blog/understanding-bitcoin-volatility</loc>
+    <lastmod>2025-01-05T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

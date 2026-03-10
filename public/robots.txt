@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Main pages
+Allow: /
+Allow: /de
+Allow: /fr
+Allow: /it
+
+# Blog pages
+Allow: /blog
+Allow: /de/blog
+Allow: /fr/blog
+Allow: /it/blog
+
+# Blog articles
+Allow: /blog/*
+Allow: /de/blog/*
+Allow: /fr/blog/*
+Allow: /it/blog/*
+
+# API endpoints (allow for SEO tools but with rate limiting)
+Allow: /api/
+
+# Sitemap
+Sitemap: https://whentobuybtc.xyz/api/sitemap.xml
+
+# Crawl delay (be respectful)
+Crawl-delay: 1

@@ -1,0 +1,124 @@
+{
+  "app": {
+    "name": "Satoshi Assistant",
+    "title": "Satoshi Assistant - Tracker Prix Bitcoin en Direct",
+    "title_loading": "Tracker Prix Bitcoin & Analyses Intelligentes",
+    "title_insights": "Analyses Intelligentes du Prix Bitcoin",
+    "description": "Satoshi Assistant vous donne des mises à jour claires du prix Bitcoin et des analyses intelligentes - vous aidant à comprendre et agir avec confiance, sans jargon technique.",
+    "keywords": "Bitcoin, BTC, prix, tracker, cryptomonnaie, live, temps réel, marché, analyse, aperçus"
+  },
+  "greetings": {
+    "morning": "Bonjour ! Satoshi Assistant vous donne des mises à jour claires du prix Bitcoin et des analyses intelligentes - vous aidant à comprendre et agir avec confiance, sans jargon technique.",
+    "afternoon": "Bon après-midi ! Satoshi Assistant vous donne des mises à jour claires du prix Bitcoin et des analyses intelligentes - vous aidant à comprendre et agir avec confiance, sans jargon technique.",
+    "evening": "Bonsoir ! Satoshi Assistant vous donne des mises à jour claires du prix Bitcoin et des analyses intelligentes - vous aidant à comprendre et agir avec confiance, sans jargon technique."
+  },
+  "price": {
+    "title": "Prix du Bitcoin",
+    "usd": "USD",
+    "eur": "EUR",
+    "change_24h": "Changement 24h",
+    "change_72h": "Changement 72h",
+    "ath_highest_ever": "Le prix le plus élevé jamais atteint était",
+    "ath_distance_new_record": "Nous sommes à {{percent}}% d'un nouveau record.",
+    "ath_at_record": "Nous sommes à un nouveau record !"
+  },
+  "chart": {
+    "title": "Graphique Bitcoin",
+    "error_load": "Échec du chargement des données du graphique",
+    "no_data": "Aucune donnée disponible pour le graphique",
+    "timeframe_1w": "1S",
+    "timeframe_1m": "1M",
+    "timeframe_3m": "3M",
+    "timeframe_1y": "1A"
+  },
+  "insights": {
+    "title": "Que se passe-t-il ?",
+    "disclaimer": "Ceci n'est pas un conseil financier.",
+    "fear_greed_extreme_fear": "L'ambiance autour de Bitcoin est très prudente aujourd'hui.",
+    "fear_greed_fear": "L'ambiance autour de Bitcoin est plutôt prudente aujourd'hui.",
+    "fear_greed_greed": "L'ambiance autour de Bitcoin est plutôt optimiste aujourd'hui.",
+    "fear_greed_extreme_greed": "L'ambiance autour de Bitcoin est très positive aujourd'hui.",
+    "strong_growth_1": "Bitcoin montre une forte tendance haussière ! Ce type d'élan attire souvent de nouveaux investisseurs. Considérez votre stratégie à long terme.",
+    "strong_growth_2": "Des augmentations de prix significatives comme celle-ci peuvent être excitantes, mais rappelez-vous que la valeur du Bitcoin peut être volatile. Restez concentré sur vos objectifs.",
+    "strong_growth_3": "Bitcoin performe bien aujourd'hui. Les périodes de forte croissance sont formidables, mais il est sage de garder une perspective équilibrée sur l'investissement à long terme.",
+    "moderate_growth_1": "Bitcoin montre un mouvement positif constant. Une croissance graduelle comme celle-ci reflète souvent une confiance saine du marché.",
+    "moderate_growth_2": "Belle tendance haussière pour Bitcoin aujourd'hui. Les gains modérés peuvent être un signe de croissance durable plutôt que de bulles spéculatives.",
+    "moderate_growth_3": "Bitcoin tend vers le haut à un rythme confortable. Ce type de croissance stable est souvent préféré par les détenteurs à long terme.",
+    "stable_market_1": "Bitcoin reste stable aujourd'hui. Des périodes stables comme celle-ci peuvent être de bons moments pour rechercher et planifier vos prochains mouvements.",
+    "stable_market_2": "Le marché Bitcoin est relativement calme en ce moment. Utilisez des périodes calmes comme celle-ci pour en apprendre davantage sur les stratégies à long terme.",
+    "stable_market_3": "Bitcoin évolue latéralement aujourd'hui. Les marchés stables offrent souvent de bonnes opportunités pour les stratégies de moyenne d'achat.",
+    "minor_drop_1": "Bitcoin a légèrement baissé aujourd'hui. De petites corrections comme celle-ci sont normales et offrent souvent des opportunités d'achat pour les investisseurs patients.",
+    "minor_drop_2": "Bitcoin a un peu baissé, mais c'est un comportement typique du marché. De nombreux détenteurs de Bitcoin prospères ont appris à voir les petites baisses comme des points d'entrée potentiels.",
+    "minor_drop_3": "Une baisse modeste du Bitcoin aujourd'hui. Rappelez-vous, les mouvements de prix à court terme ne changent pas le potentiel à long terme du Bitcoin.",
+    "significant_drop_1": "Bitcoin a chuté notablement aujourd'hui. Bien que cela puisse sembler préoccupant, rappelez-vous que Bitcoin s'est historiquement remis de baisses similaires.",
+    "significant_drop_2": "Bitcoin connaît un recul plus important. Ces moments peuvent tester la patience, mais de nombreux détenteurs à long terme les voient comme des opportunités d'accumulation.",
+    "significant_drop_3": "Une baisse significative du Bitcoin aujourd'hui. La volatilité du marché fait partie de la nature du Bitcoin - concentrez-vous sur votre thèse d'investissement à long terme.",
+    "recovery_trend_1": "Bitcoin semble se remettre des récents plus bas. Les phases de récupération peuvent être des signes encourageants pour le sentiment du marché.",
+    "recovery_trend_2": "Bitcoin rebondit aujourd'hui. Les mouvements de récupération attirent souvent un intérêt renouvelé des investisseurs nouveaux et existants.",
+    "recovery_trend_3": "Bitcoin montre des signes de récupération. Ces mouvements à la hausse après les baisses peuvent signaler une confiance renouvelée du marché.",
+    "conflicting_signals_1": "Bitcoin montre des signaux mitigés avec différentes tendances à court et moyen terme. Considérez attendre une direction plus claire avant de faire des mouvements.",
+    "conflicting_signals_2": "Le marché Bitcoin envoie des signaux contradictoires en ce moment. Des moments comme ceux-ci demandent souvent patience et observation attentive.",
+    "conflicting_signals_3": "Les tendances récentes du Bitcoin tirent dans différentes directions. Des signaux mitigés comme ceux-ci nous rappellent pourquoi la pensée à long terme est précieuse.",
+    "high_volatility_minimal_change_1": "Bitcoin a beaucoup bougé aujourd'hui mais a fini près de son point de départ. C'est une bonne journée pour observer comment le prix se comporte et comprendre le marché.",
+    "high_volatility_minimal_change_2": "Il y a eu beaucoup d'action aujourd'hui — le prix a sauté dans tous les sens mais s'est stabilisé. Des journées comme celle-ci sont parfaites pour apprendre comment Bitcoin évolue dans le temps.",
+    "high_volatility_minimal_change_3": "Aujourd'hui a été un peu comme des montagnes russes pour Bitcoin, mais il a fini près de son point de départ. Ce genre de journées est idéal pour simplement observer et apprendre comment Bitcoin se comporte.",
+    "recovery_after_dip_1": "Bitcoin a chuté récemment mais commence à remonter. Certaines personnes achètent pendant les récupérations, d'autres préfèrent attendre un peu plus longtemps.",
+    "recovery_after_dip_2": "Il semble que Bitcoin rebondisse après une chute. Vous pouvez garder un œil dessus et décider si cela vous semble le bon moment.",
+    "recovery_after_dip_3": "Bitcoin a récemment chuté mais semble remonter. Vous pouvez continuer à suivre la tendance et prendre votre temps pour décider ce qui vous semble juste."
+  },
+  "education": {
+    "title": "Le saviez-vous ? 🤔",
+    "tip_1": "Le moyen le plus simple d'épargner en Bitcoin ? Configurez un achat récurrent, aussi appelé moyenne d'achat (DCA). C'est une stratégie simple et automatisée que de nombreux épargnants Bitcoin à long terme utilisent pour lisser les hauts et bas des prix au fil du temps.",
+    "tip_2": "Vous n'avez pas besoin d'acheter un Bitcoin entier ! Vous pouvez commencer avec seulement 1€. Bitcoin est divisible, vous pouvez donc acheter de petits morceaux et construire progressivement.",
+    "tip_3": "Historiquement, les gens qui ont détenu Bitcoin pendant 4 ans ou plus ont vu des résultats positifs. Il ne s'agit pas de gains rapides, la pensée à long terme a été la clé.",
+    "tip_4": "Au cours de la dernière décennie, Bitcoin a surpassé les actifs traditionnels comme les actions, l'or et l'immobilier. C'est pourquoi plus de gens y prêtent attention.",
+    "tip_5": "Bitcoin est souvent appelé or numérique. C'est une forme sécurisée et décentralisée d'argent en laquelle font confiance les individus et institutions du monde entier.",
+    "tip_6": "Bitcoin fonctionne sur un réseau mondial, ouvert à tous, sans banques ni intermédiaires. C'est de l'argent que vous contrôlez, accessible à tout moment, partout.",
+    "tip_7": "Commencer est simple. Vous pouvez utiliser une application Bitcoin ou un courtier conçu pour les débutants, aucune connaissance technique requise.",
+    "tip_8": "Après avoir acheté Bitcoin, il est stocké dans un portefeuille numérique, une application sécurisée conçue spécifiquement pour détenir et gérer vos Bitcoin.",
+    "tip_9": "Bitcoin est rare : seulement 21 millions existeront jamais. Cette offre fixe est une raison pour laquelle beaucoup de gens le voient comme une réserve de valeur.",
+    "tip_10": "Bitcoin n'utilise pas votre vrai nom, il s'appuie sur des adresses de portefeuille. Bien que toutes les transactions soient publiques, votre identité personnelle reste privée.",
+    "tip_11": "Bitcoin a été lancé en 2009 par quelqu'un (ou un groupe) utilisant le nom Satoshi Nakamoto. À ce jour, personne ne connaît leur véritable identité.",
+    "tip_12": "Certains magasins en ligne acceptent Bitcoin, mais la plupart des gens l'utilisent comme outil d'épargne à long terme plutôt que pour les dépenses quotidiennes.",
+    "tip_13": "Bitcoin était la première cryptomonnaie et reste la plus largement utilisée et digne de confiance. Alors que beaucoup d'autres sont venues et reparties, Bitcoin reste concentré sur être de l'argent numérique décentralisé.",
+    "tip_14": "L'inflation signifie que votre argent achète moins au fil du temps. Les prix montent, mais vos économies ne s'étendent pas autant. C'est pourquoi beaucoup de gens cherchent des moyens de protéger leur pouvoir d'achat.",
+    "tip_15": "Un marché haussier est quand les prix montent généralement et la confiance est élevée. Un marché baissier est quand les prix chutent et les gens sont plus prudents. Les deux sont des parties naturelles des cycles financiers."
+  },
+  "social": {
+    "title": "Partager l'App",
+    "share_button": "Partager cette page",
+    "share_message_1": "Est-ce le bon moment pour acheter du Bitcoin ? Obtenez des conseils intelligents avec Satoshi Assistant : [URL]",
+    "share_message_2": "Le Bitcoin est actuellement à $[PRICE]. Consulte les données en direct et les infos : [URL]"
+  },
+  "faq": {
+    "question_1": "Quel est le meilleur moment pour acheter du Bitcoin ?",
+    "answer_1": "Il n'y a pas de moment parfait garanti. Beaucoup achètent quand les prix sont plus bas ou stables. Cette app te montre les tendances pour t'aider à décider.",
+    "question_2": "Dois-je acheter un Bitcoin entier ?",
+    "answer_2": "Non, tu peux commencer avec quelques euros. Bitcoin est divisible, tu peux acheter de petites fractions et avancer à ton rythme.",
+    "question_3": "Qu'est-ce que le DCA et pourquoi l'utiliser ?",
+    "answer_3": "Le Dollar-Cost Averaging signifie investir régulièrement de petites sommes au lieu d'essayer de prédire le marché. Beaucoup l'utilisent pour lisser les variations de prix.",
+    "question_4": "Comment stocker mes Bitcoins ?",
+    "answer_4": "Les Bitcoins sont stockés dans une app wallet numérique, une appli sécurisée. Pour plus de sécurité, certains utilisent un hardware wallet, un appareil physique qui stocke hors ligne.",
+    "question_5": "Où acheter du Bitcoin ?",
+    "answer_5": "Tu peux acheter via une app, une plateforme en ligne ou un distributeur Bitcoin. La plupart des débutants choisissent une app simple pour tout gérer. Choisis toujours un fournisseur fiable."
+  },
+  "visitor": {
+    "counter": "[NUMBER] personnes ont utilisé cette app"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Conseils d'experts pour vous aider à naviguer dans le monde du Bitcoin.",
+    "keywords": "Éducation Bitcoin, analyses cryptomonnaie, guide investissement Bitcoin, volatilité Bitcoin, actualités Bitcoin, analyse crypto",
+    "read_more": "Lire la suite",
+    "see_all_articles": "Voir tous les articles",
+    "back_to_blog": "← Voir tous les articles",
+    "promo_title": "⚡ Essayez Satoshi Assistant",
+    "promo_description": "Notre app simple vous donne des informations intelligentes sur Bitcoin pour prendre des décisions en confiance.",
+    "promo_button": "Essayer maintenant"
+  },
+  "footer": {
+    "created_by": "Créé avec ♥ pour tous les débutants en Bitcoin",
+    "data_source": "Données de prix de CoinGecko, données graphiques de CryptoCompare",
+    "last_updated": "Dernière mise à jour"
+  }
+}
