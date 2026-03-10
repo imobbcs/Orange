@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 5000",
     "build": "next build",
-    "start": "node .next/standalone/server.js",
+    "start": "next start -p $PORT",
     "lint": "next lint"
   },
   "keywords": [
