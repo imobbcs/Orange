@@ -38,7 +38,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #080808;
@@ -58,6 +58,7 @@
       --red: #F87171;
       --red-dim: rgba(248,113,113,0.12);
       --display: 'Syne', sans-serif;
+      --numeric: 'Outfit', sans-serif;
       --serif: 'Lora', Georgia, serif;
       --mono: 'DM Mono', monospace;
     }
@@ -158,10 +159,10 @@
     }
 
     .hero-price {
-      font-family: var(--display);
+      font-family: var(--numeric);
       font-size: clamp(4rem, 12vw, 10rem);
       font-weight: 800; line-height: 1;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       color: var(--white);
       opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
       position: relative;
@@ -311,7 +312,7 @@
       color: var(--grey); margin-bottom: 1.25rem;
     }
     .signal-card-value {
-      font-family: var(--display); font-size: 2.5rem;
+      font-family: var(--numeric); font-size: 2.5rem;
       font-weight: 800; line-height: 1; margin-bottom: 0.5rem;
     }
     .signal-card-desc {
@@ -331,17 +332,17 @@
     /* Fear & Greed Gauge */
     .gauge-wrap {
       display: flex; justify-content: center;
-      align-items: center; margin: 1rem 0;
+      align-items: center; margin: 0.75rem 0 0.5rem;
     }
     .gauge {
-      position: relative; width: 140px; height: 75px;
+      position: relative; width: 100px; height: 58px;
     }
     .gauge svg { width: 100%; height: 100%; overflow: visible; }
     .gauge-value {
-      position: absolute; bottom: 0; left: 50%;
+      position: absolute; bottom: -4px; left: 50%;
       transform: translateX(-50%);
-      font-family: var(--display); font-size: 1.8rem;
-      font-weight: 800;
+      font-family: var(--numeric); font-size: 1.4rem;
+      font-weight: 700;
     }
 
     /* ── CHART SECTION ── */
@@ -433,7 +434,12 @@
     .habit-card:hover, .habit-card.active {
       border-color: var(--orange); background: var(--orange-dim);
     }
-    .habit-icon { font-size: 1.5rem; }
+    .habit-icon {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--orange);
+      opacity: 0.65;
+      margin-bottom: 0.1rem;
+    }
     .habit-name {
       font-family: var(--display); font-size: 0.8rem;
       font-weight: 600; color: var(--white); line-height: 1.2;
@@ -445,27 +451,78 @@
     .whatif-result-wrap {
       border: 1px solid var(--border);
       background: var(--bg2); overflow: hidden;
-      animation: fadeUp 0.4s ease;
+      animation: fadeUp 0.5s ease;
+      margin-top: 2rem;
     }
     .whatif-result-header {
-      padding: 2rem 2rem 1.5rem;
+      padding: 2.5rem 2.5rem 2rem;
       border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(247,147,26,0.05) 0%, transparent 60%);
     }
     .whatif-selected-label {
       font-family: var(--mono); font-size: 0.6rem;
       letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 0.75rem;
+      color: var(--orange); margin-bottom: 1rem;
     }
     .whatif-headline {
-      font-family: var(--display); font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-family: var(--display); font-size: clamp(1.2rem, 3vw, 1.75rem);
       font-weight: 700; line-height: 1.3; color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .whatif-big-number {
+      font-family: var(--numeric); font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 800; color: var(--orange);
+      line-height: 1; letter-spacing: -0.02em;
+    }
+    .whatif-big-sub {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.1em; color: var(--grey);
+      text-transform: uppercase; margin-top: 0.5rem;
+    }
+    .whatif-chart-area {
+      padding: 2rem 2.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .whatif-chart-label {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 1rem;
+    }
+    .whatif-canvas-wrap {
+      position: relative; height: 180px;
+    }
+    canvas#whatifChart { width: 100%; height: 100%; }
+    .whatif-bar-area {
+      padding: 1.75rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .whatif-bar-item {}
+    .whatif-bar-label {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 0.5rem;
+    }
+    .whatif-bar-track {
+      height: 6px; background: var(--bg3); border-radius: 3px;
+      margin-bottom: 0.5rem; overflow: hidden;
+    }
+    .whatif-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .whatif-bar-value {
+      font-family: var(--numeric); font-size: 1.1rem;
+      font-weight: 700;
     }
     .whatif-stats-grid {
-      display: grid; grid-template-columns: repeat(6, 1fr);
+      display: grid; grid-template-columns: repeat(4, 1fr);
     }
     .whatif-stat {
-      padding: 1.5rem 1.25rem;
+      padding: 1.25rem 1.25rem;
       border-right: 1px solid var(--border);
+      min-width: 0;
     }
     .whatif-stat:last-child { border-right: none; }
     .whatif-stat-label {
@@ -474,18 +531,20 @@
       color: var(--grey); margin-bottom: 0.4rem;
     }
     .whatif-stat-value {
-      font-family: var(--display); font-size: 1.1rem;
-      font-weight: 800; color: var(--white);
+      font-family: var(--numeric); font-size: 1rem;
+      font-weight: 700; color: var(--white);
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
     }
     .whatif-stat-value.positive { color: var(--green); }
     .whatif-disclaimer {
-      padding: 1rem 2rem;
+      padding: 1rem 2.5rem;
       font-family: var(--mono); font-size: 0.58rem;
       letter-spacing: 0.06em; color: var(--grey);
       border-top: 1px solid var(--border);
     }
     .whatif-share-row {
-      padding: 1rem 2rem 1.5rem;
+      padding: 1rem 2.5rem 1.5rem;
       display: flex; gap: 0.75rem; flex-wrap: wrap;
     }
 
@@ -506,7 +565,7 @@
       border: 1px solid var(--border); border-top: none;
     }
     .share-btc-price {
-      font-family: var(--display); font-size: 2.5rem;
+      font-family: var(--numeric); font-size: 2.5rem;
       font-weight: 800; color: var(--white); margin-bottom: 0.5rem;
     }
     .share-signal-line {
@@ -520,7 +579,7 @@
     }
     .share-stat { text-align: center; }
     .share-stat-val {
-      font-family: var(--display); font-weight: 700;
+      font-family: var(--numeric); font-weight: 700;
       font-size: 1.1rem; color: var(--orange);
     }
     .share-stat-label {
@@ -841,9 +900,11 @@
 
       /* What If */
       .habit-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-      .whatif-stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
       .whatif-stat { border-bottom: 1px solid var(--border); }
       .whatif-result-header { padding: 1.5rem; }
+      .whatif-bar-area { grid-template-columns: 1fr; gap: 1rem; padding: 1.25rem 1.5rem; }
+      .whatif-chart-area { padding: 1.5rem 1.5rem 0.75rem; }
       .whatif-share-row, .whatif-disclaimer { padding: 1rem 1.5rem; }
     }
 
@@ -886,12 +947,12 @@
   <div class="signal-wrap">
     <div class="signal-pill accumulate" id="signal-pill">
       <div class="signal-dot"></div>
-      <span class="signal-text" id="signal-text">Most long-term holders are buying</span>
+      <span class="signal-text" id="signal-text">Most Bitcoiners are buying</span>
     </div>
   </div>
 
   <p class="signal-reason" id="signal-reason">
-    Fear & Greed is in extreme fear territory, and Bitcoin is trading below its long-term average — historically, these are the moments experienced holders act on.
+    Fear & Greed is in extreme fear territory, and Bitcoin is trading below its 200-day average — historically, these are the conditions Bitcoiners act on.
   </p>
 
   <p class="hero-disclaimer">Not financial advice. See what the data shows, decide for yourself.</p>
@@ -918,17 +979,20 @@
         <p class="signal-card-label">Fear & Greed Index</p>
         <div class="gauge-wrap">
           <div class="gauge">
-            <svg viewBox="0 0 140 80">
-              <!-- Background arc -->
-              <path d="M 15 75 A 55 55 0 0 1 125 75" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="8" stroke-linecap="round"/>
-              <!-- Colored arc segments -->
-              <path d="M 15 75 A 55 55 0 0 1 35 32" fill="none" stroke="#F87171" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-              <path d="M 35 32 A 55 55 0 0 1 70 20" fill="none" stroke="#FBBF24" stroke-width="8" opacity="0.5"/>
-              <path d="M 70 20 A 55 55 0 0 1 105 32" fill="none" stroke="#4ADE80" stroke-width="8" opacity="0.5"/>
-              <path d="M 105 32 A 55 55 0 0 1 125 75" fill="none" stroke="#4ADE80" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-              <!-- Needle -->
-              <line id="gauge-needle" x1="70" y1="75" x2="25" y2="38" stroke="#F7931A" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="70" cy="75" r="4" fill="#F7931A"/>
+            <svg viewBox="0 0 100 56" fill="none">
+              <!-- bg arc: center 50,54 radius 40, 180° sweep -->
+              <path d="M 10 54 A 40 40 0 0 1 90 54" stroke="rgba(255,255,255,0.07)" stroke-width="7" stroke-linecap="round"/>
+              <!-- Fear (red) 0–25% -->
+              <path d="M 10 54 A 40 40 0 0 1 21.7 25.7" stroke="#F87171" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+              <!-- Fear-neutral (amber) 25–50% -->
+              <path d="M 21.7 25.7 A 40 40 0 0 1 50 14" stroke="#FBBF24" stroke-width="7" opacity="0.55"/>
+              <!-- Neutral-greed (amber-green) 50–75% -->
+              <path d="M 50 14 A 40 40 0 0 1 78.3 25.7" stroke="#4ADE80" stroke-width="7" opacity="0.45"/>
+              <!-- Greed (green) 75–100% -->
+              <path d="M 78.3 25.7 A 40 40 0 0 1 90 54" stroke="#4ADE80" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+              <!-- Needle: pivots at 50,54 -->
+              <line id="gauge-needle" x1="50" y1="54" x2="14" y2="26" stroke="#F7931A" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="50" cy="54" r="3.5" fill="#F7931A"/>
             </svg>
             <div class="gauge-value" id="fg-value" style="color: var(--red);">—</div>
           </div>
@@ -974,10 +1038,9 @@
   <div class="section-inner">
     <p class="section-label reveal">Price Chart</p>
     <h2 class="section-title reveal">Price + 200-Day Average</h2>
-    <p class="section-sub reveal">The orange line is Bitcoin's price. The white line is the 200-day average — when the price falls below it, long-term holders historically see it as an opportunity.</p>
+    <p class="section-sub reveal">The orange line is Bitcoin's price. The white line is the 200-day average — when the price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
 
     <div class="chart-tabs reveal">
-      <button class="chart-tab" onclick="loadChart('7')">1W</button>
       <button class="chart-tab active" onclick="loadChart('30')">1M</button>
       <button class="chart-tab" onclick="loadChart('90')">3M</button>
       <button class="chart-tab" onclick="loadChart('365')">1Y</button>
@@ -1003,13 +1066,13 @@
 <!-- WHAT EXPERTS DO -->
 <section class="section expert-section" id="experts">
   <div class="section-inner">
-    <p class="section-label reveal">What Experienced Holders Do</p>
+    <p class="section-label reveal">What Bitcoiners Do</p>
     <h2 class="section-title reveal">In moments like this,<br>here's what tends to happen.</h2>
 
     <div class="expert-card reveal" style="margin-top: 3rem;">
       <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
       <p class="expert-text" id="expert-text">
-        When the Fear & Greed Index falls into extreme fear territory — as it is now — experienced long-term Bitcoin holders tend to see it as an opportunity rather than a warning. Historically, the periods of deepest fear have aligned closely with local price bottoms. Many DCA investors choose to increase their regular purchase amount during these windows, rather than reduce or pause it. The logic is straightforward: if your conviction in Bitcoin's long-term trajectory hasn't changed, then a lower price is simply a better entry point.
+        When the Fear & Greed Index is in extreme fear territory — as it is now — Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms. Many who DCA choose to increase their regular purchase amount during these windows. The logic is simple: if your conviction in Bitcoin hasn't changed, a lower price is a better entry point.
       </p>
       <p class="expert-meta" id="expert-date">Updated today · Based on current market conditions</p>
     </div>
@@ -1021,51 +1084,83 @@
   <div class="section-inner">
     <p class="section-label reveal">What If?</p>
     <h2 class="section-title reveal">The money was always there.</h2>
-    <p class="section-sub reveal">Most people think they can't afford Bitcoin. But they're already spending it — just on something else. Pick a habit and see what 10 years of Bitcoin savings would have looked like instead.</p>
+    <p class="section-sub reveal">Small, regular spending adds up faster than most people realise. Pick a habit and see what ten years of putting that money into Bitcoin would have looked like instead.</p>
 
     <div class="habit-grid reveal">
       <button class="habit-card" onclick="selectHabit('coffee')">
-        <span class="habit-icon">☕</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
         <span class="habit-name">Daily latte</span>
         <span class="habit-cost">~€4.50/day</span>
       </button>
       <button class="habit-card" onclick="selectHabit('cigarettes')">
-        <span class="habit-icon">🚬</span>
-        <span class="habit-name">Pack of cigarettes</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
+        <span class="habit-name">Cigarettes</span>
         <span class="habit-cost">~€8/day</span>
       </button>
       <button class="habit-card" onclick="selectHabit('gym')">
-        <span class="habit-icon">🏋️</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
         <span class="habit-name">Gym membership</span>
         <span class="habit-cost">~€45/month</span>
       </button>
       <button class="habit-card" onclick="selectHabit('netflix')">
-        <span class="habit-icon">📺</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
         <span class="habit-name">Netflix</span>
         <span class="habit-cost">~€18/month</span>
       </button>
       <button class="habit-card" onclick="selectHabit('spotify')">
-        <span class="habit-icon">🎵</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
         <span class="habit-name">Spotify</span>
         <span class="habit-cost">~€11/month</span>
       </button>
       <button class="habit-card" onclick="selectHabit('zalando')">
-        <span class="habit-icon">🛍️</span>
-        <span class="habit-name">Zalando haul</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+        <span class="habit-name">Online shopping</span>
         <span class="habit-cost">~€80/month</span>
       </button>
       <button class="habit-card" onclick="selectHabit('takeaway')">
-        <span class="habit-icon">🍕</span>
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
         <span class="habit-name">Food delivery</span>
         <span class="habit-cost">~€40/week</span>
       </button>
     </div>
 
     <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
+
+      <!-- Header: habit label + big number -->
       <div class="whatif-result-header">
         <p class="whatif-selected-label" id="whatif-selected-label">—</p>
-        <h3 class="whatif-headline">If you'd put that into Bitcoin weekly since 2015, you'd have <span id="whatif-btc-value" style="color:var(--orange);">—</span> today.</h3>
+        <p class="whatif-headline">If you'd put that into Bitcoin weekly since 2015, you'd have</p>
+        <div class="whatif-big-number" id="whatif-btc-value">—</div>
+        <p class="whatif-big-sub">today — instead of nothing</p>
       </div>
+
+      <!-- Growth chart -->
+      <div class="whatif-chart-area">
+        <p class="whatif-chart-label">Portfolio value over time</p>
+        <div class="whatif-canvas-wrap">
+          <canvas id="whatifChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Invested vs Value bars -->
+      <div class="whatif-bar-area">
+        <div class="whatif-bar-item">
+          <p class="whatif-bar-label">Total invested</p>
+          <div class="whatif-bar-track">
+            <div class="whatif-bar-fill" id="bar-invested" style="width:0%; background: rgba(240,237,232,0.25);"></div>
+          </div>
+          <div class="whatif-bar-value" id="whatif-invested" style="color:var(--white);">—</div>
+        </div>
+        <div class="whatif-bar-item">
+          <p class="whatif-bar-label">Value today</p>
+          <div class="whatif-bar-track">
+            <div class="whatif-bar-fill" id="bar-value" style="width:0%; background: var(--orange);"></div>
+          </div>
+          <div class="whatif-bar-value" id="whatif-today" style="color:var(--orange);">—</div>
+        </div>
+      </div>
+
+      <!-- 4 key stats -->
       <div class="whatif-stats-grid">
         <div class="whatif-stat">
           <p class="whatif-stat-label">Weekly amount</p>
@@ -1076,15 +1171,7 @@
           <div class="whatif-stat-value" id="whatif-monthly">—</div>
         </div>
         <div class="whatif-stat">
-          <p class="whatif-stat-label">Total invested</p>
-          <div class="whatif-stat-value" id="whatif-invested">—</div>
-        </div>
-        <div class="whatif-stat">
-          <p class="whatif-stat-label">Value today</p>
-          <div class="whatif-stat-value" id="whatif-today" style="color:var(--orange);">—</div>
-        </div>
-        <div class="whatif-stat">
-          <p class="whatif-stat-label">Gain</p>
+          <p class="whatif-stat-label">Total gain</p>
           <div class="whatif-stat-value positive" id="whatif-gain">—</div>
         </div>
         <div class="whatif-stat">
@@ -1092,9 +1179,10 @@
           <div class="whatif-stat-value positive" id="whatif-return">—</div>
         </div>
       </div>
-      <p class="whatif-disclaimer">Based on actual Bitcoin weekly average prices since 2015. Not financial advice — this is for perspective.</p>
+
+      <p class="whatif-disclaimer">Based on actual Bitcoin yearly average prices since 2015. Not financial advice — this is for perspective.</p>
       <div class="whatif-share-row">
-        <button class="share-btn" onclick="shareWhatIfWhatsApp()">Share on WhatsApp</button>
+        <button class="share-btn primary" onclick="shareWhatIfWhatsApp()">Share on WhatsApp</button>
         <button class="share-btn" onclick="shareWhatIfTwitter()">Share on X</button>
       </div>
     </div>
@@ -1112,7 +1200,7 @@
     <div class="share-preview reveal">
       <p style="font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.15em; color: var(--orange); text-transform: uppercase; margin-bottom: 1rem;">whentobuybtc.xyz</p>
       <div class="share-btc-price" id="share-price">€—</div>
-      <div class="share-signal-line" id="share-signal" style="color: var(--green);">● Most long-term holders are buying</div>
+      <div class="share-signal-line" id="share-signal" style="color: var(--green);">● Most Bitcoiners are buying</div>
       <div class="share-stats">
         <div class="share-stat">
           <div class="share-stat-val" id="share-fg">—</div>
@@ -1156,7 +1244,7 @@
             <span class="push-notif-title">When to Buy BTC</span>
             <span class="push-notif-time">now</span>
           </div>
-          <p class="push-notif-body">Signal changed: Fear & Greed hit 18. Most long-term holders are accumulating. BTC is 24% below its 200-day average.</p>
+          <p class="push-notif-body">Signal changed: Fear & Greed hit 18. Most Bitcoiners are accumulating. BTC is 24% below its 200-day average.</p>
         </div>
         <p class="push-mockup-label">Example alert</p>
       </div>
@@ -1183,7 +1271,7 @@
     </div>
     <div class="relai-right">
       <a href="https://relai.app/referral" target="_blank" class="relai-btn">Get the Relai app →</a>
-      <p class="relai-referral-note">Use referral code for 0.9% fees</p>
+      <p class="relai-referral-note">Use referral code IMO for 0.9% fees</p>
     </div>
   </div>
 </section>
@@ -1193,42 +1281,42 @@
   <div class="container">
     <p class="section-eyebrow">Learn</p>
     <h2 class="section-title">Understand the signal</h2>
-    <p class="section-sub">No speculation. No hype. Just the frameworks long-term Bitcoin holders actually use.</p>
+    <p class="section-sub">No speculation. No hype. Just the frameworks Bitcoiners actually use.</p>
     <div class="blog-grid">
-      <a href="/blog/what-is-the-200-day-moving-average" class="blog-card">
+      <a href="/blog/fear-greed-index" class="blog-card">
         <span class="blog-cat">Fundamentals</span>
-        <h3 class="blog-card-title">What is the 200-day moving average — and why do Bitcoin holders watch it?</h3>
-        <p class="blog-card-excerpt">One of the most reliable long-term indicators in Bitcoin's history. Here's what it measures and what it has meant historically.</p>
+        <h3 class="blog-card-title">Fear & Greed: the market's mood in one number</h3>
+        <p class="blog-card-excerpt">What the index actually measures, why it matters for timing, and where most people misread it.</p>
         <span class="blog-read">Read →</span>
       </a>
-      <a href="/blog/fear-and-greed-index-explained" class="blog-card">
-        <span class="blog-cat">Fundamentals</span>
-        <h3 class="blog-card-title">The Fear & Greed Index explained — what it measures and what it doesn't</h3>
-        <p class="blog-card-excerpt">Market sentiment is powerful, but it's not the whole picture. Here's how to read Fear & Greed without being misled by it.</p>
-        <span class="blog-read">Read →</span>
-      </a>
-      <a href="/blog/what-is-dca-bitcoin" class="blog-card">
+      <a href="/blog/bitcoin-investment-dca-vs-lump" class="blog-card">
         <span class="blog-cat">Strategy</span>
-        <h3 class="blog-card-title">What is DCA and why do most long-term Bitcoin holders use it?</h3>
-        <p class="blog-card-excerpt">Dollar-cost averaging removes the hardest part of investing: timing. Here's the logic, the maths, and the psychology behind it.</p>
+        <h3 class="blog-card-title">DCA vs. lump sum: which approach actually works?</h3>
+        <p class="blog-card-excerpt">The data, the psychology, and the honest trade-offs. What experienced Bitcoiners choose — and why.</p>
         <span class="blog-read">Read →</span>
       </a>
-      <a href="/blog/why-invest-in-bitcoin" class="blog-card">
-        <span class="blog-cat">Investment case</span>
-        <h3 class="blog-card-title">Why invest in Bitcoin? The case for long-term holders in 2025</h3>
-        <p class="blog-card-excerpt">Fixed supply, growing demand, and a decade of data. Here's the structured case for Bitcoin as a long-term savings asset — without the hype.</p>
+      <a href="/blog/bitcoin-investment-guide-beginners" class="blog-card">
+        <span class="blog-cat">Getting started</span>
+        <h3 class="blog-card-title">Your first Bitcoin investment: a clear, no-hype guide</h3>
+        <p class="blog-card-excerpt">Where to start, what to avoid, and how to think about Bitcoin as a long-term savings asset.</p>
         <span class="blog-read">Read →</span>
       </a>
-      <a href="/blog/self-custody-explained" class="blog-card">
-        <span class="blog-cat">Security</span>
-        <h3 class="blog-card-title">Self-custody explained: why "not your keys, not your coins" actually matters</h3>
-        <p class="blog-card-excerpt">Exchanges fail, get hacked, or freeze withdrawals. Self-custody is not paranoia — it's the point of Bitcoin.</p>
+      <a href="/blog/bitcoin-volatility-explained" class="blog-card">
+        <span class="blog-cat">Mindset</span>
+        <h3 class="blog-card-title">Why Bitcoin is volatile — and why that's not the point</h3>
+        <p class="blog-card-excerpt">Volatility isn't a flaw. It's the price of access to the best-performing asset of the last decade.</p>
         <span class="blog-read">Read →</span>
       </a>
-      <a href="/blog/mica-what-it-means-for-bitcoin-buyers" class="blog-card">
-        <span class="blog-cat">Regulation</span>
-        <h3 class="blog-card-title">MiCA regulation: what it means for European Bitcoin buyers in 2025</h3>
-        <p class="blog-card-excerpt">Europe's new crypto framework is live. Here's what changed, what it protects you from, and what it doesn't cover.</p>
+      <a href="/blog/bitcoin-myths-busted" class="blog-card">
+        <span class="blog-cat">Education</span>
+        <h3 class="blog-card-title">Bitcoin myths, debunked with data</h3>
+        <p class="blog-card-excerpt">Too slow. Too risky. Bad for the environment. Here's what the evidence actually says.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/when-to-buy-bitcoin" class="blog-card">
+        <span class="blog-cat">Timing</span>
+        <h3 class="blog-card-title">When is the right time to buy Bitcoin?</h3>
+        <p class="blog-card-excerpt">Short answer: consistently. Long answer: here's how to think about market cycles without trying to time them.</p>
         <span class="blog-read">Read →</span>
       </a>
     </div>
@@ -1256,9 +1344,9 @@
   const translations = {
     en: {
       heroLabel: 'Live Bitcoin Signal — Updated every 5 minutes',
-      signalAccumulate: 'Most long-term holders are buying',
+      signalAccumulate: 'Most Bitcoiners are buying',
       signalHold: 'Most are watching and waiting',
-      signalCaution: 'Many experienced holders are being cautious',
+      signalCaution: 'Many Bitcoiners are being cautious',
       disclaimer: 'Not financial advice. See what the data shows, decide for yourself.',
       scrollHint: '↓ Scroll to explore',
     },
@@ -1325,6 +1413,7 @@
   async function fetchFearGreed() {
     try {
       const res = await fetch('/api/fear-greed');
+      if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       fgValue = data.value;
       const label = data.value_classification;
@@ -1342,10 +1431,10 @@
         desc = 'Fear in the market. Prices are under pressure and sentiment is negative — many holders watch and wait.';
       } else if (fgValue < 75) {
         color = 'var(--amber)';
-        desc = 'Greed is building. The market feels good — but experienced holders often start trimming positions.';
+        desc = 'Greed is building. The market feels good — but Bitcoiners often start trimming positions.';
       } else {
         color = 'var(--red)';
-        desc = 'Extreme Greed. Historically a warning sign. Many experienced holders have been cautious in periods like this.';
+        desc = 'Extreme Greed. Historically a warning sign. Many Bitcoiners have been cautious in periods like this.';
       }
 
       document.getElementById('fg-value').style.color = color;
@@ -1362,6 +1451,7 @@
   async function fetchATH() {
     try {
       const res = await fetch('/api/ath');
+      if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       athPrice = currentCurrency === 'EUR' ? data.ath_eur : data.ath_usd;
       const sym = currentCurrency === 'EUR' ? '€' : '$';
@@ -1377,13 +1467,13 @@
       let color, desc;
       if (dropPct < -50) {
         color = 'var(--green)';
-        desc = `Bitcoin is ${absPct}% below its all-time high. Deep drawdowns like this have historically been when long-term holders accumulate most aggressively.`;
+        desc = `Bitcoin is ${absPct}% below its all-time high. Deep drawdowns like this have historically been when Bitcoiners accumulate most aggressively.`;
       } else if (dropPct < -25) {
         color = 'var(--amber)';
-        desc = `${absPct}% below its record price. A meaningful correction — experienced holders often see this range as reasonable entry territory.`;
+        desc = `${absPct}% below its record price. A meaningful correction — Bitcoiners often see this range as reasonable entry territory.`;
       } else {
         color = 'var(--red)';
-        desc = `Near all-time high territory. Many experienced holders become more cautious when Bitcoin is this close to its peak.`;
+        desc = `Near all-time high territory. Many Bitcoiners become more cautious when Bitcoin is this close to its peak.`;
       }
 
       document.getElementById('ath-value').style.color = color;
@@ -1398,6 +1488,7 @@
   async function fetch200MA() {
     try {
       const res = await fetch('/api/history?timeframe=1y');
+      if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       const prices = data.prices.map(p => p[1]);
       const last200 = prices.slice(-200);
@@ -1416,10 +1507,10 @@
       let color, desc;
       if (diffPct < -10) {
         color = 'var(--green)';
-        desc = `Bitcoin is ${Math.abs(diffPct).toFixed(1)}% below its 200-day average. Historically, trading below this line has been one of the strongest long-term buy signals.`;
+        desc = `Bitcoin is ${Math.abs(diffPct).toFixed(1)}% below its 200-day average. Historically, trading below this line has been one of the strongest strongest buy signals in Bitcoin's history.`;
       } else if (diffPct < 10) {
         color = 'var(--amber)';
-        desc = `Bitcoin is trading close to its 200-day average. This is considered a neutral zone — neither particularly expensive nor cheap on a long-term basis.`;
+        desc = `Bitcoin is trading close to its 200-day average. This is considered a neutral zone — neither particularly expensive nor cheap on a historical basis.`;
       } else {
         color = 'var(--red)';
         desc = `Bitcoin is ${diffPct.toFixed(1)}% above its 200-day average. Extended periods above this line have often preceded corrections.`;
@@ -1458,39 +1549,41 @@
       text.textContent = translations[currentLang].signalAccumulate;
       shareSignal.style.color = 'var(--green)';
       shareEl.textContent = '● ' + translations[currentLang].signalAccumulate;
-      reason.textContent = `Fear & Greed is in fear territory at ${fgValue}, and Bitcoin is trading ${Math.abs(diffPct).toFixed(0)}% below its long-term average — historically, these are the moments experienced holders act on.`;
+      reason.textContent = `Fear & Greed is at ${fgValue} and Bitcoin is trading ${Math.abs(diffPct).toFixed(0)}% below its 200-day average. Historically, these are the conditions Bitcoiners act on.`;
       expertTag.textContent = 'Current signal: Accumulation zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = `When the Fear & Greed Index falls into fear territory — as it is now — experienced long-term Bitcoin holders tend to see it as an opportunity rather than a warning. Historically, the periods of deepest fear have aligned closely with local price bottoms. Many DCA investors choose to increase their regular purchase amount during these windows. The logic is straightforward: if your conviction in Bitcoin's long-term trajectory hasn't changed, then a lower price is simply a better entry point.`;
+      expertText.textContent = `When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows — the logic being that if your conviction hasn't changed, a lower price is simply a better entry point.`;
     } else if (score >= 0) {
       pill.classList.add('hold');
       text.textContent = translations[currentLang].signalHold;
       shareSignal.style.color = 'var(--amber)';
       shareEl.textContent = '● ' + translations[currentLang].signalHold;
-      reason.textContent = `Mixed signals — Fear & Greed at ${fgValue} with Bitcoin near its long-term average. Experienced holders tend to continue their regular DCA plan without making big changes.`;
+      reason.textContent = `Mixed signals — Fear & Greed at ${fgValue} with Bitcoin close to its 200-day average. Most Bitcoiners stick to their regular plan and wait for a clearer picture.`;
       expertTag.textContent = 'Current signal: Neutral zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = `When signals are mixed, most experienced Bitcoin holders simply stick to their regular plan. Dollar-cost averaging is designed precisely for moments like this — when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular investment schedule, avoid making emotional changes, and wait for a clearer signal before adjusting your strategy.`;
+      expertText.textContent = `When signals are mixed, most Bitcoiners simply stay the course. DCA is designed for exactly these moments — when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular schedule, avoid reacting to noise, and let the next clear signal inform your next move.`;
     } else {
       pill.classList.add('caution');
       text.textContent = translations[currentLang].signalCaution;
       shareSignal.style.color = 'var(--red)';
       shareEl.textContent = '● ' + translations[currentLang].signalCaution;
-      reason.textContent = `Greed is elevated at ${fgValue} with Bitcoin ${diffPct.toFixed(0)}% above its long-term average. Many experienced holders are cautious — not necessarily selling, but not aggressively buying either.`;
+      reason.textContent = `Greed is elevated at ${fgValue} with Bitcoin ${diffPct.toFixed(0)}% above its 200-day average. Many Bitcoiners are cautious — not necessarily selling, but not aggressively buying either.`;
       expertTag.textContent = 'Current signal: Caution zone';
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(248,113,113,0.3); background:var(--red-dim); color:var(--red); font-family:var(--mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = `When greed is elevated and Bitcoin trades significantly above its long-term average, many experienced holders shift into a more cautious stance. This doesn't typically mean selling — most long-term holders don't time exits either. But it often means pausing additional purchases, reviewing position sizes, and being mentally prepared for a correction. The phrase "be fearful when others are greedy" captures this instinct well.`;
+      expertText.textContent = `When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling — timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. "Be fearful when others are greedy" is a cliché for a reason.`;
     }
 
     // Update gauge needle
     if (fgValue !== null) {
-      const angle = (fgValue / 100) * 180 - 90;
-      const rad = (angle - 90) * Math.PI / 180;
-      const cx = 70, cy = 75, len = 45;
+      const angle = (fgValue / 100) * 180 - 180;
+      const rad = angle * Math.PI / 180;
+      const cx = 50, cy = 54, len = 36;
       const x2 = cx + len * Math.cos(rad);
       const y2 = cy + len * Math.sin(rad);
-      document.getElementById('gauge-needle').setAttribute('x2', x2);
-      document.getElementById('gauge-needle').setAttribute('y2', y2);
+      if (!isNaN(x2) && !isNaN(y2)) {
+        document.getElementById('gauge-needle').setAttribute('x2', x2.toFixed(1));
+        document.getElementById('gauge-needle').setAttribute('y2', y2.toFixed(1));
+      }
     }
   }
 
@@ -1594,7 +1687,7 @@
     gym:        { label: 'Gym membership',                 weekly: 10.40, monthly: 45  },
     netflix:    { label: 'Netflix subscription',           weekly: 4.15,  monthly: 18  },
     spotify:    { label: 'Spotify subscription',           weekly: 2.55,  monthly: 11  },
-    zalando:    { label: 'Monthly Zalando haul',           weekly: 18.50, monthly: 80  },
+    zalando:    { label: 'Monthly online shopping',        weekly: 18.50, monthly: 80  },
     takeaway:   { label: 'Weekly food delivery',           weekly: 40,    monthly: 173 },
   };
 
@@ -1607,18 +1700,27 @@
     const sym = currentCurrency === 'EUR' ? '€' : '$';
     const price = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
 
-    // DCA calculation: invest weekly amount each week from Jan 2015
+    // Build yearly snapshots for chart + totals
     const startYear = 2015;
     const currentYear = new Date().getFullYear();
     let totalInvested = 0;
     let totalBTC = 0;
+    const chartLabels = [];
+    const chartValues = [];
+    const chartInvested = [];
 
     for (let year = startYear; year <= currentYear; year++) {
       const btcPrice = BTC_YEARLY_EUR[year] || price;
-      const weeksThisYear = year === currentYear ? new Date().getDay() === 0 ? Math.floor((new Date() - new Date(year, 0, 1)) / 604800000) : Math.floor((new Date() - new Date(year, 0, 1)) / 604800000) : 52;
+      const weeksThisYear = year === currentYear
+        ? Math.max(1, Math.floor((Date.now() - new Date(year, 0, 1)) / 604800000))
+        : 52;
       const invested = habit.weekly * weeksThisYear;
       totalInvested += invested;
       totalBTC += invested / btcPrice;
+      // snapshot value at current price
+      chartLabels.push(year);
+      chartValues.push(Math.round(totalBTC * price));
+      chartInvested.push(Math.round(totalInvested));
     }
 
     const valueToday = totalBTC * price;
@@ -1626,6 +1728,7 @@
     const returnPct = ((valueToday - totalInvested) / totalInvested) * 100;
     const fmt = n => sym + Math.round(n).toLocaleString();
 
+    // Update text
     document.getElementById('whatif-selected-label').textContent = habit.label.toUpperCase();
     document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
     document.getElementById('whatif-weekly').textContent = sym + habit.weekly.toFixed(2);
@@ -1633,11 +1736,94 @@
     document.getElementById('whatif-invested').textContent = fmt(totalInvested);
     document.getElementById('whatif-today').textContent = fmt(valueToday);
     document.getElementById('whatif-gain').textContent = '+' + fmt(gain);
-    document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct) + '%';
+    document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct).toLocaleString() + '%';
 
+    // Animate bars (invested always 100%, value scaled relative)
+    setTimeout(() => {
+      document.getElementById('bar-invested').style.width = '100%';
+      document.getElementById('bar-value').style.width = Math.min(100, (valueToday / valueToday) * 100) + '%';
+    }, 50);
+
+    // Show result
     const wrap = document.getElementById('whatif-result-wrap');
     wrap.style.display = 'block';
-    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+
+    // Draw chart after render
+    setTimeout(() => {
+      drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
+  }
+
+  function drawWhatIfChart(labels, values, invested, sym) {
+    const canvas = document.getElementById('whatifChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    const pad = { top: 16, right: 16, bottom: 28, left: 12 };
+    const w = W - pad.left - pad.right;
+    const h = H - pad.top - pad.bottom;
+
+    const maxVal = Math.max(...values);
+    const toX = i => pad.left + (i / (labels.length - 1)) * w;
+    const toY = v => pad.top + h - (v / maxVal) * h;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Invested area (subtle grey)
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(invested[0]));
+    invested.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
+    ctx.lineTo(toX(invested.length - 1), H - pad.bottom);
+    ctx.lineTo(toX(0), H - pad.bottom);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(240,237,232,0.06)';
+    ctx.fill();
+
+    // Value area (orange glow)
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(247,147,26,0.3)');
+    grad.addColorStop(1, 'rgba(247,147,26,0.02)');
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(values[0]));
+    values.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
+    ctx.lineTo(toX(values.length - 1), H - pad.bottom);
+    ctx.lineTo(toX(0), H - pad.bottom);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Invested line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(240,237,232,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    invested.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Value line
+    ctx.beginPath();
+    ctx.strokeStyle = '#F7931A';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    values.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+    ctx.stroke();
+
+    // Year labels
+    ctx.fillStyle = 'rgba(107,101,96,0.8)';
+    ctx.font = `${9 * window.devicePixelRatio}px "DM Mono", monospace`;
+    ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
+    labels.forEach((yr, i) => {
+      if (i % 2 === 0 || i === labels.length - 1) {
+        const x = toX(i) * window.devicePixelRatio;
+        const y = (H - 6) * window.devicePixelRatio;
+        ctx.fillText(yr, x - 10, y);
+      }
+    });
   }
 
   function shareWhatIfWhatsApp() {
@@ -1718,8 +1904,6 @@
     await fetchFearGreed();
     await fetchATH();
     await fetch200MA();
-    calcPast();
-    calcFuture();
   }
 
   init();
