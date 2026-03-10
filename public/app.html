@@ -4,6 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>When to Buy BTC — Bitcoin Signal for Long-Term Thinkers</title>
+  <meta name="description" content="A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice." />
+  <meta name="keywords" content="when to buy bitcoin, bitcoin signal, bitcoin fear and greed, bitcoin 200 day average, bitcoin DCA, long term bitcoin" />
+  <meta name="author" content="whentobuybtc.xyz" />
+  <link rel="canonical" href="https://whentobuybtc.xyz/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://whentobuybtc.xyz/" />
+  <meta property="og:title" content="When to Buy BTC — Bitcoin Signal for Long-Term Thinkers" />
+  <meta property="og:description" content="A free Bitcoin market signal combining Fear & Greed, 200-day average, and ATH distance. See what the data shows right now." />
+  <meta property="og:image" content="https://whentobuybtc.xyz/social-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="When to Buy BTC — Bitcoin Signal for Long-Term Thinkers" />
+  <meta name="twitter:description" content="A free Bitcoin market signal combining Fear & Greed, 200-day average, and ATH distance. See what the data shows right now." />
+  <meta name="twitter:image" content="https://whentobuybtc.xyz/social-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "When to Buy BTC",
+    "url": "https://whentobuybtc.xyz",
+    "description": "A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day moving average, and ATH distance into one clear signal.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet" />
@@ -384,80 +416,78 @@
       padding: 0.25rem 0.75rem; margin-bottom: 1.5rem;
     }
 
-    /* ── DCA CALCULATOR ── */
-    .dca-section { background: var(--bg3); }
-    .dca-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 4rem; align-items: start;
+    /* ── WHAT IF CALCULATOR ── */
+    .whatif-section { background: var(--bg3); }
+    .habit-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 3rem;
     }
-    .dca-inputs { display: flex; flex-direction: column; gap: 1.5rem; }
-    .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
-    .input-label {
-      font-family: var(--mono); font-size: 0.62rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--grey);
-    }
-    .input-row { display: flex; }
-    .input-prefix {
-      font-family: var(--mono); font-size: 0.9rem;
+    .habit-card {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5rem; padding: 1.25rem 0.75rem;
       background: var(--bg2); border: 1px solid var(--border);
-      border-right: none; padding: 0.75rem 1rem;
-      color: var(--orange);
+      cursor: pointer; transition: all 0.2s; text-align: center;
     }
-    .dca-input {
-      flex: 1; background: var(--bg2);
-      border: 1px solid var(--border); border-left: none;
-      padding: 0.75rem 1rem;
-      font-family: var(--display); font-size: 1rem;
-      font-weight: 600; color: var(--white);
-      outline: none; transition: border-color 0.2s;
+    .habit-card:hover, .habit-card.active {
+      border-color: var(--orange); background: var(--orange-dim);
     }
-    .dca-input:focus { border-color: var(--orange); }
-    .freq-tabs { display: flex; gap: 0; }
-    .freq-tab {
-      flex: 1; font-family: var(--mono); font-size: 0.62rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-right: none; color: var(--grey);
-      padding: 0.75rem; cursor: pointer; transition: all 0.2s;
-      text-align: center;
+    .habit-icon { font-size: 1.5rem; }
+    .habit-name {
+      font-family: var(--display); font-size: 0.8rem;
+      font-weight: 600; color: var(--white); line-height: 1.2;
     }
-    .freq-tab:last-child { border-right: 1px solid var(--border); }
-    .freq-tab.active { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
-
-    .dca-result {
+    .habit-cost {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.08em; color: var(--grey);
+    }
+    .whatif-result-wrap {
       border: 1px solid var(--border);
-      padding: 2.5rem; background: var(--bg2);
+      background: var(--bg2); overflow: hidden;
+      animation: fadeUp 0.4s ease;
     }
-    .dca-result-label {
-      font-family: var(--mono); font-size: 0.62rem;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--grey); margin-bottom: 0.5rem;
-    }
-    .dca-result-value {
-      font-family: var(--display); font-size: 3rem;
-      font-weight: 800; color: var(--orange);
-      line-height: 1; margin-bottom: 0.25rem;
-    }
-    .dca-result-sub {
-      font-family: var(--mono); font-size: 0.7rem;
-      color: var(--grey); margin-bottom: 2rem;
-    }
-    .dca-breakdown { display: flex; flex-direction: column; gap: 1rem; }
-    .dca-row {
-      display: flex; justify-content: space-between;
-      padding-bottom: 0.75rem;
+    .whatif-result-header {
+      padding: 2rem 2rem 1.5rem;
       border-bottom: 1px solid var(--border);
     }
-    .dca-row-label {
-      font-family: var(--mono); font-size: 0.65rem;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    .whatif-selected-label {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 0.75rem;
     }
-    .dca-row-value {
-      font-family: var(--display); font-size: 0.9rem;
-      font-weight: 600; color: var(--white);
+    .whatif-headline {
+      font-family: var(--display); font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 700; line-height: 1.3; color: var(--white);
     }
-    .dca-row-value.positive { color: var(--green); }
+    .whatif-stats-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+    }
+    .whatif-stat {
+      padding: 1.5rem 1.25rem;
+      border-right: 1px solid var(--border);
+    }
+    .whatif-stat:last-child { border-right: none; }
+    .whatif-stat-label {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 0.4rem;
+    }
+    .whatif-stat-value {
+      font-family: var(--display); font-size: 1.1rem;
+      font-weight: 800; color: var(--white);
+    }
+    .whatif-stat-value.positive { color: var(--green); }
+    .whatif-disclaimer {
+      padding: 1rem 2rem;
+      font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.06em; color: var(--grey);
+      border-top: 1px solid var(--border);
+    }
+    .whatif-share-row {
+      padding: 1rem 2rem 1.5rem;
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+    }
 
     /* ── SHARE CARD ── */
     .share-section { background: var(--bg2); }
@@ -664,137 +694,52 @@
       .relai-btn { width: 100%; padding: 1rem; }
     }
 
-    /* ── INSTEAD OF — SLOT MACHINE ── */
-    .instead-section { background: var(--bg2); }
-    .slot-machine {
-      border: 1px solid var(--border);
-      background: var(--bg); overflow: hidden;
-      margin-bottom: 2rem;
-    }
-    .slot-window {
-      padding: 2rem 1.5rem 1.5rem;
-      min-height: 120px;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center; position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-    .slot-window::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 40px;
-      background: linear-gradient(to bottom, var(--bg), transparent);
-      pointer-events: none; z-index: 1;
-    }
-    .slot-window::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
-      background: linear-gradient(to top, var(--bg), transparent);
-      pointer-events: none; z-index: 1;
-    }
-    .slot-item-text {
-      font-family: var(--display); font-size: clamp(1rem, 4vw, 1.5rem);
-      font-weight: 700; line-height: 1.3; color: var(--white);
-      transition: opacity 0.15s, transform 0.15s;
-    }
-    .slot-item-text.spinning {
-      opacity: 0.3; transform: translateY(-6px);
-    }
-    .slot-item-price {
-      font-family: var(--mono); font-size: 0.75rem;
-      letter-spacing: 0.1em; color: var(--orange);
-      margin-top: 0.5rem;
-    }
-    .slot-item-year {
-      font-family: var(--mono); font-size: 0.6rem;
-      letter-spacing: 0.08em; color: var(--grey);
-      margin-top: 0.2rem;
-    }
-    .slot-controls {
-      display: flex; align-items: stretch; gap: 0;
-    }
-    .slot-spin {
-      flex: 1; font-family: var(--mono); font-size: 0.7rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      background: var(--orange); color: #000;
-      border: none; padding: 1.1rem 1.5rem;
-      cursor: pointer; transition: opacity 0.2s;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-    }
-    .slot-spin:active { opacity: 0.75; }
-    .slot-spin.spinning-btn { opacity: 0.6; pointer-events: none; }
-    .spin-icon { display: inline-block; transition: transform 0.4s; }
-    .slot-spin.spinning-btn .spin-icon { animation: spinIcon 0.5s linear infinite; }
-    @keyframes spinIcon { to { transform: rotate(360deg); } }
-    .slot-calc {
-      font-family: var(--mono); font-size: 0.65rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      background: var(--bg3); color: var(--white);
-      border: none; border-left: 1px solid var(--border);
-      padding: 1.1rem 1.5rem; cursor: pointer;
-      transition: background 0.2s; white-space: nowrap;
-    }
-    .slot-calc:hover { background: var(--bg2); }
 
-    .instead-result {
-      display: none; border: 1px solid var(--border);
-      background: var(--bg); overflow: hidden;
+
+    /* ── BLOG ── */
+    .blog-section { padding: 5rem 2rem; }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
     }
-    .instead-result.visible { display: block; animation: fadeUp 0.4s ease; }
-    .instead-result-top {
-      padding: 2rem 1.5rem 1.5rem;
-      border-bottom: 1px solid var(--border);
+    .blog-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.75rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .instead-item-name {
-      font-family: var(--mono); font-size: 0.6rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--grey); margin-bottom: 0.5rem;
+    .blog-card:hover { border-color: var(--orange); transform: translateY(-2px); }
+    .blog-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
     }
-    .instead-headline {
-      font-family: var(--display); font-size: clamp(1.1rem, 4vw, 1.8rem);
-      font-weight: 700; line-height: 1.2; color: var(--white);
+    .blog-card-title {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--white);
     }
-    .instead-headline span { color: var(--orange); }
-    .instead-result-grid {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
+    .blog-card-excerpt {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--grey);
+      flex: 1;
     }
-    .instead-stat {
-      padding: 1.5rem;
-      border-right: 1px solid var(--border);
-      border-top: 1px solid var(--border);
-    }
-    .instead-stat:last-child { border-right: none; }
-    .instead-stat-label {
-      font-family: var(--mono); font-size: 0.55rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--grey); margin-bottom: 0.4rem;
-    }
-    .instead-stat-value {
-      font-family: var(--display); font-size: clamp(1.2rem, 4vw, 1.6rem);
-      font-weight: 800; line-height: 1;
-    }
-    .instead-stat-sub {
-      font-family: var(--mono); font-size: 0.55rem;
-      color: var(--grey); margin-top: 0.3rem;
-    }
-    .instead-share-row {
-      padding: 1.25rem 1.5rem;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 1rem;
-      flex-wrap: wrap; background: var(--bg3);
-      border-top: 1px solid var(--border);
-    }
-    .instead-share-text {
-      font-family: var(--serif); font-style: italic;
-      font-size: 0.85rem; color: rgba(240,237,232,0.5);
-      flex: 1; min-width: 200px;
-    }
-    @media (max-width: 600px) {
-      .instead-result-grid { grid-template-columns: 1fr; }
-      .instead-stat { border-right: none; }
-      .instead-stat:not(:first-child) { border-top: 1px solid var(--border); }
-      .instead-share-row { flex-direction: column; align-items: stretch; }
-      .instead-share-row .share-btn { text-align: center; }
+    .blog-read {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--orange);
     }
 
     /* ── FOOTER ── */
@@ -889,6 +834,17 @@
 
       /* Footer */
       footer { flex-direction: column; gap: 1rem; padding: 1.5rem 1.25rem; }
+
+      /* Blog */
+      .blog-grid { grid-template-columns: 1fr; }
+      .blog-section { padding: 3rem 1.25rem; }
+
+      /* What If */
+      .habit-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+      .whatif-stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .whatif-stat { border-bottom: 1px solid var(--border); }
+      .whatif-result-header { padding: 1.5rem; }
+      .whatif-share-row, .whatif-disclaimer { padding: 1rem 1.5rem; }
     }
 
     /* Touch targets — minimum 44px */
@@ -942,7 +898,7 @@
 
   <div class="hero-actions">
     <a href="#signal" class="btn-primary">Understand the signal</a>
-    <a href="#dca" class="btn-ghost">Calculate your DCA</a>
+    <a href="#whatif" class="btn-ghost">Calculate your "What If?"</a>
   </div>
 
   <div class="scroll-hint">↓ Scroll to explore</div>
@@ -1060,124 +1016,89 @@
   </div>
 </section>
 
-<!-- DCA CALCULATOR -->
-<section class="section dca-section" id="dca">
+<!-- WHAT IF CALCULATOR -->
+<section class="section whatif-section" id="whatif">
   <div class="section-inner">
-    <p class="section-label reveal">DCA Calculator</p>
-    <h2 class="section-title reveal">What would you have today?</h2>
-    <p class="section-sub reveal">Enter any amount and see what a regular Bitcoin savings plan would have returned — compared to doing nothing.</p>
+    <p class="section-label reveal">What If?</p>
+    <h2 class="section-title reveal">The money was always there.</h2>
+    <p class="section-sub reveal">Most people think they can't afford Bitcoin. But they're already spending it — just on something else. Pick a habit and see what 10 years of Bitcoin savings would have looked like instead.</p>
 
-    <div class="dca-grid reveal" style="margin-top: 3rem;">
-      <div class="dca-inputs">
-        <div class="input-group">
-          <label class="input-label">Amount per period</label>
-          <div class="input-row">
-            <div class="input-prefix" id="dca-currency-prefix">€</div>
-            <input type="number" class="dca-input" id="dca-amount" value="100" min="1" oninput="calcDCA()" />
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">Frequency</label>
-          <div class="freq-tabs">
-            <button class="freq-tab" onclick="setFreq('daily', this)">Daily</button>
-            <button class="freq-tab active" onclick="setFreq('weekly', this)">Weekly</button>
-            <button class="freq-tab" onclick="setFreq('monthly', this)">Monthly</button>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">Starting from</label>
-          <div class="freq-tabs">
-            <button class="freq-tab" onclick="setYears(1, this)">1Y ago</button>
-            <button class="freq-tab active" onclick="setYears(3, this)">3Y ago</button>
-            <button class="freq-tab" onclick="setYears(5, this)">5Y ago</button>
-          </div>
-        </div>
-
-        <p style="font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--grey); line-height: 1.6;">
-          Past performance doesn't guarantee future results. This is for educational purposes only — not financial advice.
-        </p>
-      </div>
-
-      <div class="dca-result">
-        <p class="dca-result-label">Your portfolio value today</p>
-        <div class="dca-result-value" id="dca-result">€—</div>
-        <p class="dca-result-sub" id="dca-btc-amount">— BTC accumulated</p>
-        <div class="dca-breakdown">
-          <div class="dca-row">
-            <span class="dca-row-label">Total invested</span>
-            <span class="dca-row-value" id="dca-invested">—</span>
-          </div>
-          <div class="dca-row">
-            <span class="dca-row-label">Gain / Loss</span>
-            <span class="dca-row-value positive" id="dca-gain">—</span>
-          </div>
-          <div class="dca-row" style="border-bottom: none;">
-            <span class="dca-row-label">Return</span>
-            <span class="dca-row-value positive" id="dca-return">—</span>
-          </div>
-        </div>
-      </div>
+    <div class="habit-grid reveal">
+      <button class="habit-card" onclick="selectHabit('coffee')">
+        <span class="habit-icon">☕</span>
+        <span class="habit-name">Daily latte</span>
+        <span class="habit-cost">~€4.50/day</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('cigarettes')">
+        <span class="habit-icon">🚬</span>
+        <span class="habit-name">Pack of cigarettes</span>
+        <span class="habit-cost">~€8/day</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('gym')">
+        <span class="habit-icon">🏋️</span>
+        <span class="habit-name">Gym membership</span>
+        <span class="habit-cost">~€45/month</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('netflix')">
+        <span class="habit-icon">📺</span>
+        <span class="habit-name">Netflix</span>
+        <span class="habit-cost">~€18/month</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('spotify')">
+        <span class="habit-icon">🎵</span>
+        <span class="habit-name">Spotify</span>
+        <span class="habit-cost">~€11/month</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('zalando')">
+        <span class="habit-icon">🛍️</span>
+        <span class="habit-name">Zalando haul</span>
+        <span class="habit-cost">~€80/month</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('takeaway')">
+        <span class="habit-icon">🍕</span>
+        <span class="habit-name">Food delivery</span>
+        <span class="habit-cost">~€40/week</span>
+      </button>
     </div>
-  </div>
-</section>
 
-<!-- INSTEAD OF -->
-<section class="section instead-section" id="instead">
-  <div class="section-inner">
-    <p class="section-label reveal">Opportunity Cost</p>
-    <h2 class="section-title reveal">What if you'd bought Bitcoin instead?</h2>
-    <p class="section-sub reveal">Spin to see a random thing people spent money on in the last 10 years — and what it would be worth in Bitcoin today.</p>
-
-    <div class="slot-machine reveal">
-      <div class="slot-window" id="slot-window">
-        <div class="slot-item-text" id="slot-text">Hit spin to find out</div>
-        <div class="slot-item-price" id="slot-price"></div>
-        <div class="slot-item-year" id="slot-year"></div>
+    <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
+      <div class="whatif-result-header">
+        <p class="whatif-selected-label" id="whatif-selected-label">—</p>
+        <h3 class="whatif-headline">If you'd put that into Bitcoin weekly since 2015, you'd have <span id="whatif-btc-value" style="color:var(--orange);">—</span> today.</h3>
       </div>
-      <div class="slot-controls">
-        <button class="slot-spin" id="spin-btn" onclick="spinSlot()">
-          <span class="spin-icon">↻</span> Spin
-        </button>
-        <button class="slot-calc" id="calc-btn" onclick="calcSlot()" style="display:none;">
-          Calculate →
-        </button>
+      <div class="whatif-stats-grid">
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Weekly amount</p>
+          <div class="whatif-stat-value" id="whatif-weekly">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Monthly amount</p>
+          <div class="whatif-stat-value" id="whatif-monthly">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Total invested</p>
+          <div class="whatif-stat-value" id="whatif-invested">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Value today</p>
+          <div class="whatif-stat-value" id="whatif-today" style="color:var(--orange);">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Gain</p>
+          <div class="whatif-stat-value positive" id="whatif-gain">—</div>
+        </div>
+        <div class="whatif-stat">
+          <p class="whatif-stat-label">Return</p>
+          <div class="whatif-stat-value positive" id="whatif-return">—</div>
+        </div>
+      </div>
+      <p class="whatif-disclaimer">Based on actual Bitcoin weekly average prices since 2015. Not financial advice — this is for perspective.</p>
+      <div class="whatif-share-row">
+        <button class="share-btn" onclick="shareWhatIfWhatsApp()">Share on WhatsApp</button>
+        <button class="share-btn" onclick="shareWhatIfTwitter()">Share on X</button>
       </div>
     </div>
 
-    <div class="instead-result" id="instead-result">
-      <div class="instead-result-top">
-        <p class="instead-item-name" id="instead-item-label">—</p>
-        <h3 class="instead-headline">
-          That money would be worth <span id="instead-btc-value">—</span> in Bitcoin today.
-        </h3>
-      </div>
-      <div class="instead-result-grid">
-        <div class="instead-stat">
-          <p class="instead-stat-label">Spent</p>
-          <div class="instead-stat-value" id="instead-spent" style="color: var(--grey);">—</div>
-          <p class="instead-stat-sub" id="instead-spent-sub">—</p>
-        </div>
-        <div class="instead-stat">
-          <p class="instead-stat-label">Worth in BTC today</p>
-          <div class="instead-stat-value" id="instead-worth" style="color: var(--orange);">—</div>
-          <p class="instead-stat-sub" id="instead-btc-sub">—</p>
-        </div>
-        <div class="instead-stat">
-          <p class="instead-stat-label">Return</p>
-          <div class="instead-stat-value" id="instead-diff" style="color: var(--green);">—</div>
-          <p class="instead-stat-sub" id="instead-return-sub">—</p>
-        </div>
-      </div>
-      <div class="instead-share-row">
-        <p class="instead-share-text" id="instead-share-text">—</p>
-        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-          <button class="share-btn" onclick="shareInsteadWhatsApp()">WhatsApp</button>
-          <button class="share-btn" onclick="shareInsteadTwitter()">Share on X</button>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1267,6 +1188,53 @@
   </div>
 </section>
 
+<!-- BLOG -->
+<section class="blog-section reveal">
+  <div class="container">
+    <p class="section-eyebrow">Learn</p>
+    <h2 class="section-title">Understand the signal</h2>
+    <p class="section-sub">No speculation. No hype. Just the frameworks long-term Bitcoin holders actually use.</p>
+    <div class="blog-grid">
+      <a href="/blog/what-is-the-200-day-moving-average" class="blog-card">
+        <span class="blog-cat">Fundamentals</span>
+        <h3 class="blog-card-title">What is the 200-day moving average — and why do Bitcoin holders watch it?</h3>
+        <p class="blog-card-excerpt">One of the most reliable long-term indicators in Bitcoin's history. Here's what it measures and what it has meant historically.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/fear-and-greed-index-explained" class="blog-card">
+        <span class="blog-cat">Fundamentals</span>
+        <h3 class="blog-card-title">The Fear & Greed Index explained — what it measures and what it doesn't</h3>
+        <p class="blog-card-excerpt">Market sentiment is powerful, but it's not the whole picture. Here's how to read Fear & Greed without being misled by it.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/what-is-dca-bitcoin" class="blog-card">
+        <span class="blog-cat">Strategy</span>
+        <h3 class="blog-card-title">What is DCA and why do most long-term Bitcoin holders use it?</h3>
+        <p class="blog-card-excerpt">Dollar-cost averaging removes the hardest part of investing: timing. Here's the logic, the maths, and the psychology behind it.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/why-invest-in-bitcoin" class="blog-card">
+        <span class="blog-cat">Investment case</span>
+        <h3 class="blog-card-title">Why invest in Bitcoin? The case for long-term holders in 2025</h3>
+        <p class="blog-card-excerpt">Fixed supply, growing demand, and a decade of data. Here's the structured case for Bitcoin as a long-term savings asset — without the hype.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/self-custody-explained" class="blog-card">
+        <span class="blog-cat">Security</span>
+        <h3 class="blog-card-title">Self-custody explained: why "not your keys, not your coins" actually matters</h3>
+        <p class="blog-card-excerpt">Exchanges fail, get hacked, or freeze withdrawals. Self-custody is not paranoia — it's the point of Bitcoin.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+      <a href="/blog/mica-what-it-means-for-bitcoin-buyers" class="blog-card">
+        <span class="blog-cat">Regulation</span>
+        <h3 class="blog-card-title">MiCA regulation: what it means for European Bitcoin buyers in 2025</h3>
+        <p class="blog-card-excerpt">Europe's new crypto framework is live. Here's what changed, what it protects you from, and what it doesn't cover.</p>
+        <span class="blog-read">Read →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <p class="footer-copy">© 2026 whentobuybtc.xyz · Not financial advice</p>
@@ -1281,8 +1249,6 @@
   let currentLang = 'en';
   let currentPrice = null;
   let currentCurrency = 'EUR';
-  let dcaFreq = 'weekly';
-  let dcaYears = 3;
   let fgValue = null;
   let maPrice = null;
   let athPrice = null;
@@ -1615,53 +1581,78 @@
     ctx.fillText(sym + formatPrice(min), 24, H - 6);
   }
 
-  // ── DCA CALCULATOR ──
-  function setFreq(freq, el) {
-    dcaFreq = freq;
-    document.querySelectorAll('.freq-tab').forEach(t => {
-      if (t.textContent.toLowerCase().includes(freq.split('')[0])) t.classList.add('active');
-    });
-    // Better: toggle active on clicked button's group
-    el.closest('.freq-tabs')?.querySelectorAll('.freq-tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    calcDCA();
-  }
+  // ── WHAT IF CALCULATOR ──
+  // Historical BTC weekly average prices in EUR (approximate yearly averages)
+  const BTC_YEARLY_EUR = {
+    2015: 280, 2016: 580, 2017: 4200, 2018: 6800,
+    2019: 7500, 2020: 11500, 2021: 42000, 2022: 28000,
+    2023: 27000, 2024: 57000, 2025: 72000
+  };
 
-  function setYears(y, el) {
-    dcaYears = y;
-    el.closest('.freq-tabs')?.querySelectorAll('.freq-tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    calcDCA();
-  }
+  const HABITS = {
+    coffee:     { label: 'Daily latte from a coffee shop', weekly: 31.50, monthly: 135 },
+    cigarettes: { label: 'A pack of cigarettes a day',     weekly: 56,    monthly: 240 },
+    gym:        { label: 'Gym membership',                 weekly: 10.40, monthly: 45  },
+    netflix:    { label: 'Netflix subscription',           weekly: 4.15,  monthly: 18  },
+    spotify:    { label: 'Spotify subscription',           weekly: 2.55,  monthly: 11  },
+    zalando:    { label: 'Monthly Zalando haul',           weekly: 18.50, monthly: 80  },
+    takeaway:   { label: 'Weekly food delivery',           weekly: 40,    monthly: 173 },
+  };
 
-  async function calcDCA() {
+  function selectHabit(key) {
     if (!currentPrice) return;
-    const amount = parseFloat(document.getElementById('dca-amount').value) || 100;
+    document.querySelectorAll('.habit-card').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
+    const price = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
 
-    // Estimate periods
-    const periodsPerYear = { daily: 365, weekly: 52, monthly: 12 };
-    const periods = periodsPerYear[dcaFreq] * dcaYears;
-    const totalInvested = amount * periods;
+    // DCA calculation: invest weekly amount each week from Jan 2015
+    const startYear = 2015;
+    const currentYear = new Date().getFullYear();
+    let totalInvested = 0;
+    let totalBTC = 0;
 
-    // Use historical price ratios (approximate, using current price as reference)
-    const priceMultipliers = { 1: 0.55, 3: 0.18, 5: 0.08 };
-    const avgEntryPrice = currentPrice * (priceMultipliers[dcaYears] || 0.3);
-    const btcAccumulated = totalInvested / avgEntryPrice;
-    const portfolioValue = btcAccumulated * currentPrice;
-    const gain = portfolioValue - totalInvested;
-    const returnPct = (gain / totalInvested) * 100;
+    for (let year = startYear; year <= currentYear; year++) {
+      const btcPrice = BTC_YEARLY_EUR[year] || price;
+      const weeksThisYear = year === currentYear ? new Date().getDay() === 0 ? Math.floor((new Date() - new Date(year, 0, 1)) / 604800000) : Math.floor((new Date() - new Date(year, 0, 1)) / 604800000) : 52;
+      const invested = habit.weekly * weeksThisYear;
+      totalInvested += invested;
+      totalBTC += invested / btcPrice;
+    }
 
+    const valueToday = totalBTC * price;
+    const gain = valueToday - totalInvested;
+    const returnPct = ((valueToday - totalInvested) / totalInvested) * 100;
     const fmt = n => sym + Math.round(n).toLocaleString();
-    const fmtBtc = n => n.toFixed(6) + ' BTC';
 
-    document.getElementById('dca-result').textContent = fmt(portfolioValue);
-    document.getElementById('dca-btc-amount').textContent = fmtBtc(btcAccumulated) + ' accumulated';
-    document.getElementById('dca-invested').textContent = fmt(totalInvested);
-    document.getElementById('dca-gain').textContent = (gain >= 0 ? '+' : '') + fmt(gain);
-    document.getElementById('dca-gain').className = 'dca-row-value ' + (gain >= 0 ? 'positive' : 'negative');
-    document.getElementById('dca-return').textContent = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(0) + '%';
-    document.getElementById('dca-return').className = 'dca-row-value ' + (returnPct >= 0 ? 'positive' : 'negative');
+    document.getElementById('whatif-selected-label').textContent = habit.label.toUpperCase();
+    document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
+    document.getElementById('whatif-weekly').textContent = sym + habit.weekly.toFixed(2);
+    document.getElementById('whatif-monthly').textContent = sym + habit.monthly.toFixed(0);
+    document.getElementById('whatif-invested').textContent = fmt(totalInvested);
+    document.getElementById('whatif-today').textContent = fmt(valueToday);
+    document.getElementById('whatif-gain').textContent = '+' + fmt(gain);
+    document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct) + '%';
+
+    const wrap = document.getElementById('whatif-result-wrap');
+    wrap.style.display = 'block';
+    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+
+  function shareWhatIfWhatsApp() {
+    const label = document.getElementById('whatif-selected-label').textContent;
+    const val = document.getElementById('whatif-today').textContent;
+    const invested = document.getElementById('whatif-invested').textContent;
+    const text = `${label}: if I'd put that money into Bitcoin weekly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+  }
+  function shareWhatIfTwitter() {
+    const label = document.getElementById('whatif-selected-label').textContent;
+    const val = document.getElementById('whatif-today').textContent;
+    const text = `${label} — if that money had gone into Bitcoin weekly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
   // ── SHARE ──
@@ -1721,272 +1712,6 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  // ── INSTEAD OF — SLOT MACHINE ──
-  const ITEMS = [
-    { name: 'iPhone 6', cheeky: 'That iPhone 6 collecting dust in a drawer', price: 699, cat: 'tech', year: 2014 },
-    { name: 'iPhone X', cheeky: 'That iPhone X you queued 3 hours for', price: 1149, cat: 'tech', year: 2017 },
-    { name: 'iPhone 14 Pro', cheeky: 'That iPhone 14 Pro you upgraded too soon', price: 1299, cat: 'tech', year: 2022 },
-    { name: 'iPhone 16', cheeky: 'That iPhone 16 still in the box basically', price: 1199, cat: 'tech', year: 2024 },
-    { name: 'AirPods Pro', cheeky: 'Those AirPods Pro you barely use anymore', price: 279, cat: 'tech', year: 2022 },
-    { name: 'AirPods (1st gen)', cheeky: 'The original AirPods everyone laughed at', price: 179, cat: 'tech', year: 2016 },
-    { name: 'Samsung Galaxy S24', cheeky: 'That Samsung S24 that scratched week one', price: 1099, cat: 'tech', year: 2024 },
-    { name: 'iPad Pro', cheeky: 'That iPad Pro that became a very expensive cookbook stand', price: 1199, cat: 'tech', year: 2021 },
-    { name: 'MacBook Air M1', cheeky: 'That MacBook Air you bought right before M2 launched', price: 1149, cat: 'tech', year: 2020 },
-    { name: 'Apple Watch Series 4', cheeky: 'That Apple Watch you wore for three months', price: 399, cat: 'tech', year: 2018 },
-    { name: 'Apple Watch Ultra', cheeky: 'That Apple Watch Ultra for someone who hates hiking', price: 849, cat: 'tech', year: 2022 },
-    { name: 'PS5', cheeky: 'That PS5 you scalped off eBay at 2x price', price: 549, cat: 'tech', year: 2020 },
-    { name: 'Nintendo Switch', cheeky: 'That Nintendo Switch mostly used for Mario Kart at parties', price: 329, cat: 'tech', year: 2017 },
-    { name: 'GoPro Hero', cheeky: 'That GoPro you used on exactly one holiday', price: 399, cat: 'tech', year: 2019 },
-    { name: 'Dyson V11 hoover', cheeky: 'That Dyson hoover you treat better than your car', price: 599, cat: 'tech', year: 2019 },
-    { name: 'Roomba robot vacuum', cheeky: 'That Roomba that mostly panics in corners', price: 449, cat: 'tech', year: 2020 },
-    { name: 'Kindle Paperwhite', cheeky: 'That Kindle with 47 unread books on it', price: 139, cat: 'tech', year: 2018 },
-    { name: 'Meta Quest 2', cheeky: 'That Meta Quest 2 that lives under the bed now', price: 349, cat: 'tech', year: 2020 },
-    { name: 'Sonos speaker', cheeky: 'That Sonos speaker you spent 2 hours setting up', price: 279, cat: 'tech', year: 2019 },
-    { name: 'OLED TV 65"', cheeky: 'That 65" OLED TV you bought to justify the sofa upgrade', price: 1499, cat: 'tech', year: 2021 },
-    { name: 'Yeezy Boost 350', cheeky: 'Those Yeezys you told yourself were an investment', price: 220, cat: 'fashion', year: 2016 },
-    { name: 'Air Jordan 1 Retro', cheeky: 'Those Jordans still in the box unworn', price: 180, cat: 'fashion', year: 2018 },
-    { name: 'Nike Air Max 97', cheeky: 'Those Air Max 97s for someone who only walks to the car', price: 170, cat: 'fashion', year: 2017 },
-    { name: 'Canada Goose parka', cheeky: 'That Canada Goose parka you wore to look cold in a mild winter', price: 1095, cat: 'fashion', year: 2018 },
-    { name: 'Supreme box logo hoodie', cheeky: 'That Supreme hoodie bought to flip, then kept', price: 648, cat: 'fashion', year: 2019 },
-    { name: 'Louis Vuitton belt', cheeky: 'That Louis Vuitton belt for the logo, let\'s be honest', price: 390, cat: 'fashion', year: 2019 },
-    { name: 'Balenciaga Triple S', cheeky: 'Those Balenciagas that make your feet look like submarines', price: 895, cat: 'fashion', year: 2018 },
-    { name: 'Ray-Ban Wayfarers', cheeky: 'Those Ray-Bans you lose every summer', price: 160, cat: 'fashion', year: 2015 },
-    { name: 'Rolex Submariner', cheeky: 'That Rolex you told yourself was a store of value', price: 9550, cat: 'fashion', year: 2020 },
-    { name: 'Lululemon leggings', cheeky: 'Those Lululemon leggings that cost more than rent', price: 128, cat: 'fashion', year: 2019 },
-    { name: 'North Face puffer jacket', cheeky: 'That North Face that became the unofficial office uniform', price: 280, cat: 'fashion', year: 2020 },
-    { name: 'Off-White sneakers', cheeky: 'Those Off-White sneakers with the useless zip tie still on', price: 450, cat: 'fashion', year: 2018 },
-    { name: 'Daily Starbucks (1 year)', cheeky: 'That daily Starbucks habit you swore you\'d quit', price: 1825, cat: 'food', year: 2022 },
-    { name: 'Nespresso machine + pods (2 years)', cheeky: 'That Nespresso machine making €0.60 coffee taste like €3', price: 520, cat: 'food', year: 2020 },
-    { name: 'HelloFresh (1 year)', cheeky: 'That HelloFresh subscription you cancelled twice', price: 1440, cat: 'food', year: 2021 },
-    { name: 'Wine club (1 year)', cheeky: 'That wine club you joined to seem sophisticated', price: 600, cat: 'food', year: 2019 },
-    { name: 'Deliveroo habit (1 year)', cheeky: 'A year of delivery fees and service charges', price: 960, cat: 'food', year: 2022 },
-    { name: 'Oat milk phase (2 years)', cheeky: 'Two years of oat milk at €1.80 above regular', price: 657, cat: 'food', year: 2020 },
-    { name: 'Maldives holiday', cheeky: 'That Maldives trip that looks better on Instagram than in memory', price: 4500, cat: 'travel', year: 2019 },
-    { name: 'Bali trip', cheeky: 'That Bali trip where you found yourself', price: 2800, cat: 'travel', year: 2018 },
-    { name: 'NYC weekend', cheeky: 'That NYC long weekend that cost €700 in airport food alone', price: 2200, cat: 'travel', year: 2019 },
-    { name: 'Ski week in the Alps', cheeky: 'That ski week where you spent 30% of the time in the chalet', price: 2500, cat: 'travel', year: 2020 },
-    { name: 'Tokyo trip', cheeky: 'That Tokyo trip where you ate your weight in ramen', price: 3200, cat: 'travel', year: 2019 },
-    { name: 'Dubai weekend', cheeky: 'That Dubai weekend mostly spent in the hotel', price: 1800, cat: 'travel', year: 2022 },
-    { name: 'Airbnb Amalfi Coast', cheeky: 'That Amalfi Coast Airbnb with the unreliable WiFi', price: 3500, cat: 'travel', year: 2021 },
-    { name: 'Le Creuset casserole', cheeky: 'That Le Creuset that lives on the hob looking pretty', price: 350, cat: 'home', year: 2020 },
-    { name: 'KitchenAid stand mixer', cheeky: 'That KitchenAid used six times since lockdown', price: 549, cat: 'home', year: 2020 },
-    { name: 'Peloton bike', cheeky: 'That Peloton that became an expensive clothes hanger', price: 1745, cat: 'home', year: 2020 },
-    { name: 'Vitamix blender', cheeky: 'That Vitamix that makes €15 smoothies', price: 649, cat: 'home', year: 2019 },
-    { name: 'Weber BBQ', cheeky: 'That Weber grill used precisely twice per summer', price: 599, cat: 'home', year: 2020 },
-    { name: 'Dyson Airwrap', cheeky: 'That Dyson Airwrap you watched 40 tutorials for', price: 499, cat: 'home', year: 2021 },
-    { name: 'Theragun', cheeky: 'That Theragun that sounds like a dentist drill', price: 399, cat: 'home', year: 2021 },
-    { name: 'Air fryer', cheeky: 'That air fryer that replaced your entire cooking personality', price: 179, cat: 'home', year: 2022 },
-    { name: 'Smart home starter kit', cheeky: 'That Alexa setup you mostly use to set timers', price: 350, cat: 'home', year: 2019 },
-    { name: 'Premium gym (3 years)', cheeky: 'Three years of premium gym (attended: sporadically)', price: 2160, cat: 'fitness', year: 2019 },
-    { name: 'Personal trainer (6 months)', cheeky: 'Six months of a PT you cancelled on twice a week', price: 1800, cat: 'fitness', year: 2021 },
-    { name: 'Garmin running watch', cheeky: 'That Garmin that knows your VO2 max better than your doctor', price: 449, cat: 'fitness', year: 2021 },
-    { name: 'Whoop (3 years)', cheeky: 'Three years of Whoop telling you you\'re tired', price: 720, cat: 'fitness', year: 2021 },
-    { name: 'CrossFit (2 years)', cheeky: 'Two years of CrossFit you told everyone about', price: 2880, cat: 'fitness', year: 2018 },
-    { name: 'Oura Ring', cheeky: 'That Oura Ring that confirmed you sleep badly', price: 649, cat: 'fitness', year: 2022 },
-    { name: 'Netflix (5 years)', cheeky: 'Five years of Netflix you share with 4 people', price: 780, cat: 'entertainment', year: 2018 },
-    { name: 'Spotify (5 years)', cheeky: 'Five years of Spotify (same 200 songs)', price: 660, cat: 'entertainment', year: 2018 },
-    { name: 'Disney+ since launch', cheeky: 'Disney+ since launch (for The Mandalorian, let\'s be honest)', price: 430, cat: 'entertainment', year: 2019 },
-    { name: 'Concert tickets (5 years)', cheeky: 'Five years of concert tickets at Ticketmaster prices', price: 1500, cat: 'entertainment', year: 2018 },
-    { name: 'F1 Grand Prix weekend', cheeky: 'That F1 weekend where you watched 90% on a screen in a tent', price: 1800, cat: 'entertainment', year: 2019 },
-    { name: 'Glastonbury (3 editions)', cheeky: 'Three Glastonburys including the muddy one', price: 1050, cat: 'entertainment', year: 2017 },
-    { name: 'NFT (2021 average)', cheeky: 'That NFT you bought because "it\'s like Bitcoin but with art"', price: 2800, cat: 'tech', year: 2021 },
-    { name: 'Altcoin punt', cheeky: 'That altcoin you bought instead of Bitcoin (where is it now?)', price: 500, cat: 'tech', year: 2021 },
-    { name: 'Trading guru course', cheeky: 'That trading course from a guy with a Lambo in the thumbnail', price: 997, cat: 'entertainment', year: 2020 },
-    { name: 'TikTok shopping (1 year)', cheeky: 'A year of TikTok Shop impulse buys', price: 840, cat: 'fashion', year: 2023 },
-    { name: 'Dating app stack (2 years)', cheeky: 'Two years of Tinder Gold + Hinge + Bumble Boost', price: 720, cat: 'entertainment', year: 2021 },
-    { name: 'Electric scooter', cheeky: 'That e-scooter you rode twice before locking in the hallway', price: 699, cat: 'tech', year: 2020 },
-    { name: 'DJI Mini drone', cheeky: 'That drone you flew twice before the regulations kicked in', price: 399, cat: 'tech', year: 2020 },
-    { name: 'Stanley tumbler collection', cheeky: 'That Stanley cup collection (you have three)', price: 180, cat: 'food', year: 2023 },
-    { name: 'Viral skincare (1 year)', cheeky: 'A year of TikTok-viral skincare products', price: 780, cat: 'fashion', year: 2022 },
-    { name: 'Premier League season ticket', cheeky: 'That season ticket (away travel not included)', price: 1500, cat: 'entertainment', year: 2019 },
-  ];
-
-  const YEAR_RATIOS = {
-    2014: 0.002, 2015: 0.002, 2016: 0.003, 2017: 0.006,
-    2018: 0.012, 2019: 0.015, 2020: 0.018, 2021: 0.045,
-    2022: 0.055, 2023: 0.035, 2024: 0.72
-  };
-
-  let currentSlotItem = null;
-  let lastSpunIndex = -1;
-
-  function spinSlot() {
-    const btn = document.getElementById('spin-btn');
-    const textEl = document.getElementById('slot-text');
-    const priceEl = document.getElementById('slot-price');
-    const yearEl = document.getElementById('slot-year');
-    const calcBtn = document.getElementById('calc-btn');
-
-    btn.classList.add('spinning-btn');
-    textEl.classList.add('spinning');
-
-    // Rapid shuffle effect
-    let ticks = 0;
-    const maxTicks = 12;
-    const interval = setInterval(() => {
-      const rand = ITEMS[Math.floor(Math.random() * ITEMS.length)];
-      textEl.textContent = rand.cheeky;
-      ticks++;
-      if (ticks >= maxTicks) {
-        clearInterval(interval);
-        // Pick final item (not same as last)
-        let idx;
-        do { idx = Math.floor(Math.random() * ITEMS.length); } while (idx === lastSpunIndex);
-        lastSpunIndex = idx;
-        currentSlotItem = ITEMS[idx];
-
-        const sym = currentCurrency === 'EUR' ? '€' : '$';
-        textEl.textContent = currentSlotItem.cheeky;
-        textEl.classList.remove('spinning');
-        priceEl.textContent = sym + currentSlotItem.price.toLocaleString();
-        yearEl.textContent = 'Bought in ' + currentSlotItem.year;
-
-        btn.classList.remove('spinning-btn');
-        calcBtn.style.display = 'block';
-
-        // Auto-calculate if price is loaded
-        if (currentPrice) calcSlot();
-      }
-    }, 60);
-  }
-
-  function calcSlot() {
-    if (!currentSlotItem || !currentPrice) return;
-    showInsteadResult(currentSlotItem);
-  }
-
-  function showInsteadResult(item) {
-    if (!currentPrice) return;
-    const sym = currentCurrency === 'EUR' ? '€' : '$';
-    const ratio = YEAR_RATIOS[item.year] || 0.035;
-    const entryPrice = currentPrice * ratio;
-    const btcBought = item.price / entryPrice;
-    const valueToday = btcBought * currentPrice;
-    const gain = valueToday - item.price;
-    const returnPct = (gain / item.price) * 100;
-    const yearsAgo = new Date().getFullYear() - item.year;
-    const timeLabel = yearsAgo <= 1 ? 'last year' : `${yearsAgo} years ago`;
-
-    const fmt = n => sym + Math.round(n).toLocaleString();
-    const fmtBtc = n => n < 0.001 ? Math.round(n * 1e5).toLocaleString() + ' sats' : n.toFixed(4) + ' BTC';
-
-    document.getElementById('instead-item-label').textContent = item.name.toUpperCase() + ' · ' + timeLabel;
-    document.getElementById('instead-btc-value').textContent = fmt(valueToday);
-    document.getElementById('instead-spent').textContent = fmt(item.price);
-    document.getElementById('instead-spent-sub').textContent = 'in ' + item.year;
-    document.getElementById('instead-worth').textContent = fmt(valueToday);
-    document.getElementById('instead-btc-sub').textContent = fmtBtc(btcBought);
-    document.getElementById('instead-diff').textContent = '+' + returnPct.toFixed(0) + '%';
-    document.getElementById('instead-return-sub').textContent = '+' + fmt(gain) + ' gain';
-    document.getElementById('instead-share-text').textContent =
-      `${item.cheeky} cost ${fmt(item.price)} in ${item.year}. If you'd bought Bitcoin instead, you'd have ${fmt(valueToday)} today — +${returnPct.toFixed(0)}% return.`;
-
-    const result = document.getElementById('instead-result');
-    result.classList.add('visible');
-    setTimeout(() => result.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-  }
-
-  function shareInsteadWhatsApp() {
-    const text = document.getElementById('instead-share-text').textContent;
-    window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n\nSee more at whentobuybtc.xyz'), '_blank');
-  }
-  function shareInsteadTwitter() {
-    const text = document.getElementById('instead-share-text').textContent;
-    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text + ' — whentobuybtc.xyz'), '_blank');
-  }
-    // TECH
-    { name: 'iPhone 6', cheeky: 'That iPhone 6 collecting dust in a drawer', price: 699, cat: 'tech', year: 2014 },
-    { name: 'iPhone X', cheeky: 'That iPhone X you queued 3 hours for', price: 1149, cat: 'tech', year: 2017 },
-    { name: 'iPhone 14 Pro', cheeky: 'That iPhone 14 Pro you upgraded too soon', price: 1299, cat: 'tech', year: 2022 },
-    { name: 'iPhone 16', cheeky: 'That iPhone 16 still in the box basically', price: 1199, cat: 'tech', year: 2024 },
-    { name: 'AirPods Pro', cheeky: 'Those AirPods Pro you barely use anymore', price: 279, cat: 'tech', year: 2022 },
-    { name: 'AirPods (1st gen)', cheeky: 'The original AirPods everyone laughed at', price: 179, cat: 'tech', year: 2016 },
-    { name: 'Samsung Galaxy S24', cheeky: 'That Samsung S24 that scratched week one', price: 1099, cat: 'tech', year: 2024 },
-    { name: 'iPad Pro', cheeky: 'That iPad Pro that became a very expensive cookbook stand', price: 1199, cat: 'tech', year: 2021 },
-    { name: 'MacBook Air M1', cheeky: 'That MacBook Air you bought right before M2 launched', price: 1149, cat: 'tech', year: 2020 },
-    { name: 'Apple Watch Series 4', cheeky: 'That Apple Watch you wore for three months', price: 399, cat: 'tech', year: 2018 },
-    { name: 'Apple Watch Ultra', cheeky: 'That Apple Watch Ultra for someone who hates hiking', price: 849, cat: 'tech', year: 2022 },
-    { name: 'PS5', cheeky: 'That PS5 you scalped off eBay at 2x price', price: 549, cat: 'tech', year: 2020 },
-    { name: 'Nintendo Switch', cheeky: 'That Nintendo Switch mostly used for Mario Kart at parties', price: 329, cat: 'tech', year: 2017 },
-    { name: 'GoPro Hero', cheeky: 'That GoPro you used on exactly one holiday', price: 399, cat: 'tech', year: 2019 },
-    { name: 'Dyson V11 hoover', cheeky: 'That Dyson hoover you treat better than your car', price: 599, cat: 'tech', year: 2019 },
-    { name: 'Roomba robot vacuum', cheeky: 'That Roomba that mostly panics in corners', price: 449, cat: 'tech', year: 2020 },
-    { name: 'Kindle Paperwhite', cheeky: 'That Kindle with 47 unread books on it', price: 139, cat: 'tech', year: 2018 },
-    { name: 'Meta Quest 2', cheeky: 'That Meta Quest 2 that lives under the bed now', price: 349, cat: 'tech', year: 2020 },
-    { name: 'Sonos speaker', cheeky: 'That Sonos speaker you spent 2 hours setting up', price: 279, cat: 'tech', year: 2019 },
-    { name: 'OLED TV 65"', cheeky: 'That 65" OLED TV you bought to justify the sofa upgrade', price: 1499, cat: 'tech', year: 2021 },
-    // FASHION
-    { name: 'Yeezy Boost 350', cheeky: 'Those Yeezys you told yourself were an investment', price: 220, cat: 'fashion', year: 2016 },
-    { name: 'Air Jordan 1 Retro', cheeky: 'Those Jordans still in the box unworn', price: 180, cat: 'fashion', year: 2018 },
-    { name: 'Nike Air Max 97', cheeky: 'Those Air Max 97s for someone who only walks to the car', price: 170, cat: 'fashion', year: 2017 },
-    { name: 'Canada Goose parka', cheeky: 'That Canada Goose parka you wore to look cold in a mild winter', price: 1095, cat: 'fashion', year: 2018 },
-    { name: 'Supreme box logo hoodie', cheeky: 'That Supreme hoodie bought to flip, then kept', price: 648, cat: 'fashion', year: 2019 },
-    { name: 'Louis Vuitton belt', cheeky: 'That Louis Vuitton belt for the logo, let\'s be honest', price: 390, cat: 'fashion', year: 2019 },
-    { name: 'Balenciaga Triple S', cheeky: 'Those Balenciagas that make your feet look like submarines', price: 895, cat: 'fashion', year: 2018 },
-    { name: 'Ray-Ban Wayfarers', cheeky: 'Those Ray-Bans you lose every summer', price: 160, cat: 'fashion', year: 2015 },
-    { name: 'Rolex Submariner', cheeky: 'That Rolex you told yourself was a store of value', price: 9550, cat: 'fashion', year: 2020 },
-    { name: 'Lululemon leggings', cheeky: 'Those Lululemon leggings that cost more than rent', price: 128, cat: 'fashion', year: 2019 },
-    { name: 'North Face puffer jacket', cheeky: 'That North Face that became the unofficial office uniform', price: 280, cat: 'fashion', year: 2020 },
-    { name: 'Off-White sneakers', cheeky: 'Those Off-White sneakers with the useless zip tie still on', price: 450, cat: 'fashion', year: 2018 },
-    // FOOD & DRINK
-    { name: 'Daily Starbucks habit (1 year)', cheeky: 'That daily Starbucks habit you swore you\'d quit', price: 1825, cat: 'food', year: 2022 },
-    { name: 'Nespresso machine + pods (2 years)', cheeky: 'That Nespresso machine making €0.60 coffee taste like €3', price: 520, cat: 'food', year: 2020 },
-    { name: 'HelloFresh subscription (1 year)', cheeky: 'That HelloFresh subscription you cancelled twice', price: 1440, cat: 'food', year: 2021 },
-    { name: 'Wine club membership (1 year)', cheeky: 'That wine club you joined to seem sophisticated', price: 600, cat: 'food', year: 2019 },
-    { name: 'Deliveroo / UberEats (1 year)', cheeky: 'A year of delivery fees and service charges', price: 960, cat: 'food', year: 2022 },
-    { name: 'Oat milk phase (2 years)', cheeky: 'Two years of oat milk at €1.80 above regular', price: 657, cat: 'food', year: 2020 },
-    { name: 'Protein powder stash (3 years)', cheeky: 'Three years of protein powder you sometimes forgot to use', price: 540, cat: 'food', year: 2019 },
-    { name: 'Restaurant anniversary dinners (5 years)', cheeky: 'Five years of Michelin-adjacent anniversary dinners', price: 1500, cat: 'food', year: 2019 },
-    // TRAVEL
-    { name: 'Maldives holiday', cheeky: 'That Maldives trip that looks better on Instagram than in memory', price: 4500, cat: 'travel', year: 2019 },
-    { name: 'Bali trip', cheeky: 'That Bali trip where you found yourself', price: 2800, cat: 'travel', year: 2018 },
-    { name: 'NYC weekend', cheeky: 'That NYC long weekend that cost €700 in airport food alone', price: 2200, cat: 'travel', year: 2019 },
-    { name: 'Ski week in the Alps', cheeky: 'That ski week where you spent 30% of the time in the chalet', price: 2500, cat: 'travel', year: 2020 },
-    { name: 'Tokyo trip', cheeky: 'That Tokyo trip where you ate your weight in ramen', price: 3200, cat: 'travel', year: 2019 },
-    { name: 'Dubai weekend', cheeky: 'That Dubai weekend mostly spent in the hotel', price: 1800, cat: 'travel', year: 2022 },
-    { name: 'Eurostar business class (10 trips)', cheeky: 'Ten Eurostar business class tickets for the leg room', price: 2500, cat: 'travel', year: 2019 },
-    { name: 'Airline upgrade habit (3 years)', cheeky: 'Three years of "just this once" flight upgrades', price: 2400, cat: 'travel', year: 2019 },
-    { name: 'Airbnb Amalfi Coast week', cheeky: 'That Amalfi Coast Airbnb with the unreliable WiFi', price: 3500, cat: 'travel', year: 2021 },
-    // HOME
-    { name: 'Le Creuset casserole', cheeky: 'That Le Creuset that lives on the hob looking pretty', price: 350, cat: 'home', year: 2020 },
-    { name: 'KitchenAid stand mixer', cheeky: 'That KitchenAid used six times since lockdown', price: 549, cat: 'home', year: 2020 },
-    { name: 'Peloton bike', cheeky: 'That Peloton that became an expensive clothes hanger', price: 1745, cat: 'home', year: 2020 },
-    { name: 'Nespresso Vertuo + 2yr pods', cheeky: 'That Nespresso Vertuo + two years of pods', price: 680, cat: 'home', year: 2021 },
-    { name: 'Instant Pot pressure cooker', cheeky: 'That Instant Pot you used intensely for one month', price: 119, cat: 'home', year: 2018 },
-    { name: 'Vitamix blender', cheeky: 'That Vitamix that makes €15 smoothies', price: 649, cat: 'home', year: 2019 },
-    { name: 'Weber BBQ grill', cheeky: 'That Weber grill used precisely twice per summer', price: 599, cat: 'home', year: 2020 },
-    { name: 'Scented candle collection (3 years)', cheeky: 'Three years of Diptyque candles you burned in an afternoon', price: 720, cat: 'home', year: 2021 },
-    { name: 'Nespresso pod subscription (5 years)', cheeky: 'Five years of Nespresso pod subscriptions', price: 900, cat: 'home', year: 2018 },
-    { name: 'Dyson Airwrap', cheeky: 'That Dyson Airwrap you watched 40 tutorials for', price: 499, cat: 'home', year: 2021 },
-    { name: 'Theragun massager', cheeky: 'That Theragun that sounds like a dentist drill', price: 399, cat: 'home', year: 2021 },
-    // FITNESS
-    { name: 'Premium gym membership (3 years)', cheeky: 'Three years of premium gym membership (attended: sporadically)', price: 2160, cat: 'fitness', year: 2019 },
-    { name: 'Nike running shoe habit (5 years)', cheeky: 'Five years of Nike running shoes replaced every 8 months', price: 900, cat: 'fitness', year: 2018 },
-    { name: 'Personal trainer (6 months)', cheeky: 'Six months of a personal trainer you cancelled on twice a week', price: 1800, cat: 'fitness', year: 2021 },
-    { name: 'Garmin running watch', cheeky: 'That Garmin watch that knows your VO2 max better than your doctor', price: 449, cat: 'fitness', year: 2021 },
-    { name: 'Whoop fitness tracker (3 years)', cheeky: 'Three years of Whoop telling you you\'re tired', price: 720, cat: 'fitness', year: 2021 },
-    { name: 'CrossFit membership (2 years)', cheeky: 'Two years of CrossFit you told everyone about', price: 2880, cat: 'fitness', year: 2018 },
-    { name: 'Yoga studio membership (2 years)', cheeky: 'Two years of yoga classes you attended occasionally', price: 1920, cat: 'fitness', year: 2020 },
-    { name: 'Supplement stack (2 years)', cheeky: 'Two years of supplements with mixed evidence', price: 960, cat: 'fitness', year: 2021 },
-    // ENTERTAINMENT
-    { name: 'Netflix (5 years)', cheeky: 'Five years of Netflix you share with 4 people', price: 780, cat: 'entertainment', year: 2018 },
-    { name: 'Spotify (5 years)', cheeky: 'Five years of Spotify (you\'ve listened to the same 200 songs)', price: 660, cat: 'entertainment', year: 2018 },
-    { name: 'Disney+ since launch', cheeky: 'Disney+ since launch (for The Mandalorian, let\'s be honest)', price: 430, cat: 'entertainment', year: 2019 },
-    { name: 'Concert tickets (5 years)', cheeky: 'Five years of concert tickets at Ticketmaster prices', price: 1500, cat: 'entertainment', year: 2018 },
-    { name: 'PlayStation Plus (5 years)', cheeky: 'Five years of PS Plus you needed to play online', price: 400, cat: 'entertainment', year: 2019 },
-    { name: 'Steam game purchases (3 years)', cheeky: 'Three years of Steam games 70% of which are unplayed', price: 540, cat: 'entertainment', year: 2019 },
-    { name: 'Audible subscription (3 years)', cheeky: 'Three years of Audible credits slowly accumulating', price: 432, cat: 'entertainment', year: 2019 },
-    { name: 'Premier League season ticket', cheeky: 'That Premier League season ticket (the away travel not included)', price: 1500, cat: 'entertainment', year: 2019 },
-    { name: 'Formula 1 Grand Prix weekend', cheeky: 'That F1 weekend where you watched 90% on a screen in a tent', price: 1800, cat: 'entertainment', year: 2019 },
-    { name: 'Glastonbury tickets (3 editions)', cheeky: 'Three Glastonburys including the muddy one', price: 1050, cat: 'entertainment', year: 2017 },
-    // EXTRA POP CULTURE / MISC
-    { name: 'NFT (average 2021 purchase)', cheeky: 'That NFT you bought because "it\'s like Bitcoin but with art"', price: 2800, cat: 'tech', year: 2021 },
-    { name: 'Crypto altcoin punt', cheeky: 'That altcoin you bought instead of Bitcoin (where is it now?)', price: 500, cat: 'tech', year: 2021 },
-    { name: 'Trading course (guru edition)', cheeky: 'That online trading course from a guy with a Lambo in the thumbnail', price: 997, cat: 'entertainment', year: 2020 },
-    { name: 'Fidget spinner phase', cheeky: 'The fidget spinner phase. We don\'t talk about it.', price: 25, cat: 'tech', year: 2017 },
-    { name: 'TikTok shopping phase (1 year)', cheeky: 'A year of TikTok Shop impulse buys', price: 840, cat: 'fashion', year: 2023 },
-    { name: 'OnlyFans subscription (1 year)', cheeky: 'A year of OnlyFans (no judgment)', price: 720, cat: 'entertainment', year: 2021 },
-  ];
   // ── INIT ──
   async function init() {
     await detectCurrency();
@@ -1994,6 +1719,8 @@
     await fetchFearGreed();
     await fetchATH();
     await fetch200MA();
+    calcPast();
+    calcFuture();
   }
 
   init();
