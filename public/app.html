@@ -421,7 +421,7 @@
     .whatif-section { background: var(--bg3); }
     .habit-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       gap: 0.75rem;
       margin-bottom: 3rem;
     }
@@ -930,7 +930,7 @@
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
       <button class="lang-btn" onclick="setLang('de')">DE</button>
     </div>
-    <a href="https://relai.app/referral" class="nav-cta" target="_blank">Buy on Relai →</a>
+    <a href="https://relai.me/imo" class="nav-cta" target="_blank">Buy on Relai →</a>
   </div>
 </nav>
 
@@ -1041,9 +1041,9 @@
     <p class="section-sub reveal">The orange line is Bitcoin's price. The white line is the 200-day average — when the price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
 
     <div class="chart-tabs reveal">
-      <button class="chart-tab active" onclick="loadChart('30')">1M</button>
+      <button class="chart-tab" onclick="loadChart('30')">1M</button>
       <button class="chart-tab" onclick="loadChart('90')">3M</button>
-      <button class="chart-tab" onclick="loadChart('365')">1Y</button>
+      <button class="chart-tab active" onclick="loadChart('365')">1Y</button>
     </div>
 
     <div class="chart-legend reveal">
@@ -1090,37 +1090,42 @@
       <button class="habit-card" onclick="selectHabit('coffee')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
         <span class="habit-name">Daily latte</span>
-        <span class="habit-cost">~€4.50/day</span>
+        <span class="habit-cost">~€135/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('cigarettes')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
         <span class="habit-name">Cigarettes</span>
-        <span class="habit-cost">~€8/day</span>
+        <span class="habit-cost">~€240/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('gym')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
         <span class="habit-name">Gym membership</span>
-        <span class="habit-cost">~€45/month</span>
+        <span class="habit-cost">~€45/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('netflix')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
         <span class="habit-name">Netflix</span>
-        <span class="habit-cost">~€18/month</span>
+        <span class="habit-cost">~€18/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('spotify')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
         <span class="habit-name">Spotify</span>
-        <span class="habit-cost">~€11/month</span>
+        <span class="habit-cost">~€11/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('zalando')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
         <span class="habit-name">Online shopping</span>
-        <span class="habit-cost">~€80/month</span>
+        <span class="habit-cost">~€80/mo</span>
       </button>
       <button class="habit-card" onclick="selectHabit('takeaway')">
         <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
         <span class="habit-name">Food delivery</span>
-        <span class="habit-cost">~€40/week</span>
+        <span class="habit-cost">~€173/mo</span>
+      </button>
+      <button class="habit-card" onclick="selectHabit('beer')">
+        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M5 11h12v10H5z"/><path d="M5 7h14l-1 4H6L5 7z"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/></svg></span>
+        <span class="habit-name">Nights out</span>
+        <span class="habit-cost">~€120/mo</span>
       </button>
     </div>
 
@@ -1270,8 +1275,8 @@
       </div>
     </div>
     <div class="relai-right">
-      <a href="https://relai.app/referral" target="_blank" class="relai-btn">Get the Relai app →</a>
-      <p class="relai-referral-note">Use referral code IMO for 0.9% fees</p>
+      <a href="https://relai.me/imo" target="_blank" class="relai-btn">Get the Relai app →</a>
+      <p class="relai-referral-note">Use referral code <strong style="color:var(--orange); letter-spacing:0.08em;">IMO</strong> for 0.9% fees</p>
     </div>
   </div>
 </section>
@@ -1398,7 +1403,6 @@
       changeEl.textContent = `${sign}${change.toFixed(2)}% today`;
       changeEl.className = `change ${change >= 0 ? 'up' : 'down'}`;
       document.getElementById('share-price').textContent = sym + formatPrice(currentPrice);
-      calcDCA();
     } catch (e) {
       document.getElementById('price-value').textContent = 'Error loading';
     }
@@ -1681,14 +1685,16 @@
     2023: 27000, 2024: 57000, 2025: 72000
   };
 
+  // All amounts in monthly EUR
   const HABITS = {
-    coffee:     { label: 'Daily latte from a coffee shop', weekly: 31.50, monthly: 135 },
-    cigarettes: { label: 'A pack of cigarettes a day',     weekly: 56,    monthly: 240 },
-    gym:        { label: 'Gym membership',                 weekly: 10.40, monthly: 45  },
-    netflix:    { label: 'Netflix subscription',           weekly: 4.15,  monthly: 18  },
-    spotify:    { label: 'Spotify subscription',           weekly: 2.55,  monthly: 11  },
-    zalando:    { label: 'Monthly online shopping',        weekly: 18.50, monthly: 80  },
-    takeaway:   { label: 'Weekly food delivery',           weekly: 40,    monthly: 173 },
+    coffee:     { label: 'Daily latte from a coffee shop', monthly: 135  },
+    cigarettes: { label: 'A pack of cigarettes a day',     monthly: 240  },
+    gym:        { label: 'Gym membership',                 monthly: 45   },
+    netflix:    { label: 'Netflix subscription',           monthly: 18   },
+    spotify:    { label: 'Spotify subscription',           monthly: 11   },
+    zalando:    { label: 'Monthly online shopping',        monthly: 80   },
+    takeaway:   { label: 'Food delivery',                  monthly: 173  },
+    beer:       { label: 'Nights out',                     monthly: 120  },
   };
 
   function selectHabit(key) {
@@ -1699,8 +1705,8 @@
     const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
     const price = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
+    const weekly = Math.round(habit.monthly / 4.33);
 
-    // Build yearly snapshots for chart + totals
     const startYear = 2015;
     const currentYear = new Date().getFullYear();
     let totalInvested = 0;
@@ -1710,16 +1716,17 @@
     const chartInvested = [];
 
     for (let year = startYear; year <= currentYear; year++) {
-      const btcPrice = BTC_YEARLY_EUR[year] || price;
-      const weeksThisYear = year === currentYear
-        ? Math.max(1, Math.floor((Date.now() - new Date(year, 0, 1)) / 604800000))
-        : 52;
-      const invested = habit.weekly * weeksThisYear;
-      totalInvested += invested;
-      totalBTC += invested / btcPrice;
-      // snapshot value at current price
+      const btcPriceThisYear = BTC_YEARLY_EUR[year] || price;
+      const monthsThisYear = year === currentYear
+        ? Math.max(1, new Date().getMonth() + 1)
+        : 12;
+      totalInvested += habit.monthly * monthsThisYear;
+      totalBTC += (habit.monthly * monthsThisYear) / btcPriceThisYear;
+
+      // Show value at that year's BTC price (realistic), current year uses live price
+      const displayPrice = year === currentYear ? price : btcPriceThisYear;
       chartLabels.push(year);
-      chartValues.push(Math.round(totalBTC * price));
+      chartValues.push(Math.round(totalBTC * displayPrice));
       chartInvested.push(Math.round(totalInvested));
     }
 
@@ -1728,27 +1735,22 @@
     const returnPct = ((valueToday - totalInvested) / totalInvested) * 100;
     const fmt = n => sym + Math.round(n).toLocaleString();
 
-    // Update text
     document.getElementById('whatif-selected-label').textContent = habit.label.toUpperCase();
     document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
-    document.getElementById('whatif-weekly').textContent = sym + habit.weekly.toFixed(2);
-    document.getElementById('whatif-monthly').textContent = sym + habit.monthly.toFixed(0);
+    document.getElementById('whatif-weekly').textContent = sym + weekly;
+    document.getElementById('whatif-monthly').textContent = sym + habit.monthly;
     document.getElementById('whatif-invested').textContent = fmt(totalInvested);
     document.getElementById('whatif-today').textContent = fmt(valueToday);
     document.getElementById('whatif-gain').textContent = '+' + fmt(gain);
     document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct).toLocaleString() + '%';
 
-    // Animate bars (invested always 100%, value scaled relative)
     setTimeout(() => {
       document.getElementById('bar-invested').style.width = '100%';
-      document.getElementById('bar-value').style.width = Math.min(100, (valueToday / valueToday) * 100) + '%';
+      document.getElementById('bar-value').style.width = '100%';
     }, 50);
 
-    // Show result
     const wrap = document.getElementById('whatif-result-wrap');
     wrap.style.display = 'block';
-
-    // Draw chart after render
     setTimeout(() => {
       drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
       wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1763,7 +1765,8 @@
     canvas.height = canvas.offsetHeight * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     const W = canvas.offsetWidth, H = canvas.offsetHeight;
-    const pad = { top: 16, right: 16, bottom: 28, left: 12 };
+    const dpr = window.devicePixelRatio;
+    const pad = { top: 20, right: 16, bottom: 28, left: 72 };
     const w = W - pad.left - pad.right;
     const h = H - pad.top - pad.bottom;
 
@@ -1773,19 +1776,37 @@
 
     ctx.clearRect(0, 0, W, H);
 
-    // Invested area (subtle grey)
+    // Horizontal grid lines + Y-axis labels
+    const ticks = 4;
+    ctx.font = `${10}px "DM Mono", monospace`;
+    for (let i = 0; i <= ticks; i++) {
+      const v = (i / ticks) * maxVal;
+      const y = toY(v);
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+      // Y label
+      const label = maxVal >= 100000
+        ? sym + Math.round(v / 1000) + 'k'
+        : sym + Math.round(v).toLocaleString();
+      ctx.fillStyle = 'rgba(107,101,96,0.7)';
+      ctx.textAlign = 'right';
+      ctx.fillText(label, pad.left - 6, y + 4);
+    }
+
+    // Invested area
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(invested[0]));
     invested.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
     ctx.lineTo(toX(invested.length - 1), H - pad.bottom);
     ctx.lineTo(toX(0), H - pad.bottom);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(240,237,232,0.06)';
+    ctx.fillStyle = 'rgba(240,237,232,0.05)';
     ctx.fill();
 
-    // Value area (orange glow)
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, 'rgba(247,147,26,0.3)');
+    // Value area
+    const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+    grad.addColorStop(0, 'rgba(247,147,26,0.35)');
     grad.addColorStop(1, 'rgba(247,147,26,0.02)');
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(values[0]));
@@ -1798,7 +1819,7 @@
 
     // Invested line
     ctx.beginPath();
-    ctx.strokeStyle = 'rgba(240,237,232,0.25)';
+    ctx.strokeStyle = 'rgba(240,237,232,0.3)';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
     invested.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
@@ -1815,16 +1836,14 @@
 
     // Year labels
     ctx.fillStyle = 'rgba(107,101,96,0.8)';
-    ctx.font = `${9 * window.devicePixelRatio}px "DM Mono", monospace`;
-    ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
+    ctx.textAlign = 'center';
     labels.forEach((yr, i) => {
       if (i % 2 === 0 || i === labels.length - 1) {
-        const x = toX(i) * window.devicePixelRatio;
-        const y = (H - 6) * window.devicePixelRatio;
-        ctx.fillText(yr, x - 10, y);
+        ctx.fillText(yr, toX(i), H - 8);
       }
     });
   }
+
 
   function shareWhatIfWhatsApp() {
     const label = document.getElementById('whatif-selected-label').textContent;
