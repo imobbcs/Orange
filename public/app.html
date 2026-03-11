@@ -943,13 +943,14 @@
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
         appId: '528df914-2cb6-4e5b-af01-3c849ce8e393',
-        promptOptions: {
-          slidedown: {
-            prompts: []
-          }
-        },
         autoResubscribe: false,
         autoRegister: false,
+        promptOptions: {
+          autoPrompt: false,
+        },
+        notifyButton: {
+          enable: false,
+        },
       });
 
       // Store reference globally so requestPush() can access it
