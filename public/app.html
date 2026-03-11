@@ -62,7 +62,7 @@
       --orange:   #F7931A;
       --orange-dim: rgba(247,147,26,0.07);
       --white:    #EDE8DE;
-      --muted:    rgba(237,232,222,0.38);
+      --muted:    rgba(237,232,222,0.52);
       --grey:     #4A4540;
       --green:    #4ADE80;
       --green-dim: rgba(74,222,128,0.07);
@@ -109,6 +109,14 @@
       display: flex; justify-content: space-between; align-items: center;
       padding: 1.75rem 4rem;
       mix-blend-mode: normal;
+      transition: padding 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    nav.scrolled {
+      padding: 1.1rem 4rem;
+      background: rgba(9,8,10,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(247,147,26,0.06);
     }
     nav::after {
       content: ''; position: absolute; inset: 0;
@@ -121,6 +129,8 @@
       color: var(--white); text-decoration: none; opacity: 0.7;
       transition: opacity 0.2s;
     }
+    .nav-logo:hover { opacity: 1; }
+    .nav-logo span { color: var(--orange); }
     .nav-logo:hover { opacity: 1; }
     .nav-logo span { color: var(--orange); }
     .nav-right { display: flex; align-items: center; gap: 2.5rem; }
@@ -139,11 +149,12 @@
     }
     .lang-btn:hover:not(.active) { color: var(--white); }
     .nav-cta {
-      font-family: var(--mono); font-size: 0.58rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 0.56rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
       color: #000; background: var(--orange);
-      border: none; padding: 0.55rem 1.2rem;
+      border: none; padding: 0.5rem 0.9rem;
       text-decoration: none; cursor: pointer;
+      white-space: nowrap;
       transition: opacity 0.2s;
     }
     .nav-cta:hover { opacity: 0.85; }
@@ -245,18 +256,18 @@
       letter-spacing: 0.35em; text-transform: uppercase;
       color: var(--orange);
       margin-bottom: 1.5rem;
-      padding-top: 14vh;
       opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
     }
 
     /* THE PRICE — carved in stone */
     .hero-price-block {
+      padding-top: 10vh;
       opacity: 0; animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
       position: relative; display: inline-block;
     }
     .hero-price {
       font-family: var(--title);
-      font-size: clamp(7rem, 22vw, 20rem);
+      font-size: clamp(7rem, 24vw, 22rem);
       font-weight: 400;
       line-height: 0.88;
       color: var(--white);
@@ -322,6 +333,21 @@
     }
     @keyframes verdictPulse {
       0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
+    /* State-specific heartbeat overrides — replace verdictPulse per state */
+    .signal-pill.accumulate .signal-dot { animation: heartbeat-calm 3s ease-in-out infinite; }
+    .signal-pill.hold       .signal-dot { animation: heartbeat-calm 2s ease-in-out infinite; }
+    .signal-pill.caution    .signal-dot { animation: heartbeat-urgent 0.85s ease-in-out infinite; }
+    @keyframes heartbeat-calm {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.35; transform: scale(0.65); }
+    }
+    @keyframes heartbeat-urgent {
+      0%   { opacity: 1; transform: scale(1); }
+      15%  { opacity: 1; transform: scale(1.45); }
+      30%  { opacity: 0.5; transform: scale(0.8); }
+      50%  { opacity: 1; transform: scale(1.2); }
+      100% { opacity: 0.4; transform: scale(1); }
+    }
       50% { opacity: 0.5; transform: scale(1.5); box-shadow: 0 0 4px currentColor, 0 0 8px currentColor; }
     }
     .signal-text {
@@ -342,6 +368,7 @@
       color: var(--muted);
       max-width: 46ch; margin: 0 auto;
       line-height: 1.7;
+      padding-top: 1.5rem;
       opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
     }
 
@@ -364,6 +391,11 @@
       border: none; padding: 1.1rem 2.5rem;
       text-decoration: none; cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-primary:hover {
+      background: #ffaa3d;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(247,147,26,0.25);
     }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
     .btn-ghost {
@@ -411,8 +443,7 @@
     ═══════════════════════════════════════════════ */
     .ornament-rule {
       display: flex; align-items: center; gap: 1.5rem;
-      padding: 0 4rem; margin: 0;
-      height: 1px;
+      padding: 2rem 4rem; margin: 0;
     }
     .ornament-rule::before, .ornament-rule::after {
       content: ''; flex: 1; height: 1px;
@@ -435,13 +466,13 @@
     .section-label {
       font-family: var(--mono); font-size: 0.58rem;
       letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 1.25rem; opacity: 0.8;
+      color: var(--orange); margin-bottom: 1.25rem;
     }
     .section-title {
       font-family: var(--display);
       font-size: clamp(2.2rem, 5vw, 4rem);
       font-weight: 300; font-style: italic;
-      line-height: 1.15; margin-bottom: 0.75rem; color: var(--white);
+      line-height: 1.18; margin-bottom: 0.75rem; color: var(--white);
     }
     .section-sub {
       font-family: var(--display); font-style: italic; font-weight: 300;
@@ -499,41 +530,72 @@
     .gauge svg { display: block; overflow: visible; }
 
     /* ── CHART ── */
-    .chart-section { background: var(--bg2); }
-    .chart-wrap {
-      position: relative; height: 340px;
-      border: 1px solid var(--border2); overflow: hidden;
+    .chart-section { background: var(--bg); }
+    .chart-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2rem; gap: 2rem;
+      flex-wrap: wrap;
     }
-    canvas#priceChart { width: 100%; height: 100%; }
-    .chart-legend {
-      display: flex; gap: 2.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+    .chart-header .section-title { margin-bottom: 0; }
+    .chart-timeframes { display: flex; gap: 0; }
+    .chart-tf {
+      font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      background: none; border: 1px solid rgba(247,147,26,0.12);
+      border-right: none; color: var(--grey);
+      padding: 0.5rem 1.25rem; cursor: pointer; transition: all 0.2s;
     }
-    .legend-item {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-family: var(--mono); font-size: 0.58rem;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey);
+    .chart-tf:last-child { border-right: 1px solid rgba(247,147,26,0.12); }
+    .chart-tf.active, .chart-tf:hover { color: var(--orange); border-color: rgba(247,147,26,0.3); background: rgba(247,147,26,0.04); }
+    .chart-bleed {
+      position: relative;
+      height: 380px;
+      margin: 0;
+      overflow: hidden;
     }
-    .legend-dot { width: 24px; height: 1px; }
-    .chart-tabs { display: flex; gap: 0; margin-bottom: 2rem; }
-    .chart-tab {
-      font-family: var(--mono); font-size: 0.58rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      background: none; border: 1px solid var(--border2);
-      border-right: none; color: var(--grey); padding: 0.55rem 1.5rem;
-      cursor: pointer; transition: all 0.2s;
+    .chart-bleed canvas {
+      width: 100%; height: 100%;
+      display: block;
     }
-    .chart-tab:last-child { border-right: 1px solid var(--border2); }
-    .chart-tab.active, .chart-tab:hover { color: var(--orange); background: var(--orange-dim); }
+    /* Floating annotations */
+    .chart-annotation-ma,
+    .chart-annotation-price {
+      position: absolute;
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      pointer-events: none;
+      transition: top 0.4s ease;
+      z-index: 2;
+    }
+    .chart-annotation-ma {
+      color: rgba(237,232,222,0.4);
+      border-left: 1px solid rgba(237,232,222,0.15);
+      right: 1rem;
+    }
+    .chart-annotation-price {
+      color: var(--orange);
+      border-left: 1px solid rgba(247,147,26,0.4);
+      right: 1rem;
+    }
+    .chart-caption {
+      font-family: var(--display); font-style: italic; font-weight: 300;
+      font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+      margin-top: 2rem; margin-bottom: 0; max-width: 60ch;
+    }
 
     /* ── EXPERT ── */
-    .expert-section { background: var(--bg); }
+    .expert-section { background: var(--bg2); }
     .expert-card {
       border: 1px solid var(--border2);
       padding: 5rem; position: relative; overflow: hidden;
     }
     .expert-quote-mark {
-      font-family: var(--display); font-size: 20rem; line-height: 0.7;
-      color: var(--orange); opacity: 0.04;
+      font-family: var(--display); font-size: clamp(10rem, 22vw, 20rem); line-height: 0.7;
+      color: var(--orange); opacity: 0.055;
       position: absolute; top: 2rem; left: 3rem;
       pointer-events: none; user-select: none;
       font-style: italic; font-weight: 300;
@@ -563,27 +625,157 @@
       display: grid; grid-template-columns: repeat(8, 1fr);
       border: 1px solid var(--border2); margin-bottom: 3rem;
     }
+
+    /* ── HORIZONTAL SCROLL ── */
+    .whatif-section .section-inner > *:not(.habit-scroll-wrap):not(.whatif-result-wrap):not(#whatif-nudge) {
+      max-width: var(--max);
+      margin-left: auto; margin-right: auto;
+      padding-left: clamp(1.5rem, 5vw, 4rem);
+      padding-right: clamp(1.5rem, 5vw, 4rem);
+    }
+    .habit-scroll-wrap {
+      width: 100%;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0.25rem clamp(1.5rem, 5vw, 4rem) 1.5rem;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 92%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 92%, transparent 100%);
+      cursor: grab;
+    }
+    .habit-scroll-wrap:active { cursor: grabbing; }
+    .habit-scroll-wrap::-webkit-scrollbar { display: none; }
+    .habit-scroll-inner {
+      display: flex;
+      gap: 1rem;
+      padding: 2rem 0 3rem;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    /* Scroll hint */
+    .habit-scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      opacity: 0.6;
+      margin-bottom: 1.25rem;
+      transition: opacity 0.5s;
+    }
+    .habit-scroll-hint.hidden { opacity: 0; pointer-events: none; }
+    .habit-scroll-hint-arrow {
+      display: inline-flex;
+      animation: hintBounce 1.4s ease-in-out infinite;
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateX(0); }
+      50%       { transform: translateX(6px); }
+    }
+    .habit-scroll-inner 
+    .habit-scroll-inner .habit-card:last-child { }
     @keyframes cardLift {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(247,147,26,0.08); }
     }
+    /* ── HABIT CARDS ── */
     .habit-card {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 0.6rem; padding: 2rem 0.5rem;
-      background: transparent; border: none; border-right: 1px solid var(--border2);
-      cursor: pointer; transition: all 0.3s; text-align: center;
-      position: relative; overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 2rem 1.75rem 1.75rem;
+      background: var(--bg2);
+      border-left: 2px solid var(--orange);
+      border-top: 1px solid var(--border2);
+      border-right: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+      cursor: pointer;
+      transition: background 0.25s, border-left-color 0.25s, box-shadow 0.25s;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transform-origin: bottom center;
+      min-height: 260px;
+      min-width: 220px;
+      width: 220px;
+      flex: 0 0 auto;
+      justify-content: space-between;
+      gap: 1.5rem;
+      will-change: transform;
     }
-    .habit-card:last-child { border-right: none; }
-    .habit-card.lifting {
-      animation: cardLift 0.7s ease;
+    .habit-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 60px;
+      background: linear-gradient(to top, rgba(247,147,26,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
-    .habit-card:hover, .habit-card.active { background: var(--orange-dim); }
-    .habit-icon { color: var(--orange); opacity: 0.6; }
-    .habit-name { font-family: var(--display); font-size: 0.85rem; font-style: italic; font-weight: 300; color: var(--white); line-height: 1.2; }
-    .habit-cost { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.08em; color: var(--grey); }
+    .habit-card:hover::after,
+    .habit-card.active::after { opacity: 1; }
+    .habit-card:hover {
+      background: rgba(247,147,26,0.05);
+      border-left-color: var(--orange);
+      box-shadow: 4px 0 0 0 rgba(247,147,26,0.15), 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .habit-card.active {
+      background: rgba(247,147,26,0.07);
+      border-left-color: var(--orange);
+      box-shadow: 4px 0 0 0 rgba(247,147,26,0.25), 0 8px 32px rgba(247,147,26,0.08);
+    }
+    .habit-card.lifting { animation: cardLift 0.7s ease; }
+    .habit-card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .habit-card-seq {
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange);
+      opacity: 0.5;
+    }
+    .habit-icon {
+      color: var(--orange);
+      opacity: 0.55;
+      margin-top: 0.5rem;
+      display: block;
+    }
+    .habit-icon svg { width: 20px; height: 20px; }
+    .habit-name {
+      font-family: var(--display);
+      font-size: 1.45rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .habit-card-bottom { }
+    .habit-cost {
+      font-family: var(--title);
+      font-size: 3.2rem;
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      color: var(--orange);
+    }
+    .habit-cost-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.5rem;
+      opacity: 0.7;
+    }
 
-    .whatif-result-wrap {
+        .whatif-result-wrap {
       border: 1px solid var(--border2); background: var(--bg2); overflow: hidden;
     }
     .whatif-result-header {
@@ -630,7 +822,7 @@
     .whatif-share-row { padding: 1.5rem 3.5rem 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
     /* ── SHARE ── */
-    .share-section { background: var(--bg2); }
+    .share-section { background: var(--bg); border-top: 1px solid rgba(247,147,26,0.08); }
     .share-preview {
       border: 1px solid var(--border2); padding: 3rem;
       text-align: center; background: var(--bg);
@@ -655,8 +847,24 @@
       background: var(--bg3); border: 1px solid var(--border2); color: var(--white);
       padding: 0.85rem 1.5rem; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
     }
+    .share-btn:hover {
+      border-color: rgba(247,147,26,0.4);
+      color: var(--orange);
+      background: rgba(247,147,26,0.04);
+    }
+    
     .share-btn:hover { border-color: var(--orange); color: var(--orange); }
-    .share-btn.primary { background: var(--orange); color: #000; border-color: var(--orange); }
+    .share-btn.primary {
+      background: rgba(37,211,102,0.1);
+      color: #25D366;
+      border-color: rgba(37,211,102,0.35);
+    }
+    .share-btn.primary:hover {
+      background: rgba(37,211,102,0.18);
+      border-color: rgba(37,211,102,0.6);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(37,211,102,0.12);
+    }
     .share-btn.primary:hover { opacity: 0.85; color: #000; }
 
     /* ── PUSH ── */
@@ -705,102 +913,216 @@
     .footer-links a { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--orange); }
 
-    /* ── REVEAL ── */
-    .reveal { transition: opacity 0.9s ease, transform 0.9s ease; }
-    .reveal.hidden { opacity: 0; transform: translateY(30px); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* ── REVEAL SYSTEM ── */
+    .reveal {
+      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.hidden        { opacity: 0; transform: translateY(28px); }
+    .reveal.visible       { opacity: 1; transform: translateY(0); }
+
+    /* Variant: slide from left (section labels) */
+    .reveal-left.hidden   { opacity: 0; transform: translateX(-24px); }
+    .reveal-left.visible  { opacity: 1; transform: translateX(0); }
+
+    /* Variant: scale in (large display numbers) */
+    .reveal-scale.hidden  { opacity: 0; transform: scale(0.94) translateY(16px); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+    /* Variant: fade only (body text) */
+    .reveal-fade.hidden   { opacity: 0; }
+    .reveal-fade.visible  { opacity: 1; }
+
+    /* Section transitions — each section fades bg accent */
+    .section { transition: none; }
+
+    /* Stagger delays — applied via JS data-delay */
+    .reveal[data-delay="1"] { transition-delay: 0.08s; }
+    .reveal[data-delay="2"] { transition-delay: 0.16s; }
+    .reveal[data-delay="3"] { transition-delay: 0.24s; }
+    .reveal[data-delay="4"] { transition-delay: 0.32s; }
+    .reveal[data-delay="5"] { transition-delay: 0.40s; }
+    .reveal-left[data-delay="1"] { transition-delay: 0.08s; }
+    .reveal-left[data-delay="2"] { transition-delay: 0.16s; }
+    .reveal-scale[data-delay="1"] { transition-delay: 0.1s; }
+    .reveal-scale[data-delay="2"] { transition-delay: 0.2s; }
+    .reveal-fade[data-delay="1"]  { transition-delay: 0.12s; }
+    .reveal-fade[data-delay="2"]  { transition-delay: 0.22s; }
+
+    /* Ornament rules get a width-in animation */
+    .ornament-rule-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(247,147,26,0.15);
+      transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    .ornament-rule-line.visible {
+      transform: scaleX(1);
+    }
+    .ornament-rule-line.visible { width: 100%; }
 
     /* ── MOBILE ── */
     /* ═══════════════ MOBILE — full responsive pass ═══════════════ */
     @media (max-width: 768px) {
       /* Nav */
       nav { padding: 1.25rem 1.5rem; }
+      nav.scrolled { padding: 0.8rem 1.5rem; }
       .nav-cta { display: none; }
       .nav-right { gap: 1rem; }
 
       /* Hero */
       .hero { padding: 0 1.5rem; min-height: 100svh; justify-content: center; }
       .hero-eyebrow { padding-top: 8vh; font-size: 0.52rem; letter-spacing: 0.2em; }
-      .hero-price { font-size: clamp(4rem, 19vw, 6.5rem); }
+      .hero-price { font-size: clamp(4.5rem, 20vw, 7rem); }
       .hero-price-change { font-size: 0.65rem; }
-
-      /* Sigil — slightly smaller on mobile, still fills well */
       .sigil-wrap { width: min(96vw, 80vh); height: min(96vw, 80vh); opacity: 0.75; }
-
-      /* Signal pill — compact */
-      .signal-pill { padding: 0.65rem 1.5rem; gap: 0.75rem; }
-      .signal-text { font-size: 0.68rem; letter-spacing: 0.14em; }
-      .signal-reason { font-size: 1.05rem; padding: 0 0.5rem; }
+      .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
+      .signal-text { font-size: 0.62rem; letter-spacing: 0.12em; }
+      .signal-reason { font-size: 1rem; padding: 0 0.5rem; }
       .signal-wrap { margin: 1.5rem 0 0.75rem; }
-
-      /* Scroll indicator hidden on small screens */
       .scroll-indicator { display: none; }
-
-      /* Hero CTAs — stack */
       .hero-actions { flex-direction: column; align-items: stretch; gap: 0.75rem; margin-top: 2rem; }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost { text-align: center; padding: 1rem 1.5rem; }
 
       /* Sections */
-      .section { padding: 4rem 1.5rem; }
+      .section { padding: 4rem 1.25rem; }
       .section-title { font-size: clamp(1.8rem, 7vw, 2.8rem); }
-      .section-sub { font-size: 0.95rem; margin-bottom: 2.5rem; }
-      .ornament-rule { padding: 0 1.5rem; }
+      .section-sub { font-size: 0.92rem; margin-bottom: 2.5rem; }
+      .ornament-rule { padding: 0 1.25rem; }
 
       /* Signal cards — stack */
       .signals-grid { grid-template-columns: 1fr; }
-      .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.5rem; }
+      .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.25rem; }
       .signal-card:last-child { border-bottom: none; }
       .signal-card-value { font-size: 3.5rem; }
 
+      /* ── INSTRUMENT PANEL — mobile ── */
+      .instrument-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .instrument-metric {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 0.25rem 1rem;
+        padding: 1.25rem 1.25rem;
+        border-bottom: 1px solid var(--border2);
+        border-right: none;
+      }
+      .instrument-metric:last-child { border-bottom: none; }
+      .instrument-id {
+        grid-column: 1; grid-row: 1;
+        font-size: 0.44rem;
+      }
+      .instrument-value {
+        grid-column: 2; grid-row: 1;
+        font-size: 2.2rem;
+        text-align: right;
+      }
+      .instrument-bar-wrap {
+        grid-column: 1 / -1; grid-row: 2;
+        height: 2px;
+      }
+      .instrument-desc {
+        grid-column: 1 / -1; grid-row: 3;
+        font-size: 0.78rem;
+      }
+      .instrument-label {
+        grid-column: 1; grid-row: 1;
+        align-self: end;
+      }
+      .instrument-sub {
+        grid-column: 2; grid-row: 2;
+        text-align: right;
+        font-size: 0.6rem;
+      }
+      .instrument-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.25rem;
+        text-align: center;
+      }
+      .instrument-score-wrap { justify-content: center; }
+
       /* Chart */
-      .chart-wrap { height: 220px; }
-      .chart-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .chart-tab { padding: 0.5rem 1.1rem; flex-shrink: 0; }
-      .chart-legend { gap: 1.5rem; margin-bottom: 1.5rem; }
+      .chart-bleed { height: 240px; }
+      .chart-header { flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
+      .chart-timeframes { align-self: flex-start; }
+      .chart-tf { padding: 0.45rem 0.9rem; font-size: 0.5rem; }
+      .chart-caption { font-size: 0.82rem; }
 
       /* Expert */
-      .expert-card { padding: 2.5rem 1.5rem; }
-      .expert-text { font-size: 1.05rem; }
-      .expert-quote-mark { font-size: 10rem; top: 1rem; left: 1rem; }
+      .expert-card { padding: 2.5rem 1.25rem; }
+      .expert-text { font-size: 1rem; }
+      .expert-quote-mark { font-size: 8rem; top: 1rem; left: 1rem; }
+
+      /* ── HABIT CARDS — mobile ── */
+      .habit-scroll-hint { font-size: 0.5rem; }
+      .habit-card {
+        min-width: 168px;
+        width: 168px;
+        min-height: 220px;
+        padding: 1.25rem 1rem;
+      }
+      .habit-name { font-size: 1.15rem; }
+      .habit-cost { font-size: 2.6rem; }
+      .habit-icon svg { width: 18px; height: 18px; }
 
       /* What If */
-      .habit-grid { grid-template-columns: repeat(4, 1fr); }
-      .habit-card { padding: 1.25rem 0.4rem; }
-      .habit-name { font-size: 0.75rem; }
-      .habit-cost { font-size: 0.48rem; }
       .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
       .whatif-result-header,
       .whatif-chart-area,
       .whatif-bar-area,
       .whatif-share-row,
-      .whatif-disclaimer { padding: 1.75rem 1.5rem; }
+      .whatif-disclaimer { padding: 1.5rem 1.25rem; }
       .whatif-bar-area { grid-template-columns: 1fr; gap: 1.5rem; }
-      .whatif-big-number { font-size: clamp(3rem, 14vw, 5rem); }
-      .whatif-stat { padding: 1.25rem 1rem; }
+      .whatif-big-number { font-size: clamp(2.8rem, 13vw, 5rem); }
+      .whatif-stat { padding: 1.1rem 0.9rem; }
 
       /* Share */
-      .share-preview { max-width: 100%; padding: 1.75rem 1.25rem; }
-      .share-btns { flex-direction: column; gap: 0.75rem; }
-      .share-btn { padding: 0.9rem 1.5rem; }
+      .share-btns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .share-btns .share-btn.primary { grid-column: 1 / -1; }
+      .share-btn { padding: 0.9rem 1rem; font-size: 0.55rem; }
 
       /* Push */
-      .push-inner { flex-direction: column; gap: 2rem; }
-      .push-mockup { width: 100%; max-width: 380px; }
+      .push-inner { flex-direction: column; gap: 2rem; align-items: stretch; }
+      .push-mockup { width: 100%; max-width: 100%; box-sizing: border-box; }
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
 
       /* Relai */
-      .relai-section { padding: 4rem 1.5rem; }
+      .relai-section { padding: 4rem 1.25rem; }
       .relai-inner { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
       .relai-right { width: 100%; }
       .relai-btn { padding: 1.1rem; width: 100%; display: block; text-align: center; }
       .relai-title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
-      .relai-badges { gap: 1.25rem; }
-      .relai-logo-lockup svg { height: 28px; }
+      .relai-badges { gap: 1rem; flex-wrap: wrap; }
+      .relai-logo-lockup svg { height: 26px; }
 
       /* Footer */
-      footer { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 2rem 1.5rem; }
+      footer { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 2rem 1.25rem; }
       .footer-links { gap: 1.5rem; }
+    }
+
+    /* ── 390px EXTREME NARROW ── */
+    @media (max-width: 400px) {
+      .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
+      .instrument-value { font-size: 2rem; }
+      .habit-card { min-width: 155px; width: 155px; }
+      .habit-name { font-size: 1.05rem; }
+      .habit-cost { font-size: 2.3rem; }
+      .share-btns { grid-template-columns: 1fr; }
+      .share-btns .share-btn.primary { grid-column: 1; }
     }
 
     /* Small phones */
@@ -815,7 +1137,283 @@
       button, a.btn-primary, a.btn-ghost, a.relai-btn,
       .chart-tab, .lang-btn, .habit-card, .share-btn { min-height: 44px; }
     }
-  </style>
+  
+    /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
+    .section-anchor {
+      font-family: var(--title);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 400; line-height: 0.9;
+      letter-spacing: -0.01em;
+      color: var(--white); margin-bottom: 0.6rem;
+      display: block;
+      text-shadow:
+        0 1px 0 rgba(247,147,26,0.2),
+        0 4px 24px rgba(0,0,0,0.6),
+        0 0 60px rgba(247,147,26,0.03);
+    }
+    .section-anchor-sub {
+      font-family: var(--display);
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-style: italic; font-weight: 300;
+      color: var(--muted); line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    /* ── HEARTBEAT PULSE ── */
+    @keyframes heartbeat-calm {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(0.6); opacity: 0.35; }
+    }
+    @keyframes heartbeat-urgent {
+      0%   { transform: scale(1); opacity: 1; }
+      15%  { transform: scale(1.4); opacity: 1; }
+      30%  { transform: scale(0.75); opacity: 0.5; }
+      50%  { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.45; }
+    }
+
+    /* ══════════════════════════════════════════
+       INSTRUMENT PANEL
+    ══════════════════════════════════════════ */
+    .instrument-panel {
+      margin-top: 3rem;
+      border: 1px solid rgba(247,147,26,0.15);
+      position: relative;
+      overflow: hidden;
+      background: rgba(247,147,26,0.02);
+    }
+    .instrument-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent);
+    }
+    .instrument-panel.scanning::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(247,147,26,0.04), transparent);
+      animation: scanPass 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
+      pointer-events: none;
+    }
+    @keyframes scanPass {
+      0%   { left: -60%; }
+      100% { left: 110%; }
+    }
+    .instrument-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(247,147,26,0.1);
+    }
+    .instrument-header-left {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .instrument-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
+      animation: instrumentPulse 3s ease-in-out infinite;
+    }
+    @keyframes instrumentPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.8); }
+    }
+    .instrument-header-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--orange);
+      opacity: 0.7;
+    }
+    .instrument-header-right {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--grey);
+      opacity: 0.6;
+    }
+    .instrument-body {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      min-height: 0;
+    }
+    .instrument-metric {
+      padding: 2.2rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .instrument-metric + .instrument-metric {
+      border-left: 1px solid rgba(247,147,26,0.08);
+    }
+    .instrument-metric::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: currentColor;
+      opacity: 0.45;
+    }
+    .instrument-metric-id {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 1.2rem;
+      opacity: 0.7;
+    }
+    .instrument-value {
+      font-family: var(--title);
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.9rem;
+    }
+    .instrument-metric.primary .instrument-value {
+      font-size: clamp(3.5rem, 7vw, 6rem);
+    }
+    .instrument-sub {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 1.4rem;
+      opacity: 0.65;
+      line-height: 1.6;
+    }
+    .instrument-bar-track {
+      height: 2px;
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 0.9rem;
+      overflow: hidden;
+    }
+    .instrument-bar-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s;
+    }
+    .instrument-desc {
+      font-family: var(--display);
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .instrument-gauge {
+      width: 100px;
+      height: 56px;
+      max-width: 100px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .instrument-footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid rgba(247,147,26,0.08);
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .instrument-footer-stat {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey);
+      opacity: 0.6;
+    }
+    .instrument-footer-stat span {
+      color: var(--muted);
+      opacity: 1;
+    }
+
+    /* Mobile: stack instrument metrics */
+    @media (max-width: 768px) {
+      .instrument-body {
+        grid-template-columns: 1fr;
+      }
+      .instrument-metric + .instrument-metric {
+        border-left: none;
+        border-top: 1px solid rgba(247,147,26,0.08);
+      }
+    }
+
+    /* ── SKELETON LOADING STATES ── */
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    .skel {
+      display: inline-block;
+      border-radius: 2px;
+      background: linear-gradient(90deg,
+        rgba(247,147,26,0.04) 0%,
+        rgba(247,147,26,0.10) 40%,
+        rgba(247,147,26,0.04) 80%);
+      background-size: 600px 100%;
+      animation: shimmer 1.6s infinite linear;
+    }
+    /* Skeleton blocks for specific elements */
+    #price-value.loading {
+      color: transparent;
+      position: relative;
+    }
+    #price-value.loading::after {
+      content: '';
+      position: absolute;
+      top: 10%; left: 5%; right: 5%; bottom: 10%;
+      background: linear-gradient(90deg,
+        rgba(237,232,222,0.03) 0%, rgba(237,232,222,0.08) 40%, rgba(237,232,222,0.03) 80%);
+      background-size: 600px 100%;
+      animation: shimmer 1.6s infinite linear;
+      border-radius: 4px;
+    }
+    .instrument-value.loading {
+      display: inline-block; min-width: 4ch; height: 0.88em;
+      background: linear-gradient(90deg,
+        rgba(237,232,222,0.04) 0%, rgba(237,232,222,0.1) 40%, rgba(237,232,222,0.04) 80%);
+      background-size: 400px 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 2px; color: transparent !important;
+    }
+    .instrument-desc.loading {
+      display: block; height: 3em; width: 100%;
+      background: linear-gradient(90deg,
+        rgba(237,232,222,0.03) 0%, rgba(237,232,222,0.07) 40%, rgba(237,232,222,0.03) 80%);
+      background-size: 400px 100%;
+      animation: shimmer 1.6s 0.2s infinite linear;
+      border-radius: 2px; color: transparent !important;
+    }
+
+
+    /* ── SELECTION ── */
+    ::selection { background: rgba(247,147,26,0.25); color: var(--white); }
+    ::-moz-selection { background: rgba(247,147,26,0.25); color: var(--white); }
+
+    /* ── FOCUS ── */
+    :focus-visible {
+      outline: 1px solid rgba(247,147,26,0.5);
+      outline-offset: 3px;
+    }
+
+
+    /* ── WHATIF RESULT REVEAL ── */
+    .whatif-result-wrap {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .whatif-result-wrap.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+</style>
 </head>
 <body>
 
@@ -955,11 +1553,11 @@
 
   <!-- Content -->
   <div class="hero-content">
-    <p class="hero-eyebrow" id="hero-label"><span data-i18n="heroLabel">Live Bitcoin Signal &mdash; Updated every 5 minutes</span></p>
+    <p class="hero-eyebrow"><span data-i18n="heroLabel">Live Bitcoin Signal</span></p>
 
     <div class="hero-price-block">
       <div class="hero-price" id="hero-price">
-        <span class="hero-price-currency" id="currency-symbol">€</span><span id="price-value">—</span>
+        <span class="hero-price-currency" id="currency-symbol">€</span><span id="price-value" class="hero-price loading"></span>
       </div>
       <p class="hero-price-change" id="price-change">Loading...</p>
     </div>
@@ -969,7 +1567,6 @@
         <div class="signal-dot"></div>
         <span class="signal-text" id="signal-text">Most Bitcoiners are buying</span>
       </div>
-      <p class="signal-updated" id="signal-updated">Loading…</p>
     </div>
 
     <p class="signal-reason" id="signal-reason">Fear & Greed is in extreme fear territory, and Bitcoin is trading below its 200-day average — historically, these are the conditions Bitcoiners act on.</p>
@@ -980,6 +1577,9 @@
       <a href="#signal" class="btn-primary" data-i18n="heroBtn1">Understand the signal</a>
       <a href="#whatif" class="btn-ghost" data-i18n="heroBtn2">Calculate your "What If?"</a>
     </div>
+
+    <p class="signal-updated" id="signal-updated" style="margin-top:1.5rem;"></p>
+
   </div>
 
   <div class="scroll-indicator">
@@ -988,105 +1588,112 @@
   </div>
 </section>
 
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- SIGNAL BREAKDOWN -->
 <section class="section" id="signal" style="background: var(--bg2);">
   <div class="section-inner">
-    <p class="section-label reveal" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
-    <h2 class="section-title reveal" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
-    <p class="section-sub reveal" data-i18n="signalBreakdownSub">No jargon. Here's what the data actually shows right now — and what it has meant historically.</p>
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
+    <h2 class="section-title reveal" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
+    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">No jargon. Here's what the data actually shows right now — and what it has meant historically.</p>
 
-    <div class="signals-grid reveal">
-      <!-- Fear & Greed -->
-      <div class="signal-card">
-        <p class="signal-card-label" data-i18n="fgLabel">Fear & Greed Index</p>
-        <!-- Large value — same visual weight as MA and ATH cards -->
-        <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.75rem;">
-          <div class="signal-card-value" id="fg-value" style="color: var(--red);">—</div>
+    <!-- INSTRUMENT PANEL -->
+    <div class="instrument-panel reveal" data-delay="4" id="instrument-panel">
+      <div class="instrument-header">
+        <div class="instrument-header-left">
+          <div class="instrument-status-dot" id="instrument-dot"></div>
+          <span class="instrument-header-label">Signal Breakdown — Live</span>
         </div>
-        <!-- Gauge below the number, compact -->
-        <div class="gauge-wrap" style="justify-content:flex-start;margin:0 0 1rem;">
-          <div class="gauge" style="width:90px;height:50px;">
-            <svg viewBox="0 0 100 56" fill="none" style="width:100%;height:100%;">
-              <path d="M 10 54 A 40 40 0 0 1 90 54" stroke="rgba(255,255,255,0.05)" stroke-width="7" stroke-linecap="round"/>
-              <path d="M 10 54 A 40 40 0 0 1 21.7 25.7" stroke="#F87171" stroke-width="7" stroke-linecap="round" opacity="0.4"/>
-              <path d="M 21.7 25.7 A 40 40 0 0 1 50 14" stroke="#FBBF24" stroke-width="7" opacity="0.4"/>
-              <path d="M 50 14 A 40 40 0 0 1 78.3 25.7" stroke="#4ADE80" stroke-width="7" opacity="0.35"/>
-              <path d="M 78.3 25.7 A 40 40 0 0 1 90 54" stroke="#4ADE80" stroke-width="7" stroke-linecap="round" opacity="0.4"/>
+        <span class="instrument-header-right" id="instrument-timestamp">LOADING DATA...</span>
+      </div>
+
+      <div class="instrument-body">
+        <!-- FEAR & GREED — primary, larger -->
+        <div class="instrument-metric primary" id="fg-metric" style="color: var(--red);">
+          <div class="instrument-metric-id">01 / Fear &amp; Greed Index</div>
+          <div class="instrument-value loading" id="fg-value">—</div>
+          <div class="instrument-gauge">
+            <svg viewBox="0 0 100 56" fill="none" style="width:100px;height:56px;max-width:100px;display:block;">
+              <path d="M 10 54 A 40 40 0 0 1 90 54" stroke="rgba(255,255,255,0.05)" stroke-width="6" stroke-linecap="round"/>
+              <path d="M 10 54 A 40 40 0 0 1 21.7 25.7" stroke="#F87171" stroke-width="6" stroke-linecap="round" opacity="0.35"/>
+              <path d="M 21.7 25.7 A 40 40 0 0 1 50 14" stroke="#FBBF24" stroke-width="6" opacity="0.35"/>
+              <path d="M 50 14 A 40 40 0 0 1 78.3 25.7" stroke="#4ADE80" stroke-width="6" opacity="0.3"/>
+              <path d="M 78.3 25.7 A 40 40 0 0 1 90 54" stroke="#4ADE80" stroke-width="6" stroke-linecap="round" opacity="0.35"/>
               <line id="gauge-needle" x1="50" y1="54" x2="14" y2="26" stroke="#F7931A" stroke-width="1.5" stroke-linecap="round"/>
               <circle cx="50" cy="54" r="3" fill="#F7931A"/>
             </svg>
           </div>
+          <div class="instrument-bar-track"><div class="instrument-bar-fill" id="fg-bar" style="background: var(--red);"></div></div>
+          <p class="instrument-desc loading" id="fg-desc"></p>
         </div>
-        <p class="signal-card-desc" id="fg-desc"></p>
-        <div class="signal-card-bar"><div class="signal-card-fill" id="fg-bar" style="width: 0%; background: var(--red);"></div></div>
+
+        <!-- VS 200-DAY MA -->
+        <div class="instrument-metric" id="ma-metric" style="color: var(--green);">
+          <div class="instrument-metric-id">02 / vs. 200-Day Avg</div>
+          <div style="display:flex;align-items:baseline;gap:0.4rem;">
+            <div class="instrument-value loading" id="ma-value">—</div>
+            <span id="ma-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
+          </div>
+          <div class="instrument-sub" id="ma-sub"><span data-i18n="legend200ma">200-Day MA</span>: <span id="ma-price">—</span></div>
+          <div class="instrument-bar-track"><div class="instrument-bar-fill" id="ma-bar" style="width:50%;background:var(--grey);"></div></div>
+          <p class="instrument-desc loading" id="ma-desc"></p>
+        </div>
+
+        <!-- FROM ATH -->
+        <div class="instrument-metric" id="ath-metric" style="color: var(--amber);">
+          <div class="instrument-metric-id">03 / From All-Time High</div>
+          <div style="display:flex;align-items:baseline;gap:0.4rem;">
+            <div class="instrument-value loading" id="ath-value">—</div>
+            <span id="ath-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
+          </div>
+          <div class="instrument-sub"><span data-i18n="athPriceLabel">All-Time High</span>: <span id="ath-price">—</span></div>
+          <div class="instrument-bar-track"><div class="instrument-bar-fill" id="ath-bar" style="background: var(--amber);"></div></div>
+          <p class="instrument-desc loading" id="ath-desc"></p>
+        </div>
       </div>
 
-      <!-- 200-day MA -->
-      <div class="signal-card">
-        <p class="signal-card-label" data-i18n="maLabel">vs. 200-Day Average</p>
-        <div style="display:flex;align-items:baseline;gap:0.5rem;">
-          <div class="signal-card-value" id="ma-value" style="color: var(--green);">—</div>
-          <span id="ma-arrow" style="font-size:1.5rem;line-height:1;color:var(--green);"></span>
-        </div>
-        <p class="signal-card-desc" id="ma-desc"></p>
-        <div class="signal-card-bar" style="margin-top:2rem;">
-          <div class="signal-card-fill" id="ma-bar" style="width: 50%; background: var(--grey);"></div>
-        </div>
-        <p style="font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;color:var(--grey);margin-top:0.75rem;">
-          <span data-i18n="legend200ma">200-Day MA</span>: <span id="ma-price">—</span>
-        </p>
-      </div>
-
-      <!-- ATH -->
-      <div class="signal-card">
-        <p class="signal-card-label" data-i18n="athLabel">From All-Time High</p>
-        <div style="display:flex;align-items:baseline;gap:0.5rem;">
-          <div class="signal-card-value" id="ath-value" style="color: var(--amber);">—</div>
-          <span id="ath-arrow" style="font-size:1.5rem;line-height:1;color:var(--amber);"></span>
-        </div>
-        <p class="signal-card-desc" id="ath-desc"></p>
-        <div class="signal-card-bar" style="margin-top:2rem;">
-          <div class="signal-card-fill" id="ath-bar" style="width: 0%; background: var(--amber);"></div>
-        </div>
-        <p style="font-family:var(--mono);font-size:0.52rem;letter-spacing:0.1em;color:var(--grey);margin-top:0.75rem;">
-          <span data-i18n="athPriceLabel">All-Time High</span>: <span id="ath-price">—</span>
-        </p>
+      <div class="instrument-footer">
+        <span class="instrument-footer-stat">SCORE <span id="instrument-score">—</span></span>
+        <span class="instrument-footer-stat">SIGNAL <span id="instrument-signal-label">LOADING</span></span>
+        <span class="instrument-footer-stat">UPDATED <span id="instrument-updated">—</span></span>
       </div>
     </div>
   </div>
 </section>
 
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- PRICE CHART -->
 <section class="section chart-section">
   <div class="section-inner">
-    <p class="section-label reveal" data-i18n="chartLabel">Price Chart</p>
-    <h2 class="section-title reveal" data-i18n="chartTitle">Price + 200-Day Average</h2>
-    <p class="section-sub reveal" data-i18n="chartSub">The orange line is Bitcoin's price. The white line is the 200-day average — when price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
-    <div class="chart-tabs reveal">
-      <button class="chart-tab" onclick="loadChart('30',this)">1M</button>
-      <button class="chart-tab" onclick="loadChart('90',this)">3M</button>
-      <button class="chart-tab active" onclick="loadChart('365',this)">1Y</button>
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="chartLabel">Price Chart</p>
+    <div class="chart-header reveal" data-delay="2">
+      <h2 class="section-title" data-i18n="chartTitle">Price + 200-Day Average</h2>
+      <div class="chart-timeframes">
+        <button class="chart-tf" onclick="loadChart('30',this)">1M</button>
+        <button class="chart-tf" onclick="loadChart('90',this)">3M</button>
+        <button class="chart-tf active" onclick="loadChart('365',this)">1Y</button>
+      </div>
     </div>
-    <div class="chart-legend reveal">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--orange);"></div><span data-i18n="legendBtc">Bitcoin Price</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(237,232,222,0.3);"></div><span data-i18n="legend200ma">200-Day Moving Average</span></div>
-    </div>
-    <div class="chart-wrap reveal"><canvas id="priceChart"></canvas></div>
+  </div>
+  <div class="chart-bleed reveal" data-delay="3">
+    <div class="chart-annotation-ma" id="chart-annotation-ma">200D AVG</div>
+    <div class="chart-annotation-price" id="chart-annotation-price">BTC</div>
+    <canvas id="priceChart"></canvas>
+  </div>
+  <div class="section-inner">
+    <p class="chart-caption reveal reveal-fade" data-delay="4" data-i18n="chartSub">The orange line is Bitcoin's price. The white line is the 200-day average — when price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
   </div>
 </section>
 
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- WHAT EXPERTS DO -->
 <section class="section expert-section" id="experts">
   <div class="section-inner">
-    <p class="section-label reveal" data-i18n="expertsLabel">What Bitcoiners Do</p>
-    <h2 class="section-title reveal" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
-    <div class="expert-card reveal" style="margin-top:3rem;">
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">What Bitcoiners Do</p>
+    <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
+    <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;">
       <div class="expert-quote-mark" aria-hidden="true">"</div>
       <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
       <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory — as it is now — Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
@@ -1095,57 +1702,111 @@
   </div>
 </section>
 
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- WHAT IF CALCULATOR -->
 <section class="section whatif-section" id="whatif">
   <div class="section-inner">
-    <p class="section-label reveal" data-i18n="whatifLabel">What If?</p>
-    <h2 class="section-title reveal" data-i18n="whatifTitle">The money was always there.</h2>
-    <p class="section-sub reveal" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit and see what ten years of putting that money into Bitcoin would have looked like instead.</p>
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="whatifLabel">What If?</p>
+    <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
+    <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit — and see what it would look like if you had put that money into Bitcoin instead.</p>
 
-    <div class="habit-grid reveal" id="habit-grid">
-      <button class="habit-card" onclick="selectHabit('coffee',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
-        <span class="habit-name" data-i18n="habitCoffee">Daily latte</span>
-        <span class="habit-cost">~€135/mo</span>
-      </button>
-      <button class="habit-card" onclick="selectHabit('cigarettes',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
-        <span class="habit-name" data-i18n="habitCigarettes">Cigarettes</span>
-        <span class="habit-cost">~€240/mo</span>
-      </button>
-      <button class="habit-card" onclick="selectHabit('gym',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
-        <span class="habit-name" data-i18n="habitGym">Gym membership</span>
-        <span class="habit-cost">~€45/mo</span>
+    <div class="habit-scroll-hint" id="habit-scroll-hint">
+      <span class="habit-scroll-hint-arrow">→</span>
+      <span>Drag to explore</span>
+    </div>
+    <div class="habit-scroll-wrap reveal" data-delay="4" id="habit-scroll-wrap">
+      <div class="habit-scroll-inner" id="habit-grid">
+      <button class="habit-card" onclick="selectHabit('spotify',this)">
+        <div class="habit-card-top">
+          <span class="habit-card-seq">01</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
+          <span class="habit-name">Spotify</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€11</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
       </button>
       <button class="habit-card" onclick="selectHabit('netflix',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
-        <span class="habit-name">Netflix</span>
-        <span class="habit-cost">~€18/mo</span>
+        <div class="habit-card-top">
+          <span class="habit-card-seq">02</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
+          <span class="habit-name">Netflix</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€18</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
       </button>
-      <button class="habit-card" onclick="selectHabit('spotify',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
-        <span class="habit-name">Spotify</span>
-        <span class="habit-cost">~€11/mo</span>
+      <button class="habit-card" onclick="selectHabit('gym',this)">
+        <div class="habit-card-top">
+          <span class="habit-card-seq">03</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
+          <span class="habit-name" data-i18n="habitGym">Gym membership</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€45</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
       </button>
       <button class="habit-card" onclick="selectHabit('zalando',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
-        <span class="habit-name" data-i18n="habitShopping">Online shopping</span>
-        <span class="habit-cost">~€80/mo</span>
-      </button>
-      <button class="habit-card" onclick="selectHabit('takeaway',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
-        <span class="habit-name" data-i18n="habitDelivery">Food delivery</span>
-        <span class="habit-cost">~€173/mo</span>
+        <div class="habit-card-top">
+          <span class="habit-card-seq">04</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+          <span class="habit-name" data-i18n="habitShopping">Online shopping</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€80</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
       </button>
       <button class="habit-card" onclick="selectHabit('beer',this)">
-        <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M5 11h12v10H5z"/><path d="M5 7h14l-1 4H6L5 7z"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/></svg></span>
-        <span class="habit-name" data-i18n="habitBeer">Nights out</span>
-        <span class="habit-cost">~€120/mo</span>
+        <div class="habit-card-top">
+          <span class="habit-card-seq">05</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M5 11h12v10H5z"/><path d="M5 7h14l-1 4H6L5 7z"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/></svg></span>
+          <span class="habit-name" data-i18n="habitBeer">Nights out</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€120</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
       </button>
-    </div>
+      <button class="habit-card" onclick="selectHabit('coffee',this)">
+        <div class="habit-card-top">
+          <span class="habit-card-seq">06</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
+          <span class="habit-name" data-i18n="habitCoffee">Daily latte</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€135</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
+      </button>
+      <button class="habit-card" onclick="selectHabit('takeaway',this)">
+        <div class="habit-card-top">
+          <span class="habit-card-seq">07</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
+          <span class="habit-name" data-i18n="habitDelivery">Food delivery</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€173</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
+      </button>
+      <button class="habit-card" onclick="selectHabit('cigarettes',this)">
+        <div class="habit-card-top">
+          <span class="habit-card-seq">08</span>
+          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
+          <span class="habit-name" data-i18n="habitCigarettes">Cigarettes</span>
+        </div>
+        <div class="habit-card-bottom">
+          <div class="habit-cost">~€240</div>
+          <div class="habit-cost-label">per month</div>
+        </div>
+      </button>
+    </div><!-- /habit-scroll-inner -->
+    </div><!-- /habit-scroll-wrap -->
     <p id="whatif-nudge" data-i18n="whatifNudge" style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange);text-align:center;margin-top:-1.5rem;margin-bottom:2rem;opacity:0.7;">↑ Pick a habit to see your number</p>
 
     <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
@@ -1186,39 +1847,12 @@
   </div>
 </section>
 
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
-
-<!-- SHARE -->
-<section class="section share-section" id="share">
-  <div class="section-inner" style="text-align:center;">
-    <p class="section-label reveal" style="justify-content:center;" data-i18n="shareLabel">Share the Signal</p>
-    <h2 class="section-title reveal" data-i18n="shareTitle">Send this to a friend<br>thinking about buying.</h2>
-    <p class="section-sub reveal" style="margin:0 auto 3rem;" data-i18n="shareSub">One tap. They'll see exactly what the signal is today and why.</p>
-    <div class="share-preview reveal">
-      <p style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.18em;color:var(--orange);text-transform:uppercase;margin-bottom:1.25rem;">whentobuybtc.xyz</p>
-      <div class="share-btc-price" id="share-price">€—</div>
-      <div class="share-signal-line" id="share-signal" style="color:var(--green);">● Most Bitcoiners are buying</div>
-      <div class="share-stats">
-        <div class="share-stat"><div class="share-stat-val" id="share-fg">—</div><div class="share-stat-label" data-i18n="shareFgLabel">Fear & Greed</div></div>
-        <div class="share-stat"><div class="share-stat-val" id="share-ma">—</div><div class="share-stat-label" data-i18n="shareMaLabel">vs 200D MA</div></div>
-        <div class="share-stat"><div class="share-stat-val" id="share-ath">—</div><div class="share-stat-label" data-i18n="shareAthLabel">From ATH</div></div>
-      </div>
-      <div class="share-url" data-i18n="shareUrl">Not financial advice · Check the data yourself</div>
-    </div>
-    <div class="share-btns reveal">
-      <button class="share-btn primary" onclick="shareWhatsApp()" data-i18n="shareWhatsapp">Share on WhatsApp</button>
-      <button class="share-btn" onclick="copyLink()" data-i18n="shareCopy">Copy Link</button>
-      <button class="share-btn" onclick="shareTwitter()" data-i18n="shareX">Share on X</button>
-    </div>
-  </div>
-</section>
-
-<div class="ornament-rule"><span class="ornament-rule-center">✦</span></div>
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- PUSH NOTIFICATIONS -->
 <section class="section push-section" id="alerts">
   <div class="section-inner">
-    <div class="push-inner reveal">
+    <div class="push-inner reveal" data-delay="1">
       <div class="push-left">
         <p class="section-label" data-i18n="alertsLabel">Alerts</p>
         <h2 class="push-title" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
@@ -1265,6 +1899,31 @@
 </section>
 
 <!-- FOOTER -->
+
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
+
+<!-- SHARE -->
+<section class="section share-section" id="share">
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-label reveal reveal-left" data-delay="1" style="justify-content:center;" data-i18n="shareLabel">Share the Signal</p>
+    <h2 class="section-title reveal" data-delay="2" data-i18n="shareTitle">Send this to a friend<br>thinking about buying.</h2>
+    <p class="section-sub reveal reveal-fade" data-delay="3" style="margin:0 auto 3rem;" data-i18n="shareSub">One tap. They'll see exactly what the signal is today and why.</p>
+    <!-- Hidden data nodes for share functions (populated by API fetches) -->
+    <span id="share-price" style="display:none"></span>
+    <span id="share-signal" style="display:none"></span>
+    <span id="share-fg" style="display:none"></span>
+    <span id="share-ma" style="display:none"></span>
+    <span id="share-ath" style="display:none"></span>
+
+    <div class="share-btns reveal" data-delay="4">
+      <button class="share-btn primary" onclick="shareWhatsApp()" data-i18n="shareWhatsapp">WhatsApp</button>
+      <button class="share-btn" onclick="shareTwitter()" data-i18n="shareX">X / Twitter</button>
+      <button class="share-btn" onclick="shareSignal()">Signal</button>
+      <button class="share-btn" onclick="shareTelegram()">Telegram</button>
+      <button class="share-btn" onclick="copyLink()" data-i18n="shareCopy">Copy Link</button>
+    </div>
+  </div>
+</section>
 <footer>
   <p class="footer-copy">© 2026 whentobuybtc.xyz · <span data-i18n="footerBuilt">Built by</span> <a href="https://imobabics.com" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;">Imo Babics</a> · <span data-i18n="footerDisclaimer">Not financial advice</span></p>
   <div class="footer-links"><a href="#top" data-i18n="footerTop">↑ Top</a></div>
@@ -1287,7 +1946,7 @@
       // Nav
       navCta: 'Buy on Relai',
       // Hero
-      heroLabel: 'Live Bitcoin Signal — Updated every 5 minutes',
+      heroLabel: 'Live Bitcoin Signal',
       disclaimer: 'Not financial advice. See what the data shows, decide for yourself.',
       heroBtn1: 'Understand the signal',
       heroBtn2: 'Calculate your "What If?"',
@@ -1619,7 +2278,7 @@
       currentPrice = currentCurrency === 'EUR' ? data.eur : data.usd;
       const change = currentCurrency === 'EUR' ? data.eur_24h_change : data.usd_24h_change;
 
-      document.getElementById('price-value').textContent = formatPrice(currentPrice);
+      const pv = document.getElementById('price-value'); pv.textContent = formatPrice(currentPrice); pv.classList.remove('loading');
       const changeEl = document.getElementById('price-change');
       const sign = change >= 0 ? '+' : '';
       changeEl.textContent = `${sign}${change.toFixed(2)}% today`;
@@ -1652,7 +2311,7 @@
       fgValue = data.value;
       const label = data.value_classification;
 
-      document.getElementById('fg-value').textContent = fgValue;
+      const fgEl2 = document.getElementById('fg-value'); fgEl2.textContent = fgValue; fgEl2.classList.remove('loading'); document.getElementById('fg-desc').classList.remove('loading');
       document.getElementById('fg-bar').style.width = fgValue + '%';
       document.getElementById('share-fg').textContent = fgValue;
 
@@ -1694,7 +2353,7 @@
       const absPct = Math.abs(dropPct).toFixed(0);
 
       document.getElementById('ath-price').textContent = sym + formatPrice(athPrice);
-      document.getElementById('ath-value').textContent = dropPct.toFixed(1) + '%';
+      const athEl2 = document.getElementById('ath-value'); athEl2.textContent = dropPct.toFixed(1) + '%'; athEl2.classList.remove('loading'); document.getElementById('ath-desc').classList.remove('loading');
       document.getElementById('ath-bar').style.width = Math.min(Math.abs(dropPct), 100) + '%';
       document.getElementById('share-ath').textContent = dropPct.toFixed(0) + '%';
 
@@ -1734,7 +2393,7 @@
       const sym = currentCurrency === 'EUR' ? '€' : '$';
 
       document.getElementById('ma-price').textContent = sym + formatPrice(maPrice);
-      document.getElementById('ma-value').textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(1) + '%';
+      const maEl2 = document.getElementById('ma-value'); maEl2.textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(1) + '%'; maEl2.classList.remove('loading'); document.getElementById('ma-desc').classList.remove('loading');
       document.getElementById('share-ma').textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(0) + '%';
 
       const fillPct = Math.min(Math.max((diffPct + 50) / 100 * 100, 5), 95);
@@ -1833,7 +2492,7 @@
 
   // ── CHART ──
   async function loadChart(days, triggerEl) {
-    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.chart-tf, .chart-tab').forEach(t => t.classList.remove('active'));
     if (triggerEl) triggerEl.classList.add('active');
     const timeframeMap = { '30': '1m', '90': '3m', '365': '1y' };
     const timeframe = timeframeMap[days] || '1m';
@@ -1846,67 +2505,127 @@
 
   function drawChart(prices, days) {
     const canvas = document.getElementById('priceChart');
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.parentElement.offsetWidth;
+    const H = canvas.parentElement.offsetHeight;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
 
     const vals = prices.map(p => p[1]);
-    const min = Math.min(...vals) * 0.98;
-    const max = Math.max(...vals) * 1.02;
-    const toY = v => H - ((v - min) / (max - min)) * (H - 40) - 20;
-    const toX = i => (i / (vals.length - 1)) * (W - 40) + 20;
+    if (!vals.length) return;
+    const pad = { top: 32, right: 80, bottom: 28, left: 0 };
+    const cw = W - pad.left - pad.right;
+    const ch = H - pad.top - pad.bottom;
+    const min = Math.min(...vals) * 0.97;
+    const max = Math.max(...vals) * 1.03;
+    const toX = i => pad.left + (i / (vals.length - 1)) * cw;
+    const toY = v => pad.top + ch - ((v - min) / (max - min)) * ch;
+    const sym = currentCurrency === 'EUR' ? '€' : '$';
 
     ctx.clearRect(0, 0, W, H);
 
-    // Grid
-    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const y = 20 + (i / 4) * (H - 40);
-      ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(W - 20, y); ctx.stroke();
-    }
+    // Atmospheric glow — sweep across bottom
+    const bgGlow = ctx.createLinearGradient(0, H * 0.5, 0, H);
+    bgGlow.addColorStop(0, 'rgba(247,147,26,0)');
+    bgGlow.addColorStop(1, 'rgba(247,147,26,0.03)');
+    ctx.fillStyle = bgGlow;
+    ctx.fillRect(0, 0, W, H);
 
-    // Price area fill
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, 'rgba(247,147,26,0.15)');
-    grad.addColorStop(1, 'rgba(247,147,26,0)');
+    // Very faint horizontal grid — just 3 lines, hairline
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 1;
+    [0.25, 0.5, 0.75].forEach(t => {
+      const y = pad.top + ch * t;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    });
+
+    // Price area fill — rich orange gradient
+    const areaGrad = ctx.createLinearGradient(0, pad.top, 0, H);
+    areaGrad.addColorStop(0,   'rgba(247,147,26,0.18)');
+    areaGrad.addColorStop(0.6, 'rgba(247,147,26,0.05)');
+    areaGrad.addColorStop(1,   'rgba(247,147,26,0)');
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(vals[0]));
     vals.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
     ctx.lineTo(toX(vals.length - 1), H);
-    ctx.lineTo(toX(0), H);
+    ctx.lineTo(0, H);
     ctx.closePath();
-    ctx.fillStyle = grad;
+    ctx.fillStyle = areaGrad;
     ctx.fill();
 
-    // Price line
+    // 200MA flat line first (behind price)
+    if (maPrice) {
+      const maY = toY(maPrice);
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(237,232,222,0.18)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 5]);
+      ctx.moveTo(0, maY); ctx.lineTo(W - pad.right, maY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Position MA annotation
+      const maAnnot = document.getElementById('chart-annotation-ma');
+      if (maAnnot) maAnnot.style.top = Math.max(8, Math.min(maY - 10, H - 30)) + 'px';
+    }
+
+    // Price line — orange with glow
+    ctx.save();
+    ctx.shadowColor = 'rgba(247,147,26,0.4)';
+    ctx.shadowBlur = 8;
     ctx.beginPath();
     ctx.strokeStyle = '#F7931A';
     ctx.lineWidth = 2;
     ctx.lineJoin = 'round';
+    ctx.lineCap  = 'round';
     vals.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
     ctx.stroke();
+    ctx.restore();
 
-    // 200-day MA line (if available and enough data)
-    if (maPrice && days >= 30) {
-      const maY = toY(maPrice);
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(240,237,232,0.35)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([6, 4]);
-      ctx.moveTo(20, maY); ctx.lineTo(W - 20, maY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
+    // End dot — glowing orange circle at current price
+    const lastX = toX(vals.length - 1);
+    const lastY = toY(vals[vals.length - 1]);
+    ctx.save();
+    ctx.shadowColor = 'rgba(247,147,26,0.6)';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#F7931A';
+    ctx.fill();
+    ctx.restore();
 
-    // Price labels
-    ctx.fillStyle = 'rgba(240,237,232,0.3)';
-    ctx.font = `${0.6 * 13}px "DM Mono", monospace`;
-    const sym = currentCurrency === 'EUR' ? '€' : '$';
-    ctx.fillText(sym + formatPrice(max), 24, 18);
-    ctx.fillText(sym + formatPrice(min), 24, H - 6);
+    // Price annotation position
+    const priceAnnot = document.getElementById('chart-annotation-price');
+    if (priceAnnot) priceAnnot.style.top = Math.max(8, Math.min(lastY - 10, H - 30)) + 'px';
+
+    // Y-axis price labels — right side, 3 values
+    ctx.fillStyle = 'rgba(74,69,64,0.8)';
+    ctx.font = '10px "DM Mono", monospace';
+    ctx.textAlign = 'right';
+    [max, (max + min) / 2, min].forEach(v => {
+      const y = toY(v);
+      if (y > 12 && y < H - 8) {
+        ctx.fillText(sym + formatPrice(v), W - 4, y + 4);
+      }
+    });
+
+    // X-axis: month/year labels — subtle
+    ctx.fillStyle = 'rgba(74,69,64,0.5)';
+    ctx.textAlign = 'center';
+    ctx.font = '9px "DM Mono", monospace';
+    const step = Math.max(1, Math.floor(vals.length / 6));
+    prices.forEach((p, i) => {
+      if (i % step === 0 || i === prices.length - 1) {
+        const d = new Date(p[0]);
+        const label = d.toLocaleDateString('en', { month: 'short', year: '2-digit' }).replace(' ', "'");
+        const x = toX(i);
+        if (x > 20 && x < W - pad.right - 10) ctx.fillText(label, x, H - 6);
+      }
+    });
   }
 
   // ── WHAT IF CALCULATOR ──
@@ -2033,6 +2752,7 @@
 
     const wrap = document.getElementById('whatif-result-wrap');
     wrap.style.display = 'block';
+    requestAnimationFrame(() => wrap.classList.add('revealed'));
     setTimeout(() => {
       drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
       wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2154,6 +2874,18 @@
       setTimeout(() => btn.textContent = 'Copy Link', 2000);
     });
   }
+  function shareSignal() {
+    const sig = document.getElementById('signal-text').textContent;
+    const price = document.getElementById('share-price').textContent;
+    const text = `Bitcoin Signal: ${sig}\nCurrent price: ${price}\nCheck the full signal at whentobuybtc.xyz`;
+    window.open('https://signal.me/#p/?message=' + encodeURIComponent(text), '_blank');
+  }
+  function shareTelegram() {
+    const sig = document.getElementById('signal-text').textContent;
+    const price = document.getElementById('share-price').textContent;
+    const text = `Bitcoin Signal: ${sig}\nCurrent price: ${price}\nwhentobuybtc.xyz`;
+    window.open('https://t.me/share/url?url=https://whentobuybtc.xyz&text=' + encodeURIComponent(text), '_blank');
+  }
   function shareTwitter() {
     const sig = document.getElementById('signal-text').textContent;
     const text = `Bitcoin Signal right now: "${sig}" — see the full data at whentobuybtc.xyz`;
@@ -2265,6 +2997,96 @@
 
   init();
   setInterval(fetchPrice, 5 * 60 * 1000);
+
+  // ── INSTRUMENT PANEL: scan-in + count-up on first reveal ──
+  (function() {
+    const panel = document.getElementById('instrument-panel');
+    if (!panel) return;
+    let activated = false;
+    const io = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !activated) {
+        activated = true;
+        // Trigger scan line
+        panel.classList.add('scanning');
+        setTimeout(() => panel.classList.remove('scanning'), 1600);
+        // Count-up: fg-value if it's a number
+        setTimeout(() => {
+          const fgEl = document.getElementById('fg-value');
+          const target = parseInt(fgEl.textContent);
+          if (!isNaN(target)) {
+            let current = 0;
+            const step = target / 30;
+            const interval = setInterval(() => {
+              current = Math.min(current + step, target);
+              fgEl.textContent = Math.round(current);
+              if (current >= target) clearInterval(interval);
+            }, 30);
+          }
+          // Update instrument footer labels
+          const scoreEl = document.getElementById('instrument-score');
+          const sigLabelEl = document.getElementById('instrument-signal-label');
+          const updEl = document.getElementById('instrument-updated');
+          if (updEl) {
+            const now = new Date();
+            updEl.textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+          }
+        }, 400);
+      }
+    }, { threshold: 0.2 });
+    io.observe(panel);
+  })();
+
+  // Update instrument footer when signal is computed
+  const _origUpdateSignal = updateSignal;
+  function updateSignalWithFooter() {
+    _origUpdateSignal();
+    if (fgValue === null || maPrice === null || currentPrice === null) return;
+    const diffPct = (currentPrice - maPrice) / maPrice * 100;
+    const score = (fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2) +
+                  (diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2);
+    const scoreEl = document.getElementById('instrument-score');
+    const sigLabelEl = document.getElementById('instrument-signal-label');
+    const tsEl = document.getElementById('instrument-timestamp');
+    if (scoreEl) scoreEl.textContent = (score >= 0 ? '+' : '') + score;
+    const sigLabel = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'CAUTION';
+    if (sigLabelEl) sigLabelEl.textContent = sigLabel;
+    if (tsEl) {
+      const now = new Date();
+      tsEl.textContent = 'LAST UPDATE ' + now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    }
+    // Sync instrument-dot colour
+    const dot = document.getElementById('instrument-dot');
+    if (dot) {
+      dot.style.background = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)';
+      dot.style.boxShadow = '0 0 8px ' + (score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)');
+    }
+    // Sync metric top-bar colours
+    ['fg-metric','ma-metric','ath-metric'].forEach(id => {
+      const el = document.getElementById(id);
+    });
+  }
+  // Override updateSignal globally
+  window.updateSignal = updateSignalWithFooter;
+
+  // ── DRAG-TO-SCROLL for habit cards ──
+  (function() {
+    const wrap = document.getElementById('habit-scroll-wrap');
+    if (!wrap) return;
+    let isDown = false, startX, scrollLeft;
+    wrap.addEventListener('mousedown', e => {
+      isDown = true;
+      startX = e.pageX - wrap.offsetLeft;
+      scrollLeft = wrap.scrollLeft;
+    });
+    wrap.addEventListener('mouseleave', () => isDown = false);
+    wrap.addEventListener('mouseup', () => isDown = false);
+    wrap.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - wrap.offsetLeft;
+      wrap.scrollLeft = scrollLeft - (x - startX);
+    });
+  })();
 </script>
 <script>
   // ── PARALLAX MOUSE DEPTH ──
@@ -2331,37 +3153,143 @@
   }, { passive: true });
 
   // ── REVEAL ──
-  const reveals = document.querySelectorAll('.reveal');
-  reveals.forEach(el => el.classList.add('hidden'));
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
+  // ── NAV SCROLL ──
+  (function() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // ── REVEAL — all variants ──
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .reveal-fade');
+  revealEls.forEach(el => el.classList.add('hidden'));
+
+  // Ornament rule lines
+  document.querySelectorAll('.ornament-rule-line').forEach(el => el.classList.remove('visible'));
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.remove('hidden');
-          entry.target.classList.add('visible');
-        }, (i % 3) * 80);
-        observer.unobserve(entry.target);
+        entry.target.classList.remove('hidden');
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08 });
-  reveals.forEach(el => observer.observe(el));
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
 
-  // ── HABIT CARD STAGGERED LIFT ──
+  // Ornament rules: animate lines in
+  const ornObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.ornament-rule-line').forEach(l => l.classList.add('visible'));
+        ornObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.ornament-rule').forEach(el => ornObserver.observe(el));
+
+  // (staggered lift removed — ticker handles animation)
+
+  // Patch updateSignal to populate instrument footer
+  setTimeout(function() {
+    const _origUS = window.updateSignal;
+    window.updateSignal = function() {
+      _origUS.call(this);
+      try {
+        if (typeof fgValue === 'undefined' || fgValue === null) return;
+        if (typeof maPrice === 'undefined' || maPrice === null) return;
+        if (typeof currentPrice === 'undefined' || currentPrice === null) return;
+        const diffPct = (currentPrice - maPrice) / maPrice * 100;
+        const score = (fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2) +
+                      (diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2);
+        const scoreEl = document.getElementById('instrument-score');
+        const sigLbl  = document.getElementById('instrument-signal-label');
+        const tsEl    = document.getElementById('instrument-timestamp');
+        const dot     = document.getElementById('instrument-dot');
+        if (scoreEl) scoreEl.textContent = (score >= 0 ? '+' : '') + score;
+        if (sigLbl)  sigLbl.textContent  = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'CAUTION';
+        const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+        if (tsEl) tsEl.textContent = 'LAST UPDATE ' + t;
+        const col = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)';
+        if (dot) { dot.style.background = col; dot.style.boxShadow = '0 0 8px ' + col; }
+      } catch(e) {}
+    };
+  }, 100);
+
+  // Drag-to-scroll habit cards
   (function() {
-    const cards = Array.from(document.querySelectorAll('.habit-card'));
-    let idx = 0, stopped = false;
-    function run() {
-      if (stopped) return;
-      const card = cards[idx % cards.length];
-      card.classList.add('lifting');
-      setTimeout(() => card.classList.remove('lifting'), 700);
-      idx++;
-      setTimeout(run, 400);
+    const wrap = document.getElementById('habit-scroll-wrap');
+    if (!wrap) return;
+    let down = false, startX, scrollL;
+    wrap.addEventListener('mousedown',  e => { down = true; startX = e.pageX - wrap.offsetLeft; scrollL = wrap.scrollLeft; });
+    wrap.addEventListener('mouseleave', () => down = false);
+    wrap.addEventListener('mouseup',    () => down = false);
+    wrap.addEventListener('mousemove',  e => {
+      if (!down) return; e.preventDefault();
+      wrap.scrollLeft = scrollL - (e.pageX - wrap.offsetLeft - startX);
+    });
+  
+  // ── HABIT TICKER — auto-scroll + tilt + scroll hint ──
+  (function() {
+    const wrap = document.getElementById('habit-scroll-wrap');
+    const hint = document.getElementById('habit-scroll-hint');
+    if (!wrap) return;
+
+    let userPaused  = false;
+    let hintDismissed = false;
+    const speed     = 0.55;
+
+    function dismissHint() {
+      if (!hintDismissed && hint) {
+        hintDismissed = true;
+        hint.classList.add('hidden');
+      }
     }
-    // Lift all cards once in sequence, then stop
-    setTimeout(run, 2000);
-    document.querySelectorAll('.habit-card').forEach(c => c.addEventListener('click', () => { stopped = true; }, { once: true }));
+
+    function applyTilt() {
+      const cards = wrap.querySelectorAll('.habit-card');
+      if (!cards.length) return;
+      const wrapRect   = wrap.getBoundingClientRect();
+      const wrapCenter = wrapRect.left + wrapRect.width / 2;
+      cards.forEach(card => {
+        const rect       = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const norm       = Math.max(-1, Math.min(1, (cardCenter - wrapCenter) / (wrapRect.width / 2)));
+        const deg        = norm * 5;
+        const lift       = Math.abs(norm) * -6;
+        card.style.transform = `perspective(800px) rotateY(${deg}deg) translateY(${lift}px)`;
+      });
+    }
+
+    function tick() {
+      if (!userPaused) {
+        const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+        if (maxScroll > 0) {
+          wrap.scrollLeft += speed;
+          if (wrap.scrollLeft >= maxScroll - 1) wrap.scrollLeft = 0;
+        }
+      }
+      applyTilt();
+      requestAnimationFrame(tick);
+    }
+
+    // Pause + dismiss hint on interaction
+    wrap.addEventListener('mouseenter', () => { userPaused = true; dismissHint(); });
+    wrap.addEventListener('mouseleave', () => { userPaused = false; });
+    wrap.addEventListener('touchstart', () => { userPaused = true; dismissHint(); }, { passive: true });
+    wrap.addEventListener('touchend',   () => { setTimeout(() => { userPaused = false; }, 1500); }, { passive: true });
+    wrap.addEventListener('scroll',     () => { applyTilt(); dismissHint(); }, { passive: true });
+
+    // Only start ticker once section enters viewport (fixes off-screen rAF issue)
+    const io = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        requestAnimationFrame(tick);
+        io.disconnect();
+      }
+    }, { threshold: 0.2 });
+    io.observe(wrap);
   })();
 </script>
-</body>
-</html>
