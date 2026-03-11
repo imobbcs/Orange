@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { neon } from '@neondatabase/serverless';
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const sql = neon(process.env.DATABASE_URL!);
 
-// Hardcoded fallback — used if DB and CoinGecko both fail
 const FALLBACK: Record<string, number> = {
   '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
   '2015-07':268,'2015-08':263,'2015-09':211,'2015-10':267,'2015-11':313,'2015-12':384,
@@ -39,40 +38,33 @@ function currentYYYYMM(): string {
   return toYYYYMM(Date.now());
 }
 
-// Ensure table exists
 async function ensureTable() {
-  await pool.query(`
+  await sql`
     CREATE TABLE IF NOT EXISTS btc_monthly_prices (
-      month CHAR(7) PRIMARY KEY,  -- e.g. '2024-03'
+      month CHAR(7) PRIMARY KEY,
       price_eur INTEGER NOT NULL,
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
-  `);
+  `;
 }
 
-// Read all rows from DB
 async function readFromDB(): Promise<Record<string, number>> {
-  const { rows } = await pool.query('SELECT month, price_eur FROM btc_monthly_prices ORDER BY month');
+  const rows = await sql`SELECT month, price_eur FROM btc_monthly_prices ORDER BY month`;
   const result: Record<string, number> = {};
   for (const row of rows) result[row.month] = row.price_eur;
   return result;
 }
 
-// Seed DB from fallback (first-run only — one time, no API call)
 async function seedFromFallback() {
-  const entries = Object.entries(FALLBACK);
-  for (const [month, price] of entries) {
-    await pool.query(
-      `INSERT INTO btc_monthly_prices (month, price_eur) VALUES ($1, $2)
-       ON CONFLICT (month) DO NOTHING`,
-      [month, price]
-    );
+  for (const [month, price] of Object.entries(FALLBACK)) {
+    await sql`
+      INSERT INTO btc_monthly_prices (month, price_eur)
+      VALUES (${month}, ${price})
+      ON CONFLICT (month) DO NOTHING
+    `;
   }
-  console.log(`btc-history-monthly: seeded ${entries.length} months from fallback`);
 }
 
-// Fetch only the LAST 90 days from CoinGecko — just enough to get the latest 2-3 months
-// This is ~1 lightweight API call per month, not 3650 days of history
 async function fetchLatestMonthsFromCoinGecko(): Promise<Record<string, number>> {
   const url = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=90&interval=daily';
   const res = await fetch(url, {
@@ -96,48 +88,38 @@ async function fetchLatestMonthsFromCoinGecko(): Promise<Record<string, number>>
   return monthly;
 }
 
-// Check if DB needs updating: is the latest month in DB behind current month?
 async function needsUpdate(dbData: Record<string, number>): Promise<boolean> {
   const keys = Object.keys(dbData).sort();
   if (keys.length === 0) return true;
-  const latest = keys[keys.length - 1];
-  return latest < currentYYYYMM();
+  return keys[keys.length - 1] < currentYYYYMM();
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  // Tell CDN/browser to cache for 6 hours — reduces DB reads too
   res.setHeader('Cache-Control', 'public, max-age=21600, stale-while-revalidate=3600');
 
   try {
     await ensureTable();
     let dbData = await readFromDB();
 
-    // First run: DB is empty — seed from hardcoded fallback (no API call)
     if (Object.keys(dbData).length === 0) {
       await seedFromFallback();
       dbData = await readFromDB();
     }
 
-    // Only call CoinGecko if a new month has started and isn't in DB yet
-    // This means: at most 1 CoinGecko call per month, total
     if (await needsUpdate(dbData)) {
-      console.log('btc-history-monthly: new month detected, fetching from CoinGecko...');
       try {
         const latest = await fetchLatestMonthsFromCoinGecko();
-        // Only write months that are complete (not the current in-progress month, unless it's already there)
         for (const [month, price] of Object.entries(latest)) {
-          await pool.query(
-            `INSERT INTO btc_monthly_prices (month, price_eur, updated_at)
-             VALUES ($1, $2, NOW())
-             ON CONFLICT (month) DO UPDATE SET price_eur = $2, updated_at = NOW()`,
-            [month, price]
-          );
+          await sql`
+            INSERT INTO btc_monthly_prices (month, price_eur, updated_at)
+            VALUES (${month}, ${price}, NOW())
+            ON CONFLICT (month) DO UPDATE SET price_eur = ${price}, updated_at = NOW()
+          `;
         }
         dbData = await readFromDB();
-        console.log(`btc-history-monthly: updated, now ${Object.keys(dbData).length} months in DB`);
       } catch (apiErr) {
-        console.error('btc-history-monthly: CoinGecko fetch failed, serving existing DB data', apiErr);
+        console.error('btc-history-monthly: CoinGecko fetch failed', apiErr);
       }
     }
 
@@ -145,6 +127,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } catch (dbErr) {
     console.error('btc-history-monthly: DB error, using fallback', dbErr);
-    return res.status(200).json({ monthly: FALLBACK, count: Object.keys(FALLBACK).length });
+    return res.status(200).json({ monthly: FALLBACK, count: Object.keys(FALLBACK).length, source: 'fallback' });
   }
 }
