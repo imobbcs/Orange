@@ -943,6 +943,13 @@
     OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
         appId: '528df914-2cb6-4e5b-af01-3c849ce8e393',
+        promptOptions: {
+          slidedown: {
+            prompts: []
+          }
+        },
+        autoResubscribe: false,
+        autoRegister: false,
       });
 
       // Store reference globally so requestPush() can access it
@@ -1405,7 +1412,7 @@
       expertTagCaution: 'Current signal: Caution zone',
       expertTextAccumulate: "When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows — the logic being that if your conviction hasn't changed, a lower price is simply a better entry point.",
       expertTextHold: "When signals are mixed, most Bitcoiners simply stay the course. DCA is designed for exactly these moments — when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular schedule, avoid reacting to noise, and let the next clear signal inform your next move.",
-      expertTextCaution: 'When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling — timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. "Be fearful when others are greedy" is a cliché for a reason.',
+      expertTextCaution: "When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling — timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. \"Be fearful when others are greedy\" is a cliché for a reason.",
       // Signal reason text (dynamic)
       reasonAccumulate: (fg, pct) => `Fear & Greed is at ${fg} and Bitcoin is trading ${pct}% below its 200-day average. Historically, these are the conditions Bitcoiners act on.`,
       reasonHold: (fg) => `Mixed signals — Fear & Greed at ${fg} with Bitcoin close to its 200-day average. Most Bitcoiners stick to their regular plan and wait for a clearer picture.`,
