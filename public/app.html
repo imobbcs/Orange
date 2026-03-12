@@ -284,7 +284,7 @@
     .hero-price-currency {
       font-family: var(--mono); font-size: 0.14em;
       letter-spacing: 0.05em; font-weight: 400;
-      color: var(--grey); vertical-align: super;
+      color: rgba(237,232,222,0.6); vertical-align: super;
       margin-right: 0.06em;
     }
     .hero-price-change {
@@ -884,22 +884,28 @@
     .push-mockup-label { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey); text-align: center; margin-top: 1rem; }
 
     /* ── RELAI ── */
-    .relai-section { background: #060d18; padding: 7rem 4rem; position: relative; overflow: hidden; }
+    .relai-section { background: var(--bg3); padding: 7rem 4rem; position: relative; overflow: hidden; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
     .relai-section::before {
-      content: ''; position: absolute; top: -120px; right: -120px;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(247,147,26,0.05) 0%, transparent 65%);
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(247,147,26,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .relai-section::after {
+      content: ''; position: absolute; bottom: -60px; left: -60px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(247,147,26,0.04) 0%, transparent 60%);
       pointer-events: none;
     }
     .relai-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 5rem; position: relative; z-index: 1; }
-    .relai-eyebrow { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 1.5rem; }
+    .relai-eyebrow { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--orange); opacity: 0.8; margin-bottom: 1.5rem; }
     .relai-logo-lockup { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
     .relai-logo-mark { width: 38px; height: 38px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-family: var(--title); font-size: 1.1rem; color: #000; flex-shrink: 0; }
     .relai-logo-name { font-family: var(--title); font-size: 1.8rem; color: #fff; }
-    .relai-title { font-family: var(--display); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 300; font-style: italic; color: #fff; line-height: 1.2; margin-bottom: 1.25rem; }
+    .relai-title { font-family: var(--display); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 300; font-style: italic; color: var(--white); line-height: 1.2; margin-bottom: 1.25rem; }
     .relai-sub { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 1.05rem; color: rgba(255,255,255,0.4); max-width: 44ch; line-height: 1.7; margin-bottom: 2.5rem; }
     .relai-badges { display: flex; gap: 2.5rem; flex-wrap: wrap; }
-    .relai-badge { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 0.5rem; }
+    .relai-badge { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
     .relai-badge::before { content: '✓'; color: var(--orange); font-size: 0.65rem; }
     .relai-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
     .relai-btn { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; background: var(--orange); color: #000; border: none; padding: 1.3rem 3rem; text-decoration: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; display: block; text-align: center; }
@@ -1117,6 +1123,7 @@
     /* ── 390px EXTREME NARROW ── */
     @media (max-width: 400px) {
       .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
+      .sigil-wrap { width: min(72vw, 65vh); height: min(72vw, 65vh); opacity: 0.55; }
       .instrument-value { font-size: 2rem; }
       .habit-card { min-width: 155px; width: 155px; }
       .habit-name { font-size: 1.05rem; }
@@ -1413,15 +1420,86 @@
       transform: translateY(0);
     }
 
+
+    /* ══ CUSTOM CURSOR ══ */
+    .cursor-dot {
+      position: fixed;
+      z-index: 9999;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #F7931A;
+      pointer-events: none;
+      top: 0; left: 0;
+      margin: -7px 0 0 -7px;
+      will-change: transform;
+      transition: width 0.15s ease, height 0.15s ease, margin 0.15s ease, background 0.15s ease;
+      display: none;
+    }
+    .cursor-ring {
+      position: fixed;
+      z-index: 9998;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(247,147,26,0.85);
+      pointer-events: none;
+      top: 0; left: 0;
+      margin: -20px 0 0 -20px;
+      will-change: transform;
+      transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, border-color 0.2s ease, opacity 0.2s ease;
+      display: none;
+    }
+    @media (pointer: fine) {
+      * { cursor: none !important; }
+      .cursor-dot, .cursor-ring { display: block; }
+    }
+    .cursor-dot.hovering { width: 18px; height: 18px; margin: -9px 0 0 -9px; }
+    .cursor-ring.hovering { width: 56px; height: 56px; margin: -28px 0 0 -28px; border-color: rgba(247,147,26,0.35); }
+    .cursor-dot.clicking { background: #fff; width: 8px; height: 8px; margin: -4px 0 0 -4px; }
+    .cursor-ring.clicking { width: 24px; height: 24px; margin: -12px 0 0 -12px; border-color: rgba(247,147,26,0.9); }
+
+
+    .hero { perspective: 1200px; }
+    .sigil-wrap { transform-style: preserve-3d; }
+
+    /* ══ SCROLL SURPRISE — clip-path wipe ══ */
+    .reveal-wipe {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-wipe.visible {
+      clip-path: inset(0 0% 0 0);
+    }
+
+
+    /* ══ NAV SIGNAL DOT ══ */
+    .nav-signal-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-left: 0.6em;
+      vertical-align: middle;
+      opacity: 0;
+      transition: opacity 0.6s ease, background 0.4s ease;
+      position: relative;
+      top: -1px;
+    }
+    .nav-signal-dot.active { opacity: 1; }
+    .nav-signal-dot.accumulate { background: var(--green); box-shadow: 0 0 6px rgba(74,222,128,0.6); }
+    .nav-signal-dot.hold      { background: var(--amber); box-shadow: 0 0 6px rgba(251,191,36,0.6); }
+    .nav-signal-dot.caution   { background: var(--red);   box-shadow: 0 0 6px rgba(248,113,113,0.6); }
+
 </style>
 </head>
 <body>
+<div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
 
 <div id="progress"></div>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">When to Buy <span>BTC</span></a>
+  <a href="#" class="nav-logo">When to Buy <span>BTC</span><span class="nav-signal-dot" id="nav-signal-dot"></span></a>
   <div class="nav-right">
     <div class="nav-lang">
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -1594,7 +1672,7 @@
 <section class="section" id="signal" style="background: var(--bg2);">
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
-    <h2 class="section-title reveal" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
+    <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
     <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">No jargon. Here's what the data actually shows right now — and what it has meant historically.</p>
 
     <!-- INSTRUMENT PANEL -->
@@ -2439,8 +2517,11 @@
     const expertText = document.getElementById('expert-text');
 
     pill.className = 'signal-pill';
+    const navDot = document.getElementById('nav-signal-dot');
+    if (navDot) { navDot.className = 'nav-signal-dot'; }
     if (score >= 2) {
       pill.classList.add('accumulate');
+      if (navDot) { navDot.classList.add('accumulate', 'active'); }
       text.textContent = translations[currentLang].signalAccumulate;
       shareSignal.style.color = 'var(--green)';
       shareSignal.textContent = '● ' + translations[currentLang].signalAccumulate;
@@ -2450,6 +2531,7 @@
       expertText.textContent = translations[currentLang].expertTextAccumulate;
     } else if (score >= 0) {
       pill.classList.add('hold');
+      if (navDot) { navDot.classList.add('hold', 'active'); }
       text.textContent = translations[currentLang].signalHold;
       shareSignal.style.color = 'var(--amber)';
       shareSignal.textContent = '● ' + translations[currentLang].signalHold;
@@ -2459,6 +2541,7 @@
       expertText.textContent = translations[currentLang].expertTextHold;
     } else {
       pill.classList.add('caution');
+      if (navDot) { navDot.classList.add('caution', 'active'); }
       text.textContent = translations[currentLang].signalCaution;
       shareSignal.style.color = 'var(--red)';
       shareSignal.textContent = '● ' + translations[currentLang].signalCaution;
@@ -2952,11 +3035,36 @@
   window.addEventListener('scroll', () => {
     if (scrollRaf) return;
     scrollRaf = requestAnimationFrame(() => {
-      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+      const sy = window.scrollY;
+      const pct = sy / (document.documentElement.scrollHeight - window.innerHeight) * 100;
       document.getElementById('progress').style.width = pct + '%';
-      if (!scrollHintHidden && window.scrollY > 60) {
+      if (!scrollHintHidden && sy > 60) {
         scrollHintHidden = true;
         document.querySelector('.scroll-hint')?.classList.add('hide');
+      }
+
+      // ── HERO PARALLAX ──
+      const heroEl = document.getElementById('top');
+      if (heroEl) {
+        const heroH = heroEl.offsetHeight;
+        const p = Math.min(sy / heroH, 1); // 0 → 1 as hero scrolls off
+
+        // Sigil: shrinks, fades, moves up faster than scroll
+        const sigilWrap = heroEl.querySelector('.sigil-wrap');
+        if (sigilWrap) {
+          const sigilY  = -(sy * 0.35);           // moves up at 35% of scroll speed
+          const sigilS  = 1 - (p * 0.18);         // shrinks to 82%
+          const sigilO  = 1 - (p * 1.6);          // fades out by ~62% scroll
+          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY}px)) scale(${sigilS}) rotateX(${sigilWrap._rx || 0}deg) rotateY(${sigilWrap._ry || 0}deg)`;
+          sigilWrap.style.opacity   = Math.max(sigilO, 0);
+        }
+
+        // Hero-content: moves up slower — stays in view longer (depth layer)
+        const heroContent = heroEl.querySelector('.hero-content');
+        if (heroContent) {
+          const contentY = -(sy * 0.12);          // moves at 12% — nearly pinned
+          heroContent.style.transform = `translateY(${contentY}px)`;
+        }
       }
       scrollRaf = null;
     });
@@ -3174,6 +3282,10 @@
       if (entry.isIntersecting) {
         entry.target.classList.remove('hidden');
         entry.target.classList.add('visible');
+        // Also trigger wipe if applicable
+        if (entry.target.classList.contains('reveal-wipe')) {
+          entry.target.classList.add('visible');
+        }
         revealObserver.unobserve(entry.target);
       }
     });
@@ -3292,4 +3404,146 @@
     }, { threshold: 0.2 });
     io.observe(wrap);
   })();
+
+  // ══ CUSTOM CURSOR ══
+  (function() {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    // Visibility handled by CSS (pointer: fine media query)
+    // JS runs regardless so cursor is ready when media query activates
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX  = mouseX, ringY = mouseY;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }, { passive: true });
+
+    (function loop() {
+      dot.style.transform  = `translate(${mouseX}px, ${mouseY}px)`;
+      ringX += (mouseX - ringX) * 0.13;
+      ringY += (mouseY - ringY) * 0.13;
+      ring.style.transform = `translate(${Math.round(ringX)}px, ${Math.round(ringY)}px)`;
+      requestAnimationFrame(loop);
+    })();
+
+    const sel = 'a, button, [onclick], input, select, .lang-btn, .chart-tf, .habit-card, .share-btn, .nav-cta, .btn-primary, .btn-ghost, .relai-btn';
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(sel)) { dot.classList.add('hovering'); ring.classList.add('hovering'); }
+    }, { passive: true });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(sel)) { dot.classList.remove('hovering'); ring.classList.remove('hovering'); }
+    }, { passive: true });
+    document.addEventListener('mousedown', () => { dot.classList.add('clicking'); ring.classList.add('clicking'); });
+    document.addEventListener('mouseup',   () => { dot.classList.remove('clicking'); ring.classList.remove('clicking'); });
+    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+  })();
+
+  // ══ SIGIL MOUSE TILT ══
+  (function() {
+    const wrap = document.querySelector('.sigil-wrap');
+    if (!wrap) return;
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
+    const hero = document.querySelector('.hero');
+    let targetRX = 0, targetRY = 0;
+    let currentRX = 0, currentRY = 0;
+    const MAX_TILT = 5; // degrees
+
+    document.addEventListener('mousemove', e => {
+      const rect = hero ? hero.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width  / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      targetRY =  dx * MAX_TILT;
+      targetRX = -dy * MAX_TILT;
+    }, { passive: true });
+
+    // On scroll: gradually return to flat
+    window.addEventListener('scroll', () => {
+      const scrollRatio = Math.min(window.scrollY / window.innerHeight, 1);
+      targetRX *= (1 - scrollRatio);
+      targetRY *= (1 - scrollRatio);
+    }, { passive: true });
+
+    (function tiltLoop() {
+      currentRX += (targetRX - currentRX) * 0.06;
+      currentRY += (targetRY - currentRY) * 0.06;
+      // Store tilt values for parallax to consume
+      wrap._rx = currentRX;
+      wrap._ry = currentRY;
+      // Only apply tilt when in hero (parallax takes over during scroll)
+      if (window.scrollY < window.innerHeight * 0.3) {
+        wrap.style.transform = `translate(-50%, -50%) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
+      }
+      requestAnimationFrame(tiltLoop);
+    })();
+  })();
+
+
+  // ══ INSTRUMENT COUNT-UP ══
+  (function() {
+    let hasCountedUp = false;
+
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function animateValue(el, start, end, isFloat, suffix, duration) {
+      if (!el) return;
+      const startTime = performance.now();
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOut(progress);
+        const value = start + (end - start) * eased;
+        el.textContent = isFloat
+          ? (value >= 0 ? '+' : '') + value.toFixed(0) + suffix
+          : Math.round(value) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    const signalSection = document.getElementById('signal');
+    if (!signalSection) return;
+
+    const countUpObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasCountedUp) {
+          // Wait a beat for the section reveal to complete
+          setTimeout(() => {
+            if (fgValue !== null) {
+              const fgEl = document.getElementById('fg-value');
+              if (fgEl && fgEl.textContent !== '—') {
+                animateValue(fgEl, 0, fgValue, false, '', 1400);
+              }
+            }
+            if (currentPrice !== null && maPrice !== null) {
+              const maEl = document.getElementById('ma-value');
+              if (maEl && maEl.textContent !== '—') {
+                const diffPct = (currentPrice - maPrice) / maPrice * 100;
+                animateValue(maEl, 0, diffPct, true, '%', 1400);
+              }
+            }
+            if (currentPrice !== null && athPrice !== null) {
+              const athEl = document.getElementById('ath-value');
+              if (athEl && athEl.textContent !== '—') {
+                const dropPct = (currentPrice - athPrice) / athPrice * 100;
+                animateValue(athEl, 0, dropPct, true, '%', 1400);
+              }
+            }
+            hasCountedUp = true;
+          }, 300);
+          countUpObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+
+    countUpObserver.observe(signalSection);
+  })();
+
 </script>
