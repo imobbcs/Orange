@@ -881,20 +881,104 @@
     .share-btn.primary:hover { opacity: 0.85; color: #000; }
 
     /* ── PUSH ── */
-    .push-section { background: var(--bg); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+    /* ══ ALERTS / PUSH ══ */
+    .push-section {
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+    }
+    .push-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
     .push-inner { display: flex; align-items: center; justify-content: space-between; gap: 6rem; }
     .push-left { max-width: 50ch; }
-    .push-title { font-family: var(--display); font-size: clamp(2rem, 4vw, 3.2rem); font-style: italic; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2; }
+    .push-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-style: italic;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      line-height: 1.15;
+      color: var(--white);
+    }
     .push-title em { font-style: normal; color: var(--orange); }
-    .push-sub { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2.5rem; }
-    .push-mockup { flex-shrink: 0; width: 300px; border: 1px solid var(--border2); background: var(--bg2); padding: 1.5rem; }
-    .push-notification { background: var(--bg3); padding: 1.25rem; border-left: 2px solid var(--orange); }
-    .push-notif-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
-    .push-notif-icon { width: 20px; height: 20px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; flex-shrink: 0; }
-    .push-notif-title { font-family: var(--mono); font-size: 0.65rem; font-weight: 500; color: var(--white); }
-    .push-notif-time { font-family: var(--mono); font-size: 0.55rem; color: var(--grey); margin-left: auto; }
-    .push-notif-body { font-family: var(--display); font-size: 0.9rem; font-style: italic; font-weight: 300; color: var(--muted); line-height: 1.5; }
-    .push-mockup-label { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey); text-align: center; margin-top: 1rem; }
+    .push-sub {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .push-signal-preview {
+      flex-shrink: 0;
+      width: 300px;
+    }
+    .push-preview-label {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 0.75rem;
+    }
+    .push-preview-card {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .push-preview-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--orange);
+    }
+    .push-preview-state {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .push-preview-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 8px var(--orange);
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .push-preview-msg {
+      font-family: var(--display);
+      font-size: 0.95rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .push-preview-meta {
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.12em;
+      color: var(--grey);
+      margin-top: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .push-inner { flex-direction: column; gap: 2.5rem; align-items: stretch; }
+      .push-signal-preview { width: 100%; }
+      .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
+    }
 
     /* ── RELAI ── */
     .relai-section { background: var(--bg3); padding: 7rem 4rem; position: relative; overflow: hidden; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
@@ -2056,22 +2140,22 @@
   <div class="section-inner">
     <div class="push-inner reveal" data-delay="1">
       <div class="push-left">
-        <p class="section-label" data-i18n="alertsLabel">Alerts</p>
-        <h2 class="push-title" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
-        <p class="push-sub" data-i18n="pushSub">Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.</p>
-        <button class="btn-primary" id="push-btn" onclick="requestPush()" data-i18n="pushBtn">Enable Alerts</button>
-        <p style="font-family:var(--mono);font-size:0.54rem;letter-spacing:0.1em;color:var(--grey);margin-top:1.25rem;" data-i18n="pushMeta">Free · No account needed · Turn off anytime</p>
+        <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
+        <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
+        <p class="push-sub reveal" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.</p>
+        <button class="btn-primary reveal" data-delay="4" id="push-btn" onclick="requestPush()" data-i18n="pushBtn">Enable Alerts</button>
+        <p class="reveal" data-delay="5" style="font-family:var(--mono);font-size:0.54rem;letter-spacing:0.1em;color:var(--grey);margin-top:1.25rem;" data-i18n="pushMeta">Free · No account needed · Turn off anytime</p>
       </div>
-      <div class="push-mockup">
-        <div class="push-notification">
-          <div class="push-notif-header">
-            <div class="push-notif-icon">₿</div>
-            <span class="push-notif-title">When to Buy BTC</span>
-            <span class="push-notif-time">now</span>
+      <div class="push-signal-preview reveal" data-delay="3">
+        <p class="push-preview-label" data-i18n="pushMockupLabel">Example alert</p>
+        <div class="push-preview-card">
+          <div class="push-preview-state">
+            <span class="push-preview-dot"></span>
+            <span data-i18n="pushExampleState">Signal changed · Accumulate</span>
           </div>
-          <p class="push-notif-body" data-i18n="pushExample">Signal changed: Fear & Greed hit 18. Most Bitcoiners are accumulating. BTC is 24% below its 200-day average.</p>
+          <p class="push-preview-msg" data-i18n="pushExample">Fear &amp; Greed hit 18. Most Bitcoiners are accumulating. BTC is 24% below its 200-day average.</p>
+          <p class="push-preview-meta">whentobuybtc.xyz · just now</p>
         </div>
-        <p class="push-mockup-label" data-i18n="pushMockupLabel">Example alert</p>
       </div>
     </div>
   </div>
@@ -2710,17 +2794,7 @@
       const res = await fetch(`/api/history?timeframe=${timeframe}`);
       const data = await res.json();
       // Stitch live price onto end so chart always terminates at real-time price
-      let prices = data.prices || [];
-      if (currentPrice && prices.length) {
-        const now = Date.now();
-        const last = prices[prices.length - 1];
-        // Only append if live price differs meaningfully from last data point
-        if (Math.abs(last[1] - currentPrice) / currentPrice > 0.001) {
-          prices = [...prices, [now, currentPrice]];
-        } else {
-          prices[prices.length - 1] = [last[0], currentPrice];
-        }
-      }
+      const prices = data.prices || [];
       drawChart(prices, parseInt(days));
     } catch (e) {}
   }
@@ -3361,11 +3435,7 @@
       currentX += (targetX - currentX) * 0.06;
       currentY += (targetY - currentY) * 0.06;
 
-      // Sigil drifts gently opposite to cursor (depth effect)
-      if (wrap) {
-        wrap.style.transform = `translate(calc(-50% + ${currentX * -18}px), calc(-50% + ${currentY * -18}px))`;
-      }
-      // Ambient light follows cursor slightly
+      // Ambient light follows cursor — keeps depth without fighting tilt
       if (ambient) {
         ambient.style.transform = `translate(calc(-50% + ${currentX * 28}px), calc(-50% + ${currentY * 28}px))`;
       }
@@ -3565,9 +3635,9 @@
     let signalState = 'hold'; // default until updateSignal fires
 
     const STATES = {
-      accumulate: { count: 60, speed: 0.25, drift: 0.015, color: '74,222,128',  gather: true,  spread: 0.3 },
-      hold:       { count: 45, speed: 0.4,  drift: 0.008, color: '251,191,36',  gather: false, spread: 0.5 },
-      caution:    { count: 70, speed: 0.9,  drift: 0.03,  color: '248,113,113', gather: false, spread: 0.9 },
+      accumulate: { count: 100, speed: 0.25, drift: 0.015, color: '74,222,128',  gather: true,  spread: 0.3 },
+      hold:       { count: 80,  speed: 0.4,  drift: 0.008, color: '251,191,36',  gather: false, spread: 0.5 },
+      caution:    { count: 120, speed: 0.9,  drift: 0.03,  color: '248,113,113', gather: false, spread: 0.9 },
     };
 
     function resize() {
@@ -3588,7 +3658,7 @@
           r: Math.random() * 1.8 + 0.4,
           vx: (Math.random() - 0.5) * s.speed,
           vy: (Math.random() - 0.5) * s.speed,
-          alpha: Math.random() * 0.5 + 0.15,
+          alpha: Math.random() * 0.6 + 0.2,
         });
       }
     }
