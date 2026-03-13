@@ -838,7 +838,7 @@
     .whatif-chart-area { padding: 2.5rem 3.5rem 1.5rem; border-bottom: 1px solid var(--border2); }
     .whatif-chart-label { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey); margin-bottom: 1.25rem; }
     .whatif-canvas-wrap { position: relative; height: 200px; }
-    canvas#whatifChart { width: 100%; height: 100%; }
+    canvas#whatifChart { display: block; }
     .whatif-bar-area {
       padding: 2.5rem 3.5rem; border-bottom: 1px solid var(--border2);
       display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
@@ -1203,6 +1203,19 @@
       .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
       .instrument-sub { grid-column: 2; grid-row: 2; }
 
+      .whatif-chart-area { padding: 1.5rem 1rem 1rem; }
+      .whatif-canvas-wrap { height: 180px; }
+      .whatif-bar-area { padding: 1.5rem 1rem; gap: 1.5rem; }
+      .whatif-bar-value { font-size: 1.5rem; }
+      .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .whatif-stat { padding: 1.25rem 1rem; }
+      .whatif-stat:nth-child(2) { border-right: none; }
+      .whatif-stat:nth-child(3) { border-top: 1px solid var(--border2); }
+      .whatif-stat:nth-child(4) { border-top: 1px solid var(--border2); border-right: none; }
+      .whatif-stat-value { font-size: 1.4rem; }
+      .whatif-disclaimer { padding: 1.25rem 1rem; }
+      .whatif-share-row { padding: 1rem 1rem 1.5rem; flex-direction: column; }
+      .whatif-share-row .share-btn { width: 100%; text-align: center; }
       /* ── WHAT IF ── */
       .habit-row { padding: 1rem 1.25rem; gap: 0.75rem; }
       .habit-row-name { font-size: 0.95rem; }
@@ -3119,6 +3132,8 @@
           setTimeout(() => {
             if (evidence) evidence.classList.add('visible');
             drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
+            // Redraw on resize so chart always fills container correctly
+            window._lastWhatifArgs = [chartLabels, chartValues, chartInvested, sym];
           }, 400);
         }
       }
@@ -3130,9 +3145,10 @@
     const canvas = document.getElementById('whatifChart');
     if (!canvas) return;
 
-    // Wait for layout if canvas has no dimensions yet (common on mobile)
-    const W = canvas.offsetWidth;
-    const H = canvas.offsetHeight;
+    // Use getBoundingClientRect for sub-pixel accurate dimensions
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const W = Math.floor(rect.width);
+    const H = Math.floor(rect.height) || 200;
     if (!W || !H) {
       requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym));
       return;
@@ -3140,8 +3156,10 @@
 
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    canvas.width  = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
     ctx.scale(dpr, dpr);
 
     const isMobile = W < 500;
@@ -3997,6 +4015,13 @@
       initParticles(signalState);
     }, { passive: true });
   })();
+
+  // Redraw whatif chart on resize
+  window.addEventListener('resize', () => {
+    if (window._lastWhatifArgs) {
+      drawWhatIfChart(...window._lastWhatifArgs);
+    }
+  }, { passive: true });
 
 </script>
 
