@@ -3129,65 +3129,75 @@
   function drawWhatIfChart(labels, values, invested, sym) {
     const canvas = document.getElementById('whatifChart');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
+
+    // Wait for layout if canvas has no dimensions yet (common on mobile)
     const W = canvas.offsetWidth;
     const H = canvas.offsetHeight;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
+    if (!W || !H) {
+      requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym));
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
     ctx.scale(dpr, dpr);
-    const pad = { top: 20, right: 16, bottom: 28, left: 72 };
-    const w = W - pad.left - pad.right;
-    const h = H - pad.top - pad.bottom;
+
+    const isMobile = W < 500;
+    const pad = { top: 20, right: 16, bottom: 32, left: isMobile ? 52 : 72 };
+    const cw = W - pad.left - pad.right;
+    const ch = H - pad.top - pad.bottom;
+    const baseY = pad.top + ch; // bottom of chart area in CSS coords
 
     const maxVal = Math.max(...values);
-    const toX = i => pad.left + (i / (labels.length - 1)) * w;
-    const toY = v => pad.top + h - (v / maxVal) * h;
+    const toX = i => pad.left + (i / (labels.length - 1)) * cw;
+    const toY = v => pad.top + ch - (v / maxVal) * ch;
 
     ctx.clearRect(0, 0, W, H);
 
-    // Horizontal grid lines + Y-axis labels
+    // Grid lines + Y labels
     const ticks = 4;
-    ctx.font = `${10}px "DM Mono", monospace`;
+    const fontSize = isMobile ? 9 : 10;
+    ctx.font = `${fontSize}px "DM Mono", monospace`;
     for (let i = 0; i <= ticks; i++) {
       const v = (i / ticks) * maxVal;
       const y = toY(v);
       ctx.strokeStyle = 'rgba(255,255,255,0.04)';
       ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-      // Y label
       const label = maxVal >= 100000
         ? sym + Math.round(v / 1000) + 'k'
         : sym + Math.round(v).toLocaleString();
       ctx.fillStyle = 'rgba(107,101,96,0.7)';
       ctx.textAlign = 'right';
-      ctx.fillText(label, pad.left - 6, y + 4);
+      ctx.fillText(label, pad.left - 4, y + 4);
     }
 
     // Invested area
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(invested[0]));
     invested.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.lineTo(toX(invested.length - 1), H - pad.bottom);
-    ctx.lineTo(toX(0), H - pad.bottom);
+    ctx.lineTo(toX(invested.length - 1), baseY);
+    ctx.lineTo(toX(0), baseY);
     ctx.closePath();
     ctx.fillStyle = 'rgba(240,237,232,0.05)';
     ctx.fill();
 
-    // Value area
-    const grad = ctx.createLinearGradient(0, pad.top, 0, H - pad.bottom);
+    // Value area gradient
+    const grad = ctx.createLinearGradient(0, pad.top, 0, baseY);
     grad.addColorStop(0, 'rgba(247,147,26,0.35)');
     grad.addColorStop(1, 'rgba(247,147,26,0.02)');
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(values[0]));
     values.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.lineTo(toX(values.length - 1), H - pad.bottom);
-    ctx.lineTo(toX(0), H - pad.bottom);
+    ctx.lineTo(toX(values.length - 1), baseY);
+    ctx.lineTo(toX(0), baseY);
     ctx.closePath();
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Invested line
+    // Invested dashed line
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(240,237,232,0.3)';
     ctx.lineWidth = 1.5;
@@ -3204,11 +3214,21 @@
     values.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
     ctx.stroke();
 
-    // Year labels
+    // X-axis year labels — reduce density on mobile to avoid overlap
     ctx.fillStyle = 'rgba(107,101,96,0.8)';
     ctx.textAlign = 'center';
+    ctx.font = `${fontSize}px "DM Mono", monospace`;
+    // Calculate how many labels fit without overlapping (~30px per label minimum)
+    const minSpacing = isMobile ? 40 : 32;
+    const totalSpan = toX(labels.length - 1) - toX(0);
+    const step = Math.max(1, Math.ceil((labels.length * minSpacing) / totalSpan));
     labels.forEach((yr, i) => {
-      if (i % 2 === 0 || i === labels.length - 1) {
+      if (i % step === 0 || i === labels.length - 1) {
+        // Don't draw last label if it would overlap the second-to-last drawn one
+        if (i === labels.length - 1) {
+          const prevDrawn = labels.length - 1 - ((labels.length - 1) % step);
+          if (toX(i) - toX(prevDrawn) < minSpacing && prevDrawn !== i) return;
+        }
         ctx.fillText(yr, toX(i), H - 8);
       }
     });
