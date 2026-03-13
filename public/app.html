@@ -26,7 +26,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
 
   <!-- OneSignal -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -249,19 +249,20 @@
       position: relative; z-index: 10;
       text-align: center;
       width: 100%;
+      padding-top: 12vh; /* push content below sigil center */
     }
 
     .hero-eyebrow {
-      font-family: var(--mono); font-size: 0.6rem;
-      letter-spacing: 0.35em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 0.68rem;
+      letter-spacing: 0.4em; text-transform: uppercase;
       color: var(--orange);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
     }
 
     /* THE PRICE — carved in stone */
     .hero-price-block {
-      padding-top: 10vh;
+      padding-top: 0;
       opacity: 0; animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
       position: relative; display: inline-block;
     }
@@ -363,7 +364,7 @@
     }
 
     .signal-reason {
-      font-family: var(--display); font-size: 1.25rem;
+      font-family: var(--display); font-size: 1.3rem;
       font-style: italic; font-weight: 300;
       color: var(--muted);
       max-width: 46ch; margin: 0 auto;
@@ -460,11 +461,11 @@
     /* ═══════════════════════════════════════════════
        SECTIONS
     ═══════════════════════════════════════════════ */
-    .section { padding: 8rem 4rem; position: relative; z-index: 1; }
+    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
 
     .section-label {
-      font-family: var(--mono); font-size: 0.58rem;
+      font-family: var(--mono); font-size: 0.62rem;
       letter-spacing: 0.3em; text-transform: uppercase;
       color: var(--orange); margin-bottom: 1.25rem;
     }
@@ -548,6 +549,10 @@
     }
     .chart-tf:last-child { border-right: 1px solid rgba(247,147,26,0.12); }
     .chart-tf.active, .chart-tf:hover { color: var(--orange); border-color: rgba(247,147,26,0.3); background: rgba(247,147,26,0.04); }
+    @media (max-width: 768px) {
+      .chart-bleed { height: 220px !important; }
+      .chart-section.section { padding-top: 3rem !important; padding-bottom: 2rem !important; }
+    }
     .chart-bleed {
       position: relative;
       height: 380px;
@@ -558,6 +563,26 @@
       width: 100%; height: 100%;
       display: block;
     }
+    .chart-skeleton {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 2rem; pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .chart-sk-line {
+      position: absolute; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(247,147,26,0.15) 30%, rgba(237,232,222,0.08) 60%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 2.2s ease-in-out infinite;
+      border-radius: 1px;
+    }
+    .chart-sk-pulse {
+      position: absolute; bottom: 20%; right: 8%;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--orange); opacity: 0.4;
+      animation: heartbeat-calm 2s ease-in-out infinite;
+    }
+    .chart-skeleton.hidden { opacity: 0; pointer-events: none; }
     /* Floating annotations */
     .chart-annotation-ma,
     .chart-annotation-price {
@@ -976,12 +1001,14 @@
     }
     @media (max-width: 768px) {
       .push-inner { flex-direction: column; gap: 2.5rem; align-items: stretch; }
+      .push-left { width: 100%; }
+      #push-btn { width: 100%; text-align: center; }
       .push-signal-preview { width: 100%; }
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
     }
 
     /* ── RELAI ── */
-    .relai-section { background: var(--bg3); padding: 7rem 4rem; position: relative; overflow: hidden; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
+    .relai-section { background: var(--bg3); padding: 7rem 4rem; scroll-margin-top: 60px; position: relative; overflow: hidden; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); }
     .relai-section::before {
       content: ''; position: absolute; top: -80px; right: -80px;
       width: 600px; height: 600px;
@@ -1069,44 +1096,89 @@
     /* ── MOBILE ── */
     /* ═══════════════ MOBILE — full responsive pass ═══════════════ */
     @media (max-width: 768px) {
-      /* Nav */
+      /* ── NAV ── */
       nav { padding: 1.25rem 1.5rem; }
+      /* Offset anchor scroll for sticky nav on mobile */
+      .section, .relai-section, .chart-section { scroll-margin-top: 72px; }
+      /* ── TAP TARGETS ── */
+      .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; }
+      .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+      .footer-back-top { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 0.5rem; }
+      .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
+      .footer-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.75rem; }
+      footer a { min-height: 44px; display: inline-flex; align-items: center; }
       nav.scrolled { padding: 0.8rem 1.5rem; }
-      .habit-row { padding: 1rem 1.25rem; gap: 0.75rem; }
-      .habit-row-name { font-size: 0.95rem; }
-      .habit-row-amount { font-size: 1.3rem; }
-      .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
-      .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
-      .whatif-revelation-context { font-size: 0.9rem; }
-      .nav-cta { display: none; }
       .nav-right { gap: 1rem; }
 
-      /* Hero */
-      .hero { padding: 0 1.5rem; min-height: 100svh; justify-content: center; }
-      .hero-eyebrow { padding-top: 8vh; font-size: 0.52rem; letter-spacing: 0.2em; }
-      .hero-price { font-size: clamp(4.5rem, 20vw, 7rem); }
-      .hero-price-change { font-size: 0.65rem; }
-      .sigil-wrap { width: min(96vw, 80vh); height: min(96vw, 80vh); opacity: 0.75; }
+      /* ── HERO — mobile layout ──
+         Sigil is atmospheric backdrop in upper 40% of screen.
+         Content flows naturally below it with space between.
+      ── */
+      .hero {
+        padding: 0 1.5rem;
+        min-height: 100svh;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+      /* hero-content pushed down enough to clear the sigil */
+      .hero-content {
+        padding-top: 22vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
+      /* Sigil: upper atmosphere, dimmer, smaller than desktop */
+      .sigil-wrap {
+        width: min(65vw, 44vh);
+        height: min(65vw, 44vh);
+        opacity: 0.18;
+        top: 36%;
+      }
+      /* Price block */
+      .hero-price-block { padding-top: 0; }
+      .hero-price { font-size: clamp(4rem, 18vw, 6.5rem); line-height: 0.88; }
+      .hero-price-change { font-size: 0.65rem; margin-top: 0.6rem; }
+
+      /* Signal pill */
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
-      .signal-text { font-size: 0.62rem; letter-spacing: 0.12em; }
-      .signal-reason { font-size: 1rem; padding: 0 0.5rem; }
-      .signal-wrap { margin: 1.5rem 0 0.75rem; }
+      .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
+      .signal-wrap { margin: 1rem 0 0.5rem; }
+      /* Signal reason: tighter on mobile */
+      .signal-reason { font-size: 0.9rem; padding: 0; max-width: 34ch; margin-bottom: 0.25rem; }
+      .hero-disclaimer { font-size: 0.6rem; }
+
+      /* ── EXPERT ── */
+      .expert-card { padding: 2rem 1.5rem; }
+      .expert-text { font-size: 1.15rem; line-height: 1.7; }
+      .expert-meta { margin-top: 1.75rem; }
+
+      /* Scroll hint hidden on mobile */
       .scroll-indicator { display: none; }
-      .hero-actions { flex-direction: column; align-items: stretch; gap: 0.75rem; margin-top: 2rem; }
+      .signal-updated { display: none; }
+
+      /* CTAs: full width, stacked */
+      .hero-actions {
+        flex-direction: column; align-items: stretch;
+        gap: 0.6rem; margin-top: 1.25rem; width: 100%;
+      }
       .hero-actions .btn-primary,
-      .hero-actions .btn-ghost { text-align: center; padding: 1rem 1.5rem; }
+      .hero-actions .btn-ghost { text-align: center; padding: 1rem 1.5rem; width: 100%; }
 
-      /* Sections */
-      .section { padding: 4rem 1.25rem; }
-      .section-title { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+      /* ── SECTIONS ── */
+      .section { padding: 4.5rem 1.5rem; }
+      .section-inner { padding: 0; }
+      .section-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
+      .section-anchor { font-size: clamp(1.9rem, 7vw, 3rem); }
       .section-sub { font-size: 0.92rem; margin-bottom: 2.5rem; }
-      .ornament-rule { padding: 0 1.25rem; }
+      .ornament-rule { padding: 0 0; }
 
-      /* Signal cards — stack */
-      .signals-grid { grid-template-columns: 1fr; }
+      /* ── SIGNAL CARDS ── */
+      .signals-grid { grid-template-columns: 1fr; gap: 0; }
       .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.25rem; }
       .signal-card:last-child { border-bottom: none; }
-      .signal-card-value { font-size: 3.5rem; }
+      .signal-card-value { font-size: 3.2rem; }
 
       /* ── INSTRUMENT PANEL — mobile ── */
       .instrument-body {
@@ -1116,111 +1188,57 @@
       }
       .instrument-metric {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 1fr auto;
         grid-template-rows: auto auto auto;
-        gap: 0.25rem 1rem;
-        padding: 1.25rem 1.25rem;
+        gap: 0.5rem 1rem;
+        padding: 1.5rem 1.25rem;
         border-bottom: 1px solid var(--border2);
         border-right: none;
       }
       .instrument-metric:last-child { border-bottom: none; }
-      .instrument-id {
-        grid-column: 1; grid-row: 1;
-        font-size: 0.44rem;
-      }
-      .instrument-value {
-        grid-column: 2; grid-row: 1;
-        font-size: 2.2rem;
-        text-align: right;
-      }
-      .instrument-bar-wrap {
-        grid-column: 1 / -1; grid-row: 2;
-        height: 2px;
-      }
-      .instrument-desc {
-        grid-column: 1 / -1; grid-row: 3;
-        font-size: 0.78rem;
-      }
-      .instrument-label {
-        grid-column: 1; grid-row: 1;
-        align-self: end;
-      }
-      .instrument-sub {
-        grid-column: 2; grid-row: 2;
-        text-align: right;
-        font-size: 0.6rem;
-      }
-      .instrument-footer {
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1.25rem;
-        text-align: center;
-      }
-      .instrument-score-wrap { justify-content: center; }
+      .instrument-id { grid-column: 1; grid-row: 1; font-size: 0.44rem; align-self: start; }
+      .instrument-value { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; }
+      .instrument-bar-wrap { grid-column: 1 / -1; grid-row: 2; height: 2px; }
+      .instrument-desc { grid-column: 1 / -1; grid-row: 3; font-size: 0.78rem; }
+      .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
+      .instrument-sub { grid-column: 2; grid-row: 2; }
 
-      /* Chart */
-      .chart-bleed { height: 240px; }
-      .chart-header { flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
-      .chart-timeframes { align-self: flex-start; }
-      .chart-tf { padding: 0.45rem 0.9rem; font-size: 0.5rem; }
-      .chart-caption { font-size: 0.82rem; }
+      /* ── WHAT IF ── */
+      .habit-row { padding: 1rem 1.25rem; gap: 0.75rem; }
+      .habit-row-name { font-size: 0.95rem; }
+      .habit-row-amount { font-size: 1.3rem; }
+      .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
+      .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
+      .whatif-revelation-context { font-size: 0.9rem; }
 
-      /* Expert */
-      .expert-card { padding: 2.5rem 1.25rem; }
-      .expert-text { font-size: 1rem; }
-      .expert-quote-mark { font-size: 8rem; top: 1rem; left: 1rem; }
+      /* ── PUSH / ALERTS ── */
+      .push-inner { flex-direction: column; gap: 2.5rem; align-items: stretch; }
+      .push-signal-preview { width: 100%; }
+      .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
 
-      /* ── HABIT CARDS — mobile ── */
-      .habit-scroll-hint { font-size: 0.5rem; }
-      .habit-card {
-        min-width: 168px;
-        width: 168px;
-        min-height: 220px;
-        padding: 1.25rem 1rem;
-      }
-      .habit-name { font-size: 1.15rem; }
-      .habit-cost { font-size: 2.6rem; }
-      .habit-icon svg { width: 18px; height: 18px; }
+      /* ── RELAI ── */
+      .relai-section { padding: 4rem 1.5rem; overflow: hidden; }
+      .relai-inner { flex-direction: column; gap: 2.5rem; }
+      .relai-left, .relai-right { width: 100%; }
+      .relai-right { text-align: center; align-items: stretch; }
+      .relai-btn { width: 100%; }
+      .relai-badges { display: flex; flex-wrap: nowrap; gap: 0.75rem; margin-bottom: 2rem; }
+      .relai-badge { font-size: 0.48rem; padding: 0.25rem 0.5rem; white-space: nowrap; }
+      .relai-title { font-size: clamp(1.8rem, 7vw, 3rem); }
 
-      /* What If */
-      .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .whatif-result-header,
-      .whatif-chart-area,
-      .whatif-bar-area,
-      .whatif-share-row,
-      .whatif-disclaimer { padding: 1.5rem 1.25rem; }
-      .whatif-bar-area { grid-template-columns: 1fr; gap: 1.5rem; }
-      .whatif-big-number { font-size: clamp(2.8rem, 13vw, 5rem); }
-      .whatif-stat { padding: 1.1rem 0.9rem; }
-
-      /* Share */
+      /* ── SHARE ── */
       .share-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.75rem;
-        max-width: 400px;
+        max-width: 100%;
         margin: 0 auto;
       }
-      .share-btns .share-btn.primary { grid-column: 1 / -1; }
+      .share-btn.primary { grid-column: 1 / -1; }
       .share-btn { padding: 0.9rem 1rem; font-size: 0.55rem; }
 
-      /* Push */
-      .push-inner { flex-direction: column; gap: 2rem; align-items: stretch; }
-      .push-mockup { width: 100%; max-width: 100%; box-sizing: border-box; }
-      .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
-
-      /* Relai */
-      .relai-section { padding: 4rem 1.25rem; }
-      .relai-inner { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
-      .relai-right { width: 100%; }
-      .relai-btn { padding: 1.1rem; width: 100%; display: block; text-align: center; }
-      .relai-title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
-      .relai-badges { gap: 1rem; flex-wrap: wrap; }
-      .relai-logo-lockup svg { height: 26px; }
-
-      /* Footer */
-      footer { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 2rem 1.25rem; }
-      .footer-links { gap: 1.5rem; }
+      /* ── OVERFLOW GUARD ── */
+      .hero-ambient { max-width: 100vw; max-height: 100vh; }
     }
 
     /* ── 390px EXTREME NARROW ── */
@@ -1250,16 +1268,13 @@
   
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
     .section-anchor {
-      font-family: var(--title);
-      font-size: clamp(3.5rem, 9vw, 7rem);
-      font-weight: 400; line-height: 0.9;
-      letter-spacing: -0.01em;
-      color: var(--white); margin-bottom: 0.6rem;
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+      font-weight: 300; font-style: italic;
+      line-height: 1.15;
+      letter-spacing: 0;
+      color: var(--white); margin-bottom: 0.75rem;
       display: block;
-      text-shadow:
-        0 1px 0 rgba(247,147,26,0.2),
-        0 4px 24px rgba(0,0,0,0.6),
-        0 0 60px rgba(247,147,26,0.03);
     }
     .section-anchor-sub {
       font-family: var(--display);
@@ -1713,7 +1728,6 @@
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
       <button class="lang-btn" onclick="setLang('de')">DE</button>
     </div>
-    <a href="https://relai.me/imo" class="nav-cta" target="_blank"><span data-i18n="navCta">Buy on Relai</span> · <span style="color:var(--orange);">IMO</span></a>
   </div>
 </nav>
 
@@ -1953,7 +1967,7 @@
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- PRICE CHART -->
-<section class="section chart-section">
+<section class="section chart-section" id="chart">
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="chartLabel">Price Chart</p>
     <div class="chart-header reveal" data-delay="2">
@@ -1966,6 +1980,12 @@
     </div>
   </div>
   <div class="chart-bleed reveal" data-delay="3">
+    <div class="chart-skeleton" id="chart-skeleton">
+      <div class="chart-sk-line" style="top:35%;width:100%;"></div>
+      <div class="chart-sk-line" style="top:55%;width:85%;"></div>
+      <div class="chart-sk-line" style="top:70%;width:92%;"></div>
+      <div class="chart-sk-pulse"></div>
+    </div>
     <div class="chart-annotation-ma" id="chart-annotation-ma">200D AVG</div>
     <div class="chart-annotation-price" id="chart-annotation-price">BTC</div>
     <canvas id="priceChart"></canvas>
@@ -2011,13 +2031,13 @@
       </button>
       <button class="habit-row" onclick="selectHabit('gym',this)">
         <span class="habit-row-seq">02</span>
-        <span class="habit-row-name">Gym membership you rarely use</span>
+        <span class="habit-row-name">A gym you rarely visit</span>
         <span class="habit-row-amount">€40<span class="habit-row-mo">/mo</span></span>
         <span class="habit-row-arrow">→</span>
       </button>
       <button class="habit-row" onclick="selectHabit('lunch',this)">
         <span class="habit-row-seq">03</span>
-        <span class="habit-row-name">Lunch out</span>
+        <span class="habit-row-name">One lunch out</span>
         <span class="habit-row-amount">€44<span class="habit-row-mo">/mo</span></span>
         <span class="habit-row-arrow">→</span>
       </button>
@@ -2029,7 +2049,7 @@
       </button>
       <button class="habit-row" onclick="selectHabit('drinks',this)">
         <span class="habit-row-seq">05</span>
-        <span class="habit-row-name">Weekend drinks</span>
+        <span class="habit-row-name">A few drinks out</span>
         <span class="habit-row-amount">€80<span class="habit-row-mo">/mo</span></span>
         <span class="habit-row-arrow">→</span>
       </button>
@@ -2041,7 +2061,7 @@
       </button>
       <button class="habit-row" onclick="selectHabit('rideshare',this)">
         <span class="habit-row-seq">07</span>
-        <span class="habit-row-name">Ride sharing</span>
+        <span class="habit-row-name">Uber</span>
         <span class="habit-row-amount">€90<span class="habit-row-mo">/mo</span></span>
         <span class="habit-row-arrow">→</span>
       </button>
@@ -2083,7 +2103,7 @@
       </button>
       <button class="habit-row" onclick="selectHabit('cigarettes',this)">
         <span class="habit-row-seq">14</span>
-        <span class="habit-row-name">Smoking (regular)</span>
+        <span class="habit-row-name">Cigarettes (regular)</span>
         <span class="habit-row-amount">€240<span class="habit-row-mo">/mo</span></span>
         <span class="habit-row-arrow">→</span>
       </button>
@@ -2162,7 +2182,7 @@
 </section>
 
 <!-- RELAI CTA -->
-<section class="relai-section">
+<section class="relai-section" id="relai">
   <div class="relai-inner">
     <div class="relai-left">
       <p class="relai-eyebrow" data-i18n="relaiEyebrow">Ready to act on the signal?</p>
@@ -2352,15 +2372,15 @@
     },
     de: {
       // Page meta
-      pageTitle: 'Wann Bitcoin kaufen — Bitcoin Signal für langfristige Anleger',
-      metaDesc: 'Ein kostenloser Bitcoin-Marktsignal für langfristige Denker. Kombiniert Fear & Greed, 200-Tage-Durchschnitt und ATH-Abstand in ein klares Signal.',
+      pageTitle: 'Wann Bitcoin kaufen — Bitcoin-Signal für langfristige Anleger',
+      metaDesc: 'Ein kostenloser Bitcoin-Marktsignal für langfristige Anleger. Kombiniert Fear & Greed, 200-Tage-Durchschnitt und ATH-Abstand zu einem klaren Signal. Kein Rauschen. Keine Handelsempfehlung.',
       // Nav
       navCta: 'Bei Relai kaufen',
       // Hero
-      heroLabel: 'Live Bitcoin Signal — Alle 5 Minuten aktualisiert',
+      heroLabel: 'Live Bitcoin Signal',
       disclaimer: 'Keine Anlageberatung. Sieh dir die Daten an und entscheide selbst.',
       heroBtn1: 'Signal verstehen',
-      heroBtn2: 'Berechne dein „Was wäre wenn?"',
+      heroBtn2: 'Berechne dein „Was wäre wenn?“',
       scrollHint: '↓ Nach unten scrollen',
       // Signal states
       signalAccumulate: 'Die meisten Bitcoiner kaufen gerade',
@@ -2382,27 +2402,27 @@
       // Chart
       chartLabel: 'Kurschart',
       chartTitle: 'Kurs + 200-Tage-Durchschnitt',
-      chartSub: 'Die orangene Linie ist der Bitcoin-Kurs. Die weiße Linie ist der 200-Tage-Durchschnitt — wenn der Kurs darunter fällt, haben Bitcoiner das historisch als Kaufgelegenheit gesehen.',
-      legendBtc: 'Bitcoin Kurs',
+      chartSub: 'Die orangene Linie ist der Bitcoin-Kurs. Die weiße Linie ist der 200-Tage-Durchschnitt — fällt der Kurs darunter, haben Bitcoiner das historisch als Kaufgelegenheit gesehen.',
+      legendBtc: 'Bitcoin-Kurs',
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
       expertsLabel: 'Was Bitcoiner tun',
-      expertsTitle: 'In Momenten wie diesem<br>passiert typischerweise folgendes.',
+      expertsTitle: 'In Momenten wie diesem —<br>was erfahrungsgemäß passiert.',
       expertDate: 'Heute aktualisiert · Basierend auf aktuellen Marktbedingungen',
       expertTagAccumulate: 'Aktuelles Signal: Akkumulationszone',
       expertTagHold: 'Aktuelles Signal: Neutrale Zone',
       expertTagCaution: 'Aktuelles Signal: Vorsichtszone',
-      expertTextAccumulate: 'Wenn der Fear & Greed Index in den Angstbereich fällt, sehen Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regulären Betrag — die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
-      expertTextHold: 'Bei gemischten Signalen bleiben die meisten Bitcoiner einfach ihrem Plan treu. DCA ist genau für solche Momente gemacht — wenn es nicht offensichtlich ist, ob man mehr kaufen oder warten soll. Das häufigste Verhalten in neutralen Zonen ist Kontinuität: regulären Rhythmus beibehalten, nicht auf Lärm reagieren und auf das nächste klare Signal warten.',
-      expertTextCaution: 'Wenn Gier hoch ist und Bitcoin weit über seinem 200-Tage-Durchschnitt handelt, werden viele Bitcoiner vorsichtiger. Das bedeutet meist nicht verkaufen — Ausstiege zu timen ist genauso schwer wie Einstiege. Aber oft bedeutet es: Käufe pausieren, Positionsgröße überdenken und mental auf einen Rücksetzer vorbereitet sein. „Sei ängstlich, wenn andere gierig sind" ist ein Klischee — aus gutem Grund.',
+      expertTextAccumulate: 'Fällt der Fear & Greed Index in den Angstbereich, werten Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regelmäßigen Betrag — die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
+      expertTextHold: 'Bei gemischten Signalen bleiben die meisten Bitcoiner einfach ihrem Plan treu. DCA ist genau für solche Momente gemacht — wenn es nicht eindeutig ist, ob man mehr kaufen oder abwarten soll. Das häufigste Verhalten in neutralen Zonen: den regelmäßigen Rhythmus beibehalten, nicht auf Lärm reagieren und auf das nächste klare Signal warten.',
+      expertTextCaution: 'Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, werden viele Bitcoiner vorsichtiger. Das bedeutet meistens nicht verkaufen — Ausstiege zu timen ist genauso schwer wie Einstiege. Aber oft heißt es: Käufe pausieren, Positionsgröße überdenken und sich mental auf einen Rücksetzer vorbereiten. „Sei ängstlich, wenn andere gierig sind“ — ein Klischée, das seinen Grund hat.',
       // Signal reason text (dynamic)
       reasonAccumulate: (fg, pct) => `Fear & Greed liegt bei ${fg} und Bitcoin handelt ${pct}% unter seinem 200-Tage-Durchschnitt. Historisch gesehen sind das die Bedingungen, unter denen Bitcoiner aktiv werden.`,
       reasonHold: (fg) => `Gemischte Signale — Fear & Greed bei ${fg}, Bitcoin nahe am 200-Tage-Durchschnitt. Die meisten Bitcoiner halten an ihrem Plan fest und warten auf ein klareres Bild.`,
-      reasonCaution: (fg, pct) => `Gier ist erhöht bei ${fg}, Bitcoin handelt ${pct}% über seinem 200-Tage-Durchschnitt. Viele Bitcoiner sind vorsichtig — nicht unbedingt am Verkaufen, aber auch nicht aggressiv am Kaufen.`,
+      reasonCaution: (fg, pct) => `Gier ist erhöht bei ${fg}, Bitcoin handelt ${pct}% über seinem 200-Tage-Durchschnitt. Viele Bitcoiner sind vorsichtig — nicht zwingend am Verkaufen, aber auch nicht aggressiv am Kaufen.`,
       // What If
       whatifLabel: 'Was wäre wenn?',
       whatifTitle: 'Das Geld war immer da.',
-      whatifSub: 'Kleine, regelmäßige Ausgaben summieren sich schneller als die meisten denken. Wähle eine Gewohnheit und sieh, wie es aussähe, wenn du das Geld stattdessen seit 2015 in Bitcoin gesteckt hättest.',
+      whatifSub: 'Kleine, regelmäßige Ausgaben summieren sich schneller als die meisten denken. Wähle eine Gewohnheit und sieh, wie es ausgesehen hätte, wenn du das Geld seit 2015 stattdessen in Bitcoin gesteckt hättest.',
       whatifNudge: '↑ Wähle eine Gewohnheit',
       habitCoffee: 'Täglicher Latte',
       habitCigarettes: 'Zigaretten',
@@ -2410,7 +2430,7 @@
       habitShopping: 'Online-Shopping',
       habitDelivery: 'Lieferdienst',
       habitBeer: 'Ausgehen',
-      whatifHeadline: 'Hättest du das monatlich seit 2015 in Bitcoin gespart, wärst du heute bei',
+      whatifHeadline: 'Hättest du das monatlich seit 2015 in Bitcoin gesteckt, wärst du heute bei',
       whatifBigSub: 'statt bei nichts',
       whatifChartLabel: 'Portfolio-Wert im Zeitverlauf',
       barInvested: 'Gesamt investiert',
@@ -2423,7 +2443,7 @@
       // Share
       shareLabel: 'Signal teilen',
       shareTitle: 'Schick das einem Freund,<br>der über Bitcoin nachdenkt.',
-      shareSub: 'Ein Tap. Er sieht genau, was das Signal heute zeigt und warum.',
+      shareSub: 'Ein Tap reicht. Er sieht genau, was das Signal heute zeigt — und warum.',
       shareFgLabel: 'Fear & Greed',
       shareMaLabel: 'vs 200T-MA',
       shareAthLabel: 'Vom ATH',
@@ -2433,15 +2453,16 @@
       shareX: 'Auf X teilen',
       // Alerts
       alertsLabel: 'Benachrichtigungen',
-      pushTitle: 'Das Signal, <em>in dem Moment</em><br>in dem es sich ändert.',
-      pushSub: 'Bitcoin bewegt sich schnell. Aktiviere Alerts und wir benachrichtigen dich, sobald sich das Signal ändert — damit du mit Überzeugung handelst, nicht aus FOMO.',
+      pushTitle: 'Das Signal — <em>sobald</em><br>es sich ändert.',
+      pushSub: 'Bitcoin bewegt sich schnell. Aktiviere Alerts und wir benachrichtigen dich sofort, wenn das Signal kippt — damit du mit Überzeugung handelst, nicht aus FOMO.',
       pushBtn: 'Alerts aktivieren',
       pushBtnEnabled: '✓ Alerts aktiv',
       pushBtnLoading: 'Lädt…',
       pushBtnEnabling: 'Aktiviere…',
       pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit deaktivierbar',
       pushExample: 'Signal geändert: Fear & Greed bei 18. Die meisten Bitcoiner akkumulieren. BTC liegt 24% unter dem 200-Tage-Durchschnitt.',
-      pushMockupLabel: 'Beispiel-Alert',
+      pushExampleState: 'Signal geändert · Akkumulieren',
+      pushMockupLabel: 'Beispiel-Benachrichtigung',
       // Relai
       relaiEyebrow: 'Bereit, auf das Signal zu reagieren?',
       relaiTitle: 'Europas Bitcoin-App.<br>Self-Custody vom ersten Tag an.',
@@ -2449,8 +2470,8 @@
       relaiBadge1: 'Nur Bitcoin',
       relaiBadge2: 'Self-Custody',
       relaiBadge4: 'Swiss Made',
-      relaiBtn: 'Relai App holen →',
-      relaiReferral: 'Verwende den Referral-Code',
+      relaiBtn: 'Zur Relai App →',
+      relaiReferral: 'Referral-Code',
       relaiReferral2: 'für 0,9% Gebühren',
       // Footer
       footerBuilt: 'Erstellt von',
@@ -2460,17 +2481,17 @@
       loading: 'Lädt…',
       priceLoading: 'Lädt...',
       // Signal card descriptions (dynamic)
-      fgExtremeFear: 'Extreme Angst. Historisch gesehen haben sich solche Momente mit Bitcoin-Kurstiefs gedeckt. Bitcoiner sehen das oft als Chance.',
+      fgExtremeFear: 'Extreme Angst. Historisch haben sich solche Momente mit Bitcoin-Kurstiefs gedeckt — Bitcoiner sehen das oft als Einstiegschance.',
       fgFear: 'Angst im Markt. Die Unsicherheit ist hoch — Bitcoiner nutzen solche Phasen oft zum Akkumulieren.',
       fgNeutral: 'Die Marktstimmung ist neutral. Weder besonders ängstlich noch gierig.',
-      fgGreed: 'Gier baut sich auf. Der Markt fühlt sich gut an — aber Bitcoiner beginnen oft, Positionen zu reduzieren.',
+      fgGreed: 'Gier baut sich auf. Der Markt fühlt sich gut an — aber Bitcoiner beginnen oft, ihre Positionen zu überdenken.',
       fgExtremeGreed: 'Extreme Gier. Historisch ein Warnsignal. Viele Bitcoiner waren in solchen Phasen vorsichtig.',
       fgError: 'Fear & Greed Daten konnten nicht geladen werden.',
-      athDeep: (pct) => `Bitcoin liegt ${pct}% unter seinem Allzeithoch. Solche tiefen Rücksetzer waren historisch gesehen die Phasen, in denen Bitcoiner am aggressivsten akkumuliert haben.`,
-      athMid: (pct) => `${pct}% unter dem Rekordhoch. Eine deutliche Korrektur — Bitcoiner sehen diese Spanne oft als vernünftiges Einstiegsniveau.`,
+      athDeep: (pct) => `Bitcoin liegt ${pct}% unter seinem Allzeithoch. Solche tiefen Rücksetzer waren historisch die Phasen, in denen Bitcoiner am aggressivsten akkumuliert haben.`,
+      athMid: (pct) => `${pct}% unter dem Rekordhoch. Eine deutliche Korrektur — Bitcoiner sehen diesen Bereich oft als vernünftiges Einstiegsniveau.`,
       athNear: 'Nahe am Allzeithoch. Viele Bitcoiner werden vorsichtiger, wenn Bitcoin so nah an seinem Höchststand ist.',
       athError: 'ATH-Daten konnten nicht geladen werden.',
-      maBelow: (pct) => `Bitcoin liegt ${pct}% unter seinem 200-Tage-Durchschnitt. Historisch gesehen war der Handel unter dieser Linie eines der stärksten Kaufsignale in Bitcoins Geschichte.`,
+      maBelow: (pct) => `Bitcoin liegt ${pct}% unter seinem 200-Tage-Durchschnitt. Historisch war der Handel unter dieser Linie eines der stärksten Kaufsignale in Bitcoins Geschichte.`,
       maNeutral: 'Bitcoin handelt nahe seinem 200-Tage-Durchschnitt. Das gilt als neutrale Zone — weder besonders teuer noch günstig auf historischer Basis.',
       maAbove: (pct) => `Bitcoin liegt ${pct}% über seinem 200-Tage-Durchschnitt. Längere Phasen über dieser Linie gingen oft Korrekturen voraus.`,
       maError: 'Gleitender Durchschnitt konnte nicht geladen werden.',
@@ -2563,6 +2584,7 @@
       const sym = currentCurrency === 'EUR' ? '€' : '$';
       currentPrice = currentCurrency === 'EUR' ? data.eur : data.usd;
       const change = currentCurrency === 'EUR' ? data.eur_24h_change : data.usd_24h_change;
+      redrawChart(); // re-render chart with fresh stitch to live price
 
       const pv = document.getElementById('price-value'); pv.textContent = formatPrice(currentPrice); pv.classList.remove('loading');
       const changeEl = document.getElementById('price-change');
@@ -2793,10 +2815,14 @@
     try {
       const res = await fetch(`/api/history?timeframe=${timeframe}`);
       const data = await res.json();
-      // Stitch live price onto end so chart always terminates at real-time price
-      const prices = data.prices || [];
-      drawChart(prices, parseInt(days));
+      _chartPrices = data.prices || [];   // store raw; stitch applied in drawChart
+      _chartDays   = parseInt(days);
+      drawChart(_chartPrices, _chartDays);
     } catch (e) {}
+  }
+
+  function redrawChart() {
+    if (_chartPrices.length) drawChart(_chartPrices, _chartDays);
   }
 
   function drawChart(prices, days) {
@@ -2812,7 +2838,26 @@
     canvas.height = H * dpr;
     ctx.scale(dpr, dpr);
 
-    const vals = prices.map(p => p[1]);
+    // ── Stitch live price onto history so chart always ends at today ──
+    // Run here (not in loadChart) so it refreshes whenever currentPrice updates.
+    let stitchedPrices = prices.slice(); // don't mutate the stored raw array
+    if (currentPrice && stitchedPrices.length) {
+      const lastTs  = stitchedPrices[stitchedPrices.length - 1][0];
+      const nowTs   = Date.now();
+      const ageHrs  = (nowTs - lastTs) / 3600000;
+      if (ageHrs > 0.5) { // last candle is stale — extend to now
+        if (ageHrs <= 6) {
+          // Close gap: replace last point with live price (same-day movement)
+          stitchedPrices = [...stitchedPrices.slice(0, -1), [nowTs, currentPrice]];
+        } else {
+          // Older gap: bridge with midpoint so line doesn't spike vertically
+          const midTs    = lastTs + (nowTs - lastTs) * 0.5;
+          const midPrice = (stitchedPrices[stitchedPrices.length - 1][1] + currentPrice) / 2;
+          stitchedPrices = [...stitchedPrices, [midTs, midPrice], [nowTs, currentPrice]];
+        }
+      }
+    }
+    const vals = stitchedPrices.map(p => p[1]);
     if (!vals.length) return;
     const pad = { top: 32, right: 80, bottom: 28, left: 0 };
     const cw = W - pad.left - pad.right;
@@ -2898,11 +2943,14 @@
     const priceAnnot = document.getElementById('chart-annotation-price');
     if (priceAnnot) priceAnnot.style.top = Math.max(8, Math.min(lastY - 10, H - 30)) + 'px';
 
-    // Y-axis price labels — right side, 3 values
+    // Y-axis price labels — use actual data min/max (not padded), 3 clean round values
+    const dataMax = Math.max(...vals);
+    const dataMin = Math.min(...vals);
+    const dataMid = (dataMax + dataMin) / 2;
     ctx.fillStyle = 'rgba(74,69,64,0.8)';
     ctx.font = '10px "DM Mono", monospace';
     ctx.textAlign = 'right';
-    [max, (max + min) / 2, min].forEach(v => {
+    [dataMax, dataMid, dataMin].forEach(v => {
       const y = toY(v);
       if (y > 12 && y < H - 8) {
         ctx.fillText(sym + formatPrice(v), W - 4, y + 4);
@@ -2913,15 +2961,18 @@
     ctx.fillStyle = 'rgba(74,69,64,0.5)';
     ctx.textAlign = 'center';
     ctx.font = '9px "DM Mono", monospace';
-    const step = Math.max(1, Math.floor(vals.length / 6));
-    prices.forEach((p, i) => {
-      if (i % step === 0 || i === prices.length - 1) {
+    const step = Math.max(1, Math.floor(stitchedPrices.length / 6));
+    stitchedPrices.forEach((p, i) => {
+      if (i % step === 0 || i === stitchedPrices.length - 1) {
         const d = new Date(p[0]);
         const label = d.toLocaleDateString('en', { month: 'short', year: '2-digit' }).replace(' ', "'");
         const x = toX(i);
         if (x > 20 && x < W - pad.right - 10) ctx.fillText(label, x, H - 6);
       }
     });
+    // Hide loading skeleton once chart has rendered
+    const _sk = document.getElementById('chart-skeleton');
+    if (_sk) _sk.classList.add('hidden');
   }
 
   // ── WHAT IF CALCULATOR ──
@@ -2973,19 +3024,19 @@
   // All amounts in monthly EUR
   const HABITS = {
     streaming:   { label: 'One streaming service',         monthly: 13   },
-    gym:         { label: 'Gym membership you rarely use', monthly: 40   },
-    lunch:       { label: 'Lunch out',                     monthly: 44   },
+    gym:         { label: 'A gym you rarely visit', monthly: 40   },
+    lunch:       { label: 'One lunch out',                     monthly: 44   },
     coffee_out:  { label: 'Daily coffee out',              monthly: 61   },
-    drinks:      { label: 'Weekend drinks',                monthly: 80   },
+    drinks:      { label: 'A few drinks out',                monthly: 80   },
     cigarettes_l:{ label: 'Cigarettes (light smoker)',     monthly: 85   },
-    rideshare:   { label: 'Ride sharing',                  monthly: 90   },
+    rideshare:   { label: 'Uber',                  monthly: 90   },
     fashion:     { label: 'Fast fashion',                  monthly: 90   },
     latte:       { label: 'Daily latte',                   monthly: 92   },
     takeaway:    { label: 'Takeaways',                     monthly: 110  },
     nights:      { label: 'Nights out',                    monthly: 130  },
     shopping:    { label: 'Online shopping',               monthly: 150  },
     dining:      { label: 'Dining out',                    monthly: 170  },
-    cigarettes:  { label: 'Smoking (regular)',             monthly: 240  },
+    cigarettes:  { label: 'Cigarettes (regular)',             monthly: 240  },
   };
 
   function selectHabit(key, el) {
@@ -3271,6 +3322,9 @@
   // ── SCROLL PROGRESS
   let scrollRaf = null;
   let scrollHintHidden = false;
+  let smoothScrollY = 0;
+  let _chartPrices = [];   // raw history, stitch applied fresh on each draw
+  let _chartDays   = 30; // lerped scroll for sigil — prevents jump on finger lift
   window.addEventListener('scroll', () => {
     if (scrollRaf) return;
     scrollRaf = requestAnimationFrame(() => {
@@ -3294,26 +3348,52 @@
         if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
         if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
 
-        // Sigil: shrinks, fades, moves up faster than scroll
-        const sigilWrap = heroEl.querySelector('.sigil-wrap');
-        if (sigilWrap) {
-          const sigilY  = -(sy * 0.35);           // moves up at 35% of scroll speed
-          const sigilS  = 1 - (p * 0.18);         // shrinks to 82%
-          const sigilO  = 1 - (p * 1.6);          // fades out by ~62% scroll
-          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY}px)) scale(${sigilS}) rotateX(${sigilWrap._rx || 0}deg) rotateY(${sigilWrap._ry || 0}deg)`;
-          sigilWrap.style.opacity   = Math.max(sigilO, 0);
-        }
+        // Sigil transform is owned exclusively by driveSmoothScroll (60fps loop above)
+        // — do NOT write sigil.style.transform here
 
-        // Hero-content: moves up slower — stays in view longer (depth layer)
+        // Hero-content: subtle parallax on desktop only
         const heroContent = heroEl.querySelector('.hero-content');
-        if (heroContent) {
-          const contentY = -(sy * 0.12);          // moves at 12% — nearly pinned
+        if (heroContent && !('ontouchstart' in window)) {
+          const contentY = -(sy * 0.12);
           heroContent.style.transform = `translateY(${contentY}px)`;
         }
       }
       scrollRaf = null;
     });
   }, { passive: true });
+
+  // Drive sigil at 60fps — sole owner of sigil transform. Disabled on touch.
+  // Uses velocity-based easing: follows scroll directly when moving, eases on decelerate.
+  // This prevents both lag during drag AND jumping on finger-lift.
+  let _prevRawScrollY = 0;
+  (function driveSmoothScroll() {
+    const rawY    = window.scrollY;
+    const vel     = Math.abs(rawY - _prevRawScrollY); // px moved this frame
+    _prevRawScrollY = rawY;
+    // Active scroll: follow directly. Settling: lerp to final position.
+    if (vel > 3) {
+      smoothScrollY = rawY;                            // instant follow during drag
+    } else {
+      smoothScrollY += (rawY - smoothScrollY) * 0.09; // ease into rest position
+    }
+    // Only apply parallax on non-touch devices — mobile scroll physics are different
+    if (!('ontouchstart' in window)) {
+      const heroEl = document.getElementById('top');
+      if (heroEl) {
+        const heroH    = heroEl.offsetHeight || window.innerHeight;
+        const sp       = Math.min(smoothScrollY / heroH, 1);
+        const sigilWrap = heroEl.querySelector('.sigil-wrap');
+        if (sigilWrap) {
+          const sigilY = -(smoothScrollY * 0.35);
+          const sigilS = 1 - (sp * 0.18);
+          const sigilO = Math.max(1 - (sp * 1.6), 0);
+          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(2)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(sigilWrap._ry || 0).toFixed(2)}deg)`;
+          sigilWrap.style.opacity = sigilO;
+        }
+      }
+    }
+    requestAnimationFrame(driveSmoothScroll);
+  })();
 
   // Apply translations before reveal observer so content is present when hidden
   applyLang(detectLang());
@@ -3418,7 +3498,7 @@
     let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
     let raf = null;
 
-    document.querySelector('.hero')?.addEventListener('mousemove', (e) => {
+    if (!('ontouchstart' in window)) document.querySelector('.hero')?.addEventListener('mousemove', (e) => {
       const hero = e.currentTarget.getBoundingClientRect();
       const cx = hero.left + hero.width / 2;
       const cy = hero.top + hero.height / 2;
@@ -3532,7 +3612,7 @@
     let currentRX = 0, currentRY = 0;
     const MAX_TILT = 5; // degrees
 
-    document.addEventListener('mousemove', e => {
+    if (!('ontouchstart' in window)) document.addEventListener('mousemove', e => {
       const rect = hero ? hero.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
       const cx = rect.left + rect.width  / 2;
       const cy = rect.top  + rect.height / 2;
@@ -3555,10 +3635,7 @@
       // Store tilt values for parallax to consume
       wrap._rx = currentRX;
       wrap._ry = currentRY;
-      // Only apply tilt when in hero (parallax takes over during scroll)
-      if (window.scrollY < window.innerHeight * 0.3) {
-        wrap.style.transform = `translate(-50%, -50%) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
-      }
+      // Tilt values stored; scroll handler applies them in combined transform
       requestAnimationFrame(tiltLoop);
     })();
   })();
