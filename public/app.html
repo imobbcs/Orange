@@ -130,9 +130,7 @@
       transition: opacity 0.2s;
     }
     .nav-logo:hover { opacity: 1; }
-    .nav-logo span { color: var(--orange); }
-    .nav-logo:hover { opacity: 1; }
-    .nav-logo span { color: var(--orange); }
+    .nav-logo span { color: var(--orange); margin-left: 0.22em; }
     .nav-right { display: flex; align-items: center; gap: 2.5rem; }
     .nav-lang { display: flex; gap: 1.5rem; }
     .lang-btn {
@@ -388,13 +386,13 @@
     .btn-primary {
       font-family: var(--mono); font-size: 0.65rem;
       letter-spacing: 0.15em; text-transform: uppercase;
-      background: var(--orange); color: #000;
-      border: none; padding: 1.1rem 2.5rem;
+      background: transparent; color: var(--orange);
+      border: 1px solid var(--orange); padding: 1.1rem 2.5rem;
       text-decoration: none; cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
     .btn-primary:hover {
-      background: #ffaa3d;
+      background: var(--orange); color: #000;
       transform: translateY(-1px);
       box-shadow: 0 6px 24px rgba(247,147,26,0.25);
     }
@@ -627,17 +625,9 @@
       transition: opacity 1.2s ease;
     }
     #expert-field.active { opacity: 0.65; }
-    .expert-quote-mark,
-    .expert-signal-tag,
+        .expert-signal-tag,
     .expert-text,
     .expert-meta { position: relative; z-index: 1; }
-    .expert-quote-mark {
-      font-family: var(--display); font-size: clamp(10rem, 22vw, 20rem); line-height: 0.7;
-      color: var(--orange); opacity: 0.055;
-      position: absolute; top: 2rem; left: 3rem;
-      pointer-events: none; user-select: none;
-      font-style: italic; font-weight: 300;
-    }
     .expert-text {
       font-family: var(--display); font-size: 1.5rem;
       font-style: italic; font-weight: 300; line-height: 1.8;
@@ -1737,6 +1727,7 @@
   <!-- Depth layers — parallax starfield -->
   <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
   <canvas class="hero-depth hero-depth-mid"  id="hero-depth-mid"></canvas>
+  <canvas class="hero-depth hero-depth-near" id="hero-depth-near"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
@@ -1842,14 +1833,7 @@
       <circle cx="200" cy="200" r="118" fill="url(#sunDisc)"/>
       <circle cx="200" cy="200" r="118" stroke="#F7931A" stroke-width="0.5" opacity="0.1"/>
 
-      <!-- ₿ symbol — mathematically centered at (200,200) -->
-      <!-- Measured bbox center: (78.824, 77.212); scale=1.85 -->
-      <!-- tx = 200 - 78.824×1.85 = 54.18 -->
-      <!-- ty = 200 - 77.212×1.85 = 57.16 -->
-      <g transform="translate(54.18 57.16) scale(1.85)">
-        <path d="M101.293 72.146c-1.032-7.07-4.823-10.511-10.362-12.657l2.117-8.483-5.167-1.29-2.061 8.257c-1.36-.34-2.754-.66-4.141-.979l2.073-8.306-5.163-1.291-2.117 8.483c-1.126-.257-2.233-.511-3.305-.779l.006-.024-7.127-1.779-1.375 5.517s3.837.879 3.753.934c2.092.523 2.471 1.909 2.408 3.008l-2.411 9.668c.144.037.331.09.537.172l-.546-.137-3.38 13.554c-.256.634-.903 1.588-2.363 1.226.052.075-3.753-.937-3.753-.937l-2.562 5.907 6.724 1.677c1.251.314 2.479.641 3.688.95l-2.137 8.572 5.16 1.29 2.117-8.487c1.41.383 2.779.736 4.12 1.069l-2.11 8.455 5.167 1.291 2.137-8.561c8.808 1.667 15.434 1.002 18.225-6.973 2.249-6.418-.112-10.115-4.745-12.529 3.374-.778 5.913-2.994 6.593-7.569zm-11.804 16.553c-1.597 6.417-12.403 2.947-15.908 2.077l2.839-11.377c3.505.875 14.753 2.608 13.069 9.3zm1.622-16.628c-1.458 5.848-10.455 2.876-13.376 2.147l2.574-10.32c2.921.729 12.33 2.086 10.802 8.173z"
-          fill="#F7931A" opacity="0.2"/>
-      </g>
+      <!-- centre void — orbited by the rings -->
     </svg>
 
   </div>
@@ -2004,7 +1988,6 @@
     <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
     <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;position:relative;overflow:hidden;">
       <canvas id="expert-field" aria-hidden="true"></canvas>
-      <div class="expert-quote-mark" aria-hidden="true">"</div>
       <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
       <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory — as it is now — Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
       <p class="expert-meta" id="expert-date" data-i18n="expertDate">Updated today · Based on current market conditions</p>
@@ -2115,9 +2098,9 @@
       <!-- THE NUMBER — full attention, nothing else -->
       <div class="whatif-revelation">
         <p class="whatif-revelation-label" id="whatif-selected-label">—</p>
+        <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
         <div class="whatif-revelation-number" id="whatif-btc-value">—</div>
         <p class="whatif-revelation-sub" data-i18n="whatifBigSub">today — instead of nothing</p>
-        <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
       </div>
 
       <!-- SUPPORTING EVIDENCE — lower weight, appears after number settles -->
@@ -3566,6 +3549,7 @@
 
   // ══ HERO STARFIELD DEPTH ══
   (function() {
+    // Static star layers — drawn once, re-seeded on resize
     function makeStars(canvasId, count, minR, maxR, colour) {
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
@@ -3573,7 +3557,8 @@
       let stars = [];
 
       function seed() {
-        const W = window.innerWidth, H = window.innerHeight * 1.3;
+        const W = window.innerWidth;
+        const H = canvas.closest('.hero') ? canvas.closest('.hero').offsetHeight : window.innerHeight;
         canvas.width = W; canvas.height = H;
         stars = [];
         for (let i = 0; i < count; i++) {
@@ -3581,7 +3566,7 @@
             x: Math.random() * W,
             y: Math.random() * H,
             r: minR + Math.random() * (maxR - minR),
-            a: 0.15 + Math.random() * 0.55,
+            a: 0.12 + Math.random() * 0.5,
           });
         }
         ctx.clearRect(0, 0, W, H);
@@ -3597,8 +3582,115 @@
       window.addEventListener('resize', seed, { passive: true });
     }
 
-    makeStars('hero-depth-far', 120, 0.4, 1.0, 'rgba(237,232,222,A)');
-    makeStars('hero-depth-mid',  55, 0.8, 1.6, 'rgba(247,147,26,A)');
+    // Animated near layer — twinkle + very slow drift across full hero
+    function makeDeepSpace(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [];
+      let raf;
+
+      function seed() {
+        const hero = canvas.closest('.hero');
+        W = window.innerWidth;
+        H = hero ? hero.offsetHeight : window.innerHeight;
+        canvas.width = W; canvas.height = H;
+        stars = [];
+
+        // Layer 1: many tiny static-ish stars — the "field"
+        for (let i = 0; i < 280; i++) {
+          stars.push({
+            x: Math.random() * W, y: Math.random() * H,
+            r: 0.3 + Math.random() * 0.7,
+            baseA: 0.08 + Math.random() * 0.35,
+            a: 0,
+            twinkleSpeed: 0.004 + Math.random() * 0.012,
+            twinkleOffset: Math.random() * Math.PI * 2,
+            vx: 0, vy: 0,
+            type: 'field',
+            col: Math.random() > 0.92 ? '247,147,26' : '237,232,222',
+          });
+        }
+
+        // Layer 2: a few brighter accent stars with subtle drift
+        for (let i = 0; i < 18; i++) {
+          stars.push({
+            x: Math.random() * W, y: Math.random() * H,
+            r: 0.9 + Math.random() * 1.1,
+            baseA: 0.25 + Math.random() * 0.45,
+            a: 0,
+            twinkleSpeed: 0.002 + Math.random() * 0.006,
+            twinkleOffset: Math.random() * Math.PI * 2,
+            vx: (Math.random() - 0.5) * 0.04,
+            vy: (Math.random() - 0.5) * 0.02,
+            type: 'accent',
+            col: Math.random() > 0.7 ? '247,147,26' : '237,232,222',
+          });
+        }
+
+        // Layer 3: 4-6 large diffuse nebula-like blobs (very faint radial gradients)
+        stars._nebulae = [];
+        for (let i = 0; i < 5; i++) {
+          stars._nebulae.push({
+            x: Math.random() * W, y: Math.random() * H,
+            r: 60 + Math.random() * 120,
+            a: 0.018 + Math.random() * 0.022,
+            col: Math.random() > 0.5 ? '247,147,26' : '100,80,150',
+          });
+        }
+      }
+
+      let t = 0;
+      function draw() {
+        t++;
+        ctx.clearRect(0, 0, W, H);
+
+        // Draw nebulae first
+        if (stars._nebulae) {
+          stars._nebulae.forEach(n => {
+            const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+            g.addColorStop(0, `rgba(${n.col},${n.a})`);
+            g.addColorStop(1, `rgba(${n.col},0)`);
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+            ctx.fillStyle = g;
+            ctx.fill();
+          });
+        }
+
+        // Draw stars
+        stars.forEach(s => {
+          // Twinkle
+          s.a = s.baseA * (0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset));
+
+          // Drift for accent stars
+          if (s.type === 'accent') {
+            s.x += s.vx; s.y += s.vy;
+            if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+            if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+          }
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${s.col},${s.a.toFixed(3)})`;
+          ctx.fill();
+        });
+
+        raf = requestAnimationFrame(draw);
+      }
+
+      seed();
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(raf);
+        seed();
+        draw();
+      }, { passive: true });
+      draw();
+    }
+
+    makeStars('hero-depth-far', 160, 0.3, 0.9, 'rgba(237,232,222,A)');
+    makeStars('hero-depth-mid',  60, 0.7, 1.4, 'rgba(247,147,26,A)');
+    makeDeepSpace('hero-depth-near');
   })();
 
   // ══ SIGIL MOUSE TILT ══
