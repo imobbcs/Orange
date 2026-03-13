@@ -975,6 +975,12 @@
       /* Nav */
       nav { padding: 1.25rem 1.5rem; }
       nav.scrolled { padding: 0.8rem 1.5rem; }
+      .habit-row { padding: 1rem 1.25rem; gap: 0.75rem; }
+      .habit-row-name { font-size: 0.95rem; }
+      .habit-row-amount { font-size: 1.3rem; }
+      .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
+      .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
+      .whatif-revelation-context { font-size: 0.9rem; }
       .nav-cta { display: none; }
       .nav-right { gap: 1rem; }
 
@@ -1421,46 +1427,6 @@
     }
 
 
-    /* ══ CUSTOM CURSOR ══ */
-    .cursor-dot {
-      position: fixed;
-      z-index: 9999;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: #F7931A;
-      pointer-events: none;
-      top: 0; left: 0;
-      margin: -7px 0 0 -7px;
-      will-change: transform;
-      transition: width 0.15s ease, height 0.15s ease, margin 0.15s ease, background 0.15s ease;
-      display: none;
-    }
-    .cursor-ring {
-      position: fixed;
-      z-index: 9998;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      border: 2px solid rgba(247,147,26,0.85);
-      pointer-events: none;
-      top: 0; left: 0;
-      margin: -20px 0 0 -20px;
-      will-change: transform;
-      transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, border-color 0.2s ease, opacity 0.2s ease;
-      display: none;
-    }
-    @media (pointer: fine) {
-      * { cursor: none !important; }
-      .cursor-dot, .cursor-ring { display: block; }
-    }
-    .cursor-dot.hovering { width: 18px; height: 18px; margin: -9px 0 0 -9px; }
-    .cursor-ring.hovering { width: 56px; height: 56px; margin: -28px 0 0 -28px; border-color: rgba(247,147,26,0.35); }
-    .cursor-dot.clicking { background: #fff; width: 8px; height: 8px; margin: -4px 0 0 -4px; }
-    .cursor-ring.clicking { width: 24px; height: 24px; margin: -12px 0 0 -12px; border-color: rgba(247,147,26,0.9); }
-
-
-    .hero { perspective: 1200px; }
-    .sigil-wrap { transform-style: preserve-3d; }
-
     /* ══ SCROLL SURPRISE — clip-path wipe ══ */
     .reveal-wipe {
       clip-path: inset(0 100% 0 0);
@@ -1488,11 +1454,142 @@
     .nav-signal-dot.hold      { background: var(--amber); box-shadow: 0 0 6px rgba(251,191,36,0.6); }
     .nav-signal-dot.caution   { background: var(--red);   box-shadow: 0 0 6px rgba(248,113,113,0.6); }
 
+
+    /* ══ HABIT TAP LIST ══ */
+    .habit-list {
+      width: 100%;
+      border: 1px solid var(--border2);
+      margin-top: 3rem;
+      margin-bottom: 0;
+    }
+    .habit-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 1.15rem 2rem;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(247,147,26,0.08);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s ease, border-left-color 0.2s ease;
+      border-left: 2px solid transparent;
+      gap: 1rem;
+      position: relative;
+    }
+    .habit-row:last-child { border-bottom: none; }
+    .habit-row:hover {
+      background: rgba(247,147,26,0.04);
+      border-left-color: rgba(247,147,26,0.4);
+    }
+    .habit-row.active {
+      background: rgba(247,147,26,0.07);
+      border-left-color: var(--orange);
+    }
+    .habit-row-seq {
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.2em;
+      color: var(--grey);
+      min-width: 2rem;
+      flex-shrink: 0;
+    }
+    .habit-row-name {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.15rem;
+      color: var(--white);
+      flex: 1;
+    }
+    .habit-row.active .habit-row-name { color: var(--white); }
+    .habit-row-amount {
+      font-family: var(--title);
+      font-size: 1.6rem;
+      color: var(--orange);
+      letter-spacing: 0.01em;
+      flex-shrink: 0;
+    }
+    .habit-row-mo {
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.1em;
+      color: var(--grey);
+      vertical-align: super;
+      margin-left: 0.2em;
+    }
+    .habit-row-arrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--grey);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .habit-row:hover .habit-row-arrow,
+    .habit-row.active .habit-row-arrow {
+      opacity: 1;
+      color: var(--orange);
+      transform: translateX(3px);
+    }
+
+    /* ══ WHATIF REVELATION — number dominates ══ */
+    .whatif-revelation {
+      padding: 5rem 4rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border2);
+      position: relative;
+    }
+    .whatif-revelation-label {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+    }
+    .whatif-revelation-number {
+      font-family: var(--title);
+      font-size: clamp(4.5rem, 14vw, 10rem);
+      font-weight: 400;
+      color: var(--orange);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      text-shadow:
+        0 0 60px rgba(247,147,26,0.2),
+        0 2px 0 rgba(247,147,26,0.15);
+    }
+    .whatif-revelation-sub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .whatif-revelation-context {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 50ch;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Evidence section fades in after number settles */
+    .whatif-evidence {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    .whatif-evidence.visible { opacity: 1; }
+
 </style>
 </head>
 <body>
-<div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
 
 
 <div id="progress"></div>
@@ -1771,7 +1868,8 @@
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">What Bitcoiners Do</p>
     <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
-    <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;">
+    <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;position:relative;overflow:hidden;">
+      <canvas id="expert-field" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.7;"></canvas>
       <div class="expert-quote-mark" aria-hidden="true">"</div>
       <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
       <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory — as it is now — Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
@@ -1789,143 +1887,139 @@
     <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
     <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit — and see what it would look like if you had put that money into Bitcoin instead.</p>
 
-    <div class="habit-scroll-hint" id="habit-scroll-hint">
-      <span class="habit-scroll-hint-arrow">→</span>
-      <span>Drag to explore</span>
-    </div>
-    <div class="habit-scroll-wrap reveal" data-delay="4" id="habit-scroll-wrap">
-      <div class="habit-scroll-inner" id="habit-grid">
-      <button class="habit-card" onclick="selectHabit('spotify',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">01</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 11.5c2.5-1 5.5-1 8 0"/><path d="M7 14.5c3-1.2 6.5-1.2 9.5 0"/><path d="M9 8.5c2-0.7 5-0.7 7 0"/></svg></span>
-          <span class="habit-name">Spotify</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€11</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+    <!-- TAP LIST — 14 habits -->
+    <div class="habit-list reveal" data-delay="4" id="habit-list">
+      <button class="habit-row" onclick="selectHabit('streaming',this)">
+        <span class="habit-row-seq">01</span>
+        <span class="habit-row-name">One streaming service</span>
+        <span class="habit-row-amount">€13<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('netflix',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">02</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg></span>
-          <span class="habit-name">Netflix</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€18</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('gym',this)">
+        <span class="habit-row-seq">02</span>
+        <span class="habit-row-name">Gym membership you rarely use</span>
+        <span class="habit-row-amount">€40<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('gym',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">03</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="9" width="3" height="6" rx="1"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span>
-          <span class="habit-name" data-i18n="habitGym">Gym membership</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€45</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('lunch',this)">
+        <span class="habit-row-seq">03</span>
+        <span class="habit-row-name">Lunch out</span>
+        <span class="habit-row-amount">€44<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('zalando',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">04</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
-          <span class="habit-name" data-i18n="habitShopping">Online shopping</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€80</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('coffee_out',this)">
+        <span class="habit-row-seq">04</span>
+        <span class="habit-row-name">Daily coffee out</span>
+        <span class="habit-row-amount">€61<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('beer',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">05</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M5 11h12v10H5z"/><path d="M5 7h14l-1 4H6L5 7z"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="12" y1="2" x2="12" y2="5"/></svg></span>
-          <span class="habit-name" data-i18n="habitBeer">Nights out</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€120</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('drinks',this)">
+        <span class="habit-row-seq">05</span>
+        <span class="habit-row-name">Weekend drinks</span>
+        <span class="habit-row-amount">€80<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('coffee',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">06</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></span>
-          <span class="habit-name" data-i18n="habitCoffee">Daily latte</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€135</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('cigarettes_l',this)">
+        <span class="habit-row-seq">06</span>
+        <span class="habit-row-name">Cigarettes (light smoker)</span>
+        <span class="habit-row-amount">€85<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('takeaway',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">07</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></span>
-          <span class="habit-name" data-i18n="habitDelivery">Food delivery</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€173</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('rideshare',this)">
+        <span class="habit-row-seq">07</span>
+        <span class="habit-row-name">Ride sharing</span>
+        <span class="habit-row-amount">€90<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-      <button class="habit-card" onclick="selectHabit('cigarettes',this)">
-        <div class="habit-card-top">
-          <span class="habit-card-seq">08</span>
-          <span class="habit-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="15" x2="22" y2="15"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="20" y1="11" x2="20" y2="15"/><path d="M16 11c0-4 4-4 4-8"/></svg></span>
-          <span class="habit-name" data-i18n="habitCigarettes">Cigarettes</span>
-        </div>
-        <div class="habit-card-bottom">
-          <div class="habit-cost">~€240</div>
-          <div class="habit-cost-label">per month</div>
-        </div>
+      <button class="habit-row" onclick="selectHabit('fashion',this)">
+        <span class="habit-row-seq">08</span>
+        <span class="habit-row-name">Fast fashion</span>
+        <span class="habit-row-amount">€90<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
       </button>
-    </div><!-- /habit-scroll-inner -->
-    </div><!-- /habit-scroll-wrap -->
-    <p id="whatif-nudge" data-i18n="whatifNudge" style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange);text-align:center;margin-top:-1.5rem;margin-bottom:2rem;opacity:0.7;">↑ Pick a habit to see your number</p>
+      <button class="habit-row" onclick="selectHabit('latte',this)">
+        <span class="habit-row-seq">09</span>
+        <span class="habit-row-name">Daily latte</span>
+        <span class="habit-row-amount">€92<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+      <button class="habit-row" onclick="selectHabit('takeaway',this)">
+        <span class="habit-row-seq">10</span>
+        <span class="habit-row-name">Takeaways</span>
+        <span class="habit-row-amount">€110<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+      <button class="habit-row" onclick="selectHabit('nights',this)">
+        <span class="habit-row-seq">11</span>
+        <span class="habit-row-name">Nights out</span>
+        <span class="habit-row-amount">€130<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+      <button class="habit-row" onclick="selectHabit('shopping',this)">
+        <span class="habit-row-seq">12</span>
+        <span class="habit-row-name">Online shopping</span>
+        <span class="habit-row-amount">€150<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+      <button class="habit-row" onclick="selectHabit('dining',this)">
+        <span class="habit-row-seq">13</span>
+        <span class="habit-row-name">Dining out</span>
+        <span class="habit-row-amount">€170<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+      <button class="habit-row" onclick="selectHabit('cigarettes',this)">
+        <span class="habit-row-seq">14</span>
+        <span class="habit-row-name">Smoking (regular)</span>
+        <span class="habit-row-amount">€240<span class="habit-row-mo">/mo</span></span>
+        <span class="habit-row-arrow">→</span>
+      </button>
+    </div><!-- /habit-list -->
 
+    <!-- RESULT — number dominates, then supporting evidence -->
     <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
-      <div class="whatif-result-header">
-        <p class="whatif-selected-label" id="whatif-selected-label">—</p>
-        <p class="whatif-headline" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
-        <div class="whatif-big-number" id="whatif-btc-value">—</div>
-        <p class="whatif-big-sub" data-i18n="whatifBigSub">today — instead of nothing</p>
+
+      <!-- THE NUMBER — full attention, nothing else -->
+      <div class="whatif-revelation">
+        <p class="whatif-revelation-label" id="whatif-selected-label">—</p>
+        <div class="whatif-revelation-number" id="whatif-btc-value">—</div>
+        <p class="whatif-revelation-sub" data-i18n="whatifBigSub">today — instead of nothing</p>
+        <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
       </div>
-      <div class="whatif-chart-area">
-        <p class="whatif-chart-label" data-i18n="whatifChartLabel">Portfolio value over time</p>
-        <div class="whatif-canvas-wrap"><canvas id="whatifChart"></canvas></div>
-      </div>
-      <div class="whatif-bar-area">
-        <div class="whatif-bar-item">
-          <p class="whatif-bar-label" data-i18n="barInvested">Total invested</p>
-          <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-invested" style="width:0%;background:rgba(237,232,222,0.2);"></div></div>
-          <div class="whatif-bar-value" id="whatif-invested-bar" style="color:var(--white);">—</div>
+
+      <!-- SUPPORTING EVIDENCE — lower weight, appears after number settles -->
+      <div class="whatif-evidence" id="whatif-evidence">
+        <div class="whatif-chart-area">
+          <p class="whatif-chart-label" data-i18n="whatifChartLabel">Portfolio value over time</p>
+          <div class="whatif-canvas-wrap"><canvas id="whatifChart"></canvas></div>
         </div>
-        <div class="whatif-bar-item">
-          <p class="whatif-bar-label" data-i18n="barValue">Value today</p>
-          <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-value" style="width:0%;background:var(--orange);"></div></div>
-          <div class="whatif-bar-value" id="whatif-today" style="color:var(--orange);">—</div>
+        <div class="whatif-bar-area">
+          <div class="whatif-bar-item">
+            <p class="whatif-bar-label" data-i18n="barInvested">Total invested</p>
+            <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-invested" style="width:0%;background:rgba(237,232,222,0.2);"></div></div>
+            <div class="whatif-bar-value" id="whatif-invested-bar" style="color:var(--white);">—</div>
+          </div>
+          <div class="whatif-bar-item">
+            <p class="whatif-bar-label" data-i18n="barValue">Value today</p>
+            <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-value" style="width:0%;background:var(--orange);"></div></div>
+            <div class="whatif-bar-value" id="whatif-today" style="color:var(--orange);">—</div>
+          </div>
         </div>
-      </div>
-      <div class="whatif-stats-grid">
-        <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statMonthly">Monthly amount</p><div class="whatif-stat-value" id="whatif-monthly">—</div></div>
-        <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
-        <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
-        <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statReturn">Return</p><div class="whatif-stat-value positive" id="whatif-return">—</div></div>
-      </div>
-      <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
-      <div class="whatif-share-row">
-        <button class="share-btn primary" onclick="shareWhatIfWhatsApp()" data-i18n="shareWhatsapp">Share on WhatsApp</button>
-        <button class="share-btn" onclick="shareWhatIfTwitter()" data-i18n="shareX">Share on X</button>
-      </div>
-    </div>
+        <div class="whatif-stats-grid">
+          <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statMonthly">Monthly amount</p><div class="whatif-stat-value" id="whatif-monthly">—</div></div>
+          <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
+          <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
+          <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statReturn">Return</p><div class="whatif-stat-value positive" id="whatif-return">—</div></div>
+        </div>
+        <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
+        <div class="whatif-share-row">
+          <button class="share-btn primary" onclick="shareWhatIfWhatsApp()" data-i18n="shareWhatsapp">Share on WhatsApp</button>
+          <button class="share-btn" onclick="shareWhatIfTwitter()" data-i18n="shareX">Share on X</button>
+        </div>
+      </div><!-- /whatif-evidence -->
+
+    </div><!-- /whatif-result-wrap -->
   </div>
 </section>
-
-<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- PUSH NOTIFICATIONS -->
 <section class="section push-section" id="alerts">
@@ -2522,6 +2616,7 @@
     if (score >= 2) {
       pill.classList.add('accumulate');
       if (navDot) { navDot.classList.add('accumulate', 'active'); }
+      if (window._setExpertFieldState) window._setExpertFieldState('accumulate');
       text.textContent = translations[currentLang].signalAccumulate;
       shareSignal.style.color = 'var(--green)';
       shareSignal.textContent = '● ' + translations[currentLang].signalAccumulate;
@@ -2532,6 +2627,7 @@
     } else if (score >= 0) {
       pill.classList.add('hold');
       if (navDot) { navDot.classList.add('hold', 'active'); }
+      if (window._setExpertFieldState) window._setExpertFieldState('hold');
       text.textContent = translations[currentLang].signalHold;
       shareSignal.style.color = 'var(--amber)';
       shareSignal.textContent = '● ' + translations[currentLang].signalHold;
@@ -2542,6 +2638,7 @@
     } else {
       pill.classList.add('caution');
       if (navDot) { navDot.classList.add('caution', 'active'); }
+      if (window._setExpertFieldState) window._setExpertFieldState('caution');
       text.textContent = translations[currentLang].signalCaution;
       shareSignal.style.color = 'var(--red)';
       shareSignal.textContent = '● ' + translations[currentLang].signalCaution;
@@ -2582,7 +2679,19 @@
     try {
       const res = await fetch(`/api/history?timeframe=${timeframe}`);
       const data = await res.json();
-      drawChart(data.prices, parseInt(days));
+      // Stitch live price onto end so chart always terminates at real-time price
+      let prices = data.prices || [];
+      if (currentPrice && prices.length) {
+        const now = Date.now();
+        const last = prices[prices.length - 1];
+        // Only append if live price differs meaningfully from last data point
+        if (Math.abs(last[1] - currentPrice) / currentPrice > 0.001) {
+          prices = [...prices, [now, currentPrice]];
+        } else {
+          prices[prices.length - 1] = [last[0], currentPrice];
+        }
+      }
+      drawChart(prices, parseInt(days));
     } catch (e) {}
   }
 
@@ -2759,87 +2868,112 @@
 
   // All amounts in monthly EUR
   const HABITS = {
-    coffee:     { label: 'Daily latte from a coffee shop', monthly: 135  },
-    cigarettes: { label: 'A pack of cigarettes a day',     monthly: 240  },
-    gym:        { label: 'Gym membership',                 monthly: 45   },
-    netflix:    { label: 'Netflix subscription',           monthly: 18   },
-    spotify:    { label: 'Spotify subscription',           monthly: 11   },
-    zalando:    { label: 'Monthly online shopping',        monthly: 80   },
-    takeaway:   { label: 'Food delivery',                  monthly: 173  },
-    beer:       { label: 'Nights out',                     monthly: 120  },
+    streaming:   { label: 'One streaming service',         monthly: 13   },
+    gym:         { label: 'Gym membership you rarely use', monthly: 40   },
+    lunch:       { label: 'Lunch out',                     monthly: 44   },
+    coffee_out:  { label: 'Daily coffee out',              monthly: 61   },
+    drinks:      { label: 'Weekend drinks',                monthly: 80   },
+    cigarettes_l:{ label: 'Cigarettes (light smoker)',     monthly: 85   },
+    rideshare:   { label: 'Ride sharing',                  monthly: 90   },
+    fashion:     { label: 'Fast fashion',                  monthly: 90   },
+    latte:       { label: 'Daily latte',                   monthly: 92   },
+    takeaway:    { label: 'Takeaways',                     monthly: 110  },
+    nights:      { label: 'Nights out',                    monthly: 130  },
+    shopping:    { label: 'Online shopping',               monthly: 150  },
+    dining:      { label: 'Dining out',                    monthly: 170  },
+    cigarettes:  { label: 'Smoking (regular)',             monthly: 240  },
   };
 
   function selectHabit(key, el) {
     if (!currentPrice) return;
-    document.querySelectorAll('.habit-card').forEach(c => c.classList.remove('active'));
+
+    // Mark active row
+    document.querySelectorAll('.habit-row').forEach(c => c.classList.remove('active'));
     if (el) el.classList.add('active');
-    // Hide the nudge once a habit is selected
-    const nudge = document.getElementById('whatif-nudge');
-    if (nudge) nudge.style.display = 'none';
 
     const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
     const livePrice = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
 
-    // True monthly DCA: iterate every month, buy at that month's actual price
-    let totalInvested = 0;
-    let totalBTC = 0;
-
-    // For chart: one data point per year (end-of-year snapshot)
-    const chartLabels = [];
-    const chartValues = [];
-    const chartInvested = [];
+    let totalInvested = 0, totalBTC = 0;
+    const chartLabels = [], chartValues = [], chartInvested = [];
     let lastYear = null;
 
     for (const [monthKey, rawPrice] of Object.entries(BTC_MONTHLY_EUR)) {
       const monthPrice = (rawPrice == null) ? livePrice : rawPrice;
       const [yearStr] = monthKey.split('-');
       const year = parseInt(yearStr);
-
       totalInvested += habit.monthly;
       totalBTC += habit.monthly / monthPrice;
-
-      // Push a chart point at year-end (or the last available month)
-      const isLastMonth = monthKey === Object.keys(BTC_MONTHLY_EUR).at(-1);
-      const nextKey = Object.keys(BTC_MONTHLY_EUR)[Object.keys(BTC_MONTHLY_EUR).indexOf(monthKey) + 1];
-      const nextYear = nextKey ? parseInt(nextKey.split('-')[0]) : null;
-
-      if (nextYear !== year || isLastMonth) {
-        // Use the last month's price for that year's display (year-end snapshot)
-        // Final point always uses live price so it matches the headline number
-        const displayPrice = isLastMonth ? livePrice : monthPrice;
-        chartLabels.push(year);
-        chartValues.push(Math.round(totalBTC * displayPrice));
+      if (year !== lastYear) {
+        chartLabels.push(yearStr);
+        chartValues.push(Math.round(totalBTC * livePrice));
         chartInvested.push(Math.round(totalInvested));
+        lastYear = year;
       }
     }
 
-    const valueToday = totalBTC * livePrice;
-    const gain = valueToday - totalInvested;
-    const returnPct = ((valueToday - totalInvested) / totalInvested) * 100;
-    const fmt = n => sym + Math.round(n).toLocaleString();
+    const finalValue  = Math.round(totalBTC * livePrice);
+    const gainValue   = finalValue - totalInvested;
+    const returnPct   = ((finalValue / totalInvested - 1) * 100).toFixed(0);
+    const fmt = v => sym + Math.round(v).toLocaleString('de-DE');
 
-    document.getElementById('whatif-selected-label').textContent = habit.label.toUpperCase();
-    document.getElementById('whatif-btc-value').textContent = fmt(valueToday);
-    document.getElementById('whatif-monthly').textContent = sym + habit.monthly;
-    document.getElementById('whatif-invested').textContent = fmt(totalInvested);
-    document.getElementById('whatif-invested-bar').textContent = fmt(totalInvested);
-    document.getElementById('whatif-today').textContent = fmt(valueToday);
-    document.getElementById('whatif-gain').textContent = '+' + fmt(gain);
-    document.getElementById('whatif-return').textContent = '+' + Math.round(returnPct).toLocaleString() + '%';
-
-    setTimeout(() => {
-      document.getElementById('bar-invested').style.width = '100%';
-      document.getElementById('bar-value').style.width = '100%';
-    }, 50);
-
+    // ── REVELATION SEQUENCE ──
     const wrap = document.getElementById('whatif-result-wrap');
+    const numEl = document.getElementById('whatif-btc-value');
+    const labelEl = document.getElementById('whatif-selected-label');
+    const evidence = document.getElementById('whatif-evidence');
+
+    // Show wrap, hide evidence initially
     wrap.style.display = 'block';
+    if (evidence) evidence.classList.remove('visible');
+
+    // Populate supporting data (hidden until number settles)
+    document.getElementById('whatif-monthly').textContent    = fmt(habit.monthly);
+    document.getElementById('whatif-invested').textContent   = fmt(totalInvested);
+    document.getElementById('whatif-invested-bar').textContent = fmt(totalInvested);
+    document.getElementById('whatif-today').textContent      = fmt(finalValue);
+    document.getElementById('whatif-gain').textContent       = fmt(gainValue);
+    document.getElementById('whatif-return').textContent     = '+' + returnPct + '%';
+
+    // Bar fills
+    setTimeout(() => {
+      document.getElementById('bar-invested').style.width = '33%';
+      document.getElementById('bar-value').style.width = '100%';
+    }, 1800);
+
+    // Set label
+    if (labelEl) labelEl.textContent = habit.label.toUpperCase();
+
+    // Scroll to result
     requestAnimationFrame(() => wrap.classList.add('revealed'));
     setTimeout(() => {
-      drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
-      wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 80);
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+
+    // Count-up: zero → final value over 1.5s, decelerating
+    if (numEl) {
+      numEl.textContent = sym + '0';
+      const start = performance.now();
+      const duration = 1500;
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+      function countUp(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const v = Math.round(easeOut(t) * finalValue);
+        numEl.textContent = sym + v.toLocaleString('de-DE');
+        if (t < 1) {
+          requestAnimationFrame(countUp);
+        } else {
+          numEl.textContent = fmt(finalValue);
+          // Hold the number for 400ms, then reveal evidence
+          setTimeout(() => {
+            if (evidence) evidence.classList.add('visible');
+            drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
+          }, 400);
+        }
+      }
+      requestAnimationFrame(countUp);
+    }
   }
 
   function drawWhatIfChart(labels, values, invested, sym) {
@@ -3176,25 +3310,8 @@
   // Override updateSignal globally
   window.updateSignal = updateSignalWithFooter;
 
-  // ── DRAG-TO-SCROLL for habit cards ──
-  (function() {
-    const wrap = document.getElementById('habit-scroll-wrap');
-    if (!wrap) return;
-    let isDown = false, startX, scrollLeft;
-    wrap.addEventListener('mousedown', e => {
-      isDown = true;
-      startX = e.pageX - wrap.offsetLeft;
-      scrollLeft = wrap.scrollLeft;
-    });
-    wrap.addEventListener('mouseleave', () => isDown = false);
-    wrap.addEventListener('mouseup', () => isDown = false);
-    wrap.addEventListener('mousemove', e => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - wrap.offsetLeft;
-      wrap.scrollLeft = scrollLeft - (x - startX);
-    });
-  })();
+  // [carousel drag removed]
+
 </script>
 <script>
   // ── PARALLAX MOUSE DEPTH ──
@@ -3332,103 +3449,8 @@
   }, 100);
 
   // Drag-to-scroll habit cards
-  (function() {
-    const wrap = document.getElementById('habit-scroll-wrap');
-    if (!wrap) return;
-    let down = false, startX, scrollL;
-    wrap.addEventListener('mousedown',  e => { down = true; startX = e.pageX - wrap.offsetLeft; scrollL = wrap.scrollLeft; });
-    wrap.addEventListener('mouseleave', () => down = false);
-    wrap.addEventListener('mouseup',    () => down = false);
-    wrap.addEventListener('mousemove',  e => {
-      if (!down) return; e.preventDefault();
-      wrap.scrollLeft = scrollL - (e.pageX - wrap.offsetLeft - startX);
-    });
-  
-  // ── HABIT TICKER — auto-scroll + tilt + scroll hint ──
-  (function() {
-    const wrap = document.getElementById('habit-scroll-wrap');
-    const hint = document.getElementById('habit-scroll-hint');
-    if (!wrap) return;
+  // [drag scroll removed]
 
-    let userPaused  = false;
-    let hintDismissed = false;
-    const speed     = 0.55;
-
-    function dismissHint() {
-      if (!hintDismissed && hint) {
-        hintDismissed = true;
-        hint.classList.add('hidden');
-      }
-    }
-
-    function applyTilt() {
-      const cards = wrap.querySelectorAll('.habit-card');
-      if (!cards.length) return;
-      const wrapRect   = wrap.getBoundingClientRect();
-      const wrapCenter = wrapRect.left + wrapRect.width / 2;
-      cards.forEach(card => {
-        const rect       = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const norm       = Math.max(-1, Math.min(1, (cardCenter - wrapCenter) / (wrapRect.width / 2)));
-        const deg        = norm * 5;
-        const lift       = Math.abs(norm) * -6;
-        card.style.transform = `perspective(800px) rotateY(${deg}deg) translateY(${lift}px)`;
-      });
-    }
-
-    function tick() {
-      if (!userPaused) {
-        const maxScroll = wrap.scrollWidth - wrap.clientWidth;
-        if (maxScroll > 0) {
-          wrap.scrollLeft += speed;
-          if (wrap.scrollLeft >= maxScroll - 1) wrap.scrollLeft = 0;
-        }
-      }
-      applyTilt();
-      requestAnimationFrame(tick);
-    }
-
-    // Pause + dismiss hint on interaction
-    wrap.addEventListener('mouseenter', () => { userPaused = true; dismissHint(); });
-    wrap.addEventListener('mouseleave', () => { userPaused = false; });
-    wrap.addEventListener('touchstart', () => { userPaused = true; dismissHint(); }, { passive: true });
-    wrap.addEventListener('touchend',   () => { setTimeout(() => { userPaused = false; }, 1500); }, { passive: true });
-    wrap.addEventListener('scroll',     () => { applyTilt(); dismissHint(); }, { passive: true });
-
-    // Only start ticker once section enters viewport (fixes off-screen rAF issue)
-    const io = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        requestAnimationFrame(tick);
-        io.disconnect();
-      }
-    }, { threshold: 0.2 });
-    io.observe(wrap);
-  })();
-
-  // ══ CUSTOM CURSOR ══
-  (function() {
-    const dot  = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    if (!dot || !ring) return;
-    // Visibility handled by CSS (pointer: fine media query)
-    // JS runs regardless so cursor is ready when media query activates
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX  = mouseX, ringY = mouseY;
-
-    document.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    }, { passive: true });
-
-    (function loop() {
-      dot.style.transform  = `translate(${mouseX}px, ${mouseY}px)`;
-      ringX += (mouseX - ringX) * 0.13;
-      ringY += (mouseY - ringY) * 0.13;
-      ring.style.transform = `translate(${Math.round(ringX)}px, ${Math.round(ringY)}px)`;
-      requestAnimationFrame(loop);
-    })();
 
     const sel = 'a, button, [onclick], input, select, .lang-btn, .chart-tf, .habit-card, .share-btn, .nav-cta, .btn-primary, .btn-ghost, .relai-btn';
     document.addEventListener('mouseover', e => {
@@ -3544,6 +3566,101 @@
     }, { threshold: 0.35 });
 
     countUpObserver.observe(signalSection);
+  })();
+
+
+  // ══ EXPERT ENERGY FIELD ══
+  (function() {
+    const canvas = document.getElementById('expert-field');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    let signalState = 'hold'; // default until updateSignal fires
+
+    const STATES = {
+      accumulate: { count: 60, speed: 0.25, drift: 0.015, color: '74,222,128',  gather: true,  spread: 0.3 },
+      hold:       { count: 45, speed: 0.4,  drift: 0.008, color: '251,191,36',  gather: false, spread: 0.5 },
+      caution:    { count: 70, speed: 0.9,  drift: 0.03,  color: '248,113,113', gather: false, spread: 0.9 },
+    };
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function initParticles(state) {
+      const s = STATES[state] || STATES.hold;
+      particles = [];
+      for (let i = 0; i < s.count; i++) {
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.8 + 0.4,
+          vx: (Math.random() - 0.5) * s.speed,
+          vy: (Math.random() - 0.5) * s.speed,
+          alpha: Math.random() * 0.5 + 0.15,
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      const s = STATES[signalState] || STATES.hold;
+      const cx = W / 2, cy = H / 2;
+
+      particles.forEach(p => {
+        // Drift toward/away from centre
+        if (s.gather) {
+          p.vx += (cx - p.x) * s.drift * 0.001;
+          p.vy += (cy - p.y) * s.drift * 0.001;
+        } else {
+          p.vx += (Math.random() - 0.5) * s.drift;
+          p.vy += (Math.random() - 0.5) * s.drift;
+        }
+
+        // Clamp speed
+        const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (spd > s.speed) { p.vx = p.vx / spd * s.speed; p.vy = p.vy / spd * s.speed; }
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Wrap edges
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.color},${p.alpha})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    // Expose state setter — called by updateSignal
+    window._setExpertFieldState = function(state) {
+      if (signalState === state) return;
+      signalState = state;
+      initParticles(state);
+    };
+
+    // Init
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        resize();
+        initParticles(signalState);
+        draw();
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(canvas);
+
+    window.addEventListener('resize', () => {
+      resize();
+      initParticles(signalState);
+    }, { passive: true });
   })();
 
 </script>
