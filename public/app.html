@@ -3247,6 +3247,9 @@
     });
   }, { passive: true });
 
+  // Apply translations before reveal observer so content is present when hidden
+  applyLang(detectLang());
+
   // ── REVEAL ──
   const reveals = document.querySelectorAll('.reveal');
   reveals.forEach(el => el.classList.add('hidden'));
@@ -3267,7 +3270,6 @@
 
   // ── INIT (parallel where safe) ──
   async function init() {
-    applyLang(detectLang());
     detectCurrency();
     // Price first (needed by ATH + MA calculations)
     await fetchPrice();
@@ -3666,8 +3668,11 @@
     };
 
     function resize() {
-      W = canvas.width  = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
+      const rect = (canvas.closest('.expert-card') || canvas.parentElement).getBoundingClientRect();
+      W = canvas.width  = rect.width  || 800;
+      H = canvas.height = rect.height || 400;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
     }
 
     function initParticles(state) {
@@ -3722,22 +3727,27 @@
 
     // Expose state setter — called by updateSignal
     window._setExpertFieldState = function(state) {
-      if (signalState === state) return;
       signalState = state;
-      initParticles(state);
+      if (running) initParticles(state);
     };
 
     // Init
+    let running = false;
+    function start() {
+      if (running) return;
+      running = true;
+      resize();
+      initParticles(signalState);
+      draw();
+      requestAnimationFrame(() => canvas.classList.add('active'));
+    }
     const card = canvas.closest('.expert-card') || canvas.parentElement;
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
-        resize();
-        initParticles(signalState);
-        draw();
-        requestAnimationFrame(() => canvas.classList.add('active'));
+        start();
         observer.disconnect();
       }
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
     observer.observe(card);
 
     window.addEventListener('resize', () => {
@@ -3747,3 +3757,6 @@
   })();
 
 </script>
+
+</body>
+</html>
