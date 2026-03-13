@@ -993,7 +993,7 @@
       .push-inner { flex-direction: column; gap: 2.5rem; align-items: stretch; }
       .push-left { width: 100%; }
       #push-btn { width: 100%; text-align: center; }
-      .push-signal-preview { width: 100%; }
+      .push-signal-preview { width: 100%; opacity: 1 !important; transform: none !important; }
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
     }
 
@@ -1091,14 +1091,15 @@
       /* Offset anchor scroll for sticky nav on mobile */
       .section, .relai-section, .chart-section { scroll-margin-top: 72px; }
       /* ── TAP TARGETS ── */
-      .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; }
+      .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; letter-spacing: 0.1em; word-spacing: -0.15em; }
       .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
       .footer-back-top { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 0.5rem; }
       .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
       .footer-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.75rem; }
       footer a { min-height: 44px; display: inline-flex; align-items: center; }
       nav.scrolled { padding: 0.8rem 1.5rem; }
-      .nav-right { gap: 1rem; }
+      .nav-right { gap: 0.75rem; }
+      .nav-cta { display: none; }
 
       /* ── HERO — mobile layout ──
          Sigil is atmospheric backdrop in upper 40% of screen.
@@ -1116,15 +1117,18 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        text-align: center;
         width: 100%;
       }
+      .hero-price-block { text-align: center; width: 100%; }
+      .hero-price { text-align: center; display: block; }
       .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
-      /* Sigil: upper atmosphere, dimmer, smaller than desktop */
+      /* Sigil: upper atmosphere, slightly dimmer but still visible */
       .sigil-wrap {
-        width: min(65vw, 44vh);
-        height: min(65vw, 44vh);
-        opacity: 0.18;
-        top: 36%;
+        width: min(80vw, 52vh);
+        height: min(80vw, 52vh);
+        opacity: 0.55;
+        top: 38%;
       }
       /* Price block */
       .hero-price-block { padding-top: 0; }
@@ -1166,9 +1170,9 @@
 
       /* ── SIGNAL CARDS ── */
       .signals-grid { grid-template-columns: 1fr; gap: 0; }
-      .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.25rem; }
+      .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.5rem; min-height: auto; }
       .signal-card:last-child { border-bottom: none; }
-      .signal-card-value { font-size: 3.2rem; }
+      .signal-card-value { font-size: clamp(2.8rem, 12vw, 3.8rem); }
 
       /* ── INSTRUMENT PANEL — mobile ── */
       .instrument-body {
@@ -1203,8 +1207,9 @@
 
       /* ── PUSH / ALERTS ── */
       .push-inner { flex-direction: column; gap: 2.5rem; align-items: stretch; }
-      .push-signal-preview { width: 100%; }
+      .push-signal-preview { width: 100%; opacity: 1 !important; transform: none !important; }
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
+      #push-btn { width: 100%; text-align: center; }
 
       /* ── RELAI ── */
       .relai-section { padding: 4rem 1.5rem; overflow: hidden; }
