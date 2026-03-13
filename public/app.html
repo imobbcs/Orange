@@ -1441,14 +1441,7 @@
 
 
     /* ══ SCROLL SURPRISE — clip-path wipe ══ */
-    .reveal-wipe {
-      clip-path: inset(0 100% 0 0);
-      transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-wipe.visible {
-      clip-path: inset(0 0% 0 0);
-      opacity: 1;
-    }
+
 
 
     /* ══ NAV SIGNAL DOT ══ */
@@ -3202,6 +3195,7 @@
   })();
 
   // ── SCROLL PROGRESS
+  let scrollRaf = null;
   let scrollHintHidden = false;
   window.addEventListener('scroll', () => {
     if (scrollRaf) return;
@@ -3250,23 +3244,34 @@
   // Apply translations before reveal observer so content is present when hidden
   applyLang(detectLang());
 
-  // ── REVEAL ──
-  const reveals = document.querySelectorAll('.reveal');
-  reveals.forEach(el => el.classList.add('hidden'));
-  let revealCounter = 0;
-  const observer = new IntersectionObserver(entries => {
+  // ── REVEAL — all variants ──
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .reveal-fade');
+  revealEls.forEach(el => el.classList.add('hidden'));
+
+  // Ornament rule lines
+  document.querySelectorAll('.ornament-rule-line').forEach(el => el.classList.remove('visible'));
+
+  const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const delay = (revealCounter++ % 4) * 60;
-        setTimeout(() => {
-          entry.target.classList.remove('hidden');
-          entry.target.classList.add('visible');
-        }, delay);
-        observer.unobserve(entry.target);
+        entry.target.classList.remove('hidden');
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // Ornament rules: animate lines in
+  const ornObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.ornament-rule-line').forEach(l => l.classList.add('visible'));
+        ornObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.ornament-rule').forEach(el => ornObserver.observe(el));
 
   // ── INIT (parallel where safe) ──
   async function init() {
@@ -3324,38 +3329,8 @@
   })();
 
   // Update instrument footer when signal is computed
-  const _origUpdateSignal = updateSignal;
-  function updateSignalWithFooter() {
-    _origUpdateSignal();
-    if (fgValue === null || maPrice === null || currentPrice === null) return;
-    const diffPct = (currentPrice - maPrice) / maPrice * 100;
-    const score = (fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2) +
-                  (diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2);
-    const scoreEl = document.getElementById('instrument-score');
-    const sigLabelEl = document.getElementById('instrument-signal-label');
-    const tsEl = document.getElementById('instrument-timestamp');
-    if (scoreEl) scoreEl.textContent = (score >= 0 ? '+' : '') + score;
-    const sigLabel = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'CAUTION';
-    if (sigLabelEl) sigLabelEl.textContent = sigLabel;
-    if (tsEl) {
-      const now = new Date();
-      tsEl.textContent = 'LAST UPDATE ' + now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    }
-    // Sync instrument-dot colour
-    const dot = document.getElementById('instrument-dot');
-    if (dot) {
-      dot.style.background = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)';
-      dot.style.boxShadow = '0 0 8px ' + (score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)');
-    }
-    // Sync metric top-bar colours
-    ['fg-metric','ma-metric','ath-metric'].forEach(id => {
-      const el = document.getElementById(id);
-    });
-  }
-  // Override updateSignal globally
-  window.updateSignal = updateSignalWithFooter;
 
-  // [carousel drag removed]
+
 
 </script>
 <script>
@@ -3406,67 +3381,6 @@
     }
   })();
 
-  // ── SCROLL PROGRESS ──
-  let scrollRaf = null;
-  let scrollHintHidden = false;
-  window.addEventListener('scroll', () => {
-    if (scrollRaf) return;
-    scrollRaf = requestAnimationFrame(() => {
-      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-      document.getElementById('progress').style.width = pct + '%';
-      if (!scrollHintHidden && window.scrollY > 60) {
-        scrollHintHidden = true;
-        document.querySelector('.scroll-indicator')?.classList.add('hide');
-      }
-      scrollRaf = null;
-    });
-  }, { passive: true });
-
-  // ── REVEAL ──
-  // ── NAV SCROLL ──
-  (function() {
-    const nav = document.querySelector('nav');
-    if (!nav) return;
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 60);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  })();
-
-  // ── REVEAL — all variants ──
-  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .reveal-fade');
-  revealEls.forEach(el => el.classList.add('hidden'));
-
-  // Ornament rule lines
-  document.querySelectorAll('.ornament-rule-line').forEach(el => el.classList.remove('visible'));
-
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.remove('hidden');
-        entry.target.classList.add('visible');
-        // Also trigger wipe if applicable
-        if (entry.target.classList.contains('reveal-wipe')) {
-          entry.target.classList.add('visible');
-        }
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => revealObserver.observe(el));
-
-  // Ornament rules: animate lines in
-  const ornObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.ornament-rule-line').forEach(l => l.classList.add('visible'));
-        ornObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.ornament-rule').forEach(el => ornObserver.observe(el));
-
-  // (staggered lift removed — ticker handles animation)
-
   // Patch updateSignal to populate instrument footer
   setTimeout(function() {
     const _origUS = window.updateSignal;
@@ -3497,18 +3411,7 @@
   // [drag scroll removed]
 
 
-    const sel = 'a, button, [onclick], input, select, .lang-btn, .chart-tf, .habit-card, .share-btn, .nav-cta, .btn-primary, .btn-ghost, .relai-btn';
-    document.addEventListener('mouseover', e => {
-      if (e.target.closest(sel)) { dot.classList.add('hovering'); ring.classList.add('hovering'); }
-    }, { passive: true });
-    document.addEventListener('mouseout', e => {
-      if (e.target.closest(sel)) { dot.classList.remove('hovering'); ring.classList.remove('hovering'); }
-    }, { passive: true });
-    document.addEventListener('mousedown', () => { dot.classList.add('clicking'); ring.classList.add('clicking'); });
-    document.addEventListener('mouseup',   () => { dot.classList.remove('clicking'); ring.classList.remove('clicking'); });
-    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
-    document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
-  })();
+
 
 
   // ══ HERO STARFIELD DEPTH ══
