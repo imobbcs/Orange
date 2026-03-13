@@ -2131,7 +2131,7 @@
       <div class="whatif-evidence" id="whatif-evidence">
         <div class="whatif-chart-area">
           <p class="whatif-chart-label" data-i18n="whatifChartLabel">Portfolio value over time</p>
-          <div class="whatif-canvas-wrap"><canvas id="whatifChart"></canvas></div>
+          <div class="whatif-canvas-wrap"></div>
         </div>
         <div class="whatif-bar-area">
           <div class="whatif-bar-item">
@@ -3142,114 +3142,75 @@
   }
 
   function drawWhatIfChart(labels, values, invested, sym) {
-    const canvas = document.getElementById('whatifChart');
-    if (!canvas) return;
+    const wrap = document.querySelector('.whatif-canvas-wrap');
+    if (!wrap) return;
 
-    // Use getBoundingClientRect for sub-pixel accurate dimensions
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const W = Math.floor(rect.width);
-    const H = Math.floor(rect.height) || 200;
-    if (!W || !H) {
-      requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym));
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width  = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.scale(dpr, dpr);
+    const W = Math.floor(wrap.getBoundingClientRect().width);
+    const H = 200;
+    if (!W) { requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym)); return; }
 
     const isMobile = W < 500;
-    const pad = { top: 20, right: 16, bottom: 32, left: isMobile ? 52 : 72 };
+    const pad = { top: 16, right: 12, bottom: 28, left: isMobile ? 48 : 64 };
     const cw = W - pad.left - pad.right;
     const ch = H - pad.top - pad.bottom;
-    const baseY = pad.top + ch; // bottom of chart area in CSS coords
 
     const maxVal = Math.max(...values);
     const toX = i => pad.left + (i / (labels.length - 1)) * cw;
     const toY = v => pad.top + ch - (v / maxVal) * ch;
+    const baseY = pad.top + ch;
 
-    ctx.clearRect(0, 0, W, H);
+    // Build area path for values
+    const valuePts = values.map((v, i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ');
+    const valueArea = `M ${toX(0).toFixed(1)},${toY(values[0]).toFixed(1)} L ${valuePts} L ${toX(values.length-1).toFixed(1)},${baseY} L ${toX(0).toFixed(1)},${baseY} Z`;
 
-    // Grid lines + Y labels
+    const investedPts = invested.map((v, i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ');
+    const investedArea = `M ${toX(0).toFixed(1)},${toY(invested[0]).toFixed(1)} L ${investedPts} L ${toX(invested.length-1).toFixed(1)},${baseY} L ${toX(0).toFixed(1)},${baseY} Z`;
+    const investedLine = `M ${invested.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ')}`;
+    const valueLine   = `M ${values.map((v,i)    => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ')}`;
+
+    // Y-axis ticks
     const ticks = 4;
-    const fontSize = isMobile ? 9 : 10;
-    ctx.font = `${fontSize}px "DM Mono", monospace`;
+    let gridLines = '', yLabels = '';
     for (let i = 0; i <= ticks; i++) {
       const v = (i / ticks) * maxVal;
-      const y = toY(v);
-      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-      const label = maxVal >= 100000
-        ? sym + Math.round(v / 1000) + 'k'
-        : sym + Math.round(v).toLocaleString();
-      ctx.fillStyle = 'rgba(107,101,96,0.7)';
-      ctx.textAlign = 'right';
-      ctx.fillText(label, pad.left - 4, y + 4);
+      const y = toY(v).toFixed(1);
+      const lbl = maxVal >= 100000 ? sym + Math.round(v/1000) + 'k' : sym + Math.round(v).toLocaleString();
+      gridLines += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
+      yLabels   += `<text x="${pad.left - 4}" y="${y}" dy="0.35em" text-anchor="end" fill="rgba(107,101,96,0.7)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${lbl}</text>`;
     }
 
-    // Invested area
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(invested[0]));
-    invested.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.lineTo(toX(invested.length - 1), baseY);
-    ctx.lineTo(toX(0), baseY);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(240,237,232,0.05)';
-    ctx.fill();
-
-    // Value area gradient
-    const grad = ctx.createLinearGradient(0, pad.top, 0, baseY);
-    grad.addColorStop(0, 'rgba(247,147,26,0.35)');
-    grad.addColorStop(1, 'rgba(247,147,26,0.02)');
-    ctx.beginPath();
-    ctx.moveTo(toX(0), toY(values[0]));
-    values.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
-    ctx.lineTo(toX(values.length - 1), baseY);
-    ctx.lineTo(toX(0), baseY);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Invested dashed line
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(240,237,232,0.3)';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([4, 4]);
-    invested.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Value line
-    ctx.beginPath();
-    ctx.strokeStyle = '#F7931A';
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    values.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
-    ctx.stroke();
-
-    // X-axis year labels — reduce density on mobile to avoid overlap
-    ctx.fillStyle = 'rgba(107,101,96,0.8)';
-    ctx.textAlign = 'center';
-    ctx.font = `${fontSize}px "DM Mono", monospace`;
-    // Calculate how many labels fit without overlapping (~30px per label minimum)
-    const minSpacing = isMobile ? 40 : 32;
-    const totalSpan = toX(labels.length - 1) - toX(0);
-    const step = Math.max(1, Math.ceil((labels.length * minSpacing) / totalSpan));
+    // X-axis labels — only as many as fit
+    const minSpacing = isMobile ? 42 : 34;
+    const step = Math.max(1, Math.ceil((labels.length * minSpacing) / cw));
+    let xLabels = '';
     labels.forEach((yr, i) => {
-      if (i % step === 0 || i === labels.length - 1) {
-        // Don't draw last label if it would overlap the second-to-last drawn one
-        if (i === labels.length - 1) {
-          const prevDrawn = labels.length - 1 - ((labels.length - 1) % step);
-          if (toX(i) - toX(prevDrawn) < minSpacing && prevDrawn !== i) return;
-        }
-        ctx.fillText(yr, toX(i), H - 8);
+      if (i % step !== 0 && i !== labels.length - 1) return;
+      if (i === labels.length - 1) {
+        const prev = labels.length - 1 - ((labels.length - 1) % step);
+        if (toX(i) - toX(prev) < minSpacing && prev !== i) return;
       }
+      xLabels += `<text x="${toX(i).toFixed(1)}" y="${baseY + 14}" text-anchor="middle" fill="rgba(107,101,96,0.8)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${yr}</text>`;
     });
+
+    const gradId = 'wg' + Date.now();
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" style="display:block;overflow:visible;">
+      <defs>
+        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(247,147,26,0.35)"/>
+          <stop offset="100%" stop-color="rgba(247,147,26,0.02)"/>
+        </linearGradient>
+      </defs>
+      ${gridLines}
+      <path d="${investedArea}" fill="rgba(240,237,232,0.05)"/>
+      <path d="${valueArea}" fill="url(#${gradId})"/>
+      <path d="${investedLine}" fill="none" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <path d="${valueLine}" fill="none" stroke="#F7931A" stroke-width="2.5" stroke-linejoin="round"/>
+      ${yLabels}
+      ${xLabels}
+    </svg>`;
+
+    // Replace canvas with SVG
+    wrap.innerHTML = svg;
   }
 
 
@@ -4017,9 +3978,11 @@
   })();
 
   // Redraw whatif chart on resize
+  let _whatifResizeTimer;
   window.addEventListener('resize', () => {
     if (window._lastWhatifArgs) {
-      drawWhatIfChart(...window._lastWhatifArgs);
+      clearTimeout(_whatifResizeTimer);
+      _whatifResizeTimer = setTimeout(() => drawWhatIfChart(...window._lastWhatifArgs), 150);
     }
   }, { passive: true });
 
