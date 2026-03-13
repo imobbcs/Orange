@@ -125,12 +125,14 @@
     }
     .nav-logo {
       font-family: var(--mono); font-size: 0.65rem; font-weight: 400;
-      letter-spacing: 0.22em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--white); text-decoration: none; opacity: 0.7;
       transition: opacity 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5em;
     }
     .nav-logo:hover { opacity: 1; }
-    .nav-logo span { color: var(--orange); margin-left: 0.22em; }
+    .nav-logo .nav-btc { color: var(--orange); }
+    .nav-logo .nav-word { display: inline-block; }
     .nav-right { display: flex; align-items: center; gap: 2.5rem; }
     .nav-lang { display: flex; gap: 1.5rem; }
     .lang-btn {
@@ -271,6 +273,9 @@
       line-height: 0.88;
       color: var(--white);
       letter-spacing: -0.01em;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
       /* The "carved in stone" effect */
       text-shadow:
         0 1px 0 rgba(247,147,26,0.3),
@@ -283,8 +288,10 @@
     .hero-price-currency {
       font-family: var(--mono); font-size: 0.14em;
       letter-spacing: 0.05em; font-weight: 400;
-      color: rgba(237,232,222,0.6); vertical-align: super;
+      color: rgba(237,232,222,0.6);
       margin-right: 0.06em;
+      margin-top: 0.25em;
+      flex-shrink: 0;
     }
     .hero-price-change {
       font-family: var(--mono); font-size: 0.72rem;
@@ -1091,7 +1098,7 @@
       /* Offset anchor scroll for sticky nav on mobile */
       .section, .relai-section, .chart-section { scroll-margin-top: 72px; }
       /* ── TAP TARGETS ── */
-      .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; letter-spacing: 0.1em; word-spacing: -0.15em; }
+      .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; }
       .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
       .footer-back-top { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 0.5rem; }
       .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
@@ -1121,7 +1128,6 @@
         width: 100%;
       }
       .hero-price-block { text-align: center; width: 100%; }
-      .hero-price { text-align: center; display: block; }
       .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
       /* Sigil: upper atmosphere, slightly dimmer but still visible */
       .sigil-wrap {
@@ -1717,7 +1723,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">When to Buy <span>BTC</span><span class="nav-signal-dot" id="nav-signal-dot"></span></a>
+  <a href="#" class="nav-logo"><span class="nav-word">When</span><span class="nav-word">to</span><span class="nav-word">Buy</span><span class="nav-word nav-btc">BTC</span><span class="nav-signal-dot" id="nav-signal-dot"></span></a>
   <div class="nav-right">
     <div class="nav-lang">
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -2678,7 +2684,7 @@
   // ── 200-DAY MA (from history) ──
   async function fetch200MA() {
     try {
-      const res = await fetch('/api/history?timeframe=1y');
+      const res = await fetch('/api/history?timeframe=1y&currency=' + (currentCurrency || 'EUR').toLowerCase());
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       const prices = data.prices.map(p => p[1]);
@@ -2800,8 +2806,9 @@
     if (triggerEl) triggerEl.classList.add('active');
     const timeframeMap = { '30': '1m', '90': '3m', '365': '1y' };
     const timeframe = timeframeMap[days] || '1m';
+    const currency = (currentCurrency || 'EUR').toLowerCase();
     try {
-      const res = await fetch(`/api/history?timeframe=${timeframe}`);
+      const res = await fetch(`/api/history?timeframe=${timeframe}&currency=${currency}`);
       const data = await res.json();
       _chartPrices = data.prices || [];   // store raw; stitch applied in drawChart
       _chartDays   = parseInt(days);
