@@ -593,6 +593,19 @@
       border: 1px solid var(--border2);
       padding: 5rem; position: relative; overflow: hidden;
     }
+    #expert-field {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    #expert-field.active { opacity: 0.65; }
+    .expert-quote-mark,
+    .expert-signal-tag,
+    .expert-text,
+    .expert-meta { position: relative; z-index: 1; }
     .expert-quote-mark {
       font-family: var(--display); font-size: clamp(10rem, 22vw, 20rem); line-height: 0.7;
       color: var(--orange); opacity: 0.055;
@@ -1434,6 +1447,7 @@
     }
     .reveal-wipe.visible {
       clip-path: inset(0 0% 0 0);
+      opacity: 1;
     }
 
 
@@ -1459,17 +1473,17 @@
     .habit-list {
       width: 100%;
       border: 1px solid var(--border2);
-      margin-top: 3rem;
+      margin-top: 2rem;
       margin-bottom: 0;
     }
     .habit-row {
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 1.15rem 2rem;
+      padding: 0.7rem 2rem;
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(247,147,26,0.08);
+      border-bottom: 1px solid rgba(247,147,26,0.07);
       cursor: pointer;
       text-align: left;
       transition: background 0.2s ease, border-left-color 0.2s ease;
@@ -1498,18 +1512,23 @@
       font-family: var(--display);
       font-style: italic;
       font-weight: 300;
-      font-size: 1.15rem;
-      color: var(--white);
+      font-size: 1rem;
+      color: var(--muted);
       flex: 1;
     }
+    .habit-row.active .habit-row-name,
+    .habit-row:hover .habit-row-name { color: var(--white); }
     .habit-row.active .habit-row-name { color: var(--white); }
     .habit-row-amount {
       font-family: var(--title);
-      font-size: 1.6rem;
+      font-size: 1.35rem;
       color: var(--orange);
       letter-spacing: 0.01em;
       flex-shrink: 0;
+      opacity: 0.7;
     }
+    .habit-row.active .habit-row-amount,
+    .habit-row:hover .habit-row-amount { opacity: 1; }
     .habit-row-mo {
       font-family: var(--mono);
       font-size: 0.48rem;
@@ -1587,6 +1606,21 @@
     }
     .whatif-evidence.visible { opacity: 1; }
 
+
+    /* ══ HERO DEPTH LAYERS ══ */
+    .hero-depth {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hero-depth-far  { z-index: 0; opacity: 0.5; }
+    .hero-depth-mid  { z-index: 1; opacity: 0.7; }
+    .hero-depth-near { z-index: 2; }
+    .hero-ambient    { z-index: 3; }
+    .sigil-wrap      { z-index: 5; }
+    .hero-content    { z-index: 10; }
+
 </style>
 </head>
 <body>
@@ -1609,6 +1643,9 @@
 <!-- HERO — THE ORACLE -->
 <section class="hero" id="top">
 
+  <!-- Depth layers — parallax starfield -->
+  <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
+  <canvas class="hero-depth hero-depth-mid"  id="hero-depth-mid"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
@@ -1869,7 +1906,7 @@
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">What Bitcoiners Do</p>
     <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
     <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;position:relative;overflow:hidden;">
-      <canvas id="expert-field" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.7;"></canvas>
+      <canvas id="expert-field" aria-hidden="true"></canvas>
       <div class="expert-quote-mark" aria-hidden="true">"</div>
       <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
       <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory — as it is now — Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
@@ -3183,6 +3220,12 @@
         const heroH = heroEl.offsetHeight;
         const p = Math.min(sy / heroH, 1); // 0 → 1 as hero scrolls off
 
+        // Depth layers: far barely moves, mid drifts gently
+        const farLayer = document.getElementById('hero-depth-far');
+        const midLayer = document.getElementById('hero-depth-mid');
+        if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
+        if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
+
         // Sigil: shrinks, fades, moves up faster than scroll
         const sigilWrap = heroEl.querySelector('.sigil-wrap');
         if (sigilWrap) {
@@ -3465,6 +3508,44 @@
     document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
   })();
 
+
+  // ══ HERO STARFIELD DEPTH ══
+  (function() {
+    function makeStars(canvasId, count, minR, maxR, colour) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+
+      function seed() {
+        const W = window.innerWidth, H = window.innerHeight * 1.3;
+        canvas.width = W; canvas.height = H;
+        stars = [];
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: minR + Math.random() * (maxR - minR),
+            a: 0.15 + Math.random() * 0.55,
+          });
+        }
+        ctx.clearRect(0, 0, W, H);
+        stars.forEach(s => {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = colour.replace('A', s.a.toFixed(2));
+          ctx.fill();
+        });
+      }
+
+      seed();
+      window.addEventListener('resize', seed, { passive: true });
+    }
+
+    makeStars('hero-depth-far', 120, 0.4, 1.0, 'rgba(237,232,222,A)');
+    makeStars('hero-depth-mid',  55, 0.8, 1.6, 'rgba(247,147,26,A)');
+  })();
+
   // ══ SIGIL MOUSE TILT ══
   (function() {
     const wrap = document.querySelector('.sigil-wrap');
@@ -3647,15 +3728,17 @@
     };
 
     // Init
+    const card = canvas.closest('.expert-card') || canvas.parentElement;
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
         resize();
         initParticles(signalState);
         draw();
+        requestAnimationFrame(() => canvas.classList.add('active'));
         observer.disconnect();
       }
     }, { threshold: 0.1 });
-    observer.observe(canvas);
+    observer.observe(card);
 
     window.addEventListener('resize', () => {
       resize();
