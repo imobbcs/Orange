@@ -34,8 +34,8 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Main page — never serve a cached version
-        source: '/',
+        // ← NEW: prevents /app.html from being cached by browsers/proxies
+        source: '/app.html',
         headers: [
           {
             key: 'Cache-Control',
