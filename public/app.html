@@ -3130,10 +3130,12 @@
     const canvas = document.getElementById('whatifChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
     const pad = { top: 20, right: 16, bottom: 28, left: 72 };
     const w = W - pad.left - pad.right;
     const h = H - pad.top - pad.bottom;
@@ -3650,6 +3652,28 @@
             col: Math.random() > 0.5 ? '247,147,26' : '100,80,150',
           });
         }
+
+        // Layer 4: energy particles — drift outward from centre like the sigil radiates
+        stars._particles = [];
+        const cx = W / 2, cy = H / 2;
+        for (let i = 0; i < 38; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist  = 40 + Math.random() * Math.min(W, H) * 0.42;
+          const speed = 0.08 + Math.random() * 0.18;
+          stars._particles.push({
+            x: cx + Math.cos(angle) * dist,
+            y: cy + Math.sin(angle) * dist,
+            r: 0.8 + Math.random() * 1.4,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            baseA: 0.12 + Math.random() * 0.32,
+            a: 0,
+            twinkleSpeed: 0.008 + Math.random() * 0.016,
+            twinkleOffset: Math.random() * Math.PI * 2,
+            angle, dist,
+            maxDist: Math.min(W, H) * (0.52 + Math.random() * 0.2),
+          });
+        }
       }
 
       let t = 0;
@@ -3687,6 +3711,50 @@
           ctx.fillStyle = `rgba(${s.col},${s.a.toFixed(3)})`;
           ctx.fill();
         });
+
+        // Draw energy particles — drift outward, fade near edge, respawn at centre
+        const cx = W / 2, cy = H / 2;
+        if (stars._particles) {
+          stars._particles.forEach(p => {
+            p.dist += p.vx * Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.6 + 0.06;
+            p.x = cx + Math.cos(p.angle) * p.dist;
+            p.y = cy + Math.sin(p.angle) * p.dist;
+
+            // Fade in near centre, fade out near edge
+            const progress = p.dist / p.maxDist;
+            const fade = progress < 0.15
+              ? progress / 0.15
+              : progress > 0.75
+                ? 1 - (progress - 0.75) / 0.25
+                : 1;
+
+            p.a = p.baseA * fade * (0.6 + 0.4 * Math.sin(t * p.twinkleSpeed + p.twinkleOffset));
+
+            // Respawn when it drifts too far
+            if (p.dist >= p.maxDist) {
+              p.dist = 30 + Math.random() * 60;
+              p.angle = Math.random() * Math.PI * 2;
+              p.maxDist = Math.min(W, H) * (0.52 + Math.random() * 0.2);
+            }
+
+            if (p.a > 0.01) {
+              // Soft glow
+              const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+              glow.addColorStop(0, `rgba(247,147,26,${(p.a * 0.5).toFixed(3)})`);
+              glow.addColorStop(1, `rgba(247,147,26,0)`);
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+              ctx.fillStyle = glow;
+              ctx.fill();
+
+              // Core dot
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(247,147,26,${p.a.toFixed(3)})`;
+              ctx.fill();
+            }
+          });
+        }
 
         raf = requestAnimationFrame(draw);
       }
