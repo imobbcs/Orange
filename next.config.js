@@ -34,6 +34,16 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Main page — never serve a cached version
+        source: '/',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate',
+          },
+        ],
+      },
+      {
         source: '/api/:path*',
         headers: [
           {
