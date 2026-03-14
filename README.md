@@ -1,59 +1,86 @@
-# Satoshi Assistant - Bitcoin Price Tracker
+# When to Buy BTC
 
-A cutting-edge Bitcoin educational and price tracking web application that delivers real-time financial insights through an immersive, multilingual user experience focused on beginner-friendly cryptocurrency education.
+A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 200-day moving average, and ATH distance into one clear signal. No noise. No trading advice.
 
-## Features
+🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz)
 
-- **Real-time Bitcoin Price Tracking** - Live USD/EUR prices with 30-second updates
-- **Interactive Price Charts** - Historical data visualization with smooth animations
-- **Market Insights** - 24 different contextual messages based on market conditions
-- **Educational Content** - Rotating Bitcoin tips throughout the day
-- **Multi-language Support** - English, German, Italian, and French
-- **Responsive Design** - Optimized for mobile and desktop users
-- **Triple API Redundancy** - CoinGecko → CoinMarketCap → CryptoCompare fallback
+---
 
-## Tech Stack
+## What it does
 
-- **Framework**: Next.js 15 with TypeScript
-- **Styling**: Tailwind CSS with custom animations
-- **Data Fetching**: SWR with automatic revalidation
-- **Internationalization**: next-i18next
-- **Charts**: Recharts library
-- **APIs**: CoinGecko, CoinMarketCap, CryptoCompare
+- **Live Bitcoin signal** — Accumulate / Hold / Caution, updated in real time
+- **Three indicators** — Fear & Greed Index, 200-day moving average, distance from ATH
+- **Live price** — EUR/USD with automatic currency detection by location
+- **Price chart** — 1M / 3M / 1Y historical chart with 200-day MA overlay
+- **"What if?" calculator** — Shows what daily habits (coffee, cigarettes, etc.) would be worth if invested in Bitcoin monthly since 2015
+- **Push notifications** — Opt-in alerts when the signal changes
+- **Relai integration** — Direct link to buy Bitcoin via Relai with referral code
+- **EN / DE** — English and German language support
+- **Cinematic design** — Dark, atmospheric UI with animated celestial sigil, particle field, and grain
 
-## Deployment
+---
 
-### Railway Deployment
+## Tech stack
 
-1. **Create Railway Project**
-   - Connect your GitHub repository
-   - Railway will automatically detect the Next.js app
+- **Framework** — Next.js with TypeScript
+- **Frontend** — Single-page `app.html` served via Next.js rewrite
+- **Fonts** — Bebas Neue, Cormorant Garamond, DM Mono (Google Fonts)
+- **Charts** — Hand-built SVG (habits chart) and Canvas (price chart), no charting library
+- **Internationalization** — next-i18next (EN / DE)
+- **Push notifications** — OneSignal
+- **APIs** — CoinGecko (primary), CryptoCompare (fallback)
 
-2. **Environment Variables**
-   ```
-   NODE_ENV=production
-   ```
+---
 
-3. **Automatic Deployment**
-   - Every push to main branch triggers new deployment
-   - Built-in SSL certificates and global CDN
+## API endpoints
 
-### Local Development
+| Endpoint | Description |
+|---|---|
+| `/api/price` | Live BTC price in EUR and USD |
+| `/api/fear-greed` | Fear & Greed Index |
+| `/api/ath` | All-time high price |
+| `/api/history` | Historical price data (1m / 3m / 1y) |
+| `/api/btc-history-monthly` | Monthly BTC prices since 2015 for the What If calculator |
+
+---
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:3000](http://localhost:3000).
 
-## API Rate Limits
+---
 
-The app uses free APIs with built-in fallback logic:
-- CoinGecko (primary) - 30 calls/minute
-- CoinMarketCap (fallback) - 333 calls/month  
-- CryptoCompare (fallback) - 250,000 calls/month
+## Deployment
 
-## License
+Deployed on [Railway](https://railway.app) via GitHub. Every push to `main` triggers a new deployment automatically.
 
-MIT License
+```bash
+# Environment variables required
+CRYPTOCOMPARE_API_KEY=your_key_here
+```
+
+---
+
+## Project structure
+
+```
+/pages
+  index.tsx          # Redirects to /app.html
+  /api               # All API route handlers
+/public
+  app.html           # Main frontend (single page)
+  social-image.png   # OG image
+  sitemap.xml
+  robots.txt
+next.config.js
+next-i18next.config.js
+```
+
+---
+
+Built by [Imo Babics](https://imobabics.com) · Not financial advice
