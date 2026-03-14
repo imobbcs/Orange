@@ -1102,8 +1102,10 @@
       .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
       .footer-back-top { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 0.5rem; }
       .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
-      .footer-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.75rem; }
-      footer a { min-height: 44px; display: inline-flex; align-items: center; }
+      footer { padding: 1.5rem 1.5rem; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+      .footer-copy { font-size: 0.5rem; line-height: 1.8; }
+      .footer-links { justify-content: flex-end; }
+      .footer-links a { min-height: unset; padding: 0; }
       nav.scrolled { padding: 0.8rem 1.5rem; }
       .nav-right { gap: 0.75rem; }
       .nav-cta { display: none; }
@@ -3150,7 +3152,7 @@
     if (!W) { requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym)); return; }
 
     const isMobile = W < 500;
-    const pad = { top: 16, right: 12, bottom: 28, left: isMobile ? 48 : 64 };
+    const pad = { top: 16, right: isMobile ? 12 : 16, bottom: 28, left: isMobile ? 48 : 64 };
     const cw = W - pad.left - pad.right;
     const ch = H - pad.top - pad.bottom;
 
@@ -3205,6 +3207,8 @@
       <path d="${valueArea}" fill="url(#${gradId})"/>
       <line x1="${toX(0).toFixed(1)}" y1="${baseY}" x2="${toX(invested.length-1).toFixed(1)}" y2="${toY(invested[invested.length-1]).toFixed(1)}" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
       <path d="${valueLine}" fill="none" stroke="#F7931A" stroke-width="2.5" stroke-linejoin="round"/>
+      <text x="${(toX(values.length-1) - 4).toFixed(1)}" y="${(toY(values[values.length-1]) - 8).toFixed(1)}" text-anchor="end" fill="#F7931A" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}" font-weight="500">${maxVal >= 100000 ? sym + Math.round(values[values.length-1]/1000) + 'k' : sym + values[values.length-1].toLocaleString()}</text>
+      <text x="${(toX(invested.length-1) - 4).toFixed(1)}" y="${Math.min(toY(invested[invested.length-1]) - 8, baseY - 16).toFixed(1)}" text-anchor="end" fill="rgba(237,232,222,0.55)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${maxVal >= 100000 ? sym + Math.round(invested[invested.length-1]/1000) + 'k invested' : sym + invested[invested.length-1].toLocaleString() + ' invested'}</text>
       ${yLabels}
       ${xLabels}
     </svg>`;
