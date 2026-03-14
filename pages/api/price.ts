@@ -63,11 +63,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  // 3. CryptoCompare fallback
+  // 3. CryptoCompare fallback — use pricemultifull to get 24h change
   if (process.env.CRYPTOCOMPARE_API_KEY) {
     try {
       const r = await fetch(
-        'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,EUR',
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC&tsyms=USD,EUR',
         {
           headers: { authorization: `Apikey ${process.env.CRYPTOCOMPARE_API_KEY}` },
           signal: AbortSignal.timeout(8000),
@@ -75,7 +75,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
       if (!r.ok) throw new Error(`CryptoCompare HTTP ${r.status}`);
       const data = await r.json();
-      cache = { usd: data.USD, eur: data.EUR, usd_24h_change: 0, eur_24h_change: 0 };
+      const btc = data.RAW?.BTC;
+      cache = {
+        usd: btc?.USD?.PRICE,
+        eur: btc?.EUR?.PRICE,
+        usd_24h_change: btc?.USD?.CHANGEPCT24HOUR ?? 0,
+        eur_24h_change: btc?.EUR?.CHANGEPCT24HOUR ?? 0,
+      };
       cacheTime = Date.now();
       return res.status(200).json(cache);
     } catch (err: any) {
