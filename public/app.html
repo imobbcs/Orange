@@ -3203,7 +3203,7 @@
       ${gridLines}
       <path d="${investedArea}" fill="rgba(240,237,232,0.05)"/>
       <path d="${valueArea}" fill="url(#${gradId})"/>
-      <path d="${investedLine}" fill="none" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <line x1="${toX(0).toFixed(1)}" y1="${baseY}" x2="${toX(invested.length-1).toFixed(1)}" y2="${toY(invested[invested.length-1]).toFixed(1)}" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
       <path d="${valueLine}" fill="none" stroke="#F7931A" stroke-width="2.5" stroke-linejoin="round"/>
       ${yLabels}
       ${xLabels}
