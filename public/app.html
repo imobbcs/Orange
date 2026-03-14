@@ -387,31 +387,6 @@
       margin-top: 0.75rem; text-align: center;
     }
 
-    /* Live status + visitor count */
-    .hero-status {
-      display: flex; align-items: center; justify-content: center;
-      gap: 1.5rem; margin-top: 1rem;
-      font-family: var(--mono); font-size: 0.52rem;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--grey);
-      opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.4s forwards;
-    }
-    .hero-status-live {
-      display: flex; align-items: center; gap: 0.5em;
-      color: var(--green); opacity: 0.7;
-    }
-    .hero-status-live::before {
-      content: '';
-      display: inline-block; width: 5px; height: 5px;
-      border-radius: 50%; background: var(--green);
-      box-shadow: 0 0 6px var(--green);
-      animation: verdictPulse 2.5s ease infinite;
-    }
-    .hero-status-divider {
-      color: var(--grey); opacity: 0.3;
-    }
-    .hero-status-visitors { color: var(--grey); }
-
     .signal-reason {
       font-family: var(--display); font-size: 1.3rem;
       font-style: italic; font-weight: 300;
@@ -1932,10 +1907,6 @@
 
     <p class="signal-updated" id="signal-updated" style="margin-top:1.5rem;"></p>
 
-    <div class="hero-status">
-      <span class="hero-status-visitors" id="visitor-count"></span>
-    </div>
-
   </div>
 
   <div class="scroll-indicator">
@@ -2318,7 +2289,6 @@
       signalCaution: 'Many Bitcoiners are being cautious',
       signalUpdatedPrefix: 'Updated at',
       statusLive: 'Receiving signal',
-      visitorsToday: (n) => `${n.toLocaleString()} checked today`,
       // Signal breakdown
       signalBreakdownLabel: 'Signal Breakdown',
       signalBreakdownTitle: 'Three signals.<br>One clear picture.',
@@ -2445,7 +2415,6 @@
       signalCaution: 'Viele Bitcoiner sind gerade vorsichtig',
       signalUpdatedPrefix: 'Aktualisiert um',
       statusLive: 'Signal empfangen',
-      visitorsToday: (n) => `${n.toLocaleString()} heute geprüft`,
       // Signal breakdown
       signalBreakdownLabel: 'Signal im Detail',
       signalBreakdownTitle: 'Drei Signale.<br>Ein klares Bild.',
@@ -3555,44 +3524,6 @@
   })();
 
   // Update instrument footer when signal is computed
-
-  // ── VISITOR COUNT ──
-  (function() {
-    const el = document.getElementById('visitor-count');
-    if (!el) return;
-
-    const today = new Date().toISOString().slice(0, 10);
-    const key = 'wtb_visits';
-
-    try {
-      let data = JSON.parse(localStorage.getItem(key) || '{}');
-      // Reset daily count each day
-      if (data.date !== today) {
-        data = { date: today, count: 0 };
-      }
-      data.count++;
-      localStorage.setItem(key, JSON.stringify(data));
-    } catch(e) {}
-
-    // Fetch actual count from API, fall back to a seeded estimate
-    fetch('/api/counter', { method: 'POST' })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        const count = d?.today || d?.count;
-        if (count && count > 0) {
-          el.textContent = `${Number(count).toLocaleString()} checked today`;
-        } else {
-          // Seeded fallback — feels real, changes each day
-          const seed = parseInt(today.replace(/-/g, '')) % 1000;
-          const base = 800 + seed;
-          el.textContent = `${base.toLocaleString()} checked today`;
-        }
-      })
-      .catch(() => {
-        const seed = parseInt(today.replace(/-/g, '')) % 1000;
-        el.textContent = `${(800 + seed).toLocaleString()} checked today`;
-      });
-  })();
 
 
 
