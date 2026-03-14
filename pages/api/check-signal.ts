@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { neon } from '@neondatabase/serverless';
+import { Pool } from 'pg';
 
-const sql = neon(process.env.DATABASE_URL!);
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 const ONESIGNAL_APP_ID = '528df914-2cb6-4e5b-af01-3c849ce8e393';
 const ONESIGNAL_API_KEY = process.env.ONESIGNAL_API_KEY!;
@@ -11,13 +11,13 @@ const MOVE_THRESHOLD = 0.05;
 const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
 async function ensureTables() {
-  await sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS btc_price_history (
       recorded_at TIMESTAMPTZ PRIMARY KEY DEFAULT NOW(),
       price_eur NUMERIC NOT NULL
     )
-  `;
-  await sql`
+  `);
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS alert_log (
       id SERIAL PRIMARY KEY,
       fired_at TIMESTAMPTZ DEFAULT NOW(),
@@ -26,7 +26,7 @@ async function ensureTables() {
       move_pct NUMERIC NOT NULL,
       direction TEXT NOT NULL
     )
-  `;
+  `);
 }
 
 async function getCurrentPrice(): Promise<number> {
@@ -37,29 +37,30 @@ async function getCurrentPrice(): Promise<number> {
 }
 
 async function storePriceSnapshot(price: number) {
-  await sql`INSERT INTO btc_price_history (price_eur) VALUES (${price})`;
-  await sql`DELETE FROM btc_price_history WHERE recorded_at < NOW() - INTERVAL '7 days'`;
+  await pool.query('INSERT INTO btc_price_history (price_eur) VALUES ($1)', [price]);
+  await pool.query("DELETE FROM btc_price_history WHERE recorded_at < NOW() - INTERVAL '7 days'");
 }
 
 async function getPriceFromHoursAgo(hours: number): Promise<number | null> {
-  const rows = await sql`
-    SELECT price_eur FROM btc_price_history
-    WHERE recorded_at <= NOW() - (${hours} || ' hours')::INTERVAL
-    ORDER BY recorded_at DESC LIMIT 1
-  `;
-  return rows.length ? parseFloat(rows[0].price_eur) : null;
+  const result = await pool.query(
+    `SELECT price_eur FROM btc_price_history
+     WHERE recorded_at <= NOW() - ($1 || ' hours')::INTERVAL
+     ORDER BY recorded_at DESC LIMIT 1`,
+    [hours]
+  );
+  return result.rows.length ? parseFloat(result.rows[0].price_eur) : null;
 }
 
 async function getLastAlertTime(): Promise<Date | null> {
-  const rows = await sql`SELECT fired_at FROM alert_log ORDER BY fired_at DESC LIMIT 1`;
-  return rows.length ? new Date(rows[0].fired_at) : null;
+  const result = await pool.query('SELECT fired_at FROM alert_log ORDER BY fired_at DESC LIMIT 1');
+  return result.rows.length ? new Date(result.rows[0].fired_at) : null;
 }
 
 async function logAlert(price: number, refPrice: number, movePct: number, direction: string) {
-  await sql`
-    INSERT INTO alert_log (price_eur, reference_price_eur, move_pct, direction)
-    VALUES (${price}, ${refPrice}, ${movePct}, ${direction})
-  `;
+  await pool.query(
+    'INSERT INTO alert_log (price_eur, reference_price_eur, move_pct, direction) VALUES ($1, $2, $3, $4)',
+    [price, refPrice, movePct, direction]
+  );
 }
 
 function buildNotification(price: number, movePct: number, direction: 'up' | 'down', lang: 'en' | 'de') {
