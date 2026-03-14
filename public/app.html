@@ -2280,6 +2280,7 @@
   let currentLang = 'en';
   let currentPrice = null;
   let currentCurrency = 'EUR';
+  let eurUsdRate = 1.1693; // fallback 6-month average; updated live from price API
   let fgValue = null;
   let maPrice = null;
   let athPrice = null;
@@ -2614,6 +2615,20 @@
       currentCurrency = 'EUR';
     }
     document.getElementById('currency-symbol').textContent = currentCurrency === 'EUR' ? '€' : '$';
+    updateHabitRowAmounts();
+  }
+
+  function updateHabitRowAmounts() {
+    if (currentCurrency === 'EUR') return; // already in EUR by default
+    const sym = '$';
+    document.querySelectorAll('.habit-row').forEach(row => {
+      const key = row.getAttribute('onclick')?.match(/selectHabit\('(\w+)'/)?.[1];
+      if (!key || !HABITS[key]) return;
+      const amountEl = row.querySelector('.habit-row-amount');
+      if (!amountEl) return;
+      const converted = Math.round(HABITS[key].monthly * eurUsdRate);
+      amountEl.innerHTML = `${sym}${converted}<span class="habit-row-mo">/mo</span>`;
+    });
   }
 
   // ── PRICE FETCH ──
@@ -2624,6 +2639,11 @@
       const sym = currentCurrency === 'EUR' ? '€' : '$';
       currentPrice = currentCurrency === 'EUR' ? data.eur : data.usd;
       const change = currentCurrency === 'EUR' ? data.eur_24h_change : data.usd_24h_change;
+      // Derive live EUR/USD rate from the two prices
+      if (data.eur && data.usd) {
+        eurUsdRate = data.usd / data.eur;
+        updateHabitRowAmounts(); // refresh now that we have the live rate
+      }
       redrawChart(); // re-render chart with fresh stitch to live price
 
       const pv = document.getElementById('price-value'); pv.textContent = formatPrice(currentPrice); pv.classList.remove('loading');
@@ -3089,18 +3109,21 @@
 
     const habit = HABITS[key];
     const sym = currentCurrency === 'EUR' ? '€' : '$';
-    const livePrice = currentCurrency === 'EUR' ? currentPrice : currentPrice * 1.08;
+    const habitMonthly = currentCurrency === 'EUR' ? habit.monthly : Math.round(habit.monthly * eurUsdRate);
+    const livePrice = currentPrice;
 
     let totalInvested = 0, totalBTC = 0;
     const chartLabels = [], chartValues = [], chartInvested = [];
     let lastYear = null;
 
     for (const [monthKey, rawPrice] of Object.entries(BTC_MONTHLY_EUR)) {
-      const monthPrice = (rawPrice == null) ? livePrice : rawPrice;
+      // Convert historical EUR price to USD if needed using live rate
+      const monthPriceEur = (rawPrice == null) ? (currentCurrency === 'EUR' ? currentPrice : currentPrice / eurUsdRate) : rawPrice;
+      const monthPrice = currentCurrency === 'EUR' ? monthPriceEur : monthPriceEur * eurUsdRate;
       const [yearStr] = monthKey.split('-');
       const year = parseInt(yearStr);
-      totalInvested += habit.monthly;
-      totalBTC += habit.monthly / monthPrice;
+      totalInvested += habitMonthly;
+      totalBTC += habitMonthly / monthPrice;
       if (year !== lastYear) {
         chartLabels.push(yearStr);
         chartValues.push(Math.round(totalBTC * livePrice));
@@ -3125,7 +3148,7 @@
     if (evidence) evidence.classList.remove('visible');
 
     // Populate supporting data (hidden until number settles)
-    document.getElementById('whatif-monthly').textContent    = fmt(habit.monthly);
+    document.getElementById('whatif-monthly').textContent    = fmt(habitMonthly);
     document.getElementById('whatif-invested').textContent   = fmt(totalInvested);
     document.getElementById('whatif-invested-bar').textContent = fmt(totalInvested);
     document.getElementById('whatif-today').textContent      = fmt(finalValue);
