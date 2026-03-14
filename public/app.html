@@ -2169,8 +2169,8 @@
         </div>
         <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
         <div class="whatif-share-row">
-          <button class="share-btn primary" onclick="shareWhatIfWhatsApp()" data-i18n="shareWhatsapp">Share on WhatsApp</button>
-          <button class="share-btn" onclick="shareWhatIfTwitter()" data-i18n="shareX">Share on X</button>
+          <button class="share-btn primary" onclick="shareWhatIfWhatsApp()" data-umami-event="whatif-share-whatsapp" data-i18n="shareWhatsapp">Share on WhatsApp</button>
+          <button class="share-btn" onclick="shareWhatIfTwitter()" data-umami-event="whatif-share-x" data-i18n="shareX">Share on X</button>
         </div>
       </div><!-- /whatif-evidence -->
 
@@ -2186,7 +2186,7 @@
         <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
         <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
         <p class="push-sub reveal" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.</p>
-        <button class="btn-primary reveal" data-delay="4" id="push-btn" onclick="requestPush()" data-i18n="pushBtn">Enable Alerts</button>
+        <button class="btn-primary reveal" data-delay="4" id="push-btn" onclick="requestPush()" data-umami-event="enable-alerts" data-i18n="pushBtn">Enable Alerts</button>
         <p class="reveal" data-delay="5" style="font-family:var(--mono);font-size:0.54rem;letter-spacing:0.1em;color:var(--grey);margin-top:1.25rem;" data-i18n="pushMeta">Free · No account needed · Turn off anytime</p>
       </div>
       <div class="push-signal-preview reveal" data-delay="3">
@@ -2221,7 +2221,7 @@
       </div>
     </div>
     <div class="relai-right">
-      <a href="https://relai.me/imo" target="_blank" class="relai-btn" data-i18n="relaiBtn">Get the Relai app →</a>
+      <a href="https://relai.me/imo" target="_blank" class="relai-btn" data-umami-event="relai-click" data-i18n="relaiBtn">Get the Relai app →</a>
       <p class="relai-referral-note"><span data-i18n="relaiReferral">Use referral code</span> <strong style="color:var(--orange);letter-spacing:0.1em;">IMO</strong> <span data-i18n="relaiReferral2">for 0.9% fees</span></p>
     </div>
   </div>
@@ -2245,10 +2245,10 @@
     <span id="share-ath" style="display:none"></span>
 
     <div class="share-btns reveal" data-delay="4">
-      <button class="share-btn primary" onclick="shareWhatsApp()" data-i18n="shareWhatsapp">WhatsApp</button>
-      <button class="share-btn" onclick="shareTwitter()" data-i18n="shareX">X / Twitter</button>
-      <button class="share-btn" onclick="shareSignal()">Signal</button>
-      <button class="share-btn" onclick="shareTelegram()">Telegram</button>
+      <button class="share-btn primary" onclick="shareWhatsApp()" data-umami-event="share-whatsapp" data-i18n="shareWhatsapp">WhatsApp</button>
+      <button class="share-btn" onclick="shareTwitter()" data-umami-event="share-x" data-i18n="shareX">X / Twitter</button>
+      <button class="share-btn" onclick="shareSignal()" data-umami-event="share-signal">Signal</button>
+      <button class="share-btn" onclick="shareTelegram()" data-umami-event="share-telegram">Telegram</button>
       <button class="share-btn" onclick="copyLink()" data-i18n="shareCopy">Copy Link</button>
     </div>
   </div>
