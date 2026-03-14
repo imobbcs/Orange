@@ -1,7 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { neon } from '@neondatabase/serverless';
-
-const sql = neon(process.env.DATABASE_URL!);
 
 const FALLBACK: Record<string, number> = {
   '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
@@ -24,9 +21,7 @@ const FALLBACK: Record<string, number> = {
   '2023-07':25500,'2023-08':24000,'2023-09':23500,'2023-10':24000,'2023-11':30000,'2023-12':37000,
   '2024-01':37000,'2024-02':43000,'2024-03':56000,'2024-04':54000,'2024-05':55000,'2024-06':55000,
   '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
-  '2025-01':85000,'2025-02':77000,'2025-03':75000,'2025-04':74000,'2025-05':82000,'2025-06':84000,
-  '2025-07':88000,'2025-08':91000,'2025-09':86000,'2025-10':82000,'2025-11':78000,'2025-12':81000,
-  '2026-01':82000,'2026-02':72000,'2026-03':61000,
+  '2025-01':85000,'2025-02':77000,'2025-03':75000,
 };
 
 function toYYYYMM(ts: number): string {
@@ -34,39 +29,9 @@ function toYYYYMM(ts: number): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
 }
 
-function currentYYYYMM(): string {
-  return toYYYYMM(Date.now());
-}
-
-async function ensureTable() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS btc_monthly_prices (
-      month CHAR(7) PRIMARY KEY,
-      price_eur INTEGER NOT NULL,
-      updated_at TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-}
-
-async function readFromDB(): Promise<Record<string, number>> {
-  const rows = await sql`SELECT month, price_eur FROM btc_monthly_prices ORDER BY month`;
-  const result: Record<string, number> = {};
-  for (const row of rows) result[row.month] = row.price_eur;
-  return result;
-}
-
-async function seedFromFallback() {
-  for (const [month, price] of Object.entries(FALLBACK)) {
-    await sql`
-      INSERT INTO btc_monthly_prices (month, price_eur)
-      VALUES (${month}, ${price})
-      ON CONFLICT (month) DO NOTHING
-    `;
-  }
-}
-
-async function fetchLatestMonthsFromCoinGecko(): Promise<Record<string, number>> {
-  const url = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=90&interval=daily';
+async function fetchFromCoinGecko(): Promise<Record<string, number>> {
+  // Fetch last 365 days of daily data and average by month
+  const url = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily';
   const res = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'whentobuybtc.xyz/1.0' },
     signal: AbortSignal.timeout(10000),
@@ -88,45 +53,30 @@ async function fetchLatestMonthsFromCoinGecko(): Promise<Record<string, number>>
   return monthly;
 }
 
-async function needsUpdate(dbData: Record<string, number>): Promise<boolean> {
-  const keys = Object.keys(dbData).sort();
-  if (keys.length === 0) return true;
-  return keys[keys.length - 1] < currentYYYYMM();
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, max-age=21600, stale-while-revalidate=3600');
+  // Cache for 6 hours — monthly averages don't need to be fresher than that
+  res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=3600');
+
+  // Start with the fallback data (2015 → early 2025)
+  const monthly: Record<string, number> = { ...FALLBACK };
 
   try {
-    await ensureTable();
-    let dbData = await readFromDB();
+    // Fetch the last 12 months from CoinGecko and merge/overwrite
+    const recent = await fetchFromCoinGecko();
+    Object.assign(monthly, recent);
 
-    if (Object.keys(dbData).length === 0) {
-      await seedFromFallback();
-      dbData = await readFromDB();
-    }
-
-    if (await needsUpdate(dbData)) {
-      try {
-        const latest = await fetchLatestMonthsFromCoinGecko();
-        for (const [month, price] of Object.entries(latest)) {
-          await sql`
-            INSERT INTO btc_monthly_prices (month, price_eur, updated_at)
-            VALUES (${month}, ${price}, NOW())
-            ON CONFLICT (month) DO UPDATE SET price_eur = ${price}, updated_at = NOW()
-          `;
-        }
-        dbData = await readFromDB();
-      } catch (apiErr) {
-        console.error('btc-history-monthly: CoinGecko fetch failed', apiErr);
-      }
-    }
-
-    return res.status(200).json({ monthly: dbData, count: Object.keys(dbData).length });
-
-  } catch (dbErr) {
-    console.error('btc-history-monthly: DB error, using fallback', dbErr);
-    return res.status(200).json({ monthly: FALLBACK, count: Object.keys(FALLBACK).length, source: 'fallback' });
+    return res.status(200).json({
+      monthly,
+      count: Object.keys(monthly).length,
+      source: 'coingecko',
+    });
+  } catch (err) {
+    console.error('btc-history-monthly: CoinGecko fetch failed, using fallback only', err);
+    return res.status(200).json({
+      monthly,
+      count: Object.keys(monthly).length,
+      source: 'fallback',
+    });
   }
 }
