@@ -3264,13 +3264,17 @@
     const label = document.getElementById('whatif-selected-label').textContent;
     const val = document.getElementById('whatif-today').textContent;
     const invested = document.getElementById('whatif-invested').textContent;
-    const text = `${label}: if I'd put that money into Bitcoin weekly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
+    const text = currentLang === 'de'
+      ? `${label}: Hätte ich das Geld stattdessen seit 2015 wöchentlich in Bitcoin gesteckt, hätte ich heute ${val} (investiert: ${invested}). Berechne deins: whentobuybtc.xyz`
+      : `${label}: if I'd put that money into Bitcoin weekly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
   }
   function shareWhatIfTwitter() {
     const label = document.getElementById('whatif-selected-label').textContent;
     const val = document.getElementById('whatif-today').textContent;
-    const text = `${label} — if that money had gone into Bitcoin weekly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
+    const text = currentLang === 'de'
+      ? `${label} — hätte ich das Geld seit 2015 wöchentlich in Bitcoin investiert, wäre es heute ${val} wert. 👀 whentobuybtc.xyz`
+      : `${label} — if that money had gone into Bitcoin weekly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
     window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
@@ -3278,7 +3282,9 @@
   function shareWhatsApp() {
     const sig = document.getElementById('signal-text').textContent;
     const price = document.getElementById('share-price').textContent;
-    const text = `Bitcoin Signal: ${sig}\nCurrent price: ${price}\nCheck the full signal at whentobuybtc.xyz`;
+    const text = currentLang === 'de'
+      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
+      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
   }
   function copyLink() {
@@ -3291,18 +3297,25 @@
   function shareSignal() {
     const sig = document.getElementById('signal-text').textContent;
     const price = document.getElementById('share-price').textContent;
-    const text = `Bitcoin Signal: ${sig}\nCurrent price: ${price}\nCheck the full signal at whentobuybtc.xyz`;
+    const text = currentLang === 'de'
+      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
+      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
     window.open('https://signal.me/#p/?message=' + encodeURIComponent(text), '_blank');
   }
   function shareTelegram() {
     const sig = document.getElementById('signal-text').textContent;
     const price = document.getElementById('share-price').textContent;
-    const text = `Bitcoin Signal: ${sig}\nCurrent price: ${price}\nwhentobuybtc.xyz`;
+    const text = currentLang === 'de'
+      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
+      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
     window.open('https://t.me/share/url?url=https://whentobuybtc.xyz&text=' + encodeURIComponent(text), '_blank');
   }
   function shareTwitter() {
     const sig = document.getElementById('signal-text').textContent;
-    const text = `Bitcoin Signal right now: "${sig}" — see the full data at whentobuybtc.xyz`;
+    const price = document.getElementById('share-price').textContent;
+    const text = currentLang === 'de'
+      ? `Bitcoin steht gerade bei ${price} — ${sig}. 👉 whentobuybtc.xyz`
+      : `Bitcoin is at ${price} right now — ${sig}. 👉 whentobuybtc.xyz`;
     window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
