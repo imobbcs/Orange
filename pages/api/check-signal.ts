@@ -7,7 +7,7 @@ const ONESIGNAL_APP_ID = '528df914-2cb6-4e5b-af01-3c849ce8e393';
 const ONESIGNAL_API_KEY = process.env.ONESIGNAL_API_KEY!;
 const PRICE_API = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 
-const MOVE_THRESHOLD = 0.05;
+const MOVE_THRESHOLD = 0.045;
 const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
 async function ensureTables() {
