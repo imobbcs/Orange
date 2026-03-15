@@ -3484,7 +3484,7 @@
 
   // ── INIT (parallel where safe) ──
   async function init() {
-    detectCurrency();
+    await detectCurrency();
     // Price first (needed by ATH + MA calculations)
     await fetchPrice();
     // Monthly prices non-blocking — fallback table used instantly
