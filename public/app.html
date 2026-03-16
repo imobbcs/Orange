@@ -225,7 +225,7 @@
     .sigil-wrap {
       position: absolute;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) translateZ(0);
       width: min(92vh, 92vw);
       height: min(92vh, 92vw);
       pointer-events: none;
@@ -4252,7 +4252,12 @@
     const hero = document.querySelector('.hero');
     let targetRX = 0, targetRY = 0;
     let currentRX = 0, currentRY = 0;
-    const MAX_TILT = 5; // degrees
+    const MAX_TILT = 5;
+    // Cache heroH — recalculate only on resize, not every frame
+    let _cachedHeroH = document.getElementById('top')?.offsetHeight || window.innerHeight;
+    window.addEventListener('resize', () => {
+      _cachedHeroH = document.getElementById('top')?.offsetHeight || window.innerHeight;
+    }, { passive: true });
 
     if (!('ontouchstart' in window)) document.addEventListener('mousemove', e => {
       const rect = hero ? hero.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
@@ -4279,12 +4284,11 @@
       // Also update transform here so mouse tilt applies even without scroll
       if (wrap && !('ontouchstart' in window)) {
         const sy = window.scrollY;
-        const heroH = document.getElementById('top')?.offsetHeight || window.innerHeight;
-        const sp = Math.min(sy / heroH, 1);
+        const sp = Math.min(sy / _cachedHeroH, 1);
         const sigilY = -(sy * 0.35);
         const sigilS = 1 - (sp * 0.18);
         const sigilO = Math.max(1 - (sp * 1.6), 0);
-        wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
+        wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
         wrap.style.opacity = sigilO;
       }
       requestAnimationFrame(tiltLoop);
