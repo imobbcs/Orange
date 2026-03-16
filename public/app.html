@@ -1739,10 +1739,11 @@
     }
     .hero-depth-far  { z-index: 0; opacity: 0.5; }
     .hero-depth-mid  { z-index: 1; opacity: 0.7; }
-    .hero-depth-near { z-index: 2; }
     .hero-ambient    { z-index: 3; }
     .sigil-wrap      { z-index: 5; }
     .hero-content    { z-index: 10; }
+    /* sigil-btc-symbol hidden — canvas renders sphere + rings entirely */
+    .sigil-btc-symbol { display: none; }
 
 </style>
 </head>
@@ -1768,88 +1769,13 @@
   <!-- Depth layers — parallax starfield -->
   <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
   <canvas class="hero-depth hero-depth-mid"  id="hero-depth-mid"></canvas>
-  <canvas class="hero-depth hero-depth-near" id="hero-depth-near"></canvas>
+  <!-- Single unified cinematic canvas — rings, sphere, particles, all one system -->
+  <canvas id="hero-cinematic" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
-  <!-- THE SIGIL — multi-layer rotating instrument -->
+  <!-- THE SIGIL — disc + symbol only, rings replaced by canvas -->
   <div class="sigil-wrap" aria-hidden="true">
-
-    <!-- Outer ring: 36 ticks, slow clockwise -->
-    <svg class="sigil-ring-outer" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="200" cy="200" r="196" stroke="#F7931A" stroke-width="0.5" opacity="0.2"/>
-      <circle cx="200" cy="200" r="190" stroke="#F7931A" stroke-width="0.2" opacity="0.1"/>
-      <!-- 36 ticks every 10° — major every 90°, medium every 30°, minor rest -->
-      <g stroke="#F7931A">
-        <!-- Major ticks at 0°, 90°, 180°, 270° -->
-        <line x1="200" y1="4"   x2="200" y2="22"  stroke-width="1.2" opacity="0.5"/>
-        <line x1="200" y1="4"   x2="200" y2="22"  stroke-width="1.2" opacity="0.5" transform="rotate(90 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="22"  stroke-width="1.2" opacity="0.5" transform="rotate(180 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="22"  stroke-width="1.2" opacity="0.5" transform="rotate(270 200 200)"/>
-        <!-- Medium ticks every 30° (skip 0/90/180/270) -->
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(30 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(60 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(120 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(150 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(210 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(240 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(300 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="16"  stroke-width="0.7" opacity="0.35" transform="rotate(330 200 200)"/>
-        <!-- Minor ticks every 10° -->
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(10 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(20 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(40 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(50 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(70 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(80 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(100 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(110 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(130 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(140 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(160 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(170 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(190 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(200 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(220 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(230 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(250 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(260 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(280 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(290 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(310 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(320 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(340 200 200)"/>
-        <line x1="200" y1="4"   x2="200" y2="11"  stroke-width="0.4" opacity="0.2" transform="rotate(350 200 200)"/>
-      </g>
-    </svg>
-
-    <!-- Mid ring: dashed, counter-clockwise -->
-    <svg class="sigil-ring-mid" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="200" cy="200" r="195" stroke="#F7931A" stroke-width="0.4"
-              stroke-dasharray="3 9" opacity="0.25"/>
-      <circle cx="200" cy="200" r="185" stroke="#F7931A" stroke-width="0.2" opacity="0.1"/>
-      <!-- 8 diamond markers -->
-      <g fill="#F7931A" opacity="0.3">
-        <rect x="196" y="0" width="8" height="8" transform="rotate(45 200 4) translate(-4,-4)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(45 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(90 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(135 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(180 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(225 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(270 200 200)"/>
-        <rect x="196" y="0" width="6" height="6" transform="rotate(45 200 4) translate(-3,-3) rotate(315 200 200)"/>
-      </g>
-    </svg>
-
-    <!-- Inner ring: thin, clockwise fast -->
-    <svg class="sigil-ring-inner" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="200" cy="200" r="195" stroke="#F7931A" stroke-width="0.5"
-              stroke-dasharray="1 14" opacity="0.2"/>
-      <circle cx="200" cy="200" r="180" stroke="#F7931A" stroke-width="0.3" opacity="0.08"/>
-      <!-- Cross hairs -->
-      <line x1="200" y1="8"  x2="200" y2="392" stroke="#F7931A" stroke-width="0.2" opacity="0.07"/>
-      <line x1="8"   y1="200" x2="392" y2="200" stroke="#F7931A" stroke-width="0.2" opacity="0.07"/>
-    </svg>
 
     <!-- CELESTIAL ORBS + ₿ — single SVG, everything perfectly aligned -->
     <svg class="sigil-btc-symbol" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1874,7 +1800,6 @@
       <circle cx="200" cy="200" r="118" fill="url(#sunDisc)"/>
       <circle cx="200" cy="200" r="118" stroke="#F7931A" stroke-width="0.5" opacity="0.1"/>
 
-      <!-- centre void — orbited by the rings -->
     </svg>
 
   </div>
@@ -3828,10 +3753,323 @@
 
     makeStars('hero-depth-far', 160, 0.3, 0.9, 'rgba(237,232,222,A)');
     makeStars('hero-depth-mid',  60, 0.7, 1.4, 'rgba(247,147,26,A)');
-    makeDeepSpace('hero-depth-near');
   })();
 
-  // ══ SIGIL MOUSE TILT ══
+  // ══ UNIFIED CINEMATIC HERO CANVAS ══
+  (function() {
+    const canvas = document.getElementById('hero-cinematic');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const TAU = Math.PI * 2;
+    const OR=247, OG=147, OB=26;
+
+    let W, H;
+    function resize() {
+      const hero = document.getElementById('top');
+      W = window.innerWidth;
+      H = hero ? hero.offsetHeight : window.innerHeight;
+      canvas.width = W * DPR;
+      canvas.height = H * DPR;
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.scale(DPR, DPR);
+    }
+    resize();
+    window.addEventListener('resize', () => { ctx.setTransform(1,0,0,1,0,0); resize(); reseedBg(); }, { passive:true });
+
+    // ── BACKGROUND STARS & NEBULAE ──────────────────────────────────────────
+    let BG = [];
+    function reseedBg() {
+      BG = [];
+      // Dense star field
+      for(let i=0;i<350;i++) BG.push({
+        type:'star',
+        x:Math.random()*W, y:Math.random()*H,
+        r:Math.random()<0.7 ? 0.18+Math.random()*0.55 : 0.8+Math.random()*1.4,
+        baseA: Math.random()<0.7 ? 0.05+Math.random()*0.35 : 0.20+Math.random()*0.55,
+        tw:Math.random()*TAU, tws:0.002+Math.random()*0.010,
+        col:Math.random()>0.88?`${OR},${OG},${OB}`:'237,232,222',
+        vx:(Math.random()-0.5)*0.018, vy:(Math.random()-0.5)*0.009,
+      });
+      // Nebula clouds
+      for(let i=0;i<8;i++) BG.push({
+        type:'nebula',
+        x:Math.random()*W, y:Math.random()*H,
+        r:120+Math.random()*220,
+        a:0.008+Math.random()*0.018,
+        col:[`${OR},${OG},${OB}`,'45,30,90','20,40,80','60,20,80'][Math.floor(Math.random()*4)],
+      });
+      // Stardust — tiny drifting particles scattered across entire canvas
+      for(let i=0;i<120;i++) BG.push({
+        type:'dust',
+        x:Math.random()*W, y:Math.random()*H,
+        r:0.12+Math.random()*0.38,
+        baseA:0.04+Math.random()*0.22,
+        tw:Math.random()*TAU, tws:0.001+Math.random()*0.006,
+        vx:(Math.random()-0.5)*0.008, vy:(Math.random()-0.5)*0.004,
+        col:Math.random()>0.85?`${OR},${OG},${OB}`:'200,190,175',
+      });
+    }
+    reseedBg();
+
+    function drawBackground(t) {
+      BG.forEach(b=>{
+        if(b.type==='nebula'){
+          const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
+          g.addColorStop(0,`rgba(${b.col},${b.a})`);
+          g.addColorStop(1,`rgba(${b.col},0)`);
+          ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,TAU);
+          ctx.fillStyle=g; ctx.fill();
+        } else {
+          b.tw+=b.tws;
+          b.x+=b.vx; b.y+=b.vy;
+          if(b.x<0)b.x=W; if(b.x>W)b.x=0;
+          if(b.y<0)b.y=H; if(b.y>H)b.y=0;
+          const twinkleAmt = b.type==='dust' ? 0.3 : 0.65;
+          const a=b.baseA*(1-twinkleAmt+twinkleAmt*Math.sin(b.tw));
+          // Bright stars get a tiny cross-halo
+          if(b.r>1.0 && a>0.3) {
+            ctx.save();
+            ctx.globalAlpha=a*0.15;
+            ctx.strokeStyle=`rgba(${b.col},1)`;
+            ctx.lineWidth=0.5;
+            ctx.beginPath(); ctx.moveTo(b.x-b.r*3,b.y); ctx.lineTo(b.x+b.r*3,b.y);
+            ctx.moveTo(b.x,b.y-b.r*3); ctx.lineTo(b.x,b.y+b.r*3);
+            ctx.stroke();
+            ctx.restore();
+          }
+          ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,TAU);
+          ctx.fillStyle=`rgba(${b.col},${a.toFixed(3)})`; ctx.fill();
+        }
+      });
+    }
+
+    // ── SPHERE ───────────────────────────────────────────────────────────────
+    function drawSphere(cx, cy, R) {
+      // Ground shadow ellipse
+      ctx.save(); ctx.scale(1,0.10);
+      const sy=(cy+R*1.12)/0.10;
+      const gs=ctx.createRadialGradient(cx,sy,0,cx,sy,R*0.90);
+      gs.addColorStop(0,'rgba(0,0,0,0.50)'); gs.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(cx,sy,R*0.90,0,TAU); ctx.fillStyle=gs; ctx.fill();
+      ctx.restore();
+
+      // Wide soft corona — orange glow around planet
+      const gc=ctx.createRadialGradient(cx,cy,R*0.80,cx,cy,R*1.25);
+      gc.addColorStop(0,  `rgba(${OR},${OG},${OB},0.10)`);
+      gc.addColorStop(0.4, `rgba(${OR},${OG},${OB},0.025)`);
+      gc.addColorStop(0.75,`rgba(${OR},${OG},${OB},0.006)`);
+      gc.addColorStop(1,  `rgba(${OR},${OG},${OB},0)`);
+      ctx.beginPath(); ctx.arc(cx,cy,R*1.25,0,TAU); ctx.fillStyle=gc; ctx.fill();
+
+      // Sphere body — very dark warm brown, light from upper-left
+      const gb=ctx.createRadialGradient(cx-R*0.28,cy-R*0.24,R*0.02,cx+R*0.12,cy+R*0.12,R*1.02);
+      gb.addColorStop(0,   `rgba(58,36,10,0.96)`);
+      gb.addColorStop(0.22,`rgba(24,14,4,0.98)`);
+      gb.addColorStop(0.55,`rgba(10,6,1,0.99)`);
+      gb.addColorStop(1,   `rgba(3,1,0,1.00)`);
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gb; ctx.fill();
+
+      // Subtle specular — very small and faint, just a hint of surface
+      const gsp=ctx.createRadialGradient(cx-R*0.28,cy-R*0.24,0,cx-R*0.28,cy-R*0.24,R*0.32);
+      gsp.addColorStop(0,  `rgba(${OR},${OG},${OB},0.10)`);
+      gsp.addColorStop(0.5,`rgba(${OR},${OG},${OB},0.025)`);
+      gsp.addColorStop(1,  `rgba(${OR},${OG},${OB},0)`);
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gsp; ctx.fill();
+
+      // Rim glow
+      const gr=ctx.createRadialGradient(cx,cy,R*0.82,cx,cy,R);
+      gr.addColorStop(0,   `rgba(${OR},${OG},${OB},0)`);
+      gr.addColorStop(0.65,`rgba(${OR},${OG},${OB},0.06)`);
+      gr.addColorStop(1,   `rgba(${OR},${OG},${OB},0.16)`);
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gr; ctx.fill();
+    }
+
+    // ── RINGS ────────────────────────────────────────────────────────────────
+    // 3 rings. Static planes. tilt=0.50 = 30° from horizontal.
+    // Debris particles orbit along each ring giving different apparent speeds.
+    const RINGS = [
+      { rx:1.00, tilt:0.42, dash:null,   w:1.8, opN:0.90, opF:0.04, blur:true,  col:[OR,OG,OB] },
+      { rx:0.72, tilt:0.40, dash:[9,20], w:1.40,opN:0.88, opF:0.05, blur:false, col:[OR,OG,OB] },
+    ];
+
+    function makeRingGrad(r, cx, cy, scale) {
+      const rx=r.rx*scale, ry=rx*r.tilt;
+      const [rc,gc,bc]=r.col;
+      const g=ctx.createLinearGradient(cx,cy-ry,cx,cy+ry);
+      // Top=far=dim, bottom=near=bright — Saturn lighting
+      g.addColorStop(0,    `rgba(${rc},${gc},${bc},${r.opF})`);
+      g.addColorStop(0.18, `rgba(${rc},${gc},${bc},${(r.opF*5).toFixed(4)})`);
+      g.addColorStop(0.50, `rgba(${rc},${gc},${bc},${(r.opN*0.55).toFixed(4)})`);
+      g.addColorStop(1,    `rgba(${rc},${gc},${bc},${r.opN})`);
+      return {g, rx, ry, rc, gc, bc};
+    }
+
+    function drawFarArcs(cx, cy, scale) {
+      // Far = top half of ellipse = angles π→2π (counterclockwise from π to 0)
+      RINGS.forEach(r=>{
+        const {g,rx,ry,rc,gc,bc}=makeRingGrad(r,cx,cy,scale);
+        ctx.save(); ctx.translate(cx,cy);
+        if(r.blur) {
+          ctx.save(); ctx.globalAlpha=0.12; ctx.filter='blur(4px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
+          ctx.lineWidth=r.w*10; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+        }
+        ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
+        r.dash?ctx.setLineDash(r.dash):ctx.setLineDash([]);
+        ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        ctx.restore();
+      });
+    }
+
+    function drawNearArcs(cx, cy, scale) {
+      // Near = bottom half = angles 0→π
+      RINGS.forEach(r=>{
+        const {g,rx,ry}=makeRingGrad(r,cx,cy,scale);
+        ctx.save(); ctx.translate(cx,cy);
+        ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
+        r.dash?ctx.setLineDash(r.dash):ctx.setLineDash([]);
+        ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        ctx.restore();
+      });
+    }
+
+    // ── DEBRIS — orbital particles giving rings movement ──────────────────────
+    // Each ring has debris at different speeds and directions
+    // More particles, higher opacity = much more visible movement
+    const DEBRIS = [];
+    [
+      { rx:1.00, tilt:0.42, spd: 0.00045, n:80, dir: 1 },
+      { rx:0.72, tilt:0.40, spd: 0.00070, n:50, dir:-1 }, // faster, opposite direction
+      // inner ring removed
+    ].forEach(rd=>{
+      for(let i=0;i<rd.n;i++) {
+        DEBRIS.push({
+          angle: Math.random()*TAU,
+          // Slight speed variation per particle so they spread over time
+          speed: rd.spd * rd.dir * (0.6+Math.random()*0.8),
+          rx: rd.rx, tilt: rd.tilt+(Math.random()-0.5)*0.015,
+          r: 0.5+Math.random()*0.9,
+          baseA: 0.18+Math.random()*0.48,
+          tw: Math.random()*TAU, tws: 0.006+Math.random()*0.014,
+          trail: Math.random()>0.55, // more trails = more visible motion
+        });
+      }
+    });
+
+    // ── ENERGY — particles drifting out from sphere ──────────────────────────
+    const ENERGY=Array.from({length:18},()=>({
+      angle:Math.random()*TAU, dist:5+Math.random()*12,
+      spd:0.025+Math.random()*0.055, r:0.4+Math.random()*0.7,
+      baseA:0.05+Math.random()*0.16, tw:Math.random()*TAU,
+      tws:0.005+Math.random()*0.013, maxDist:0,
+    }));
+    function initE(){ ENERGY.forEach(p=>{ p.maxDist=Math.min(W,H)*(0.16+Math.random()*0.10); }); }
+    initE(); window.addEventListener('resize',initE,{passive:true});
+
+    function drawDebris(cx,cy,scale){
+      DEBRIS.forEach(p=>{
+        p.angle+=p.speed; p.tw+=p.tws;
+        const rx=p.rx*scale, ry=rx*p.tilt;
+        const x=cx+Math.cos(p.angle)*rx, y=cy+Math.sin(p.angle)*ry;
+        const depth=(Math.sin(p.angle)+1)*0.5; // 0=top/far, 1=bottom/near
+        const a=p.baseA*(0.10+depth*0.90)*(0.5+0.5*Math.sin(p.tw));
+        if(a<0.006) return;
+        if(p.trail){
+          // Draw trail backwards along orbit
+          const steps=8;
+          for(let s=steps;s>0;s--) {
+            const pa=p.angle-p.speed*s*3;
+            const tx=cx+Math.cos(pa)*rx, ty=cy+Math.sin(pa)*ry;
+            const ta=a*(1-s/steps)*0.5;
+            if(ta>0.003){
+              ctx.beginPath(); ctx.arc(tx,ty,p.r*0.4*(1-s/steps),0,TAU);
+              ctx.fillStyle=`rgba(${OR},${OG},${OB},${ta.toFixed(3)})`; ctx.fill();
+            }
+          }
+        }
+        // Core dot — brighter at bottom of orbit (near side)
+        const glow=ctx.createRadialGradient(x,y,0,x,y,p.r*3.5);
+        glow.addColorStop(0,`rgba(${OR},${OG},${OB},${(a*0.6).toFixed(3)})`);
+        glow.addColorStop(1,`rgba(${OR},${OG},${OB},0)`);
+        ctx.beginPath(); ctx.arc(x,y,p.r*3.5,0,TAU); ctx.fillStyle=glow; ctx.fill();
+        ctx.beginPath(); ctx.arc(x,y,p.r*(0.3+depth*0.8),0,TAU);
+        ctx.fillStyle=`rgba(${OR},${OG},${OB},${a.toFixed(3)})`; ctx.fill();
+      });
+    }
+
+    function drawEnergy(cx,cy){
+      ENERGY.forEach(p=>{
+        p.dist+=p.spd; p.tw+=p.tws;
+        const x=cx+Math.cos(p.angle)*p.dist, y=cy+Math.sin(p.angle)*p.dist;
+        const prog=p.dist/p.maxDist;
+        const fade=prog<0.10?prog/0.10:prog>0.68?1-(prog-0.68)/0.32:1;
+        const a=p.baseA*fade*(0.5+0.5*Math.sin(p.tw));
+        if(p.dist>=p.maxDist){
+          p.dist=5+Math.random()*18; p.angle=Math.random()*TAU;
+          p.maxDist=Math.min(W,H)*(0.32+Math.random()*0.24);
+        }
+        if(a>0.005){
+          const gl=ctx.createRadialGradient(x,y,0,x,y,p.r*5.5);
+          gl.addColorStop(0,`rgba(${OR},${OG},${OB},${(a*0.55).toFixed(3)})`);
+          gl.addColorStop(1,`rgba(${OR},${OG},${OB},0)`);
+          ctx.beginPath(); ctx.arc(x,y,p.r*5.5,0,TAU); ctx.fillStyle=gl; ctx.fill();
+          ctx.beginPath(); ctx.arc(x,y,p.r,0,TAU);
+          ctx.fillStyle=`rgba(${OR},${OG},${OB},${a.toFixed(3)})`; ctx.fill();
+        }
+      });
+    }
+
+    let t=0;
+    function frame(){
+      t++;
+      ctx.clearRect(0,0,W,H);
+
+      // Get planet centre — sigil-wrap centre shifted down 8% so planet
+      // sits in lower hero with text content floating above
+      const sw=document.querySelector('.sigil-wrap');
+      let cx=W*0.5, cy=H*0.58, scale, sphR;
+      if(sw){
+        const r=sw.getBoundingClientRect();
+        cx=r.left+r.width*0.5;
+        const hero=document.getElementById('top');
+        const heroH=hero?hero.offsetHeight:H;
+        cy=(r.top+r.height*0.5)+heroH*0.08;
+        scale=r.width*0.5;
+        sphR=scale*0.26;
+      } else {
+        scale=Math.min(W,H)*0.40; sphR=scale*0.26;
+      }
+
+      // Render order (painter's algorithm):
+      // 1. Background: nebulae + stars
+      drawBackground(t);
+
+      // 2. Far arcs of rings (top half — drawn behind sphere)
+      drawFarArcs(cx,cy,scale);
+
+      // 3. Sphere on top of far arcs
+      drawSphere(cx,cy,sphR);
+
+      // 4. Energy particles from sphere centre
+      drawEnergy(cx,cy);
+
+      // 5. Debris particles (orbital movement — main source of animation)
+      drawDebris(cx,cy,scale);
+
+      // 6. Near arcs of rings (bottom half — drawn in front of sphere)
+      drawNearArcs(cx,cy,scale);
+
+      requestAnimationFrame(frame);
+    }
+
+    frame();
+  })();
+
+    // ══ SIGIL MOUSE TILT ══
   (function() {
     const wrap = document.querySelector('.sigil-wrap');
     if (!wrap) return;
