@@ -229,6 +229,8 @@
       width: min(92vh, 92vw);
       height: min(92vh, 92vw);
       pointer-events: none;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
     }
 
     /* Each ring layer rotates at a different speed */
@@ -1177,11 +1179,11 @@
 
       /* CTAs: full width, stacked */
       .hero-actions {
-        flex-direction: column; align-items: stretch;
-        gap: 0.6rem; margin-top: 1.25rem; width: 100%;
+        flex-direction: row; flex-wrap: wrap; align-items: center;
+        gap: 0.6rem; margin-top: 1.25rem; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
-      .hero-actions .btn-ghost { text-align: center; padding: 1rem 1.5rem; width: 100%; }
+      .hero-actions .btn-ghost { text-align: center; padding: 0.9rem 1.2rem; width: auto; flex: 1 1 140px; max-width: 48%; }
 
       /* ── SECTIONS ── */
       .section { padding: 4.5rem 1.5rem; }
@@ -1770,7 +1772,7 @@
   <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
   <canvas class="hero-depth hero-depth-mid"  id="hero-depth-mid"></canvas>
   <!-- Single unified cinematic canvas — rings, sphere, particles, all one system -->
-  <canvas id="hero-cinematic" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;"></canvas>
+  <canvas id="hero-cinematic" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;will-change:contents;"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
@@ -3305,7 +3307,6 @@
   // ── SCROLL PROGRESS
   let scrollRaf = null;
   let scrollHintHidden = false;
-  let smoothScrollY = 0;
   let _chartPrices = [];   // raw history, stitch applied fresh on each draw
   let _chartDays   = 30; // lerped scroll for sigil — prevents jump on finger lift
   window.addEventListener('scroll', () => {
@@ -3330,53 +3331,33 @@
         const midLayer = document.getElementById('hero-depth-mid');
         if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
         if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
-
-        // Sigil transform is owned exclusively by driveSmoothScroll (60fps loop above)
-        // — do NOT write sigil.style.transform here
-
-        // Hero-content: subtle parallax on desktop only
-        const heroContent = heroEl.querySelector('.hero-content');
-        if (heroContent && !('ontouchstart' in window)) {
-          const contentY = -(sy * 0.12);
-          heroContent.style.transform = `translateY(${contentY}px)`;
-        }
       }
       scrollRaf = null;
     });
   }, { passive: true });
 
-  // Drive sigil at 60fps — sole owner of sigil transform. Disabled on touch.
-  // Uses velocity-based easing: follows scroll directly when moving, eases on decelerate.
-  // This prevents both lag during drag AND jumping on finger-lift.
-  let _prevRawScrollY = 0;
-  (function driveSmoothScroll() {
-    const rawY    = window.scrollY;
-    const vel     = Math.abs(rawY - _prevRawScrollY); // px moved this frame
-    _prevRawScrollY = rawY;
-    // Active scroll: follow directly. Settling: lerp to final position.
-    if (vel > 3) {
-      smoothScrollY = rawY;                            // instant follow during drag
-    } else {
-      smoothScrollY += (rawY - smoothScrollY) * 0.09; // ease into rest position
-    }
-    // Only apply parallax on non-touch devices — mobile scroll physics are different
+  // Drive sigil parallax at 60fps — reads raw scroll, no smoothing lag
+  let _sigilRaf = null;
+  function updateSigilParallax() {
     if (!('ontouchstart' in window)) {
       const heroEl = document.getElementById('top');
       if (heroEl) {
-        const heroH    = heroEl.offsetHeight || window.innerHeight;
-        const sp       = Math.min(smoothScrollY / heroH, 1);
+        const sy = window.scrollY;
+        const heroH = heroEl.offsetHeight || window.innerHeight;
+        const sp = Math.min(sy / heroH, 1);
         const sigilWrap = heroEl.querySelector('.sigil-wrap');
         if (sigilWrap) {
-          const sigilY = -(smoothScrollY * 0.35);
+          const sigilY = -(sy * 0.35);
           const sigilS = 1 - (sp * 0.18);
           const sigilO = Math.max(1 - (sp * 1.6), 0);
-          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(2)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(sigilWrap._ry || 0).toFixed(2)}deg)`;
+          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(sigilWrap._ry || 0).toFixed(2)}deg)`;
           sigilWrap.style.opacity = sigilO;
         }
       }
     }
-    requestAnimationFrame(driveSmoothScroll);
-  })();
+    _sigilRaf = requestAnimationFrame(updateSigilParallax);
+  }
+  updateSigilParallax();
 
   // Apply translations before reveal observer so content is present when hidden
   applyLang(detectLang());
@@ -4065,17 +4046,17 @@
         ctx.save(); ctx.translate(cx,cy);
         if(r.blur) {
           // Multi-pass glow — wide soft outer glow + tighter inner glow
-          ctx.save(); ctx.globalAlpha=0.08; ctx.filter='blur(8px)';
+          ctx.save(); ctx.globalAlpha=0.05; ctx.filter='blur(6px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
+          ctx.lineWidth=r.w*10; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+          ctx.save(); ctx.globalAlpha=0.10; ctx.filter='blur(2px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
-          ctx.lineWidth=r.w*14; ctx.stroke();
-          ctx.filter='none'; ctx.restore();
-          ctx.save(); ctx.globalAlpha=0.14; ctx.filter='blur(3px)';
-          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
-          ctx.setLineDash([]);
-          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.45})`;
-          ctx.lineWidth=r.w*5; ctx.stroke();
+          ctx.lineWidth=r.w*4; ctx.stroke();
           ctx.filter='none'; ctx.restore();
         }
         const rIdx = RINGS.indexOf(r);
@@ -4099,17 +4080,17 @@
         ctx.save(); ctx.translate(cx,cy);
         // Glow passes for near arc
         if(r.blur){
-          ctx.save(); ctx.globalAlpha=0.08; ctx.filter='blur(8px)';
+          ctx.save(); ctx.globalAlpha=0.05; ctx.filter='blur(6px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
+          ctx.lineWidth=r.w*10; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+          ctx.save(); ctx.globalAlpha=0.10; ctx.filter='blur(2px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
-          ctx.lineWidth=r.w*14; ctx.stroke();
-          ctx.filter='none'; ctx.restore();
-          ctx.save(); ctx.globalAlpha=0.14; ctx.filter='blur(3px)';
-          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
-          ctx.setLineDash([]);
-          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.45})`;
-          ctx.lineWidth=r.w*5; ctx.stroke();
+          ctx.lineWidth=r.w*4; ctx.stroke();
           ctx.filter='none'; ctx.restore();
         }
         const rIdx = RINGS.indexOf(r);
@@ -4130,8 +4111,8 @@
     // More particles, higher opacity = much more visible movement
     const DEBRIS = [];
     [
-      { rx:1.00, tilt:0.42, spd: 0.00045, n:200, dir: 1,  pSize:1.4 },
-      { rx:0.72, tilt:0.40, spd: 0.00070, n:140, dir:-1,  pSize:0.6 },
+      { rx:1.00, tilt:0.42, spd: 0.00045, n:280, dir: 1,  pSize:1.4 },
+      { rx:0.72, tilt:0.40, spd: 0.00070, n:200, dir:-1,  pSize:0.6 },
       // inner ring removed
     ].forEach(rd=>{
       for(let i=0;i<rd.n;i++) {
@@ -4224,7 +4205,7 @@
         cx=r.left+r.width*0.5;
         const hero=document.getElementById('top');
         const heroH=hero?hero.offsetHeight:H;
-        cy=(r.top+r.height*0.5)+heroH*0.08;
+        cy=(r.top+r.height*0.5)+heroH*0.14;
         scale=r.width*0.5;
         sphR=scale*0.26;
       } else {
