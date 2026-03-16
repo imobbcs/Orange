@@ -3302,60 +3302,45 @@
     });
   })();
 
-  // ── SCROLL PROGRESS
-  let scrollRaf = null;
+  // ── SCROLL PROGRESS + PARALLAX — single listener, no RAF loop, no smoothing
   let scrollHintHidden = false;
-  let _chartPrices = [];   // raw history, stitch applied fresh on each draw
-  let _chartDays   = 30; // lerped scroll for sigil — prevents jump on finger lift
-  window.addEventListener('scroll', () => {
-    if (scrollRaf) return;
-    scrollRaf = requestAnimationFrame(() => {
-      const sy = window.scrollY;
-      const pct = sy / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-      document.getElementById('progress').style.width = pct + '%';
-      if (!scrollHintHidden && sy > 60) {
-        scrollHintHidden = true;
-        document.querySelector('.scroll-hint')?.classList.add('hide');
-      }
+  const _heroEl = document.getElementById('top');
+  const _sigilWrap = _heroEl?.querySelector('.sigil-wrap');
+  const _heroH = () => _heroEl?.offsetHeight || window.innerHeight;
 
-      // ── HERO PARALLAX ──
-      const heroEl = document.getElementById('top');
-      if (heroEl) {
-        const heroH = heroEl.offsetHeight;
-        const p = Math.min(sy / heroH, 1); // 0 → 1 as hero scrolls off
+  function onScroll() {
+    const sy = window.scrollY;
+    const heroH = _heroH();
+    const sp = Math.min(sy / heroH, 1);
 
-        // Depth layers: far barely moves, mid drifts gently
-        const farLayer = document.getElementById('hero-depth-far');
-        const midLayer = document.getElementById('hero-depth-mid');
-        if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
-        if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
-      }
-      scrollRaf = null;
-    });
-  }, { passive: true });
+    // Progress bar
+    const pct = sy / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+    document.getElementById('progress').style.width = pct + '%';
 
-  // Drive sigil parallax at 60fps — reads raw scroll, no smoothing lag
-  let _sigilRaf = null;
-  function updateSigilParallax() {
-    if (!('ontouchstart' in window)) {
-      const heroEl = document.getElementById('top');
-      if (heroEl) {
-        const sy = window.scrollY;
-        const heroH = heroEl.offsetHeight || window.innerHeight;
-        const sp = Math.min(sy / heroH, 1);
-        const sigilWrap = heroEl.querySelector('.sigil-wrap');
-        if (sigilWrap) {
-          const sigilY = -(sy * 0.35);
-          const sigilS = 1 - (sp * 0.18);
-          const sigilO = Math.max(1 - (sp * 1.6), 0);
-          sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(sigilWrap._ry || 0).toFixed(2)}deg)`;
-          sigilWrap.style.opacity = sigilO;
-        }
-      }
+    // Scroll hint
+    if (!scrollHintHidden && sy > 60) {
+      scrollHintHidden = true;
+      document.querySelector('.scroll-hint')?.classList.add('hide');
     }
-    _sigilRaf = requestAnimationFrame(updateSigilParallax);
+
+    // Depth layers
+    const farLayer = document.getElementById('hero-depth-far');
+    const midLayer = document.getElementById('hero-depth-mid');
+    if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
+    if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
+
+    // Sigil parallax — desktop only
+    if (_sigilWrap && !('ontouchstart' in window)) {
+      const sigilY = -(sy * 0.35);
+      const sigilS = 1 - (sp * 0.18);
+      const sigilO = Math.max(1 - (sp * 1.6), 0);
+      _sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(_sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(_sigilWrap._ry || 0).toFixed(2)}deg)`;
+      _sigilWrap.style.opacity = sigilO;
+    }
   }
-  updateSigilParallax();
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // init on load
 
   // Apply translations before reveal observer so content is present when hidden
   applyLang(detectLang());
