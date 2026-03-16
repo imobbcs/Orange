@@ -3304,6 +3304,8 @@
 
   // ── SCROLL PROGRESS + PARALLAX — single listener, no RAF loop, no smoothing
   let scrollHintHidden = false;
+  let _chartPrices = [];
+  let _chartDays   = 30;
   const _heroEl = document.getElementById('top');
   const _sigilWrap = _heroEl?.querySelector('.sigil-wrap');
   const _heroH = () => _heroEl?.offsetHeight || window.innerHeight;
@@ -3329,13 +3331,9 @@
     if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
     if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
 
-    // Sigil parallax — desktop only
+    // Sigil transform owned by tiltLoop above — scroll triggers a tiltLoop update via scrollY
     if (_sigilWrap && !('ontouchstart' in window)) {
-      const sigilY = -(sy * 0.35);
-      const sigilS = 1 - (sp * 0.18);
-      const sigilO = Math.max(1 - (sp * 1.6), 0);
-      _sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${(_sigilWrap._rx || 0).toFixed(2)}deg) rotateY(${(_sigilWrap._ry || 0).toFixed(2)}deg)`;
-      _sigilWrap.style.opacity = sigilO;
+      // nudge tiltLoop to re-read scrollY by doing nothing — it reads window.scrollY each frame
     }
   }
 
@@ -4276,10 +4274,19 @@
     (function tiltLoop() {
       currentRX += (targetRX - currentRX) * 0.06;
       currentRY += (targetRY - currentRY) * 0.06;
-      // Store tilt values for parallax to consume
       wrap._rx = currentRX;
       wrap._ry = currentRY;
-      // Tilt values stored; scroll handler applies them in combined transform
+      // Also update transform here so mouse tilt applies even without scroll
+      if (wrap && !('ontouchstart' in window)) {
+        const sy = window.scrollY;
+        const heroH = document.getElementById('top')?.offsetHeight || window.innerHeight;
+        const sp = Math.min(sy / heroH, 1);
+        const sigilY = -(sy * 0.35);
+        const sigilS = 1 - (sp * 0.18);
+        const sigilO = Math.max(1 - (sp * 1.6), 0);
+        wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
+        wrap.style.opacity = sigilO;
+      }
       requestAnimationFrame(tiltLoop);
     })();
   })();
