@@ -2726,6 +2726,7 @@
       pill.classList.add('accumulate');
       if (navDot) { navDot.classList.add('accumulate', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('accumulate');
+      window._cinematicSignal = 'accumulate';
       text.textContent = translations[currentLang].signalAccumulate;
       shareSignal.style.color = 'var(--green)';
       shareSignal.textContent = '● ' + translations[currentLang].signalAccumulate;
@@ -2737,6 +2738,7 @@
       pill.classList.add('hold');
       if (navDot) { navDot.classList.add('hold', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('hold');
+      window._cinematicSignal = 'hold';
       text.textContent = translations[currentLang].signalHold;
       shareSignal.style.color = 'var(--amber)';
       shareSignal.textContent = '● ' + translations[currentLang].signalHold;
@@ -2748,6 +2750,7 @@
       pill.classList.add('caution');
       if (navDot) { navDot.classList.add('caution', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('caution');
+      window._cinematicSignal = 'caution';
       text.textContent = translations[currentLang].signalCaution;
       shareSignal.style.color = 'var(--red)';
       shareSignal.textContent = '● ' + translations[currentLang].signalCaution;
@@ -3792,12 +3795,16 @@
         vx:(Math.random()-0.5)*0.018, vy:(Math.random()-0.5)*0.009,
       });
       // Nebula clouds
-      for(let i=0;i<8;i++) BG.push({
+      for(let i=0;i<12;i++) BG.push({
         type:'nebula',
         x:Math.random()*W, y:Math.random()*H,
         r:120+Math.random()*220,
-        a:0.008+Math.random()*0.018,
+        a:0.010+Math.random()*0.024,
         col:[`${OR},${OG},${OB}`,'45,30,90','20,40,80','60,20,80'][Math.floor(Math.random()*4)],
+      });
+      // Large deep-space colour washes — barely visible, fill the void
+      [{col:`${OR},${OG},${OB}`,x:0.25,y:0.30},{col:'30,20,70',x:0.75,y:0.65},{col:'15,30,65',x:0.15,y:0.75}].forEach(n=>{
+        BG.push({ type:'nebula', x:n.x*W, y:n.y*H, r:W*0.45, a:0.006, col:n.col });
       });
       // Stardust — tiny drifting particles scattered across entire canvas
       for(let i=0;i<120;i++) BG.push({
@@ -3856,24 +3863,46 @@
 
       // Wide soft corona — orange glow around planet
       const gc=ctx.createRadialGradient(cx,cy,R*0.80,cx,cy,R*1.25);
-      gc.addColorStop(0,  `rgba(${OR},${OG},${OB},0.10)`);
+      gc.addColorStop(0,  `rgba(${OR},${OG},${OB},0.14)`);
       gc.addColorStop(0.4, `rgba(${OR},${OG},${OB},0.025)`);
       gc.addColorStop(0.75,`rgba(${OR},${OG},${OB},0.006)`);
       gc.addColorStop(1,  `rgba(${OR},${OG},${OB},0)`);
       ctx.beginPath(); ctx.arc(cx,cy,R*1.25,0,TAU); ctx.fillStyle=gc; ctx.fill();
 
-      // Sphere body — very dark warm brown, light from upper-left
-      const gb=ctx.createRadialGradient(cx-R*0.28,cy-R*0.24,R*0.02,cx+R*0.12,cy+R*0.12,R*1.02);
-      gb.addColorStop(0,   `rgba(58,36,10,0.96)`);
-      gb.addColorStop(0.22,`rgba(24,14,4,0.98)`);
-      gb.addColorStop(0.55,`rgba(10,6,1,0.99)`);
-      gb.addColorStop(1,   `rgba(3,1,0,1.00)`);
-      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gb; ctx.fill();
+      // Sphere body — dark base
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU);
+      ctx.fillStyle='rgba(10,5,1,1)'; ctx.fill();
 
-      // Subtle specular — very small and faint, just a hint of surface
-      const gsp=ctx.createRadialGradient(cx-R*0.28,cy-R*0.24,0,cx-R*0.28,cy-R*0.24,R*0.32);
-      gsp.addColorStop(0,  `rgba(${OR},${OG},${OB},0.10)`);
-      gsp.addColorStop(0.5,`rgba(${OR},${OG},${OB},0.025)`);
+      // Planet surface texture — clips to sphere, scrolls with rotation
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.clip();
+      const scrollOffset = ((sphereRotation % TAU) / TAU) * planetSize;
+      ctx.globalAlpha = 0.65;
+      ctx.drawImage(planetCanvas, scrollOffset, 0, planetSize, planetSize, cx-R, cy-R, R*2, R*2);
+      ctx.restore();
+
+      // Diffuse light — upper-left, warm orange, complex falloff
+      const rotX = Math.cos(sphereRotation)*R*0.28;
+      const rotY = R*0.24;
+      const gDiff = ctx.createRadialGradient(cx-rotX,cy-rotY,0,cx,cy,R*1.05);
+      gDiff.addColorStop(0,   `rgba(${OR},${Math.round(OG*0.42)},0,0.60)`);
+      gDiff.addColorStop(0.30,`rgba(${OR},${Math.round(OG*0.25)},0,0.20)`);
+      gDiff.addColorStop(0.65,`rgba(0,0,0,0.05)`);
+      gDiff.addColorStop(1,   `rgba(0,0,0,0.52)`);
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gDiff; ctx.fill();
+
+      // Terminator — sharp shadow crescent on the dark side
+      const gTerm = ctx.createRadialGradient(cx+rotX*0.55,cy+rotY*0.55,R*0.38,cx+rotX*0.55,cy+rotY*0.55,R*1.08);
+      gTerm.addColorStop(0,   'rgba(0,0,0,0)');
+      gTerm.addColorStop(0.60,'rgba(0,0,0,0.14)');
+      gTerm.addColorStop(1,   'rgba(0,0,0,0.62)');
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gTerm; ctx.fill();
+
+      // Specular highlight — tiny, subtle
+      const specOx = Math.cos(sphereRotation)*R*0.28 - Math.sin(sphereRotation)*R*0.05;
+      const gsp=ctx.createRadialGradient(cx+specOx,cy-R*0.24,0,cx+specOx,cy-R*0.24,R*0.30);
+      gsp.addColorStop(0,  `rgba(${OR},${OG},${OB},0.055)`);
+      gsp.addColorStop(0.5,`rgba(${OR},${OG},${OB},0.012)`);
       gsp.addColorStop(1,  `rgba(${OR},${OG},${OB},0)`);
       ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gsp; ctx.fill();
 
@@ -3883,26 +3912,150 @@
       gr.addColorStop(0.65,`rgba(${OR},${OG},${OB},0.06)`);
       gr.addColorStop(1,   `rgba(${OR},${OG},${OB},0.16)`);
       ctx.beginPath(); ctx.arc(cx,cy,R,0,TAU); ctx.fillStyle=gr; ctx.fill();
+
+      // Atmospheric haze — blue-grey scattering at the limb
+      // Sits just inside the sphere edge, fades inward
+      // Like looking at Earth from space — the thin glowing ring at the horizon
+      const gAtm = ctx.createRadialGradient(cx,cy,R*0.86,cx,cy,R*1.02);
+      gAtm.addColorStop(0,   'rgba(80,110,160,0)');
+      gAtm.addColorStop(0.45,'rgba(80,110,160,0.05)');
+      gAtm.addColorStop(0.78,'rgba(100,130,180,0.07)');
+      gAtm.addColorStop(1,   'rgba(120,150,200,0.02)');
+      ctx.beginPath(); ctx.arc(cx,cy,R*1.02,0,TAU); ctx.fillStyle=gAtm; ctx.fill();
     }
 
     // ── RINGS ────────────────────────────────────────────────────────────────
     // 3 rings. Static planes. tilt=0.50 = 30° from horizontal.
     // Debris particles orbit along each ring giving different apparent speeds.
     const RINGS = [
-      { rx:1.00, tilt:0.42, dash:null,   w:1.8, opN:0.90, opF:0.04, blur:true,  col:[OR,OG,OB] },
-      { rx:0.72, tilt:0.40, dash:[9,20], w:1.40,opN:0.88, opF:0.05, blur:false, col:[OR,OG,OB] },
+      { rx:1.00, tilt:0.42, dash:null,   w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
+      { rx:0.72, tilt:0.40, dash:[9,20], w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
+    ];
+
+    // Signal state → ring color + particle speed
+    // Values lerp smoothly so transition is gradual, not instant
+    // accumulate: orange (247,147,26), hold: amber (251,191,36), caution: red (248,113,113)
+    let sigR=OR, sigG=OG, sigB=OB, sigSpeedMult=1.0;
+    let targetR=OR, targetG=OG, targetB=OB, targetSpeedMult=1.0;
+
+    function updateSignalTargets() {
+      const sig = window._cinematicSignal || 'accumulate';
+      if (sig === 'accumulate') {
+        targetR=OR; targetG=OG; targetB=OB; targetSpeedMult=1.0;
+      } else if (sig === 'hold') {
+        targetR=251; targetG=191; targetB=36; targetSpeedMult=0.65;
+      } else {
+        targetR=248; targetG=113; targetB=113; targetSpeedMult=1.45;
+      }
+    }
+
+    function lerpSignal() {
+      const k = 0.008; // very slow lerp — subtle transition
+      sigR += (targetR-sigR)*k;
+      sigG += (targetG-sigG)*k;
+      sigB += (targetB-sigB)*k;
+      sigSpeedMult += (targetSpeedMult-sigSpeedMult)*k;
+    }
+
+    // Sphere rotation
+    let sphereRotation = 0;
+
+    // Procedural planet surface — pre-baked into an offscreen canvas
+    // Creates atmospheric banding + cloud-like variation that rotates with planet
+    const planetCanvas = document.createElement('canvas');
+    const planetSize = 512;
+    planetCanvas.width = planetSize * 2; // 2x wide so we can scroll it
+    planetCanvas.height = planetSize;
+    const pCtx = planetCanvas.getContext('2d');
+
+    (function bakePlanetSurface() {
+      const w = planetSize * 2, h = planetSize;
+      pCtx.clearRect(0, 0, w, h);
+
+      // Base — very dark warm brown
+      pCtx.fillStyle = `rgba(18,10,3,1)`;
+      pCtx.fillRect(0, 0, w, h);
+
+      // Atmospheric bands — subtle horizontal variation
+      const bands = [
+        { y:0.12, width:0.08, a:0.06, col:`${OR},${OG},${OB}` },
+        { y:0.28, width:0.05, a:0.04, col:`${OR},${OG},${OB}` },
+        { y:0.45, width:0.12, a:0.08, col:`${OR},${Math.round(OG*0.6)},0` },
+        { y:0.58, width:0.06, a:0.05, col:`${OR},${OG},${OB}` },
+        { y:0.72, width:0.09, a:0.06, col:'80,45,10' },
+        { y:0.85, width:0.05, a:0.04, col:`${OR},${OG},${OB}` },
+      ];
+      bands.forEach(b => {
+        const gy = pCtx.createLinearGradient(0, b.y*h - b.width*h*0.5, 0, b.y*h + b.width*h*0.5);
+        gy.addColorStop(0,   `rgba(${b.col},0)`);
+        gy.addColorStop(0.5, `rgba(${b.col},${b.a})`);
+        gy.addColorStop(1,   `rgba(${b.col},0)`);
+        pCtx.fillStyle = gy;
+        pCtx.fillRect(0, (b.y - b.width*0.5)*h, w, b.width*h);
+      });
+
+      // Cloud-like patches — irregular blobs using overlapping circles
+      for (let i = 0; i < 60; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const r = 8 + Math.random() * 40;
+        const a = 0.02 + Math.random() * 0.05;
+        const isLight = Math.random() > 0.5;
+        const col = isLight ? `${OR},${OG},${OB}` : '10,5,1';
+        const g = pCtx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0,   `rgba(${col},${a})`);
+        g.addColorStop(1,   `rgba(${col},0)`);
+        pCtx.fillStyle = g;
+        pCtx.beginPath();
+        pCtx.arc(x, y, r, 0, Math.PI * 2);
+        pCtx.fill();
+        // Mirror on right side for seamless scroll
+        pCtx.fillStyle = g;
+        pCtx.beginPath();
+        pCtx.arc(x + planetSize, y, r, 0, Math.PI * 2);
+        pCtx.fill();
+      }
+    })();
+
+    // Per-ring brightness variation seeds — fixed so clumps don't shift each frame
+    const RING_SEEDS = [
+      [0.82, 0.55, 0.90, 0.65, 0.78, 0.42, 0.95, 0.60], // outer ring angular brightness
+      [0.70, 0.88, 0.45, 0.92, 0.58, 0.80, 0.38, 0.74], // middle ring
     ];
 
     function makeRingGrad(r, cx, cy, scale) {
       const rx=r.rx*scale, ry=rx*r.tilt;
-      const [rc,gc,bc]=r.col;
+      const [rc,gc,bc] = (r.col[0]===OR && r.col[1]===OG) ? [sigR,sigG,sigB] : r.col;
       const g=ctx.createLinearGradient(cx,cy-ry,cx,cy+ry);
-      // Top=far=dim, bottom=near=bright — Saturn lighting
       g.addColorStop(0,    `rgba(${rc},${gc},${bc},${r.opF})`);
       g.addColorStop(0.18, `rgba(${rc},${gc},${bc},${(r.opF*5).toFixed(4)})`);
       g.addColorStop(0.50, `rgba(${rc},${gc},${bc},${(r.opN*0.55).toFixed(4)})`);
       g.addColorStop(1,    `rgba(${rc},${gc},${bc},${r.opN})`);
       return {g, rx, ry, rc, gc, bc};
+    }
+
+    // Draw ring arc with angular brightness variation — brighter clumps, darker gaps
+    function drawRingArcVaried(rx, ry, startA, endA, ringIdx, lineW, rc, gc, bc, opF, opN) {
+      const seeds = RING_SEEDS[ringIdx] || RING_SEEDS[0];
+      const segments = 48;
+      const step = (endA - startA) / segments;
+      ctx.setLineDash([]);
+      for (let i = 0; i < segments; i++) {
+        const a0 = startA + i * step;
+        const a1 = a0 + step * 1.02;
+        const pos = i / segments;
+        const seed = seeds[i % seeds.length];
+        const bright = 0.55 + 0.28 * Math.sin(pos * Math.PI * 3.5 + seed * 6.28)
+                            + 0.17 * Math.sin(pos * Math.PI * 7.2 + seed * 3.14);
+        const depth = (Math.sin((a0+a1)*0.5) + 1) * 0.5;
+        const baseOp = opF + (opN - opF) * depth;
+        const op = Math.max(0, Math.min(1, baseOp * bright));
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rx, ry, 0, a0, a1, false);
+        ctx.strokeStyle = `rgba(${Math.round(rc)},${Math.round(gc)},${Math.round(bc)},${op.toFixed(3)})`;
+        ctx.lineWidth = lineW;
+        ctx.stroke();
+      }
     }
 
     function drawFarArcs(cx, cy, scale) {
@@ -3911,16 +4064,30 @@
         const {g,rx,ry,rc,gc,bc}=makeRingGrad(r,cx,cy,scale);
         ctx.save(); ctx.translate(cx,cy);
         if(r.blur) {
-          ctx.save(); ctx.globalAlpha=0.12; ctx.filter='blur(4px)';
+          // Multi-pass glow — wide soft outer glow + tighter inner glow
+          ctx.save(); ctx.globalAlpha=0.08; ctx.filter='blur(8px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
           ctx.setLineDash([]);
-          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
-          ctx.lineWidth=r.w*10; ctx.stroke();
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
+          ctx.lineWidth=r.w*14; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+          ctx.save(); ctx.globalAlpha=0.14; ctx.filter='blur(3px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.45})`;
+          ctx.lineWidth=r.w*5; ctx.stroke();
           ctx.filter='none'; ctx.restore();
         }
-        ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
-        r.dash?ctx.setLineDash(r.dash):ctx.setLineDash([]);
-        ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        const rIdx = RINGS.indexOf(r);
+        if (!r.dash) {
+          // Solid rings get angular brightness variation
+          ctx.setLineDash([]);
+          drawRingArcVaried(rx, ry, Math.PI, TAU, rIdx, r.w, rc, gc, bc, r.opF, r.opN);
+        } else {
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
+          ctx.setLineDash(r.dash);
+          ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        }
         ctx.restore();
       });
     }
@@ -3928,11 +4095,32 @@
     function drawNearArcs(cx, cy, scale) {
       // Near = bottom half = angles 0→π
       RINGS.forEach(r=>{
-        const {g,rx,ry}=makeRingGrad(r,cx,cy,scale);
+        const {g,rx,ry,rc,gc,bc}=makeRingGrad(r,cx,cy,scale);
         ctx.save(); ctx.translate(cx,cy);
-        ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
-        r.dash?ctx.setLineDash(r.dash):ctx.setLineDash([]);
-        ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        // Glow passes for near arc
+        if(r.blur){
+          ctx.save(); ctx.globalAlpha=0.08; ctx.filter='blur(8px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
+          ctx.lineWidth=r.w*14; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+          ctx.save(); ctx.globalAlpha=0.14; ctx.filter='blur(3px)';
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
+          ctx.setLineDash([]);
+          ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.45})`;
+          ctx.lineWidth=r.w*5; ctx.stroke();
+          ctx.filter='none'; ctx.restore();
+        }
+        const rIdx = RINGS.indexOf(r);
+        if (!r.dash) {
+          ctx.setLineDash([]);
+          drawRingArcVaried(rx, ry, 0, Math.PI, rIdx, r.w, rc, gc, bc, r.opF, r.opN);
+        } else {
+          ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
+          ctx.setLineDash(r.dash);
+          ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
+        }
         ctx.restore();
       });
     }
@@ -3942,20 +4130,19 @@
     // More particles, higher opacity = much more visible movement
     const DEBRIS = [];
     [
-      { rx:1.00, tilt:0.42, spd: 0.00045, n:80, dir: 1 },
-      { rx:0.72, tilt:0.40, spd: 0.00070, n:50, dir:-1 }, // faster, opposite direction
+      { rx:1.00, tilt:0.42, spd: 0.00045, n:200, dir: 1,  pSize:1.4 },
+      { rx:0.72, tilt:0.40, spd: 0.00070, n:140, dir:-1,  pSize:0.6 },
       // inner ring removed
     ].forEach(rd=>{
       for(let i=0;i<rd.n;i++) {
         DEBRIS.push({
           angle: Math.random()*TAU,
-          // Slight speed variation per particle so they spread over time
           speed: rd.spd * rd.dir * (0.6+Math.random()*0.8),
           rx: rd.rx, tilt: rd.tilt+(Math.random()-0.5)*0.015,
-          r: 0.5+Math.random()*0.9,
+          r: rd.pSize * (0.5+Math.random()*0.8),
           baseA: 0.18+Math.random()*0.48,
           tw: Math.random()*TAU, tws: 0.006+Math.random()*0.014,
-          trail: Math.random()>0.55, // more trails = more visible motion
+          trail: Math.random()>0.55,
         });
       }
     });
@@ -3972,7 +4159,7 @@
 
     function drawDebris(cx,cy,scale){
       DEBRIS.forEach(p=>{
-        p.angle+=p.speed; p.tw+=p.tws;
+        p.angle+=p.speed*sigSpeedMult; p.tw+=p.tws;
         const rx=p.rx*scale, ry=rx*p.tilt;
         const x=cx+Math.cos(p.angle)*rx, y=cy+Math.sin(p.angle)*ry;
         const depth=(Math.sin(p.angle)+1)*0.5; // 0=top/far, 1=bottom/near
@@ -4046,10 +4233,35 @@
 
       // Render order (painter's algorithm):
       // 1. Background: nebulae + stars
+      // Update signal reactive values
+      updateSignalTargets();
+      lerpSignal();
+      // Sphere rotates very slowly — full rotation takes ~4 minutes
+      sphereRotation += 0.000499;
+
       drawBackground(t);
 
       // 2. Far arcs of rings (top half — drawn behind sphere)
       drawFarArcs(cx,cy,scale);
+
+      // 2b. Sphere shadow cast on far rings — dark cone away from light source
+      // Light is upper-left so shadow falls lower-right
+      ;(function(){
+        const outerRx = RINGS[0].rx * scale;
+        const outerRy = outerRx * RINGS[0].tilt;
+        ctx.save(); ctx.translate(cx,cy);
+        ctx.save();
+        ctx.beginPath(); ctx.ellipse(0,0,outerRx*0.94,outerRy*0.94,0,0,TAU); ctx.clip();
+        const sx=sphR*0.24, sy=sphR*0.20;
+        const sg=ctx.createRadialGradient(sx,sy,sphR*0.45,sx,sy,outerRx*0.88);
+        sg.addColorStop(0,   'rgba(0,0,0,0.40)');
+        sg.addColorStop(0.30,'rgba(0,0,0,0.18)');
+        sg.addColorStop(0.60,'rgba(0,0,0,0.06)');
+        sg.addColorStop(1,   'rgba(0,0,0,0)');
+        ctx.beginPath(); ctx.ellipse(0,0,outerRx*0.94,outerRy*0.94,0,0,TAU);
+        ctx.fillStyle=sg; ctx.fill();
+        ctx.restore(); ctx.restore();
+      })();
 
       // 3. Sphere on top of far arcs
       drawSphere(cx,cy,sphR);
