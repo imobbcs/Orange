@@ -54,12 +54,32 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" />
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" /></noscript>
 
   <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958"></script>
 
-  <!-- OneSignal -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <!-- OneSignal — lazy loaded after page is interactive -->
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    function _loadOneSignal() {
+      if (window._oneSignalLoaded) return;
+      window._oneSignalLoaded = true;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';
+      s.async = true;
+      document.head.appendChild(s);
+    }
+    if (document.readyState === 'complete') {
+      setTimeout(_loadOneSignal, 3000);
+    } else {
+      window.addEventListener('load', () => setTimeout(_loadOneSignal, 3000), { once: true });
+    }
+    ['scroll','pointerdown','keydown','touchstart'].forEach(e =>
+      window.addEventListener(e, _loadOneSignal, { once: true, passive: true })
+    );
+  </script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
@@ -124,6 +144,72 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");
       mix-blend-mode: overlay;
     }
+
+    /* ── ATH CELEBRATION ── */
+    #ath-wash {
+      position: fixed; inset: 0; z-index: 998;
+      pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%,
+        rgba(255,200,50,0.07) 0%,
+        rgba(247,147,26,0.04) 40%,
+        transparent 70%);
+      opacity: 0;
+      transition: opacity 1.4s ease;
+    }
+    #ath-wash.active { opacity: 1; }
+    #ath-wash.fade-out { opacity: 0; transition: opacity 1.8s ease; }
+
+    #ath-banner {
+      position: absolute;
+      top: 11vh; left: 50%; transform: translateX(-50%);
+      z-index: 20;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0; transform: translateX(-50%) translateY(6px);
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16,1,0.3,1);
+      white-space: nowrap;
+    }
+    #ath-banner.active {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+    #ath-banner.fade-out {
+      opacity: 0; transform: translateX(-50%) translateY(-4px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .ath-banner-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(255,200,50,0.55);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .ath-banner-text {
+      font-family: var(--title);
+      font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+      letter-spacing: 0.08em;
+      color: rgb(255,200,50);
+      display: block;
+      text-shadow:
+        0 0 30px rgba(255,200,50,0.45),
+        0 0 70px rgba(255,180,30,0.18);
+    }
+
+    /* ── HERO PLACEHOLDER — static LCP-friendly layer ── */
+    #hero-placeholder {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      opacity: 1;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 52%,
+          rgba(247,147,26,0.07) 0%,
+          rgba(247,147,26,0.025) 30%,
+          transparent 65%),
+        #09080A;
+      transition: opacity 0.6s ease;
+    }
+    #hero-placeholder.canvas-ready { opacity: 0; }
 
     /* ── SCROLL PROGRESS ── */
     #progress {
@@ -347,6 +433,7 @@
     .signal-pill.accumulate { color: var(--green); }
     .signal-pill.hold       { color: var(--amber); }
     .signal-pill.caution    { color: var(--red);   }
+    .signal-pill.loading    { color: var(--grey); pointer-events: none; }
 
     .signal-dot {
       width: 6px; height: 6px; border-radius: 50%;
@@ -361,6 +448,7 @@
     .signal-pill.accumulate .signal-dot { animation: heartbeat-calm 3s ease-in-out infinite; }
     .signal-pill.hold       .signal-dot { animation: heartbeat-calm 2s ease-in-out infinite; }
     .signal-pill.caution    .signal-dot { animation: heartbeat-urgent 0.85s ease-in-out infinite; }
+    .signal-pill.loading    .signal-dot { animation: none; opacity: 0.3; }
     @keyframes heartbeat-calm {
       0%, 100% { opacity: 1; transform: scale(1); }
       50%       { opacity: 0.35; transform: scale(0.65); }
@@ -396,6 +484,7 @@
       padding-top: 1.5rem;
       opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
     }
+    .signal-reason.loading { color: var(--grey); font-style: normal; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.1em; }
 
     .hero-disclaimer {
       font-family: var(--mono); font-size: 0.625rem;
@@ -480,7 +569,7 @@
     /* ═══════════════════════════════════════════════
        SECTIONS
     ═══════════════════════════════════════════════ */
-    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; }
+    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; content-visibility: auto; contain-intrinsic-size: 0 600px; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
 
     .section-label {
@@ -1749,6 +1838,8 @@
 </head>
 <body>
 
+<!-- ATH gold wash — full-page overlay, fixed, below grain -->
+<div id="ath-wash" aria-hidden="true"></div>
 
 <div id="progress"></div>
 
@@ -1765,6 +1856,15 @@
 
 <main>
 <section class="hero" id="top">
+
+  <!-- Static CSS placeholder — LCP-friendly -->
+  <div id="hero-placeholder" aria-hidden="true"></div>
+
+  <!-- ATH celebration banner -->
+  <div id="ath-banner" aria-live="polite" aria-atomic="true">
+    <span class="ath-banner-label">Bitcoin just made history</span>
+    <span class="ath-banner-text">New All-Time High</span>
+  </div>
 
   <!-- Depth layers — parallax starfield -->
   <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
@@ -1816,13 +1916,13 @@
     </div>
 
     <div class="signal-wrap">
-      <div class="signal-pill accumulate" id="signal-pill">
+      <div class="signal-pill loading" id="signal-pill">
         <div class="signal-dot"></div>
-        <span class="signal-text" id="signal-text">Most Bitcoiners are buying</span>
+        <span class="signal-text loading" id="signal-text">Reading the signal…</span>
       </div>
     </div>
 
-    <p class="signal-reason" id="signal-reason">Fear & Greed is in extreme fear territory, and Bitcoin is trading below its 200-day average — historically, these are the conditions Bitcoiners act on.</p>
+    <p class="signal-reason loading" id="signal-reason">Fetching live market data.</p>
 
     <p class="hero-disclaimer"><span data-i18n="disclaimer">Not financial advice. See what the data shows, decide for yourself.</span></p>
 
@@ -2195,6 +2295,7 @@
   let fgValue = null;
   let maPrice = null;
   let athPrice = null;
+  let athDropPct = null; // % from ATH (negative=below, positive=at/above)
 
   const translations = {
     en: {
@@ -2240,13 +2341,49 @@
       expertTagAccumulate: 'Current signal: Accumulation zone',
       expertTagHold: 'Current signal: Neutral zone',
       expertTagCaution: 'Current signal: Caution zone',
-      expertTextAccumulate: "When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows — the logic being that if your conviction hasn't changed, a lower price is simply a better entry point.",
-      expertTextHold: "When signals are mixed, most Bitcoiners simply stay the course. DCA is designed for exactly these moments — when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular schedule, avoid reacting to noise, and let the next clear signal inform your next move.",
-      expertTextCaution: "When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling — timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. \"Be fearful when others are greedy\" is a cliché for a reason.",
-      // Signal reason text (dynamic)
-      reasonAccumulate: (fg, pct) => `Fear & Greed is at ${fg} and Bitcoin is trading ${pct}% below its 200-day average. Historically, these are the conditions Bitcoiners act on.`,
-      reasonHold: (fg) => `Mixed signals — Fear & Greed at ${fg} with Bitcoin close to its 200-day average. Most Bitcoiners stick to their regular plan and wait for a clearer picture.`,
-      reasonCaution: (fg, pct) => `Greed is elevated at ${fg} with Bitcoin ${pct}% above its 200-day average. Many Bitcoiners are cautious — not necessarily selling, but not aggressively buying either.`,
+      expertTextAccumulate: [
+        "When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows — the logic being that if your conviction hasn't changed, a lower price is simply a better entry point.",
+        "Extreme fear has a pattern in Bitcoin's history: it marks the moments most people want nothing to do with it. Those who kept buying through those periods didn't need perfect timing — they just needed to not stop. The data tends to reward the ones who treat fear as noise rather than instruction.",
+        "Conditions like these — fear elevated, price depressed — are exactly what long-term Bitcoin buyers prepare for in advance. Not because a bottom is guaranteed, but because the alternative is waiting for certainty that never arrives. DCA is designed to make this decision automatic rather than emotional.",
+        "The market is showing fear. For most Bitcoiners, that's not a reason to pause — it's the reason they set up regular buys in the first place. History doesn't repeat exactly, but the pattern of fear preceding recovery has appeared often enough to be worth taking seriously.",
+        "When sentiment is this low, Bitcoin tends to be out of the news, out of dinner conversations, and out of favour. That's historically been the accumulation window — not because the bottom is here, but because assets bought during widespread pessimism have tended to outperform those bought during enthusiasm.",
+      ],
+      expertTextHold: [
+        "When signals are mixed, most Bitcoiners simply stay the course. DCA is designed for exactly these moments — when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular schedule, avoid reacting to noise, and let the next clear signal inform your next move.",
+        "Neutral conditions are where discipline gets tested most. There's no obvious prompt to act, no fear to lean into, no greed to step back from. The Bitcoiners who tend to do best in these phases are the ones who already decided what they'd do before the signal became unclear.",
+        "Mixed signals aren't a problem to solve — they're just the market's way of saying nothing definitive is happening yet. The right response is usually to do nothing differently. Your DCA schedule exists precisely so you don't have to make new decisions every time the picture isn't clear.",
+        "In neutral zones, the biggest risk isn't inaction — it's overreaction. The urge to do something meaningful often peaks when conditions are ambiguous. Most experienced Bitcoiners treat these periods as maintenance: keep the schedule, tune out the commentary, wait for clarity.",
+        "The signal isn't pointing strongly in either direction right now. That's not unusual — Bitcoin spends meaningful time in these transitional states. The most consistent long-term buyers don't change their behaviour here. They keep buying, or they keep holding, based on a plan they made before today.",
+      ],
+      expertTextCaution: [
+        "When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling — timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. \"Be fearful when others are greedy\" is a cliché for a reason.",
+        "Elevated greed and an extended price are the conditions where Bitcoin tends to attract the most new attention — and where experienced holders get quieter. Not because a crash is certain, but because the risk/reward of adding more at these levels has historically been less favourable than adding during fear.",
+        "When Bitcoin is this far above its long-term average, the data suggests patience over urgency. Pullbacks from extended conditions are normal and often sharp. The Bitcoiners who navigate this best are usually the ones who added during fear and are now simply holding — not chasing the move.",
+        "High greed readings have preceded corrections often enough in Bitcoin's history to be worth respecting. This doesn't mean the top is in — no one knows that. It means the asymmetry that makes accumulation zones compelling doesn't exist here in the same way. Caution isn't pessimism; it's proportionality.",
+        "Near all-time highs with sentiment running hot is when Bitcoin feels most obvious to buy — and historically, that's been the highest-risk time to do so. The most durable Bitcoin positions were built during the periods that felt least comfortable. Right now doesn't feel uncomfortable. That's worth noticing.",
+      ],
+      // Signal reason text — arrays, selected by day index
+      reasonAccumulate: [
+        (fg, maPct, athPct) => `Fear & Greed is at ${fg} and Bitcoin is ${maPct}% below its 200-day average — ${athPct}% from its all-time high. Historically, these are the conditions Bitcoiners act on.`,
+        (fg, maPct, athPct) => `Sentiment is at ${fg} on the Fear & Greed scale. Bitcoin is trading ${maPct}% below its 200-day average and ${athPct}% off its peak. The data points in one direction.`,
+        (fg, maPct, athPct) => `Fear & Greed reads ${fg} — firmly in fear territory. With Bitcoin ${maPct}% under its 200-day average and ${athPct}% below ATH, all three signals align toward accumulation.`,
+        (fg, maPct, athPct) => `At ${fg} on Fear & Greed, with Bitcoin ${maPct}% below its 200-day average and ${athPct}% from its all-time high — the kind of setup long-term Bitcoiners look for.`,
+        (fg, maPct, athPct) => `Three signals, one direction: Fear & Greed at ${fg}, Bitcoin ${maPct}% below its moving average, and ${athPct}% below its all-time high. This is the accumulation zone.`,
+      ],
+      reasonHold: [
+        (fg, maPct, athPct) => `Mixed signals — Fear & Greed at ${fg}, Bitcoin ${maPct}% from its 200-day average and ${athPct}% below ATH. Not a clear prompt to act in either direction.`,
+        (fg, maPct, athPct) => `Fear & Greed sits at ${fg} with Bitcoin ${maPct}% of its 200-day average and ${athPct}% off its peak. Conditions are neutral — the regular plan holds.`,
+        (fg, maPct, athPct) => `Sentiment reads ${fg}. Bitcoin is ${maPct}% from its 200-day average, ${athPct}% below ATH. No strong signal either way — most Bitcoiners stay their course.`,
+        (fg, maPct, athPct) => `At ${fg} on Fear & Greed and ${maPct}% from the 200-day average, the signals are mixed. ${athPct}% below ATH adds some context, but not a clear direction.`,
+        (fg, maPct, athPct) => `Nothing definitive right now: Fear & Greed at ${fg}, Bitcoin ${maPct}% from its moving average, ${athPct}% from its all-time high. The neutral zone — steady as she goes.`,
+      ],
+      reasonCaution: [
+        (fg, maPct, athPct) => `Greed is elevated at ${fg} with Bitcoin ${maPct}% above its 200-day average and only ${athPct}% from its all-time high. Many Bitcoiners are cautious here.`,
+        (fg, maPct, athPct) => `Fear & Greed reads ${fg} — deep into greed. Bitcoin is ${maPct}% above its 200-day average and ${athPct}% from ATH. The risk/reward has shifted.`,
+        (fg, maPct, athPct) => `At ${fg} on Fear & Greed, ${maPct}% above the 200-day average, and ${athPct}% from its all-time high — conditions that historically warrant stepping back rather than adding.`,
+        (fg, maPct, athPct) => `Sentiment is running hot at ${fg}. Bitcoin is extended ${maPct}% above its moving average and ${athPct}% from its peak. This is when conviction gets tested.`,
+        (fg, maPct, athPct) => `Three signals pointing toward caution: Fear & Greed at ${fg}, Bitcoin ${maPct}% above its 200-day average, just ${athPct}% from all-time highs. Not the accumulation zone.`,
+      ],
       // What If
       whatifLabel: 'What If?',
       whatifTitle: 'The money was always there.',
@@ -2366,13 +2503,49 @@
       expertTagAccumulate: 'Aktuelles Signal: Akkumulationszone',
       expertTagHold: 'Aktuelles Signal: Neutrale Zone',
       expertTagCaution: 'Aktuelles Signal: Vorsichtszone',
-      expertTextAccumulate: 'Fällt der Fear & Greed Index in den Angstbereich, werten Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regelmäßigen Betrag — die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
-      expertTextHold: 'Bei gemischten Signalen bleiben die meisten Bitcoiner einfach ihrem Plan treu. DCA ist genau für solche Momente gemacht — wenn es nicht eindeutig ist, ob man mehr kaufen oder abwarten soll. Das häufigste Verhalten in neutralen Zonen: den regelmäßigen Rhythmus beibehalten, nicht auf Lärm reagieren und auf das nächste klare Signal warten.',
-      expertTextCaution: 'Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, werden viele Bitcoiner vorsichtiger. Das bedeutet meistens nicht verkaufen — Ausstiege zu timen ist genauso schwer wie Einstiege. Aber oft heißt es: Käufe pausieren, Positionsgröße überdenken und sich mental auf einen Rücksetzer vorbereiten. „Sei ängstlich, wenn andere gierig sind“ — ein Klischée, das seinen Grund hat.',
-      // Signal reason text (dynamic)
-      reasonAccumulate: (fg, pct) => `Fear & Greed liegt bei ${fg} und Bitcoin handelt ${pct}% unter seinem 200-Tage-Durchschnitt. Historisch gesehen sind das die Bedingungen, unter denen Bitcoiner aktiv werden.`,
-      reasonHold: (fg) => `Gemischte Signale — Fear & Greed bei ${fg}, Bitcoin nahe am 200-Tage-Durchschnitt. Die meisten Bitcoiner halten an ihrem Plan fest und warten auf ein klareres Bild.`,
-      reasonCaution: (fg, pct) => `Gier ist erhöht bei ${fg}, Bitcoin handelt ${pct}% über seinem 200-Tage-Durchschnitt. Viele Bitcoiner sind vorsichtig — nicht zwingend am Verkaufen, aber auch nicht aggressiv am Kaufen.`,
+      expertTextAccumulate: [
+        'Fällt der Fear & Greed Index in den Angstbereich, werten Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regelmäßigen Betrag — die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
+        'Extreme Angst hat in der Geschichte von Bitcoin ein Muster: Sie markiert die Momente, in denen die meisten Menschen nichts damit zu tun haben wollen. Wer in diesen Phasen weiter kaufte, brauchte kein perfektes Timing — er musste nur nicht aufhören. Die Daten belohnen tendenziell die, die Angst als Rauschen behandeln, nicht als Anweisung.',
+        'Bedingungen wie diese — hohe Angst, gedrückter Preis — sind genau das, worauf sich langfristige Bitcoin-Käufer im Voraus vorbereiten. Nicht weil ein Tief garantiert ist, sondern weil die Alternative darin besteht, auf eine Gewissheit zu warten, die nie kommt. DCA macht diese Entscheidung automatisch statt emotional.',
+        'Der Markt zeigt Angst. Für die meisten Bitcoiner ist das kein Grund zu pausieren — es ist der Grund, warum sie überhaupt regelmäßige Käufe eingerichtet haben. Die Geschichte wiederholt sich nicht exakt, aber das Muster von Angst vor Erholung ist oft genug aufgetreten, um ernst genommen zu werden.',
+        'Wenn die Stimmung so gedrückt ist, ist Bitcoin oft aus den Nachrichten, aus den Gesprächen und aus dem Rampenlicht verschwunden. Das war historisch gesehen das Akkumulationsfenster — nicht weil der Tiefpunkt erreicht ist, sondern weil Käufe in Zeiten weitverbreiteten Pessimismus dazu neigten, Käufe in Zeiten der Euphorie zu übertreffen.',
+      ],
+      expertTextHold: [
+        'Bei gemischten Signalen bleiben die meisten Bitcoiner einfach ihrem Plan treu. DCA ist genau für solche Momente gemacht — wenn es nicht eindeutig ist, ob man mehr kaufen oder abwarten soll. Das häufigste Verhalten in neutralen Zonen: den regelmäßigen Rhythmus beibehalten, nicht auf Lärm reagieren und auf das nächste klare Signal warten.',
+        'Neutrale Bedingungen sind der härteste Test für Disziplin. Es gibt keinen offensichtlichen Anlass zu handeln, keine Angst, in die man sich lehnen könnte, keine Gier, von der man Abstand nehmen müsste. Die Bitcoiner, die in diesen Phasen am besten abschneiden, haben bereits entschieden, was sie tun würden, bevor das Signal unklar wurde.',
+        'Gemischte Signale sind kein Problem, das gelöst werden muss — sie sind einfach die Art des Marktes zu sagen, dass noch nichts Definitives passiert. Die richtige Reaktion ist meistens, nichts anders zu machen. Dein DCA-Plan existiert genau deshalb, damit du keine neuen Entscheidungen treffen musst, wenn das Bild unklar ist.',
+        'In neutralen Zonen ist das größte Risiko nicht Untätigkeit — es ist Überreaktion. Der Drang, etwas Bedeutsames zu tun, ist oft am stärksten, wenn die Bedingungen unklar sind. Die meisten erfahrenen Bitcoiner behandeln diese Phasen als Routine: Plan beibehalten, Kommentare ausblenden, auf Klarheit warten.',
+        'Das Signal zeigt gerade nicht stark in eine Richtung. Das ist nicht ungewöhnlich — Bitcoin verbringt erhebliche Zeit in diesen Übergangszuständen. Die beständigsten langfristigen Käufer ändern ihr Verhalten hier nicht. Sie kaufen weiter oder halten weiter — auf der Basis eines Plans, den sie vor heute gemacht haben.',
+      ],
+      expertTextCaution: [
+        'Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, werden viele Bitcoiner vorsichtiger. Das bedeutet meistens nicht verkaufen — Ausstiege zu timen ist genauso schwer wie Einstiege. Aber oft heißt es: Käufe pausieren, Positionsgröße überdenken und sich mental auf einen Rücksetzer vorbereiten.',
+        'Erhöhte Gier und ein ausgedehnter Preis sind die Bedingungen, unter denen Bitcoin die meiste neue Aufmerksamkeit anzieht — und unter denen erfahrene Halter stiller werden. Nicht weil ein Crash sicher ist, sondern weil das Chance-Risiko-Verhältnis bei diesen Niveaus historisch weniger günstig war als beim Kaufen in Angstphasen.',
+        'Wenn Bitcoin so weit über seinem langfristigen Durchschnitt liegt, deuten die Daten auf Geduld statt Dringlichkeit hin. Korrekturen aus ausgedehnten Bedingungen sind normal und oft scharf. Die Bitcoiner, die das am besten navigieren, haben meist in Angstphasen akkumuliert und halten jetzt einfach — statt der Bewegung hinterherzujagen.',
+        'Hohe Gier-Werte sind in Bitcoins Geschichte oft genug Korrekturen vorangegangen, um respektiert zu werden. Das bedeutet nicht, dass das Hoch erreicht ist — das weiß niemand. Es bedeutet, dass die Asymmetrie, die Akkumulationszonen attraktiv macht, hier nicht in gleichem Maße existiert. Vorsicht ist kein Pessimismus; es ist Verhältnismäßigkeit.',
+        'Nahe Allzeithochs mit heißer Stimmung fühlt sich Bitcoin am selbstverständlichsten zum Kaufen an — und historisch war das die risikoreichste Zeit. Die dauerhaftesten Bitcoin-Positionen wurden in Phasen aufgebaut, die sich am wenigsten angenehm anfühlten. Gerade fühlt es sich nicht unangenehm an. Das ist es wert, bemerkt zu werden.',
+      ],
+      // Signal reason text — arrays, selected by day index
+      reasonAccumulate: [
+        (fg, maPct, athPct) => `Fear & Greed liegt bei ${fg} und Bitcoin handelt ${maPct}% unter seinem 200-Tage-Durchschnitt — ${athPct}% vom Allzeithoch. Historisch gesehen sind das die Bedingungen, unter denen Bitcoiner aktiv werden.`,
+        (fg, maPct, athPct) => `Die Stimmung liegt bei ${fg} auf der Fear & Greed-Skala. Bitcoin handelt ${maPct}% unter seinem 200-Tage-Durchschnitt und ${athPct}% unter seinem Höchststand. Die Daten zeigen in eine Richtung.`,
+        (fg, maPct, athPct) => `Fear & Greed zeigt ${fg} — klar im Angstbereich. Mit Bitcoin ${maPct}% unter seinem 200-Tage-Durchschnitt und ${athPct}% unter ATH zeigen alle drei Signale auf Akkumulation.`,
+        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed, ${maPct}% unter dem 200-Tage-Durchschnitt und ${athPct}% vom Allzeithoch — die Art von Konstellation, auf die langfristige Bitcoiner warten.`,
+        (fg, maPct, athPct) => `Drei Signale, eine Richtung: Fear & Greed bei ${fg}, Bitcoin ${maPct}% unter seinem Durchschnitt und ${athPct}% unter seinem Allzeithoch. Das ist die Akkumulationszone.`,
+      ],
+      reasonHold: [
+        (fg, maPct, athPct) => `Gemischte Signale — Fear & Greed bei ${fg}, Bitcoin ${maPct}% vom 200-Tage-Durchschnitt und ${athPct}% unter ATH. Kein klarer Anlass, in eine Richtung zu handeln.`,
+        (fg, maPct, athPct) => `Fear & Greed liegt bei ${fg}, Bitcoin ${maPct}% vom 200-Tage-Durchschnitt und ${athPct}% unter seinem Höchststand. Neutrale Bedingungen — der reguläre Plan gilt.`,
+        (fg, maPct, athPct) => `Stimmung bei ${fg}. Bitcoin liegt ${maPct}% vom 200-Tage-Durchschnitt, ${athPct}% unter ATH. Kein starkes Signal in eine Richtung — die meisten Bitcoiner bleiben ihrem Kurs treu.`,
+        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed und ${maPct}% vom 200-Tage-Durchschnitt sind die Signale gemischt. ${athPct}% unter ATH gibt etwas Kontext, aber keine klare Richtung.`,
+        (fg, maPct, athPct) => `Gerade nichts Eindeutiges: Fear & Greed bei ${fg}, Bitcoin ${maPct}% vom Durchschnitt, ${athPct}% vom Allzeithoch. Die neutrale Zone — weiter wie bisher.`,
+      ],
+      reasonCaution: [
+        (fg, maPct, athPct) => `Gier ist erhöht bei ${fg}, Bitcoin ${maPct}% über seinem 200-Tage-Durchschnitt und nur ${athPct}% vom Allzeithoch. Viele Bitcoiner sind hier vorsichtig.`,
+        (fg, maPct, athPct) => `Fear & Greed zeigt ${fg} — tief im Gier-Bereich. Bitcoin liegt ${maPct}% über seinem 200-Tage-Durchschnitt und ${athPct}% vom ATH. Das Chance-Risiko-Verhältnis hat sich verändert.`,
+        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed, ${maPct}% über dem 200-Tage-Durchschnitt und ${athPct}% vom Allzeithoch — Bedingungen, die historisch eher zum Zurücktreten als zum Aufstocken einladen.`,
+        (fg, maPct, athPct) => `Die Stimmung läuft heiß bei ${fg}. Bitcoin ist ${maPct}% über seinem Durchschnitt ausgedehnt und ${athPct}% von seinem Höchststand entfernt. Hier wird Überzeugung auf die Probe gestellt.`,
+        (fg, maPct, athPct) => `Drei Signale in Richtung Vorsicht: Fear & Greed bei ${fg}, Bitcoin ${maPct}% über seinem 200-Tage-Durchschnitt, nur ${athPct}% unter Allzeithoch. Nicht die Akkumulationszone.`,
+      ],
       // What If
       whatifLabel: 'Was wäre wenn?',
       whatifTitle: 'Das Geld war immer da.',
@@ -2478,7 +2651,7 @@
 
     // Update dynamic signal/expert text if already loaded
     updateSignalText();
-    if (fgValue !== null && maPrice !== null && currentPrice !== null) {
+    if (fgValue !== null && maPrice !== null && currentPrice !== null && athDropPct !== null) {
       updateSignal();
     }
 
@@ -2631,6 +2804,7 @@
       const sym = currentCurrency === 'EUR' ? '€' : '$';
 
       const dropPct = ((currentPrice - athPrice) / athPrice * 100);
+      athDropPct = dropPct;
       const absPct = Math.abs(dropPct).toFixed(0);
 
       document.getElementById('ath-price').textContent = sym + formatPrice(athPrice);
@@ -2655,9 +2829,39 @@
       document.getElementById('ath-desc').textContent = desc;
       document.getElementById('ath-arrow').textContent = dropPct >= 0 ? '↑' : '↓';
       document.getElementById('ath-arrow').style.color = color;
+      updateSignal();
+      if (dropPct >= 0) triggerATHCelebration();
     } catch (e) {
       document.getElementById('ath-desc').textContent = translations[currentLang].athError;
     }
+  }
+
+  // ── ATH CELEBRATION ──
+  let _athCelebrated = false;
+
+  function triggerATHCelebration() {
+    if (_athCelebrated) return;
+    _athCelebrated = true;
+    const wash = document.getElementById('ath-wash');
+    const banner = document.getElementById('ath-banner');
+    // Update banner copy for current language
+    const labelEl = banner && banner.querySelector('.ath-banner-label');
+    const textEl  = banner && banner.querySelector('.ath-banner-text');
+    if (labelEl) labelEl.textContent = currentLang === 'de' ? 'Bitcoin schreibt Geschichte' : 'Bitcoin just made history';
+    if (textEl)  textEl.textContent  = currentLang === 'de' ? 'Neues Allzeithoch' : 'New All-Time High';
+    const prevSignal = window._cinematicSignal;
+    window._cinematicSignal = 'ath';
+    if (wash) requestAnimationFrame(() => wash.classList.add('active'));
+    if (banner) requestAnimationFrame(() => banner.classList.add('active'));
+    setTimeout(() => {
+      if (wash) { wash.classList.remove('active'); wash.classList.add('fade-out'); }
+      if (banner) { banner.classList.remove('active'); banner.classList.add('fade-out'); }
+      window._cinematicSignal = prevSignal || 'accumulate';
+    }, 5000);
+    setTimeout(() => {
+      if (wash) wash.classList.remove('fade-out');
+      if (banner) banner.classList.remove('fade-out');
+    }, 7000);
   }
 
   // ── 200-DAY MA (from history) ──
@@ -2706,11 +2910,16 @@
 
   // ── SIGNAL ENGINE ──
   function updateSignal() {
-    if (fgValue === null || maPrice === null || currentPrice === null) return;
+    if (fgValue === null || maPrice === null || currentPrice === null || athDropPct === null) return;
 
     const diffPct = (currentPrice - maPrice) / maPrice * 100;
-    const score = (fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2) +
-                  (diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2);
+    const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
+    const maScore  = diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2;
+    const athScore = athDropPct < -50 ? 1 : athDropPct < -25 ? 0 : -1;
+    const score = fgScore + maScore + athScore;
+    // Range −5 to +5. Thresholds: ≥3 Accumulate, −1 to 2 Hold, ≤−2 Caution
+
+    const dayIndex = Math.floor(Date.now() / 86400000);
 
     const pill = document.getElementById('signal-pill');
     const text = document.getElementById('signal-text');
@@ -2720,44 +2929,50 @@
     const expertText = document.getElementById('expert-text');
 
     pill.className = 'signal-pill';
+    reason.classList.remove('loading');
     const navDot = document.getElementById('nav-signal-dot');
     if (navDot) { navDot.className = 'nav-signal-dot'; }
-    if (score >= 2) {
+
+    const t = translations[currentLang];
+    const absMaPct = Math.abs(diffPct).toFixed(0);
+    const absAthPct = Math.abs(athDropPct).toFixed(0);
+
+    if (score >= 3) {
       pill.classList.add('accumulate');
       if (navDot) { navDot.classList.add('accumulate', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('accumulate');
       window._cinematicSignal = 'accumulate';
-      text.textContent = translations[currentLang].signalAccumulate;
+      text.textContent = t.signalAccumulate;
       shareSignal.style.color = 'var(--green)';
-      shareSignal.textContent = '● ' + translations[currentLang].signalAccumulate;
-      reason.textContent = translations[currentLang].reasonAccumulate(fgValue, Math.abs(diffPct).toFixed(0));
-      expertTag.textContent = translations[currentLang].expertTagAccumulate;
+      shareSignal.textContent = '● ' + t.signalAccumulate;
+      reason.textContent = t.reasonAccumulate[dayIndex % t.reasonAccumulate.length](fgValue, absMaPct, absAthPct);
+      expertTag.textContent = t.expertTagAccumulate;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = translations[currentLang].expertTextAccumulate;
-    } else if (score >= 0) {
+      expertText.textContent = t.expertTextAccumulate[dayIndex % t.expertTextAccumulate.length];
+    } else if (score >= -1) {
       pill.classList.add('hold');
       if (navDot) { navDot.classList.add('hold', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('hold');
       window._cinematicSignal = 'hold';
-      text.textContent = translations[currentLang].signalHold;
+      text.textContent = t.signalHold;
       shareSignal.style.color = 'var(--amber)';
-      shareSignal.textContent = '● ' + translations[currentLang].signalHold;
-      reason.textContent = translations[currentLang].reasonHold(fgValue);
-      expertTag.textContent = translations[currentLang].expertTagHold;
+      shareSignal.textContent = '● ' + t.signalHold;
+      reason.textContent = t.reasonHold[dayIndex % t.reasonHold.length](fgValue, absMaPct, absAthPct);
+      expertTag.textContent = t.expertTagHold;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = translations[currentLang].expertTextHold;
+      expertText.textContent = t.expertTextHold[dayIndex % t.expertTextHold.length];
     } else {
       pill.classList.add('caution');
       if (navDot) { navDot.classList.add('caution', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('caution');
       window._cinematicSignal = 'caution';
-      text.textContent = translations[currentLang].signalCaution;
+      text.textContent = t.signalCaution;
       shareSignal.style.color = 'var(--red)';
-      shareSignal.textContent = '● ' + translations[currentLang].signalCaution;
-      reason.textContent = translations[currentLang].reasonCaution(fgValue, diffPct.toFixed(0));
-      expertTag.textContent = translations[currentLang].expertTagCaution;
+      shareSignal.textContent = '● ' + t.signalCaution;
+      reason.textContent = t.reasonCaution[dayIndex % t.reasonCaution.length](fgValue, absMaPct, absAthPct);
+      expertTag.textContent = t.expertTagCaution;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(248,113,113,0.3); background:var(--red-dim); color:var(--red); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = translations[currentLang].expertTextCaution;
+      expertText.textContent = t.expertTextCaution[dayIndex % t.expertTextCaution.length];
     }
 
     // Update gauge needle
@@ -3902,7 +4117,9 @@
 
     function updateSignalTargets() {
       const sig = window._cinematicSignal || 'accumulate';
-      if (sig === 'accumulate') {
+      if (sig === 'ath') {
+        targetR=255; targetG=200; targetB=50; targetSpeedMult=0.08;
+      } else if (sig === 'accumulate') {
         targetR=OR; targetG=OG; targetB=OB; targetSpeedMult=1.0;
       } else if (sig === 'hold') {
         targetR=251; targetG=191; targetB=36; targetSpeedMult=0.65;
@@ -4151,8 +4368,15 @@
     }
 
     function drawEnergy(cx,cy){
+      const athActive = window._cinematicSignal === 'ath';
       ENERGY.forEach(p=>{
-        p.dist+=p.spd; p.tw+=p.tws;
+        if (athActive) {
+          p.dist -= p.spd * 0.7;
+          if (p.dist < 2) { p.dist = Math.min(W,H)*(0.12+Math.random()*0.08); p.angle=Math.random()*TAU; }
+        } else {
+          p.dist+=p.spd;
+        }
+        p.tw+=p.tws;
         const x=cx+Math.cos(p.angle)*p.dist, y=cy+Math.sin(p.angle)*p.dist;
         const prog=p.dist/p.maxDist;
         const fade=prog<0.10?prog/0.10:prog>0.68?1-(prog-0.68)/0.32:1;
@@ -4236,6 +4460,13 @@
 
       // 6. Near arcs of rings (bottom half — drawn in front of sphere)
       drawNearArcs(cx,cy,scale);
+
+      // Dismiss static placeholder on first completed frame
+      if (!frame._placeholderDone) {
+        frame._placeholderDone = true;
+        const ph = document.getElementById('hero-placeholder');
+        if (ph) requestAnimationFrame(() => ph.classList.add('canvas-ready'));
+      }
 
       requestAnimationFrame(frame);
     }
