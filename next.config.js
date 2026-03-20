@@ -34,7 +34,15 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // ← NEW: prevents /app.html from being cached by browsers/proxies
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/xml',
+          },
+        ],
+      },
+      {
         source: '/app.html',
         headers: [
           {
