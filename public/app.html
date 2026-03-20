@@ -3523,7 +3523,11 @@
   let _chartDays   = 30;
   const _heroEl = document.getElementById('top');
   const _sigilWrap = _heroEl?.querySelector('.sigil-wrap');
-  const _heroH = () => _heroEl?.offsetHeight || window.innerHeight;
+  let _cachedHeroH = _heroEl?.offsetHeight || window.innerHeight;
+  window.addEventListener('resize', () => {
+    _cachedHeroH = _heroEl?.offsetHeight || window.innerHeight;
+  }, { passive: true });
+  const _heroH = () => _cachedHeroH;
 
   function onScroll() {
     const sy = window.scrollY;
@@ -3546,9 +3550,14 @@
     if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
     if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
 
-    // Sigil transform owned by tiltLoop above — scroll triggers a tiltLoop update via scrollY
-    if (_sigilWrap && !('ontouchstart' in window)) {
-      // nudge tiltLoop to re-read scrollY by doing nothing — it reads window.scrollY each frame
+    // Sigil parallax on mobile (tiltLoop only runs on pointer:fine/desktop)
+    // On touch devices, apply scroll parallax directly in the scroll handler
+    if (_sigilWrap && ('ontouchstart' in window)) {
+      const sigilY = -(sy * 0.35);
+      const sigilS = 1 - (sp * 0.18);
+      const sigilO = Math.max(1 - (sp * 1.6), 0);
+      _sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0)`;
+      _sigilWrap.style.opacity = sigilO;
     }
   }
 
@@ -4396,18 +4405,26 @@
       });
     }
 
-    // Cache layout values — read on resize, not every frame
-    let _swRect = null, _cachedCanvasHeroH = 0;
-    function cacheLayout() {
+    // Cache sigil and hero layout — document-relative, updated only on resize
+    // In frame(), viewport position = docTop - scrollY  (no DOM reads per frame)
+    let _swDocLeft=0, _swDocTop=0, _swW=0, _cachedCanvasHeroH=0;
+    function cacheCanvasLayout() {
       const sw = document.querySelector('.sigil-wrap');
       const hero = document.getElementById('top');
-      _swRect = sw ? sw.getBoundingClientRect() : null;
+      if (sw) {
+        const r = sw.getBoundingClientRect();
+        _swDocLeft = r.left;           // left doesn't change with scroll
+        _swDocTop  = r.top + window.scrollY; // convert to document coords
+        _swW = r.width;
+      }
       _cachedCanvasHeroH = hero ? hero.offsetHeight : window.innerHeight;
     }
-    cacheLayout();
-    window.addEventListener('resize', cacheLayout, { passive: true });
+    // Re-cache after page is fully laid out
+    cacheCanvasLayout();
+    window.addEventListener('load', cacheCanvasLayout, { once: true });
+    window.addEventListener('resize', cacheCanvasLayout, { passive: true });
 
-    // Pause RAF when hero is off-screen — saves ~60fps of canvas work on mobile
+    // Pause canvas paint when hero is fully off-screen
     let _heroVisible = true;
     const _heroVisObserver = new IntersectionObserver(
       entries => { _heroVisible = entries[0].isIntersecting; },
@@ -4418,19 +4435,20 @@
 
     let t=0;
     function frame(){
-      // Skip paint entirely when hero is scrolled off-screen
+      // Skip paint when hero is scrolled off-screen
       if (!_heroVisible) { requestAnimationFrame(frame); return; }
 
       t++;
       ctx.clearRect(0,0,W,H);
 
-      // Get planet centre from cached layout values
+      // Compute viewport position from cached doc coords + current scrollY — zero DOM reads
       let cx=W*0.5, cy=H*0.58, scale, sphR;
-      if(_swRect){
-        cx=_swRect.left+_swRect.width*0.5;
-        cy=(_swRect.top+_swRect.height*0.5)+_cachedCanvasHeroH*0.14;
-        scale=_swRect.width*0.5;
-        sphR=scale*0.26;
+      if(_swW){
+        const viewportTop = _swDocTop - window.scrollY;
+        cx = _swDocLeft + _swW * 0.5;
+        cy = (viewportTop + _swW * 0.5) + _cachedCanvasHeroH * 0.14;
+        scale = _swW * 0.5;
+        sphR  = scale * 0.26;
       } else {
         scale=Math.min(W,H)*0.40; sphR=scale*0.26;
       }
