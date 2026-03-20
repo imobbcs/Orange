@@ -178,8 +178,8 @@
     }
     .ath-banner-label {
       font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.45em;
+      font-size: 0.625rem;
+      letter-spacing: 0.42em;
       text-transform: uppercase;
       color: rgba(255,200,50,0.55);
       display: block;
@@ -1225,7 +1225,7 @@
       }
       /* hero-content pushed down enough to clear the sigil */
       .hero-content {
-        padding-top: 22vw;
+        padding-top: 30vw;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1233,7 +1233,7 @@
         width: 100%;
       }
       .hero-price-block { text-align: center; width: 100%; }
-      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
+      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1.25rem; }
       /* Sigil: upper atmosphere, slightly dimmer but still visible */
       .sigil-wrap {
         width: min(80vw, 52vh);
@@ -1244,16 +1244,16 @@
       /* Price block */
       .hero-price-block { padding-top: 0; }
       .hero-price { font-size: clamp(4rem, 18vw, 6.5rem); line-height: 0.88; }
-      .hero-price-change { font-size: 0.65rem; margin-top: 0.6rem; }
+      .hero-price-change { font-size: 0.65rem; margin-top: 0.75rem; }
 
       /* Signal pill */
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
-      .signal-wrap { margin: 1rem 0 0.5rem; }
-      /* Signal reason: tighter on mobile */
-      .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 0.25rem; color: rgba(237,232,222,0.72); }
+      .signal-wrap { margin: 1.5rem 0 1rem; }
+      /* Signal reason: more room on mobile */
+      .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 1rem; color: rgba(237,232,222,0.72); }
       .section-sub, .expert-text, .relai-sub, .push-sub { color: rgba(237,232,222,0.72); }
-      .hero-disclaimer { font-size: 0.625rem; }
+      .hero-disclaimer { font-size: 0.625rem; margin-top: 0.5rem; }
 
       /* ── EXPERT ── */
       .expert-card { padding: 2rem 1.5rem; }
@@ -1267,7 +1267,7 @@
       /* CTAs: full width, stacked */
       .hero-actions {
         flex-direction: row; flex-wrap: wrap; align-items: center;
-        gap: 0.6rem; margin-top: 1.25rem; width: 100%; justify-content: center;
+        gap: 0.6rem; margin-top: 1.75rem; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost { text-align: center; padding: 0.9rem 1.2rem; width: auto; flex: 1 1 140px; max-width: 48%; }
@@ -4396,22 +4396,40 @@
       });
     }
 
+    // Cache layout values — read on resize, not every frame
+    let _swRect = null, _cachedCanvasHeroH = 0;
+    function cacheLayout() {
+      const sw = document.querySelector('.sigil-wrap');
+      const hero = document.getElementById('top');
+      _swRect = sw ? sw.getBoundingClientRect() : null;
+      _cachedCanvasHeroH = hero ? hero.offsetHeight : window.innerHeight;
+    }
+    cacheLayout();
+    window.addEventListener('resize', cacheLayout, { passive: true });
+
+    // Pause RAF when hero is off-screen — saves ~60fps of canvas work on mobile
+    let _heroVisible = true;
+    const _heroVisObserver = new IntersectionObserver(
+      entries => { _heroVisible = entries[0].isIntersecting; },
+      { threshold: 0 }
+    );
+    const _heroEl2 = document.getElementById('top');
+    if (_heroEl2) _heroVisObserver.observe(_heroEl2);
+
     let t=0;
     function frame(){
+      // Skip paint entirely when hero is scrolled off-screen
+      if (!_heroVisible) { requestAnimationFrame(frame); return; }
+
       t++;
       ctx.clearRect(0,0,W,H);
 
-      // Get planet centre — sigil-wrap centre shifted down 8% so planet
-      // sits in lower hero with text content floating above
-      const sw=document.querySelector('.sigil-wrap');
+      // Get planet centre from cached layout values
       let cx=W*0.5, cy=H*0.58, scale, sphR;
-      if(sw){
-        const r=sw.getBoundingClientRect();
-        cx=r.left+r.width*0.5;
-        const hero=document.getElementById('top');
-        const heroH=hero?hero.offsetHeight:H;
-        cy=(r.top+r.height*0.5)+heroH*0.14;
-        scale=r.width*0.5;
+      if(_swRect){
+        cx=_swRect.left+_swRect.width*0.5;
+        cy=(_swRect.top+_swRect.height*0.5)+_cachedCanvasHeroH*0.14;
+        scale=_swRect.width*0.5;
         sphR=scale*0.26;
       } else {
         scale=Math.min(W,H)*0.40; sphR=scale*0.26;
