@@ -1215,8 +1215,8 @@
       .nav-cta { display: none; }
 
       /* ── HERO — mobile layout ──
-         Three zones: price (top) → sigil ring (middle) → signal + buttons (bottom)
-         space-between distributes content to fill the full screen height.
+         hero-content fills full screen height as flex column.
+         Eyebrow + price sit at top. Buttons pushed to bottom via margin-top: auto.
       ── */
       .hero {
         padding: 0 1.5rem;
@@ -1226,18 +1226,17 @@
       }
       .hero-content {
         padding-top: 14svh;
-        padding-bottom: 0;
+        padding-bottom: 6svh;
         min-height: 86svh;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
         width: 100%;
-        justify-content: space-between;
       }
       .hero-price-block { text-align: center; width: 100%; }
-      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
-      /* Sigil: horizontal band at 52% — clean divider between price and signal */
+      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1.5rem; }
+      /* Sigil: centred at 50% of hero height — backdrop only */
       .sigil-wrap {
         width: min(90vw, 46vh);
         height: min(90vw, 46vh);
@@ -1249,13 +1248,13 @@
       .hero-price { font-size: clamp(4rem, 18vw, 6.5rem); line-height: 0.88; }
       .hero-price-change { font-size: 0.65rem; margin-top: 0.75rem; }
 
-      /* Signal zone — bottom third */
+      /* Signal zone — sits naturally below price */
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
-      .signal-wrap { margin: 0 0 0.75rem; }
+      .signal-wrap { margin: 2rem 0 1rem; }
       .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 0.75rem; color: rgba(237,232,222,0.72); }
       .section-sub, .expert-text, .relai-sub, .push-sub { color: rgba(237,232,222,0.72); }
-      .hero-disclaimer { font-size: 0.625rem; margin-top: 0.25rem; margin-bottom: 0; }
+      .hero-disclaimer { font-size: 0.625rem; margin-top: 0.5rem; }
 
       /* ── EXPERT ── */
       .expert-card { padding: 2rem 1.5rem; }
@@ -1266,20 +1265,16 @@
       .scroll-indicator { display: none; }
       .signal-updated { display: none; }
 
-      /* CTAs — pushed to bottom of hero */
+      /* CTAs — margin-top: auto pushes buttons to bottom of hero */
       .hero-actions {
-        flex-direction: row; flex-wrap: wrap; align-items: flex-end;
-        gap: 0.6rem; margin-top: auto; margin-bottom: 5svh; width: 100%; justify-content: center;
+        display: flex; flex-direction: row; flex-wrap: nowrap;
+        gap: 0.75rem; margin-top: auto; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost {
-        text-align: center;
-        padding: 0.9rem 0.75rem;
-        width: auto;
-        flex: 1 1 0;
-        white-space: nowrap;
         font-size: 0.625rem;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.12em;
+        padding: 1rem 1.5rem;
       }
 
       /* ── SECTIONS ── */
