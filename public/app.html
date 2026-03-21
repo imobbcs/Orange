@@ -126,7 +126,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; } /* smooth only applied via JS for anchor clicks */
 
     body {
       background: var(--bg);
@@ -1234,12 +1234,12 @@
       }
       .hero-price-block { text-align: center; width: 100%; }
       .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1.25rem; }
-      /* Sigil: sits between price and signal pill — mid-screen backdrop */
+      /* Sigil: sits between signal pill and reason text */
       .sigil-wrap {
-        width: min(90vw, 48vh);
-        height: min(90vw, 48vh);
+        width: min(80vw, 44vh);
+        height: min(80vw, 44vh);
         opacity: 0.7;
-        top: 48%;
+        top: 44%;
       }
       /* Price block */
       .hero-price-block { padding-top: 0; }
@@ -3537,8 +3537,19 @@
   }, { passive: true });
   const _heroH = () => _cachedHeroH;
 
+  let _scrollRAF = null;
+  let _lastScrollY = 0;
+
   function onScroll() {
-    const sy = window.scrollY;
+    _lastScrollY = window.scrollY;
+    if (!_scrollRAF) {
+      _scrollRAF = requestAnimationFrame(applyScroll);
+    }
+  }
+
+  function applyScroll() {
+    _scrollRAF = null;
+    const sy = _lastScrollY;
     const heroH = _heroH();
     const sp = Math.min(sy / heroH, 1);
 
@@ -3555,11 +3566,10 @@
     // Depth layers
     const farLayer = document.getElementById('hero-depth-far');
     const midLayer = document.getElementById('hero-depth-mid');
-    if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px)`;
-    if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px)`;
+    if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px) translateZ(0)`;
+    if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px) translateZ(0)`;
 
-    // Sigil parallax on mobile (tiltLoop only runs on pointer:fine/desktop)
-    // On touch devices, apply scroll parallax directly in the scroll handler
+    // Sigil parallax on mobile
     if (_sigilWrap && ('ontouchstart' in window)) {
       const sigilY = -(sy * 0.35);
       const sigilS = 1 - (sp * 0.18);
@@ -3570,7 +3580,17 @@
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // init on load
+  applyScroll(); // init on load
+  // Smooth scroll only for anchor clicks — not global (conflicts with native momentum scroll)
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
 
   // Apply translations before reveal observer so content is present when hidden
   applyLang(detectLang());
@@ -4442,9 +4462,15 @@
     if (_heroEl2) _heroVisObserver.observe(_heroEl2);
 
     let t=0;
-    function frame(){
+    // Throttle to 30fps on mobile — halves GPU load without visible quality loss
+    const _isMobile = 'ontouchstart' in window;
+    let _lastFrameTime = 0;
+    function frame(now){
       // Skip paint when hero is scrolled off-screen
       if (!_heroVisible) { requestAnimationFrame(frame); return; }
+      // 30fps cap on mobile (~33ms per frame)
+      if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
+      _lastFrameTime = now;
 
       t++;
       ctx.clearRect(0,0,W,H);
