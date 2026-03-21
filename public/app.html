@@ -1214,8 +1214,8 @@
       .nav-cta { display: none; }
 
       /* ── HERO — mobile layout ──
-         Sigil sits in upper third. Content starts just below centre.
-         Hero uses flex-start + explicit padding so content sits higher.
+         Three zones: price (top) → sigil ring (middle) → signal + buttons (bottom)
+         space-between distributes content to fill the full screen height.
       ── */
       .hero {
         padding: 0 1.5rem;
@@ -1223,51 +1223,59 @@
         justify-content: flex-start;
         overflow-x: hidden;
       }
-      /* hero-content: price sits in upper portion */
       .hero-content {
-        padding-top: 16svh;
+        padding-top: 14svh;
+        padding-bottom: 4svh;
+        min-height: 86svh;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
         width: 100%;
+        justify-content: space-between;
       }
       .hero-price-block { text-align: center; width: 100%; }
-      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1.25rem; }
-      /* Sigil: sits between signal pill and reason text */
+      .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1rem; }
+      /* Sigil: horizontal band at 52% — clean divider between price and signal */
       .sigil-wrap {
-        width: min(80vw, 44vh);
-        height: min(80vw, 44vh);
-        opacity: 0.7;
-        top: 44%;
+        width: min(90vw, 46vh);
+        height: min(90vw, 46vh);
+        opacity: 0.72;
+        top: 50%;
       }
       /* Price block */
       .hero-price-block { padding-top: 0; }
       .hero-price { font-size: clamp(4rem, 18vw, 6.5rem); line-height: 0.88; }
       .hero-price-change { font-size: 0.65rem; margin-top: 0.75rem; }
 
-      /* Signal pill — extra top margin creates the gap the sigil sits in */
+      /* Signal zone — bottom third */
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
-      .signal-wrap { margin: 3.5rem 0 1rem; }
-      /* Signal reason */
-      .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 1rem; color: rgba(237,232,222,0.72); }
+      .signal-wrap { margin: 0 0 0.75rem; }
+      .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 0.75rem; color: rgba(237,232,222,0.72); }
       .section-sub, .expert-text, .relai-sub, .push-sub { color: rgba(237,232,222,0.72); }
-      .hero-disclaimer { font-size: 0.625rem; margin-top: 0.5rem; }
+      .hero-disclaimer { font-size: 0.625rem; margin-top: 0.25rem; margin-bottom: 0; }
 
       /* ── EXPERT ── */
       .expert-card { padding: 2rem 1.5rem; }
       .expert-text { font-size: 1.15rem; line-height: 1.7; }
       .expert-meta { margin-top: 1.75rem; }
 
-      /* Scroll hint hidden on mobile */
-      .scroll-indicator { display: none; }
+      /* Scroll indicator: subtle anchor at bottom of hero */
+      .scroll-indicator {
+        display: flex;
+        position: absolute;
+        bottom: 1.5svh;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.3;
+      }
       .signal-updated { display: none; }
 
-      /* CTAs: side by side, enough padding so text doesn't wrap */
+      /* CTAs */
       .hero-actions {
         flex-direction: row; flex-wrap: wrap; align-items: center;
-        gap: 0.6rem; margin-top: 1.75rem; width: 100%; justify-content: center;
+        gap: 0.6rem; margin-top: 0.75rem; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost {
