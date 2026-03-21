@@ -1261,21 +1261,14 @@
       .expert-text { font-size: 1.15rem; line-height: 1.7; }
       .expert-meta { margin-top: 1.75rem; }
 
-      /* Scroll indicator: subtle anchor at bottom of hero */
-      .scroll-indicator {
-        display: flex;
-        position: absolute;
-        bottom: 1.5svh;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 0.3;
-      }
+      /* Scroll indicator: hidden on mobile */
+      .scroll-indicator { display: none; }
       .signal-updated { display: none; }
 
       /* CTAs */
       .hero-actions {
         flex-direction: row; flex-wrap: wrap; align-items: center;
-        gap: 0.6rem; margin-top: 0.75rem; width: 100%; justify-content: center;
+        gap: 0.6rem; margin-top: 1.25rem; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost {
