@@ -1214,18 +1214,18 @@
       .nav-cta { display: none; }
 
       /* ── HERO — mobile layout ──
-         Sigil is atmospheric backdrop in upper 40% of screen.
-         Content flows naturally below it with space between.
+         Sigil sits in upper third. Content starts just below centre.
+         Hero uses flex-start + explicit padding so content sits higher.
       ── */
       .hero {
         padding: 0 1.5rem;
         min-height: 100svh;
-        justify-content: center;
+        justify-content: flex-start;
         overflow-x: hidden;
       }
-      /* hero-content pushed down enough to clear the sigil */
+      /* hero-content starts at ~30% of screen height — below sigil, above centre */
       .hero-content {
-        padding-top: 30vw;
+        padding-top: 28svh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1234,12 +1234,12 @@
       }
       .hero-price-block { text-align: center; width: 100%; }
       .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; margin-bottom: 1.25rem; }
-      /* Sigil: upper atmosphere, slightly dimmer but still visible */
+      /* Sigil: higher and more visible on mobile */
       .sigil-wrap {
-        width: min(80vw, 52vh);
-        height: min(80vw, 52vh);
-        opacity: 0.55;
-        top: 38%;
+        width: min(86vw, 56vh);
+        height: min(86vw, 56vh);
+        opacity: 0.75;
+        top: 22%;
       }
       /* Price block */
       .hero-price-block { padding-top: 0; }
@@ -1250,7 +1250,7 @@
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
       .signal-wrap { margin: 1.5rem 0 1rem; }
-      /* Signal reason: more room on mobile */
+      /* Signal reason */
       .signal-reason { font-size: 1rem; padding: 0; max-width: 34ch; margin-bottom: 1rem; color: rgba(237,232,222,0.72); }
       .section-sub, .expert-text, .relai-sub, .push-sub { color: rgba(237,232,222,0.72); }
       .hero-disclaimer { font-size: 0.625rem; margin-top: 0.5rem; }
@@ -1264,13 +1264,21 @@
       .scroll-indicator { display: none; }
       .signal-updated { display: none; }
 
-      /* CTAs: full width, stacked */
+      /* CTAs: side by side, enough padding so text doesn't wrap */
       .hero-actions {
         flex-direction: row; flex-wrap: wrap; align-items: center;
         gap: 0.6rem; margin-top: 1.75rem; width: 100%; justify-content: center;
       }
       .hero-actions .btn-primary,
-      .hero-actions .btn-ghost { text-align: center; padding: 0.9rem 1.2rem; width: auto; flex: 1 1 140px; max-width: 48%; }
+      .hero-actions .btn-ghost {
+        text-align: center;
+        padding: 0.9rem 0.75rem;
+        width: auto;
+        flex: 1 1 0;
+        white-space: nowrap;
+        font-size: 0.625rem;
+        letter-spacing: 0.08em;
+      }
 
       /* ── SECTIONS ── */
       .section { padding: 4.5rem 1.5rem; }
