@@ -24,28 +24,19 @@ const nextConfig = {
     '*.riker.replit.dev'
   ],
   async rewrites() {
-  return [
-    {
-      source: '/',
-      destination: '/app.html',
-    },
-    {
-      source: '/sitemap.xml',
-      destination: '/api/sitemap.xml',
-    },
-  ];
-},
-  async headers() {
     return [
       {
-        source: '/sitemap.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/xml',
-          },
-        ],
+        source: '/',
+        destination: '/app.html',
       },
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+    ];
+  },
+  async headers() {
+    return [
       {
         source: '/app.html',
         headers: [
