@@ -1042,7 +1042,7 @@
       background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
       pointer-events: none;
     }
-    .push-inner { max-width: 860px; margin: 0 auto; }
+    .push-inner { max-width: 1200px; margin: 0 auto; }
     .push-meta {
       font-family: var(--mono);
       font-size: 0.625rem;
@@ -1077,7 +1077,7 @@
 
     /* ── RELAI ── */
     .relai-section { padding: 8rem 4rem; scroll-margin-top: 60px; position: relative; }
-    .relai-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+    .relai-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
     .relai-eyebrow { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--orange); opacity: 0.8; margin-bottom: 1.5rem; }
     .relai-logo-lockup { display: flex; align-items: center; margin-bottom: 2.5rem; }
     .relai-title { font-family: var(--display); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 300; font-style: italic; color: var(--white); line-height: 1.2; margin-bottom: 1.25rem; }
@@ -1832,7 +1832,7 @@
     .hero-depth-mid  { z-index: 1; opacity: 0.7; }
     .hero-ambient    { z-index: 3; }
     .sigil-wrap      { z-index: 5; }
-    .hero-content    { z-index: 10; }
+    .hero-content    { z-index: 15; }
     /* sigil-btc-symbol hidden — canvas renders sphere + rings entirely */
     .sigil-btc-symbol { display: none; }
 
@@ -1939,7 +1939,7 @@
   </div>
 
   <!-- Hero bottom fade — sits above canvases, fades into page -->
-  <div style="position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;z-index:20;" aria-hidden="true"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;" aria-hidden="true"></div>
 
     <div class="scroll-indicator">
     <span>scroll</span>
