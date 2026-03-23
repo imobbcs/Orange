@@ -6,7 +6,7 @@ export default function handler(req, res) {
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://whentobuybtc.xyz/</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-03-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/"/>
