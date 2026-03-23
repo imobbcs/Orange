@@ -553,7 +553,40 @@
     .ornament-rule {
       display: flex; align-items: center; gap: 1.5rem;
       padding: 2rem 4rem; margin: 0;
+      position: relative; z-index: 1;
     }
+
+    /* ── ATMOSPHERIC CONTINUITY ──
+       Ambient light from hero bleeds into first section.
+       Each section has a very faint radial to maintain spatial depth. */
+    #signal {
+      position: relative;
+    }
+    #signal::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%; transform: translateX(-50%);
+      width: 80%; height: 400px;
+      background: radial-gradient(ellipse at center top,
+        rgba(247,147,26,0.06) 0%,
+        rgba(247,147,26,0.02) 40%,
+        transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Subtle depth light on alternating sections */
+    #experts::before, #whatif::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 60%; height: 300px;
+      background: radial-gradient(ellipse at center top,
+        rgba(247,147,26,0.025) 0%,
+        transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    #experts, #whatif { position: relative; }
     .ornament-rule::before, .ornament-rule::after {
       content: ''; flex: 1; height: 1px;
       background: linear-gradient(90deg, transparent, var(--border2));
@@ -569,8 +602,9 @@
     /* ═══════════════════════════════════════════════
        SECTIONS
     ═══════════════════════════════════════════════ */
-    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; content-visibility: auto; contain-intrinsic-size: 0 600px; }
+    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; content-visibility: auto; contain-intrinsic-size: 0 600px; overflow: hidden; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
+    #signal .section-inner { max-width: 1400px; }
 
     .section-label {
       font-family: var(--mono); font-size: 0.625rem;
@@ -721,7 +755,7 @@
     }
 
     /* ── EXPERT ── */
-    .expert-section { background: var(--bg2); }
+    .expert-section { background: var(--bg); }
     .expert-card {
       border: 1px solid var(--border2);
       padding: 5rem; position: relative; overflow: hidden;
@@ -758,7 +792,7 @@
     }
 
     /* ── WHAT IF ── */
-    .whatif-section { background: var(--bg3); }
+    .whatif-section { background: var(--bg); }
     .habit-grid {
       display: grid; grid-template-columns: repeat(8, 1fr);
       border: 1px solid var(--border2); margin-bottom: 3rem;
@@ -1008,7 +1042,7 @@
     /* ── PUSH ── */
     /* ══ ALERTS / PUSH ══ */
     .push-section {
-      background: var(--bg2);
+      background: var(--bg);
       position: relative;
       overflow: hidden;
     }
@@ -1202,7 +1236,7 @@
     .ornament-rule-line {
       flex: 1;
       height: 1px;
-      background: rgba(247,147,26,0.15);
+      background: rgba(247,147,26,0.08);
       transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
       transform: scaleX(0);
       transform-origin: left center;
@@ -1995,7 +2029,7 @@
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
 <!-- SIGNAL BREAKDOWN -->
-<section class="section" id="signal" style="background: var(--bg2);">
+<section class="section" id="signal">
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
     <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
