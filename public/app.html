@@ -135,6 +135,15 @@
       overflow-x: clip;
     }
 
+    /* ── FULL-PAGE STAR FIELD — sparse, fixed, behind everything ── */
+    #page-stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 1;
+    }
+
     /* ── GRAIN — the soul of the page ── */
     body::before {
       content: '';
@@ -554,6 +563,7 @@
       display: flex; align-items: center; gap: 1.5rem;
       padding: 2rem 4rem; margin: 0;
       position: relative; z-index: 1;
+      background: transparent;
     }
 
     /* ── ATMOSPHERIC CONTINUITY ──
@@ -561,18 +571,6 @@
        Each section has a very faint radial to maintain spatial depth. */
     #signal {
       position: relative;
-    }
-    #signal::before {
-      content: '';
-      position: absolute;
-      top: -120px; left: 50%; transform: translateX(-50%);
-      width: 80%; height: 400px;
-      background: radial-gradient(ellipse at center top,
-        rgba(247,147,26,0.06) 0%,
-        rgba(247,147,26,0.02) 40%,
-        transparent 70%);
-      pointer-events: none;
-      z-index: 0;
     }
     /* Subtle depth light on alternating sections */
     #experts::before, #whatif::before {
@@ -602,7 +600,7 @@
     /* ═══════════════════════════════════════════════
        SECTIONS
     ═══════════════════════════════════════════════ */
-    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; content-visibility: auto; contain-intrinsic-size: 0 600px; overflow: hidden; }
+    .section { padding: 8rem 4rem; position: relative; z-index: 1; scroll-margin-top: 60px; content-visibility: auto; contain-intrinsic-size: 0 600px; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     #signal .section-inner { max-width: 1400px; }
 
@@ -1923,6 +1921,9 @@
 </style>
 </head>
 <body>
+
+<!-- Full-page star field — fixed behind everything -->
+<canvas id="page-stars" aria-hidden="true"></canvas>
 
 <!-- ATH gold wash — full-page overlay, fixed, below grain -->
 <div id="ath-wash" aria-hidden="true"></div>
@@ -5057,6 +5058,59 @@
     }
   }, { passive: true });
 
+  // ── FULL-PAGE STAR FIELD ──
+  // Sparse, static background stars that persist across all sections.
+  // Much lower density/opacity than hero — atmospheric, not dominant.
+  (function() {
+    const canvas = document.getElementById('page-stars');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function draw() {
+      const W = window.innerWidth;
+      const H = document.documentElement.scrollHeight;
+      canvas.width  = W;
+      canvas.height = H;
+      ctx.clearRect(0, 0, W, H);
+
+      const rng = (n) => Math.random() * n;
+
+      // Sparse star field — 180 tiny dots across full page height
+      for (let i = 0; i < 180; i++) {
+        const x = rng(W);
+        const y = rng(H);
+        const r = 0.2 + rng(0.6);
+        const a = 0.04 + rng(0.18);
+        const col = Math.random() > 0.88 ? `rgba(247,147,26,${a.toFixed(2)})` : `rgba(237,232,222,${a.toFixed(2)})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.fill();
+      }
+
+      // A few nebula washes — very faint, scattered down the page
+      for (let i = 0; i < 6; i++) {
+        const x = rng(W);
+        const y = rng(H);
+        const r = 150 + rng(250);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, `rgba(247,147,26,0.012)`);
+        g.addColorStop(1, `rgba(247,147,26,0)`);
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+      }
+    }
+
+    draw();
+    // Redraw on resize — debounced
+    let _resizeT;
+    window.addEventListener('resize', () => {
+      clearTimeout(_resizeT);
+      _resizeT = setTimeout(draw, 300);
+    }, { passive: true });
+  })();
 </script>
 
 </body>
