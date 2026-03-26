@@ -5038,34 +5038,44 @@
     }
   }, { passive: true });
   // ══ VISITOR COUNTER ══
+  // Deferred: fires after page is fully loaded and idle — never blocks rendering
   (function() {
     const el = document.getElementById('visitor-count');
     if (!el) return;
 
-    fetch('/api/visitor-count')
-      .then(r => r.json())
-      .then(({ visitors }) => {
-        if (!visitors) return;
-        const target = visitors;
-        const duration = 1800;
-        const startTime = performance.now();
-        function update(now) {
-          const progress = Math.min((now - startTime) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const current = Math.round(eased * target);
-          el.textContent = current.toLocaleString(numLocale());
-          if (progress < 1) requestAnimationFrame(update);
-        }
-        // Animate only when scrolled into view
-        const observer = new IntersectionObserver(entries => {
-          if (entries[0].isIntersecting) {
-            requestAnimationFrame(update);
-            observer.disconnect();
+    function loadCounter() {
+      fetch('/api/visitor-count')
+        .then(r => r.json())
+        .then(({ visitors }) => {
+          if (!visitors) return;
+          const target = visitors;
+          const duration = 1800;
+          let started = false;
+          function update(now) {
+            if (!started) { started = true; }
+            const startTime = update._startTime || (update._startTime = now);
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target).toLocaleString(numLocale());
+            if (progress < 1) requestAnimationFrame(update);
           }
-        }, { threshold: 0.5 });
-        observer.observe(el);
-      })
-      .catch(() => {});
+          const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+              requestAnimationFrame(update);
+              observer.disconnect();
+            }
+          }, { threshold: 0.5 });
+          observer.observe(el);
+        })
+        .catch(() => {});
+    }
+
+    // Use requestIdleCallback if available, otherwise defer 3s after load
+    if ('requestIdleCallback' in window) {
+      window.addEventListener('load', () => requestIdleCallback(loadCounter, { timeout: 5000 }));
+    } else {
+      window.addEventListener('load', () => setTimeout(loadCounter, 3000));
+    }
   })();
 
 
