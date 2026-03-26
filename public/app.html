@@ -4671,9 +4671,19 @@
         : 1 - (smoothScrollY - fadeStart) / (fadeEnd - fadeStart);
       canvas.style.opacity = canvasOpacity.toFixed(3);
 
+      // Mobile sigil DOM write — must run every frame (before throttle) so no jump on scroll end
+      if (_isMobile) {
+        const mSigilWrap = document.querySelector('.sigil-wrap');
+        if (mSigilWrap) {
+          const sp0 = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
+          mSigilWrap.style.transform = `translate(-50%, calc(-50% + ${(-(smoothScrollY * 0.08)).toFixed(1)}px)) scale(${(1 - sp0 * 0.45).toFixed(4)}) translateZ(0)`;
+          mSigilWrap.style.opacity = Math.max(0.12, 1 - sp0 * 1.1).toFixed(3);
+        }
+      }
+
       // Skip paint when invisible or hero off-screen
       if (!_heroVisible || canvasOpacity < 0.01) { requestAnimationFrame(frame); return; }
-      // 30fps cap on mobile — lerp above already ran so smoothScrollY stays current
+      // 30fps cap on mobile — lerp and sigil write above already ran
       if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
       _lastFrameTime = now;
 
@@ -4747,18 +4757,6 @@
         haze.addColorStop(1,   `rgba(9,8,10,${hazeA.toFixed(3)})`);
         ctx.beginPath(); ctx.arc(cx, cy, hazeR, 0, TAU);
         ctx.fillStyle = haze; ctx.fill();
-      }
-
-      // Sync mobile sigil-wrap to smoothScrollY — prevents jump when scroll momentum ends
-      if (_isMobile) {
-        const mSigilWrap = document.querySelector('.sigil-wrap');
-        if (mSigilWrap) {
-          const sigilY = -(smoothScrollY * 0.08);
-          const sigilS = 1 - (sp * 0.45);
-          const sigilO = Math.max(0.12, 1 - (sp * 1.1));
-          mSigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0)`;
-          mSigilWrap.style.opacity = sigilO.toFixed(3);
-        }
       }
 
       // Dismiss static placeholder on first completed frame
