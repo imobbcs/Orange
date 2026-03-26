@@ -1,17 +1,15 @@
 export default async function handler(req, res) {
   try {
-    // Login to get auth token
     const loginRes = await fetch('https://umami-orange.up.railway.app/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: 'admin',
+        username: 'imobbcs',
         password: process.env.UMAMI_PASSWORD,
       }),
     });
     const { token } = await loginRes.json();
 
-    // Fetch lifetime stats
     const statsRes = await fetch(
       `https://umami-orange.up.railway.app/api/websites/c884bf96-c757-4dfb-b2bb-8195d5876958/stats?startAt=1000000000000&endAt=${Date.now()}`,
       { headers: { Authorization: `Bearer ${token}` } }
