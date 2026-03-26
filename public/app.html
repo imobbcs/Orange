@@ -4643,6 +4643,15 @@
     // Re-cache after page is fully laid out
     cacheCanvasLayout();
     window.addEventListener('load', cacheCanvasLayout, { once: true });
+    setTimeout(cacheCanvasLayout, 200);
+    setTimeout(cacheCanvasLayout, 800);
+    // Re-cache on first scroll back near top — fixed elements may not have laid out at init
+    window.addEventListener('scroll', function recacheOnce() {
+      if (window.scrollY < 10) {
+        cacheCanvasLayout();
+        window.removeEventListener('scroll', recacheOnce);
+      }
+    }, { passive: true });
     window.addEventListener('resize', () => {
       cacheCanvasLayout();
       _lockedCX = 0; _lockedCY = 0;
@@ -4695,7 +4704,9 @@
 
       const sp = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
       const scrollScale = 1 - (sp * 0.45);
-      const baseScale = _swW ? _swW * (_isMobile ? 0.42 : 0.35) : Math.min(W,H)*0.32;
+      const baseScale = _isMobile
+        ? Math.min(W, H) * 0.42
+        : (_swW ? _swW * 0.35 : Math.min(W,H)*0.32);
       const scale = baseScale * scrollScale;
       const sphR  = scale * 0.26;
       const cx = W * 0.5;
