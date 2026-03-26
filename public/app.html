@@ -368,6 +368,21 @@
       .sigil-btc-symbol { animation: none; }
     }
 
+    /* ── VISITOR COUNTER ── */
+    .visitor-counter {
+      text-align: center;
+      padding: 2.5rem 0 0;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: rgba(237,232,222,0.35);
+      text-transform: uppercase;
+    }
+    .visitor-counter-number {
+      color: rgba(247,147,26,0.6);
+      font-variant-numeric: tabular-nums;
+    }
+
     /* ── DEPTH FADE — bottom viewport gradient ── */
     .dof-overlay {
       position: fixed;
@@ -1954,6 +1969,10 @@
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
+<div class="visitor-counter" id="visitor-counter" aria-live="polite">
+  <span class="visitor-counter-number" id="visitor-count">—</span> <span data-i18n="visitorCounter">Bitcoiners were here.</span>
+</div>
+
 <!-- SIGNAL BREAKDOWN -->
 <section class="section" id="signal">
   <div class="section-inner">
@@ -2505,6 +2524,7 @@
       heroBtn1: 'Understand the signal',
       heroBtn2: 'Calculate your "What If?"',
       scrollHint: '↓ Scroll to explore',
+      visitorCounter: 'Bitcoiners were here.',
       // Signal states
       signalAccumulate: 'Most Bitcoiners are buying',
       signalHold: 'Most are watching and waiting',
@@ -2667,6 +2687,7 @@
       heroBtn1: 'Signal verstehen',
       heroBtn2: 'Berechne dein „Was wäre wenn?“',
       scrollHint: '↓ Nach unten scrollen',
+      visitorCounter: 'Bitcoiner waren hier.',
       // Signal states
       signalAccumulate: 'Die meisten Bitcoiner kaufen gerade',
       signalHold: 'Die meisten beobachten und warten ab',
@@ -2946,8 +2967,10 @@
     }
   }
 
+  function numLocale() { return currentLang === 'de' ? 'de-DE' : 'en-GB'; }
+
   function formatPrice(p) {
-    if (p >= 10000) return Math.round(p).toLocaleString();
+    if (p >= 10000) return Math.round(p).toLocaleString(numLocale());
     return p.toFixed(0);
   }
 
@@ -3461,7 +3484,7 @@
     const finalValue  = Math.round(totalBTC * livePrice);
     const gainValue   = finalValue - totalInvested;
     const returnPct   = ((finalValue / totalInvested - 1) * 100).toFixed(0);
-    const fmt = v => sym + Math.round(v).toLocaleString('de-DE');
+    const fmt = v => sym + Math.round(v).toLocaleString(numLocale());
 
     // ── REVELATION SEQUENCE ──
     const wrap = document.getElementById('whatif-result-wrap');
@@ -3505,7 +3528,7 @@
       function countUp(now) {
         const t = Math.min((now - start) / duration, 1);
         const v = Math.round(easeOut(t) * finalValue);
-        numEl.textContent = sym + v.toLocaleString('de-DE');
+        numEl.textContent = sym + v.toLocaleString(numLocale());
         if (t < 1) {
           requestAnimationFrame(countUp);
         } else {
@@ -3556,7 +3579,7 @@
     for (let i = 0; i <= ticks; i++) {
       const v = (i / ticks) * maxVal;
       const y = toY(v).toFixed(1);
-      const lbl = maxVal >= 100000 ? sym + Math.round(v/1000) + 'k' : sym + Math.round(v).toLocaleString();
+      const lbl = maxVal >= 100000 ? sym + Math.round(v/1000) + 'k' : sym + Math.round(v).toLocaleString(numLocale());
       gridLines += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
       yLabels   += `<text x="${pad.left - 4}" y="${y}" dy="0.35em" text-anchor="end" fill="rgba(107,101,96,0.7)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${lbl}</text>`;
     }
@@ -3587,8 +3610,8 @@
       <path d="${valueArea}" fill="url(#${gradId})"/>
       <line x1="${toX(0).toFixed(1)}" y1="${baseY}" x2="${toX(invested.length-1).toFixed(1)}" y2="${toY(invested[invested.length-1]).toFixed(1)}" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
       <path d="${valueLine}" fill="none" stroke="#F7931A" stroke-width="2.5" stroke-linejoin="round"/>
-      <text x="${(toX(values.length-1) - 4).toFixed(1)}" y="${(toY(values[values.length-1]) - 8).toFixed(1)}" text-anchor="end" fill="#F7931A" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}" font-weight="500">${maxVal >= 100000 ? sym + Math.round(values[values.length-1]/1000) + 'k' : sym + values[values.length-1].toLocaleString()}</text>
-      <text x="${(toX(invested.length-1) - 4).toFixed(1)}" y="${Math.min(toY(invested[invested.length-1]) - 8, baseY - 16).toFixed(1)}" text-anchor="end" fill="rgba(237,232,222,0.55)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${maxVal >= 100000 ? sym + Math.round(invested[invested.length-1]/1000) + 'k invested' : sym + invested[invested.length-1].toLocaleString() + ' invested'}</text>
+      <text x="${(toX(values.length-1) - 4).toFixed(1)}" y="${(toY(values[values.length-1]) - 8).toFixed(1)}" text-anchor="end" fill="#F7931A" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}" font-weight="500">${maxVal >= 100000 ? sym + Math.round(values[values.length-1]/1000) + 'k' : sym + values[values.length-1].toLocaleString(numLocale())}</text>
+      <text x="${(toX(invested.length-1) - 4).toFixed(1)}" y="${Math.min(toY(invested[invested.length-1]) - 8, baseY - 16).toFixed(1)}" text-anchor="end" fill="rgba(237,232,222,0.55)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${maxVal >= 100000 ? sym + Math.round(invested[invested.length-1]/1000) + 'k invested' : sym + invested[invested.length-1].toLocaleString(numLocale()) + ' invested'}</text>
       ${yLabels}
       ${xLabels}
     </svg>`;
@@ -5014,6 +5037,36 @@
       _whatifResizeTimer = setTimeout(() => drawWhatIfChart(...window._lastWhatifArgs), 150);
     }
   }, { passive: true });
+  // ══ VISITOR COUNTER ══
+  (function() {
+    const el = document.getElementById('visitor-count');
+    if (!el) return;
+
+    fetch('/api/visitor-count')
+      .then(r => r.json())
+      .then(({ visitors }) => {
+        if (!visitors) return;
+        const target = visitors;
+        const duration = 1800;
+        const startTime = performance.now();
+        function update(now) {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.round(eased * target);
+          el.textContent = current.toLocaleString(numLocale());
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        // Animate only when scrolled into view
+        const observer = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) {
+            requestAnimationFrame(update);
+            observer.disconnect();
+          }
+        }, { threshold: 0.5 });
+        observer.observe(el);
+      })
+      .catch(() => {});
+  })();
 
 
 </script>
