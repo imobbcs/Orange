@@ -296,17 +296,17 @@
 
     /* The ambient light source — extends below hero to bridge transition */
     .hero-ambient {
-      position: absolute;
-      width: 140vw; height: 160vw;
-      max-width: 1600px; max-height: 1800px;
+      position: fixed;
+      width: 140vw; height: 140vh;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       background: radial-gradient(ellipse at center,
-        rgba(247,147,26,0.09) 0%,
-        rgba(247,147,26,0.04) 25%,
-        rgba(247,147,26,0.015) 50%,
+        rgba(247,147,26,0.06) 0%,
+        rgba(247,147,26,0.025) 25%,
+        rgba(247,147,26,0.008) 50%,
         transparent 70%);
       pointer-events: none;
+      z-index: 1;
       animation: ambientPulse 8s ease-in-out infinite;
     }
 
@@ -367,6 +367,21 @@
       .sigil-ring-outer, .sigil-ring-mid, .sigil-ring-inner { animation: none; }
       .sigil-btc-symbol { animation: none; }
     }
+
+    /* ── DEPTH FADE — bottom viewport gradient ── */
+    .dof-overlay {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 18vh;
+      pointer-events: none;
+      z-index: 90;
+      background: linear-gradient(to bottom, transparent 0%, #09080A 100%);
+      transition: opacity 0.4s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dof-overlay { display: none; }
+    }
+
 
     /* Hero content sits above the sigil */
     .hero-content {
@@ -1115,39 +1130,27 @@
 
     /* ── REVEAL SYSTEM ── */
     .reveal {
-      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+      transition: none;
     }
-    .reveal.hidden        { opacity: 0; transform: translateY(28px); }
-    .reveal.visible       { opacity: 1; transform: translateY(0); }
+    .reveal.hidden        { opacity: 1; transform: none; }
+    .reveal.visible       { opacity: 1; transform: none; }
 
     /* Variant: slide from left (section labels) */
-    .reveal-left.hidden   { opacity: 0; transform: translateX(-24px); }
-    .reveal-left.visible  { opacity: 1; transform: translateX(0); }
+    .reveal-left.hidden   { opacity: 1; transform: none; }
+    .reveal-left.visible  { opacity: 1; transform: none; }
 
     /* Variant: scale in (large display numbers) */
-    .reveal-scale.hidden  { opacity: 0; transform: scale(0.94) translateY(16px); }
-    .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+    .reveal-scale.hidden  { opacity: 1; transform: none; }
+    .reveal-scale.visible { opacity: 1; transform: none; }
 
     /* Variant: fade only (body text) */
-    .reveal-fade.hidden   { opacity: 0; }
+    .reveal-fade.hidden   { opacity: 1; }
     .reveal-fade.visible  { opacity: 1; }
 
     /* Section transitions — each section fades bg accent */
     .section { transition: none; }
 
-    /* Stagger delays — applied via JS data-delay */
-    .reveal[data-delay="1"] { transition-delay: 0.08s; }
-    .reveal[data-delay="2"] { transition-delay: 0.16s; }
-    .reveal[data-delay="3"] { transition-delay: 0.24s; }
-    .reveal[data-delay="4"] { transition-delay: 0.32s; }
-    .reveal[data-delay="5"] { transition-delay: 0.40s; }
-    .reveal-left[data-delay="1"] { transition-delay: 0.08s; }
-    .reveal-left[data-delay="2"] { transition-delay: 0.16s; }
-    .reveal-scale[data-delay="1"] { transition-delay: 0.1s; }
-    .reveal-scale[data-delay="2"] { transition-delay: 0.2s; }
-    .reveal-fade[data-delay="1"]  { transition-delay: 0.12s; }
-    .reveal-fade[data-delay="2"]  { transition-delay: 0.22s; }
+    /* Stagger delays — disabled, reveal animations removed */
 
     /* Ornament rules get a width-in animation */
     .ornament-rule-line {
@@ -1241,10 +1244,10 @@
 
       /* Sigil: centred backdrop — content flows over it */
       .sigil-wrap {
-        width: min(80vw, 42vh);
-        height: min(80vw, 42vh);
+        width: min(94vw, 52vh);
+        height: min(94vw, 52vh);
         opacity: 0.7;
-        top: 50%;
+        top: 58%;
       }
 
       /* CTAs: in normal flow, pushed to bottom with margin-top: auto */
@@ -1853,6 +1856,9 @@
 
 <div id="progress"></div>
 
+<!-- Depth-of-field bottom blur — persistent atmospheric overlay -->
+<div class="dof-overlay" aria-hidden="true"></div>
+
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo"><span class="nav-word">When</span><span class="nav-word">to</span><span class="nav-word">Buy</span><span class="nav-word nav-btc">BTC</span></a>
@@ -1880,7 +1886,7 @@
   <canvas class="hero-depth hero-depth-far"  id="hero-depth-far"></canvas>
   <canvas class="hero-depth hero-depth-mid"  id="hero-depth-mid"></canvas>
   <!-- Single unified cinematic canvas — rings, sphere, particles, all one system -->
-  <canvas id="hero-cinematic" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;"></canvas>
+  <canvas id="hero-cinematic" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;transition:opacity 0.3s ease;"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
@@ -1895,21 +1901,15 @@
           <stop offset="50%"  stop-color="#F7931A" stop-opacity="0.04"/>
           <stop offset="100%" stop-color="#F7931A" stop-opacity="0"/>
         </radialGradient>
-        <!-- Limb-darkening: light source top-left, dark limb bottom-right -->
         <radialGradient id="sunDisc" cx="38%" cy="35%" r="65%">
           <stop offset="0%"   stop-color="#F7931A" stop-opacity="0.15"/>
           <stop offset="40%"  stop-color="#F7931A" stop-opacity="0.08"/>
           <stop offset="100%" stop-color="#7a3a00" stop-opacity="0.02"/>
         </radialGradient>
       </defs>
-
-      <!-- Outer corona -->
       <circle cx="200" cy="200" r="175" fill="url(#corona)"/>
-
-      <!-- Sun disc — the sphere -->
       <circle cx="200" cy="200" r="118" fill="url(#sunDisc)"/>
       <circle cx="200" cy="200" r="118" stroke="#F7931A" stroke-width="0.5" opacity="0.1"/>
-
     </svg>
 
   </div>
@@ -1934,7 +1934,6 @@
 
     <p class="signal-reason loading" id="signal-reason">Fetching live market data.</p>
 
-
     <div class="hero-actions">
       <a href="#signal" class="btn-primary" data-i18n="heroBtn1">Understand the signal</a>
       <a href="#whatif" class="btn-ghost" data-i18n="heroBtn2">Calculate your "What If?"</a>
@@ -1944,13 +1943,11 @@
 
   </div>
 
-  <!-- Hero bottom fade — sits above canvases, fades into page -->
-  <div style="position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;" aria-hidden="true"></div>
-
-    <div class="scroll-indicator">
+  <div class="scroll-indicator">
     <span>scroll</span>
     <div class="scroll-indicator-line"></div>
   </div>
+
 </section>
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
@@ -3742,7 +3739,7 @@
     if (sy === _appliedScrollY) return;
     _appliedScrollY = sy;
     const heroH = _heroH();
-    const sp = Math.min(sy / heroH, 1);
+    const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
 
     // Progress bar
     const pct = sy / (document.documentElement.scrollHeight - window.innerHeight) * 100;
@@ -3760,11 +3757,23 @@
     if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px) translateZ(0)`;
     if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px) translateZ(0)`;
 
+    // Hide depth fade near bottom of page so footer is readable
+    const dofEl = document.querySelector('.dof-overlay');
+    if (dofEl) {
+      const distFromBottom = document.documentElement.scrollHeight - window.innerHeight - sy;
+      dofEl.style.opacity = distFromBottom < 120 ? Math.max(0, distFromBottom / 120).toFixed(3) : '1';
+    }
+    const ambientEl = document.querySelector('.hero-ambient');
+    const fadeFraction = Math.max(0, 1 - (sy / (window.innerHeight * 0.40)));
+    if (ambientEl) ambientEl.style.opacity = fadeFraction.toFixed(3);
+    if (farLayer)  farLayer.style.opacity  = (fadeFraction * 0.5).toFixed(3);
+    if (midLayer)  midLayer.style.opacity  = (fadeFraction * 0.7).toFixed(3);
+
     // Sigil parallax on mobile
     if (_sigilWrap && ('ontouchstart' in window)) {
-      const sigilY = -(sy * 0.35);
-      const sigilS = 1 - (sp * 0.18);
-      const sigilO = Math.max(1 - (sp * 1.6), 0);
+      const sigilY = -(sy * 0.08);
+      const sigilS = 1 - (sp * 0.45);
+      const sigilO = Math.max(0.12, 1 - (sp * 1.1));
       _sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0)`;
       _sigilWrap.style.opacity = sigilO;
     }
@@ -3783,26 +3792,9 @@
     });
   });
 
-  // Apply translations before reveal observer so content is present when hidden
+  // ── REVEAL — disabled, replaced by depth-of-field blur overlay ──
+  // Classes are left in HTML but CSS hidden/visible states are no-ops
   applyLang(detectLang());
-
-  // ── REVEAL — all variants ──
-  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .reveal-fade');
-  revealEls.forEach(el => el.classList.add('hidden'));
-
-  // Ornament rule lines
-  document.querySelectorAll('.ornament-rule-line').forEach(el => el.classList.remove('visible'));
-
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.remove('hidden');
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => revealObserver.observe(el));
 
   // Ornament rules: animate lines in
   const ornObserver = new IntersectionObserver(entries => {
@@ -4175,16 +4167,15 @@
   (function() {
     const canvas = document.getElementById('hero-cinematic');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: true });
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const TAU = Math.PI * 2;
     const OR=247, OG=147, OB=26;
 
     let W, H;
     function resize() {
-      const hero = document.getElementById('top');
       W = window.innerWidth;
-      H = hero ? hero.offsetHeight : window.innerHeight;
+      H = window.innerHeight;
       canvas.width = W * DPR;
       canvas.height = H * DPR;
       ctx.setTransform(1,0,0,1,0,0);
@@ -4265,7 +4256,8 @@
     }
 
     // ── SPHERE ───────────────────────────────────────────────────────────────
-    function drawSphere(cx, cy, R) {
+    function drawSphere(cx, cy, R, sysA=1) {
+      ctx.save(); ctx.globalAlpha = sysA;
       // Ground shadow ellipse
       ctx.save(); ctx.scale(1,0.10);
       const sy=(cy+R*1.12)/0.10;
@@ -4335,14 +4327,15 @@
       gAtm.addColorStop(0.78,'rgba(100,130,180,0.07)');
       gAtm.addColorStop(1,   'rgba(120,150,200,0.02)');
       ctx.beginPath(); ctx.arc(cx,cy,R*1.02,0,TAU); ctx.fillStyle=gAtm; ctx.fill();
+      ctx.restore(); // sysA globalAlpha
     }
 
     // ── RINGS ────────────────────────────────────────────────────────────────
     // 3 rings. Static planes. tilt=0.50 = 30° from horizontal.
     // Debris particles orbit along each ring giving different apparent speeds.
     const RINGS = [
-      { rx:1.00, tilt:0.42, dash:null,   w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
-      { rx:0.72, tilt:0.40, dash:[9,20], w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
+      { rx:1.26, tilt:0.42, dash:null,   w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
+      { rx:0.96, tilt:0.40, dash:[9,20], w:1.2,  opN:0.55, opF:0.02, blur:true,  col:[OR,OG,OB] },
     ];
 
     // Signal state → ring color + particle speed
@@ -4473,20 +4466,20 @@
       }
     }
 
-    function drawFarArcs(cx, cy, scale) {
+    function drawFarArcs(cx, cy, scale, sysA=1) {
       // Far = top half of ellipse = angles π→2π (counterclockwise from π to 0)
       RINGS.forEach(r=>{
         const {g,rx,ry,rc,gc,bc}=makeRingGrad(r,cx,cy,scale);
         ctx.save(); ctx.translate(cx,cy);
         if(r.blur && !_isMobile) {
           // Multi-pass glow — wide soft outer glow + tighter inner glow
-          ctx.save(); ctx.globalAlpha=0.05; ctx.filter='blur(6px)';
+          ctx.save(); ctx.globalAlpha=0.05*sysA; ctx.filter='blur(6px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
           ctx.lineWidth=r.w*10; ctx.stroke();
           ctx.filter='none'; ctx.restore();
-          ctx.save(); ctx.globalAlpha=0.10; ctx.filter='blur(2px)';
+          ctx.save(); ctx.globalAlpha=0.10*sysA; ctx.filter='blur(2px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
@@ -4495,10 +4488,10 @@
         }
         const rIdx = RINGS.indexOf(r);
         if (!r.dash) {
-          // Solid rings get angular brightness variation
           ctx.setLineDash([]);
-          drawRingArcVaried(rx, ry, Math.PI, TAU, rIdx, r.w, rc, gc, bc, r.opF, r.opN);
+          drawRingArcVaried(rx, ry, Math.PI, TAU, rIdx, r.w, rc, gc, bc, r.opF*sysA, r.opN*sysA);
         } else {
+          ctx.globalAlpha = sysA;
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,Math.PI,TAU,false);
           ctx.setLineDash(r.dash);
           ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
@@ -4507,20 +4500,20 @@
       });
     }
 
-    function drawNearArcs(cx, cy, scale) {
+    function drawNearArcs(cx, cy, scale, sysA=1) {
       // Near = bottom half = angles 0→π
       RINGS.forEach(r=>{
         const {g,rx,ry,rc,gc,bc}=makeRingGrad(r,cx,cy,scale);
         ctx.save(); ctx.translate(cx,cy);
         // Glow passes for near arc
         if(r.blur && !_isMobile){
-          ctx.save(); ctx.globalAlpha=0.05; ctx.filter='blur(6px)';
+          ctx.save(); ctx.globalAlpha=0.05*sysA; ctx.filter='blur(6px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.25})`;
           ctx.lineWidth=r.w*10; ctx.stroke();
           ctx.filter='none'; ctx.restore();
-          ctx.save(); ctx.globalAlpha=0.10; ctx.filter='blur(2px)';
+          ctx.save(); ctx.globalAlpha=0.10*sysA; ctx.filter='blur(2px)';
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
           ctx.setLineDash([]);
           ctx.strokeStyle=`rgba(${rc},${gc},${bc},${r.opN*0.35})`;
@@ -4530,8 +4523,9 @@
         const rIdx = RINGS.indexOf(r);
         if (!r.dash) {
           ctx.setLineDash([]);
-          drawRingArcVaried(rx, ry, 0, Math.PI, rIdx, r.w, rc, gc, bc, r.opF, r.opN);
+          drawRingArcVaried(rx, ry, 0, Math.PI, rIdx, r.w, rc, gc, bc, r.opF*sysA, r.opN*sysA);
         } else {
+          ctx.globalAlpha = sysA;
           ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI,false);
           ctx.setLineDash(r.dash);
           ctx.strokeStyle=g; ctx.lineWidth=r.w; ctx.stroke();
@@ -4545,8 +4539,8 @@
     // More particles, higher opacity = much more visible movement
     const DEBRIS = [];
     [
-      { rx:1.00, tilt:0.42, spd: 0.00045, n:280, dir: 1,  pSize:1.4 },
-      { rx:0.72, tilt:0.40, spd: 0.00070, n:200, dir:-1,  pSize:0.6 },
+      { rx:1.26, tilt:0.42, spd: 0.00045, n:280, dir: 1,  pSize:1.4 },
+      { rx:0.96, tilt:0.40, spd: 0.00070, n:200, dir:-1,  pSize:0.6 },
       // inner ring removed
     ].forEach(rd=>{
       for(let i=0;i<rd.n;i++) {
@@ -4572,7 +4566,8 @@
     function initE(){ ENERGY.forEach(p=>{ p.maxDist=Math.min(W,H)*(0.16+Math.random()*0.10); }); }
     initE(); window.addEventListener('resize',initE,{passive:true});
 
-    function drawDebris(cx,cy,scale){
+    function drawDebris(cx,cy,scale,sysA=1){
+      ctx.save(); ctx.globalAlpha = sysA;
       DEBRIS.forEach(p=>{
         p.angle+=p.speed*sigSpeedMult; p.tw+=p.tws;
         const rx=p.rx*scale, ry=rx*p.tilt;
@@ -4601,9 +4596,11 @@
         ctx.beginPath(); ctx.arc(x,y,p.r*(0.3+depth*0.8),0,TAU);
         ctx.fillStyle=`rgba(${OR},${OG},${OB},${a.toFixed(3)})`; ctx.fill();
       });
+      ctx.restore();
     }
 
-    function drawEnergy(cx,cy){
+    function drawEnergy(cx,cy,sysA=1){
+      ctx.save(); ctx.globalAlpha = sysA;
       const athActive = window._cinematicSignal === 'ath';
       ENERGY.forEach(p=>{
         if (athActive) {
@@ -4630,11 +4627,12 @@
           ctx.fillStyle=`rgba(${OR},${OG},${OB},${a.toFixed(3)})`; ctx.fill();
         }
       });
+      ctx.restore();
     }
 
     // Cache sigil and hero layout — document-relative, updated only on resize
     // In frame(), viewport position = docTop - scrollY  (no DOM reads per frame)
-    let _swDocLeft=0, _swDocTop=0, _swW=0, _cachedCanvasHeroH=0;
+    let _swDocLeft=0, _swDocTop=0, _swW=0, _cachedCanvasHeroH=0, _lockedCX=0, _lockedCY=0;
     function cacheCanvasLayout() {
       const sw = document.querySelector('.sigil-wrap');
       const hero = document.getElementById('top');
@@ -4649,7 +4647,10 @@
     // Re-cache after page is fully laid out
     cacheCanvasLayout();
     window.addEventListener('load', cacheCanvasLayout, { once: true });
-    window.addEventListener('resize', cacheCanvasLayout, { passive: true });
+    window.addEventListener('resize', () => {
+      cacheCanvasLayout();
+      _lockedCX = 0; _lockedCY = 0;
+    }, { passive: true });
 
     // Pause canvas paint when hero is fully off-screen
     let _heroVisible = true;
@@ -4665,27 +4666,33 @@
     const _isMobile = 'ontouchstart' in window;
     let _lastFrameTime = 0;
     function frame(now){
-      // Skip paint when hero is scrolled off-screen
-      if (!_heroVisible) { requestAnimationFrame(frame); return; }
+      // Always update canvas opacity — must run even when hero is off-screen so scroll-up restores it
+      const fadeStart = window.innerHeight * 0.15;
+      const fadeEnd   = window.innerHeight * 0.45;
+      const canvasOpacity = window.scrollY < fadeStart ? 1
+        : window.scrollY > fadeEnd ? 0
+        : 1 - (window.scrollY - fadeStart) / (fadeEnd - fadeStart);
+      canvas.style.opacity = canvasOpacity.toFixed(3);
+
+      // Skip paint when invisible or hero off-screen
+      if (!_heroVisible || canvasOpacity < 0.01) { requestAnimationFrame(frame); return; }
       // 30fps cap on mobile (~33ms per frame)
       if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
       _lastFrameTime = now;
 
       t++;
-      ctx.fillStyle = '#09080A';
-      ctx.fillRect(0, 0, W, H);
+      ctx.clearRect(0, 0, W, H);
 
-      // Compute viewport position from cached doc coords + current scrollY — zero DOM reads
-      let cx=W*0.5, cy=H*0.58, scale, sphR;
-      if(_swW){
-        const viewportTop = _swDocTop - window.scrollY;
-        cx = _swDocLeft + _swW * 0.5;
-        cy = (viewportTop + _swW * 0.5) + _cachedCanvasHeroH * 0.14;
-        scale = _swW * 0.5;
-        sphR  = scale * 0.26;
-      } else {
-        scale=Math.min(W,H)*0.40; sphR=scale*0.26;
-      }
+      // Sigil is position:absolute; top:50%; left:50% inside the hero — always centred
+      // Canvas is position:absolute; inset:0 inside the same hero — coords match directly
+      const sp = Math.min(window.scrollY / (window.innerHeight * 0.45), 1);
+      const scrollScale = 1 - (sp * 0.45);
+      const baseScale = _swW ? _swW * (_isMobile ? 0.42 : 0.35) : Math.min(W,H)*0.32;
+      const scale = baseScale * scrollScale;
+      const sphR  = scale * 0.26;
+      const cx = W * 0.5;
+      const cyBase = _isMobile ? H * 0.58 : H * 0.5;
+      const cy = cyBase - (window.scrollY * 0.08);
 
       // Render order (painter's algorithm):
       // 1. Background: nebulae + stars
@@ -4697,8 +4704,11 @@
 
       drawBackground(t);
 
+      // Fade rings+sphere brightness as they recede
+      const systemAlpha = Math.max(0.12, scrollScale);
+
       // 2. Far arcs of rings (top half — drawn behind sphere)
-      drawFarArcs(cx,cy,scale);
+      drawFarArcs(cx,cy,scale,systemAlpha);
 
       // 2b. Sphere shadow cast on far rings — dark cone away from light source
       // Light is upper-left so shadow falls lower-right
@@ -4720,16 +4730,29 @@
       })();
 
       // 3. Sphere on top of far arcs
-      drawSphere(cx,cy,sphR);
+      drawSphere(cx,cy,sphR,systemAlpha);
 
       // 4. Energy particles from sphere centre
-      drawEnergy(cx,cy);
+      drawEnergy(cx,cy,systemAlpha);
 
       // 5. Debris particles (orbital movement — main source of animation)
-      drawDebris(cx,cy,scale);
+      drawDebris(cx,cy,scale,systemAlpha);
 
       // 6. Near arcs of rings (bottom half — drawn in front of sphere)
-      drawNearArcs(cx,cy,scale);
+      drawNearArcs(cx,cy,scale,systemAlpha);
+
+      // 7. Aerial haze — atmosphere between viewer and receding system
+      if (sp > 0) {
+        const hazeR = baseScale * 1.5;
+        const hazeA = sp * 0.72;
+        const haze = ctx.createRadialGradient(cx, cy, baseScale * 0.1, cx, cy, hazeR);
+        haze.addColorStop(0,   `rgba(9,8,10,${(hazeA * 0.5).toFixed(3)})`);
+        haze.addColorStop(0.4, `rgba(9,8,10,${(hazeA * 0.7).toFixed(3)})`);
+        haze.addColorStop(0.75,`rgba(9,8,10,${(hazeA * 0.9).toFixed(3)})`);
+        haze.addColorStop(1,   `rgba(9,8,10,${hazeA.toFixed(3)})`);
+        ctx.beginPath(); ctx.arc(cx, cy, hazeR, 0, TAU);
+        ctx.fillStyle = haze; ctx.fill();
+      }
 
       // Dismiss static placeholder on first completed frame
       if (!frame._placeholderDone) {
@@ -4785,10 +4808,11 @@
       // Also update transform here so mouse tilt applies even without scroll
       if (wrap && !('ontouchstart' in window)) {
         const sy = window.scrollY;
-        const sp = Math.min(sy / _cachedHeroH, 1);
-        const sigilY = -(sy * 0.35);
-        const sigilS = 1 - (sp * 0.18);
-        const sigilO = Math.max(1 - (sp * 1.6), 0);
+        const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
+        // Recede into distance: shrinks to ~55% and drifts back, fades to subtle presence
+        const sigilY = -(sy * 0.08);
+        const sigilS = 1 - (sp * 0.45);
+        const sigilO = Math.max(0.12, 1 - (sp * 1.1));
         wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
         wrap.style.opacity = sigilO;
       }
