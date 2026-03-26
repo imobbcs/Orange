@@ -1242,12 +1242,14 @@
       .section-sub, .expert-text, .relai-sub, .push-sub { color: rgba(237,232,222,0.72); }
       .hero-disclaimer { font-size: 0.625rem; margin-top: 14svh; }
 
-      /* Sigil: centred backdrop — content flows over it */
+      /* Sigil: fixed so it's decoupled from iOS momentum scroll */
       .sigil-wrap {
+        position: fixed;
         width: min(94vw, 52vh);
         height: min(94vw, 52vh);
         opacity: 0.7;
         top: 58%;
+        left: 50%;
       }
 
       /* CTAs: in normal flow, pushed to bottom with margin-top: auto */
@@ -4671,13 +4673,13 @@
         : 1 - (smoothScrollY - fadeStart) / (fadeEnd - fadeStart);
       canvas.style.opacity = canvasOpacity.toFixed(3);
 
-      // Mobile sigil DOM write — must run every frame (before throttle) so no jump on scroll end
+      // Mobile sigil DOM write — every frame, before throttle gate
       if (_isMobile) {
         const mSigilWrap = document.querySelector('.sigil-wrap');
         if (mSigilWrap) {
           const sp0 = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
           mSigilWrap.style.transform = `translate(-50%, calc(-50% + ${(-(smoothScrollY * 0.08)).toFixed(1)}px)) scale(${(1 - sp0 * 0.45).toFixed(4)}) translateZ(0)`;
-          mSigilWrap.style.opacity = Math.max(0.12, 1 - sp0 * 1.1).toFixed(3);
+          mSigilWrap.style.opacity = canvasOpacity < 0.01 ? '0' : Math.max(0.12, 1 - sp0 * 1.1).toFixed(3);
         }
       }
 
