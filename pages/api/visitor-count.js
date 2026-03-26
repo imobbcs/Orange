@@ -8,16 +8,19 @@ export default async function handler(req, res) {
         password: process.env.UMAMI_PASSWORD,
       }),
     });
-    const loginData = await loginRes.json();
+    const { token } = await loginRes.json();
 
     const statsRes = await fetch(
       `https://umami-orange.up.railway.app/api/websites/c884bf96-c757-4dfb-b2bb-8195d5876958/stats?startAt=1000000000000&endAt=${Date.now()}`,
-      { headers: { Authorization: `Bearer ${loginData.token}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     const stats = await statsRes.json();
 
-    res.status(200).json({ loginData, stats });
+    const visitors = stats?.visitors ?? null;
+
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.status(200).json({ visitors });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ visitors: null });
   }
 }
