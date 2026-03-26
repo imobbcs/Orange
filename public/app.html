@@ -3769,14 +3769,7 @@
     if (farLayer)  farLayer.style.opacity  = (fadeFraction * 0.5).toFixed(3);
     if (midLayer)  midLayer.style.opacity  = (fadeFraction * 0.7).toFixed(3);
 
-    // Sigil parallax on mobile
-    if (_sigilWrap && ('ontouchstart' in window)) {
-      const sigilY = -(sy * 0.08);
-      const sigilS = 1 - (sp * 0.45);
-      const sigilO = Math.max(0.12, 1 - (sp * 1.1));
-      _sigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0)`;
-      _sigilWrap.style.opacity = sigilO;
-    }
+    // Sigil parallax on mobile — driven by canvas RAF smoothScrollY to avoid jump on scroll end
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -4667,7 +4660,7 @@
     const _isMobile = 'ontouchstart' in window;
     let _lastFrameTime = 0;
     function frame(now){
-      // Lerp scroll position for smooth animation — easing factor tuned for feel
+      // Lerp scroll — always runs, even on throttled frames, so sigil never jumps
       smoothScrollY += (window.scrollY - smoothScrollY) * (_isMobile ? 0.08 : 0.10);
 
       // Always update canvas opacity — must run even when hero is off-screen so scroll-up restores it
@@ -4680,7 +4673,7 @@
 
       // Skip paint when invisible or hero off-screen
       if (!_heroVisible || canvasOpacity < 0.01) { requestAnimationFrame(frame); return; }
-      // 30fps cap on mobile (~33ms cap — but smoothScrollY still lerps every frame)
+      // 30fps cap on mobile — lerp above already ran so smoothScrollY stays current
       if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
       _lastFrameTime = now;
 
@@ -4754,6 +4747,18 @@
         haze.addColorStop(1,   `rgba(9,8,10,${hazeA.toFixed(3)})`);
         ctx.beginPath(); ctx.arc(cx, cy, hazeR, 0, TAU);
         ctx.fillStyle = haze; ctx.fill();
+      }
+
+      // Sync mobile sigil-wrap to smoothScrollY — prevents jump when scroll momentum ends
+      if (_isMobile) {
+        const mSigilWrap = document.querySelector('.sigil-wrap');
+        if (mSigilWrap) {
+          const sigilY = -(smoothScrollY * 0.08);
+          const sigilS = 1 - (sp * 0.45);
+          const sigilO = Math.max(0.12, 1 - (sp * 1.1));
+          mSigilWrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0)`;
+          mSigilWrap.style.opacity = sigilO.toFixed(3);
+        }
       }
 
       // Dismiss static placeholder on first completed frame
