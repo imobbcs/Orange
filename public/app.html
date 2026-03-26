@@ -1245,8 +1245,8 @@
       /* Sigil: fixed so it's decoupled from iOS momentum scroll */
       .sigil-wrap {
         position: fixed;
-        width: min(94vw, 52vh);
-        height: min(94vw, 52vh);
+        width: min(76vw, 42vh);
+        height: min(76vw, 42vh);
         opacity: 0.7;
         top: 58%;
         left: 50%;
@@ -4705,7 +4705,7 @@
       const sp = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
       const scrollScale = 1 - (sp * 0.45);
       const baseScale = _isMobile
-        ? Math.min(W, H) * 0.42
+        ? Math.min(W, H) * 0.34
         : (_swW ? _swW * 0.35 : Math.min(W,H)*0.32);
       const scale = baseScale * scrollScale;
       const sphR  = scale * 0.26;
