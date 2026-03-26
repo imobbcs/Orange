@@ -4678,7 +4678,8 @@
         const mSigilWrap = document.querySelector('.sigil-wrap');
         if (mSigilWrap) {
           const sp0 = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
-          mSigilWrap.style.transform = `translate(-50%, calc(-50% + ${(-(smoothScrollY * 0.08)).toFixed(1)}px)) scale(${(1 - sp0 * 0.45).toFixed(4)}) translateZ(0)`;
+          // No Y drift on mobile — avoids any lerp/scroll mismatch
+          mSigilWrap.style.transform = `translate(-50%, -50%) scale(${(1 - sp0 * 0.45).toFixed(4)}) translateZ(0)`;
           mSigilWrap.style.opacity = canvasOpacity < 0.01 ? '0' : Math.max(0.12, 1 - sp0 * 1.1).toFixed(3);
         }
       }
@@ -4699,7 +4700,7 @@
       const sphR  = scale * 0.26;
       const cx = W * 0.5;
       const cyBase = _isMobile ? H * 0.58 : H * 0.62;
-      const cy = cyBase - (smoothScrollY * 0.08);
+      const cy = cyBase - (_isMobile ? 0 : smoothScrollY * 0.08);
 
       // Render order (painter's algorithm):
       // 1. Background: nebulae + stars
