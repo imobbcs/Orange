@@ -318,7 +318,7 @@
     /* ── SIGIL SYSTEM — layered, parallax, floating ── */
     .sigil-wrap {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 62%; left: 50%;
       transform: translate(-50%, -50%) translateZ(0);
       width: min(92vh, 92vw);
       height: min(92vh, 92vw);
@@ -4633,6 +4633,7 @@
     // Cache sigil and hero layout — document-relative, updated only on resize
     // In frame(), viewport position = docTop - scrollY  (no DOM reads per frame)
     let _swDocLeft=0, _swDocTop=0, _swW=0, _cachedCanvasHeroH=0, _lockedCX=0, _lockedCY=0;
+    let smoothScrollY = 0;
     function cacheCanvasLayout() {
       const sw = document.querySelector('.sigil-wrap');
       const hero = document.getElementById('top');
@@ -4666,33 +4667,34 @@
     const _isMobile = 'ontouchstart' in window;
     let _lastFrameTime = 0;
     function frame(now){
+      // Lerp scroll position for smooth animation — easing factor tuned for feel
+      smoothScrollY += (window.scrollY - smoothScrollY) * (_isMobile ? 0.08 : 0.10);
+
       // Always update canvas opacity — must run even when hero is off-screen so scroll-up restores it
       const fadeStart = window.innerHeight * 0.15;
       const fadeEnd   = window.innerHeight * 0.45;
-      const canvasOpacity = window.scrollY < fadeStart ? 1
-        : window.scrollY > fadeEnd ? 0
-        : 1 - (window.scrollY - fadeStart) / (fadeEnd - fadeStart);
+      const canvasOpacity = smoothScrollY < fadeStart ? 1
+        : smoothScrollY > fadeEnd ? 0
+        : 1 - (smoothScrollY - fadeStart) / (fadeEnd - fadeStart);
       canvas.style.opacity = canvasOpacity.toFixed(3);
 
       // Skip paint when invisible or hero off-screen
       if (!_heroVisible || canvasOpacity < 0.01) { requestAnimationFrame(frame); return; }
-      // 30fps cap on mobile (~33ms per frame)
+      // 30fps cap on mobile (~33ms cap — but smoothScrollY still lerps every frame)
       if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
       _lastFrameTime = now;
 
       t++;
       ctx.clearRect(0, 0, W, H);
 
-      // Sigil is position:absolute; top:50%; left:50% inside the hero — always centred
-      // Canvas is position:absolute; inset:0 inside the same hero — coords match directly
-      const sp = Math.min(window.scrollY / (window.innerHeight * 0.45), 1);
+      const sp = Math.min(smoothScrollY / (window.innerHeight * 0.45), 1);
       const scrollScale = 1 - (sp * 0.45);
       const baseScale = _swW ? _swW * (_isMobile ? 0.42 : 0.35) : Math.min(W,H)*0.32;
       const scale = baseScale * scrollScale;
       const sphR  = scale * 0.26;
       const cx = W * 0.5;
-      const cyBase = _isMobile ? H * 0.58 : H * 0.5;
-      const cy = cyBase - (window.scrollY * 0.08);
+      const cyBase = _isMobile ? H * 0.58 : H * 0.62;
+      const cy = cyBase - (smoothScrollY * 0.08);
 
       // Render order (painter's algorithm):
       // 1. Background: nebulae + stars
@@ -4800,16 +4802,17 @@
       targetRY *= (1 - scrollRatio);
     }, { passive: true });
 
+    let _tiltSmoothSY = 0;
     (function tiltLoop() {
+      _tiltSmoothSY += (window.scrollY - _tiltSmoothSY) * 0.10;
       currentRX += (targetRX - currentRX) * 0.06;
       currentRY += (targetRY - currentRY) * 0.06;
       wrap._rx = currentRX;
       wrap._ry = currentRY;
       // Also update transform here so mouse tilt applies even without scroll
       if (wrap && !('ontouchstart' in window)) {
-        const sy = window.scrollY;
+        const sy = _tiltSmoothSY;
         const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
-        // Recede into distance: shrinks to ~55% and drifts back, fades to subtle presence
         const sigilY = -(sy * 0.08);
         const sigilS = 1 - (sp * 0.45);
         const sigilO = Math.max(0.12, 1 - (sp * 1.1));
