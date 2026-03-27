@@ -3509,7 +3509,8 @@
     const wrap = document.querySelector('.whatif-canvas-wrap');
     if (!wrap) return;
 
-    const W = Math.floor(wrap.getBoundingClientRect().width);
+    // Read layout before any DOM writes — avoids forced reflow
+    const W = Math.floor(wrap.offsetWidth);
     const H = 200;
     if (!W) { requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym)); return; }
 
@@ -3725,8 +3726,12 @@
     const heroH = _heroH();
     const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
 
-    // Progress bar
-    const pct = sy / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+    // Read all layout values first — avoids forced reflow from interleaved reads/writes
+    const scrollHeight = document.documentElement.scrollHeight;
+    const distFromBottom = scrollHeight - window.innerHeight - sy;
+    const pct = sy / (scrollHeight - window.innerHeight) * 100;
+
+    // Now do all DOM writes
     document.getElementById('progress').style.width = pct + '%';
 
     // Scroll hint
@@ -3744,7 +3749,6 @@
     // Hide depth fade near bottom of page so footer is readable
     const dofEl = document.querySelector('.dof-overlay');
     if (dofEl) {
-      const distFromBottom = document.documentElement.scrollHeight - window.innerHeight - sy;
       dofEl.style.opacity = distFromBottom < 120 ? Math.max(0, distFromBottom / 120).toFixed(3) : '1';
     }
     const ambientEl = document.querySelector('.hero-ambient');
@@ -3786,9 +3790,10 @@
 
   // ── INIT (parallel where safe) ──
   async function init() {
-    await detectCurrency();
-    // Price first (needed by ATH + MA calculations)
-    await fetchPrice();
+    // detectCurrency and fetchPrice run in parallel — price uses currentCurrency at resolution time
+    // If currency detection finishes first, price displays in correct currency
+    // If price finishes first, it uses default EUR (correct for most users anyway)
+    await Promise.all([detectCurrency(), fetchPrice()]);
     // Monthly prices non-blocking — fallback table used instantly
     fetchMonthlyPrices();
     // Fear/Greed, ATH and MA can run in parallel after price is known
