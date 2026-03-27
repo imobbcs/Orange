@@ -325,48 +325,7 @@
       pointer-events: none;
     }
 
-    /* Each ring layer rotates at a different speed */
-    .sigil-ring-outer {
-      position: absolute; inset: 0;
-      animation: ringRotateSlow 90s linear infinite;
-      transform-origin: center;
-    }
-    .sigil-ring-mid {
-      position: absolute; inset: 8%;
-      animation: ringRotateMid 60s linear infinite reverse;
-      transform-origin: center;
-    }
-    .sigil-ring-inner {
-      position: absolute; inset: 20%;
-      animation: ringRotateFast 40s linear infinite;
-      transform-origin: center;
-    }
-    /* The ₿ symbol itself floats — no rotation, just gentle drift */
-    .sigil-btc-symbol {
-      position: absolute; inset: 28%;
-      animation: symbolFloat 8s ease-in-out infinite;
-      transform-origin: center;
-    }
-    @keyframes ringRotateSlow {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes ringRotateMid {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes ringRotateFast {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    @keyframes symbolFloat {
-      0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 20px rgba(247,147,26,0.15)); }
-      50%       { transform: translateY(-8px) scale(1.02); filter: drop-shadow(0 8px 32px rgba(247,147,26,0.25)); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .sigil-ring-outer, .sigil-ring-mid, .sigil-ring-inner { animation: none; }
-      .sigil-btc-symbol { animation: none; }
-    }
+    /* Ring CSS removed — rings rendered entirely by canvas */
 
     /* ── VISITOR COUNTER ── */
     .visitor-counter {
@@ -420,6 +379,7 @@
       padding-top: 0;
       opacity: 0; animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
       position: relative; display: inline-block;
+      min-height: clamp(5.5rem, 19vw, 17.4rem); /* reserve space — prevents CLS */
     }
     .hero-price {
       font-family: var(--title);
@@ -1201,7 +1161,6 @@
       .footer-links { justify-content: flex-end; }
       .footer-links a { min-height: unset; padding: 0; }
       nav.scrolled { padding: 0.8rem 1.5rem; backdrop-filter: none; -webkit-backdrop-filter: none; }
-      .sigil-ring-outer, .sigil-ring-mid, .sigil-ring-inner { animation: none; }
       .nav-right { gap: 0.75rem; }
       .nav-cta { display: none; }
 
@@ -4086,7 +4045,11 @@
       }
 
       let t = 0;
-      function draw() {
+      let _lastStarFrame = 0;
+      function draw(now) {
+        if (document.hidden) { raf = requestAnimationFrame(draw); return; }
+        if (now - _lastStarFrame < 33) { raf = requestAnimationFrame(draw); return; }
+        _lastStarFrame = now;
         t++;
         ctx.clearRect(0, 0, W, H);
 
@@ -4172,9 +4135,9 @@
       window.addEventListener('resize', () => {
         cancelAnimationFrame(raf);
         seed();
-        draw();
+        raf = requestAnimationFrame(draw);
       }, { passive: true });
-      draw();
+      raf = requestAnimationFrame(draw);
     }
 
     makeStars('hero-depth-far', 160, 0.3, 0.9, 'rgba(237,232,222,A)');
@@ -4717,9 +4680,10 @@
       }
 
       // Skip paint when invisible or hero off-screen
+      if (document.hidden) { requestAnimationFrame(frame); return; }
       if (!_heroVisible || canvasOpacity < 0.01) { requestAnimationFrame(frame); return; }
-      // 30fps cap on mobile — lerp and sigil write above already ran
-      if (_isMobile && now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
+      // 30fps cap on all devices — cinematic animation doesn't need 60fps
+      if (now - _lastFrameTime < 33) { requestAnimationFrame(frame); return; }
       _lastFrameTime = now;
 
       t++;
@@ -4844,20 +4808,21 @@
 
     let _tiltSmoothSY = 0;
     (function tiltLoop() {
-      _tiltSmoothSY += (window.scrollY - _tiltSmoothSY) * 0.10;
-      currentRX += (targetRX - currentRX) * 0.06;
-      currentRY += (targetRY - currentRY) * 0.06;
-      wrap._rx = currentRX;
-      wrap._ry = currentRY;
-      // Also update transform here so mouse tilt applies even without scroll
-      if (wrap && !('ontouchstart' in window)) {
-        const sy = _tiltSmoothSY;
-        const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
-        const sigilY = -(sy * 0.08);
-        const sigilS = 1 - (sp * 0.45);
-        const sigilO = Math.max(0.12, 1 - (sp * 1.1));
-        wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
-        wrap.style.opacity = sigilO;
+      if (!document.hidden) {
+        _tiltSmoothSY += (window.scrollY - _tiltSmoothSY) * 0.10;
+        currentRX += (targetRX - currentRX) * 0.06;
+        currentRY += (targetRY - currentRY) * 0.06;
+        wrap._rx = currentRX;
+        wrap._ry = currentRY;
+        if (wrap && !('ontouchstart' in window)) {
+          const sy = _tiltSmoothSY;
+          const sp = Math.min(sy / (window.innerHeight * 0.45), 1);
+          const sigilY = -(sy * 0.08);
+          const sigilS = 1 - (sp * 0.45);
+          const sigilO = Math.max(0.12, 1 - (sp * 1.1));
+          wrap.style.transform = `translate(-50%, calc(-50% + ${sigilY.toFixed(1)}px)) scale(${sigilS.toFixed(4)}) translateZ(0) rotateX(${currentRX.toFixed(2)}deg) rotateY(${currentRY.toFixed(2)}deg)`;
+          wrap.style.opacity = sigilO;
+        }
       }
       requestAnimationFrame(tiltLoop);
     })();
@@ -4963,7 +4928,11 @@
       }
     }
 
-    function draw() {
+    let _expertLastFrame = 0;
+    function draw(now) {
+      if (document.hidden) { requestAnimationFrame(draw); return; }
+      if (now - _expertLastFrame < 33) { requestAnimationFrame(draw); return; }
+      _expertLastFrame = now;
       ctx.clearRect(0, 0, W, H);
       const s = STATES[signalState] || STATES.hold;
       const cx = W / 2, cy = H / 2;
@@ -5011,7 +4980,7 @@
       running = true;
       resize();
       initParticles(signalState);
-      draw();
+      requestAnimationFrame(draw);
       requestAnimationFrame(() => canvas.classList.add('active'));
     }
     const card = canvas.closest('.expert-card') || canvas.parentElement;
