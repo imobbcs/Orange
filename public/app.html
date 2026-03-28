@@ -780,153 +780,6 @@
 
     /* ── WHAT IF ── */
     .whatif-section { }
-    .habit-grid {
-      display: grid; grid-template-columns: repeat(8, 1fr);
-      border: 1px solid var(--border2); margin-bottom: 3rem;
-    }
-
-    /* ── HORIZONTAL SCROLL ── */
-    .habit-scroll-wrap {
-      width: 100%;
-      overflow-x: auto; overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 0.25rem clamp(1.5rem, 5vw, 4rem) 1.5rem;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 92%, transparent 100%);
-      mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 92%, transparent 100%);
-      cursor: grab;
-    }
-    .habit-scroll-wrap:active { cursor: grabbing; }
-    .habit-scroll-wrap::-webkit-scrollbar { display: none; }
-    .habit-scroll-inner {
-      display: flex;
-      gap: 1rem;
-      padding: 2rem 0 3rem;
-      width: max-content;
-      min-width: 100%;
-    }
-
-    /* Scroll hint */
-    .habit-scroll-hint {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      opacity: 0.6;
-      margin-bottom: 1.25rem;
-      transition: opacity 0.5s;
-    }
-    .habit-scroll-hint.hidden { opacity: 0; pointer-events: none; }
-    .habit-scroll-hint-arrow {
-      display: inline-flex;
-      animation: hintBounce 1.4s ease-in-out infinite;
-    }
-    @keyframes hintBounce {
-      0%, 100% { transform: translateX(0); }
-      50%       { transform: translateX(6px); }
-    }
-    .habit-scroll-inner 
-    .habit-scroll-inner .habit-card:last-child { }
-    @keyframes cardLift {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(247,147,26,0.08); }
-    }
-    /* ── HABIT CARDS ── */
-    .habit-card {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 2rem 1.75rem 1.75rem;
-      background: var(--bg2);
-      border-left: 2px solid var(--orange);
-      border-top: 1px solid var(--border2);
-      border-right: 1px solid var(--border2);
-      border-bottom: 1px solid var(--border2);
-      cursor: pointer;
-      transition: background 0.25s, border-left-color 0.25s, box-shadow 0.25s;
-      text-align: left;
-      position: relative;
-      overflow: hidden;
-      transform-origin: bottom center;
-      min-height: 260px;
-      min-width: 220px;
-      width: 220px;
-      flex: 0 0 auto;
-      justify-content: space-between;
-      gap: 1.5rem;
-      will-change: transform;
-    }
-    .habit-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0; height: 60px;
-      background: linear-gradient(to top, rgba(247,147,26,0.04), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .habit-card:hover::after,
-    .habit-card.active::after { opacity: 1; }
-    .habit-card:hover {
-      background: rgba(247,147,26,0.05);
-      border-left-color: var(--orange);
-      box-shadow: 4px 0 0 0 rgba(247,147,26,0.15), 0 8px 32px rgba(0,0,0,0.4);
-    }
-    .habit-card.active {
-      background: rgba(247,147,26,0.07);
-      border-left-color: var(--orange);
-      box-shadow: 4px 0 0 0 rgba(247,147,26,0.25), 0 8px 32px rgba(247,147,26,0.08);
-    }
-    .habit-card.lifting { animation: cardLift 0.7s ease; }
-    .habit-card-top {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    .habit-card-seq {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--orange);
-      opacity: 0.5;
-    }
-    .habit-icon {
-      color: var(--orange);
-      opacity: 0.55;
-      margin-top: 0.5rem;
-      display: block;
-    }
-    .habit-icon svg { width: 20px; height: 20px; }
-    .habit-name {
-      font-family: var(--display);
-      font-size: 1.45rem;
-      font-style: italic;
-      font-weight: 300;
-      color: var(--white);
-      line-height: 1.2;
-    }
-    .habit-card-bottom { }
-    .habit-cost {
-      font-family: var(--title);
-      font-size: 3.2rem;
-      line-height: 0.88;
-      letter-spacing: -0.01em;
-      color: var(--orange);
-    }
-    .habit-cost-label {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: 0.5rem;
-      opacity: 0.7;
-    }
 
         .whatif-result-wrap {
       border: 1px solid var(--border2); background: rgba(15,13,16,0.6); overflow: hidden;
@@ -1308,9 +1161,6 @@
       .whatif-share-row { padding: 1rem 1rem 1.5rem; flex-direction: column; }
       .whatif-share-row .share-btn { width: 100%; text-align: center; }
       /* ── WHAT IF ── */
-      .habit-row { padding: 1rem 1.25rem; gap: 0.75rem; }
-      .habit-row-name { font-size: 0.95rem; }
-      .habit-row-amount { font-size: 1.3rem; }
       .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
       .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
       .whatif-revelation-context { font-size: 0.9rem; }
@@ -1349,9 +1199,6 @@
       .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
       .sigil-wrap { width: min(72vw, 65vh); height: min(72vw, 65vh); opacity: 0.7; }
       .instrument-value { font-size: 2rem; }
-      .habit-card { min-width: 155px; width: 155px; }
-      .habit-name { font-size: 1.05rem; }
-      .habit-cost { font-size: 2.3rem; }
       .share-btns { grid-template-columns: 1fr; }
       .share-btns .share-btn.primary { grid-column: 1; }
     }
@@ -1359,8 +1206,6 @@
     /* Small phones */
     @media (max-width: 390px) {
       .hero-price { font-size: clamp(3.5rem, 17vw, 5.5rem); }
-      .habit-grid { grid-template-columns: repeat(4, 1fr); }
-      .habit-name { font-size: 0.68rem; }
       .hero-actions { flex-direction: column; }
       .hero-actions .btn-primary,
       .hero-actions .btn-ghost { width: 100%; }
@@ -1369,7 +1214,7 @@
     /* Touch tap targets */
     @media (max-width: 768px) {
       button, a.btn-primary, a.btn-ghost, a.relai-btn,
-      .chart-tab, .lang-btn, .habit-card, .share-btn { min-height: 44px; }
+      .chart-tab, .lang-btn, .habit-carousel-btn, .habit-carousel-calc, .share-btn { min-height: 44px; }
     }
   
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
@@ -1668,87 +1513,193 @@
 
 
     /* ══ HABIT TAP LIST ══ */
-    .habit-list {
-      width: 100%;
-      border: 1px solid var(--border2);
-      margin-top: 2rem;
-      margin-bottom: 0;
-      margin-left: 0;
+    /* ══ HABIT CAROUSEL ══ */
+    .habit-carousel-wrap {
+      margin-top: 2.5rem;
+      position: relative;
+      border: 1px solid rgba(247,147,26,0.15);
+      background: rgba(247,147,26,0.02);
+      overflow: hidden;
     }
-    .habit-row {
+    .habit-carousel-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .habit-carousel-header {
       display: flex;
       align-items: center;
-      width: 100%;
-      padding: 0.7rem 2.5rem;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid rgba(247,147,26,0.07);
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.2s ease, border-left-color 0.2s ease;
-      border-left: 2px solid transparent;
-      gap: 1rem;
-      position: relative;
+      justify-content: space-between;
+      padding: 0.85rem 2rem;
+      border-bottom: 1px solid rgba(247,147,26,0.1);
     }
-    .habit-row:last-child { border-bottom: none; }
-    .habit-row:hover {
-      background: rgba(247,147,26,0.04);
-      border-left-color: rgba(247,147,26,0.4);
-    }
-    .habit-row.active {
-      background: rgba(247,147,26,0.07);
-      border-left-color: var(--orange);
-    }
-    .habit-row-seq {
+    .habit-carousel-label {
       font-family: var(--mono);
       font-size: 0.625rem;
-      letter-spacing: 0.2em;
-      color: var(--grey);
-      min-width: 2rem;
-      flex-shrink: 0;
-    }
-    .habit-row-name {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 300;
-      font-size: 1rem;
-      color: var(--muted);
-      flex: 1;
-    }
-    .habit-row.active .habit-row-name,
-    .habit-row:hover .habit-row-name { color: var(--white); }
-    .habit-row.active .habit-row-name { color: var(--white); }
-    .habit-row-amount {
-      font-family: var(--title);
-      font-size: 1.35rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
       color: var(--orange);
-      letter-spacing: 0.01em;
-      flex-shrink: 0;
       opacity: 0.7;
     }
-    .habit-row.active .habit-row-amount,
-    .habit-row:hover .habit-row-amount { opacity: 1; }
-    .habit-row-mo {
+    .habit-carousel-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .habit-carousel-btn {
+      background: none;
+      border: 1px solid rgba(247,147,26,0.2);
+      color: var(--orange);
       font-family: var(--mono);
-      font-size: 0.625rem;
+      font-size: 0.75rem;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .habit-carousel-btn:hover { opacity: 1; border-color: rgba(247,147,26,0.6); }
+    .habit-carousel-counter {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--grey);
+      min-width: 2.8rem;
+      text-align: center;
+    }
+    .habit-carousel-track-wrap {
+      position: relative;
+      padding: 2.5rem 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+      overflow: hidden;
+    }
+    .habit-carousel-track {
+      display: flex;
+      align-items: center;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .habit-slide {
+      flex: 0 0 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem 0.75rem;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      gap: 0.4rem;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      opacity: 0.2;
+      transform: scale(0.7);
+      position: relative;
+    }
+    .habit-slide.adjacent { opacity: 0.4; transform: scale(0.82); }
+    .habit-slide.active   { opacity: 1;   transform: scale(1); cursor: default; }
+    .habit-slide.active::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(247,147,26,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .habit-slide-id {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey);
+      opacity: 0.5;
+    }
+    .habit-slide.active .habit-slide-id { color: var(--orange); opacity: 0.7; }
+    .habit-slide-amount {
+      font-family: var(--title);
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      color: var(--orange);
+      opacity: 0.45;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+    }
+    .habit-slide.active .habit-slide-amount { opacity: 1; }
+    .habit-slide-mo {
+      font-family: var(--mono);
+      font-size: 0.5rem;
       letter-spacing: 0.1em;
       color: var(--grey);
       vertical-align: super;
-      margin-left: 0.2em;
+      margin-left: 0.1em;
     }
-    .habit-row-arrow {
+    .habit-slide-name {
       font-family: var(--mono);
-      font-size: 0.7rem;
+      font-size: 0.575rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(237,232,222,0.35);
+      line-height: 1.4;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+    .habit-slide.active .habit-slide-name { color: rgba(237,232,222,0.75); }
+    .habit-slide-bar {
+      width: 36px; height: 1px;
+      background: rgba(247,147,26,0.12);
+      position: relative;
+      overflow: hidden;
+      margin-top: 0.2rem;
+    }
+    .habit-slide-bar-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: var(--orange);
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
+    .habit-slide.active .habit-slide-bar-fill { opacity: 0.8; }
+    .habit-carousel-cta {
+      padding: 1rem 2rem 1.25rem;
+      border-top: 1px solid rgba(247,147,26,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .habit-carousel-selected {
+      font-family: var(--mono);
+      font-size: 0.575rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--grey);
-      opacity: 0;
-      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    }
+    .habit-carousel-selected span { color: rgba(237,232,222,0.7); }
+    .habit-carousel-calc {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: none;
+      border: 1px solid rgba(247,147,26,0.35);
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
       flex-shrink: 0;
     }
-    .habit-row:hover .habit-row-arrow,
-    .habit-row.active .habit-row-arrow {
-      opacity: 1;
-      color: var(--orange);
-      transform: translateX(3px);
+    .habit-carousel-calc:hover { border-color: var(--orange); background: rgba(247,147,26,0.06); }
+    @media (max-width: 768px) {
+      .habit-slide { flex: 0 0 33.333%; }
+      .habit-slide-amount { font-size: clamp(1.8rem, 7vw, 3rem); }
+      .habit-slide-name { font-size: 0.5rem; }
+      .habit-carousel-header, .habit-carousel-cta { padding: 0.85rem 1.25rem; }
     }
 
     /* ══ WHATIF REVELATION — number dominates ══ */
@@ -2059,93 +2010,35 @@
     <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
     <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit — and see what it would look like if you had put that money into Bitcoin instead.</p>
 
-    <!-- TAP LIST — 14 habits -->
-    <div class="habit-list reveal" data-delay="4" id="habit-list">
-      <button class="habit-row" onclick="selectHabit('streaming',this)">
-        <span class="habit-row-seq">01</span>
-        <span class="habit-row-name">One streaming service</span>
-        <span class="habit-row-amount">€13<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('gym',this)">
-        <span class="habit-row-seq">02</span>
-        <span class="habit-row-name">A gym you rarely visit</span>
-        <span class="habit-row-amount">€40<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('lunch',this)">
-        <span class="habit-row-seq">03</span>
-        <span class="habit-row-name">One lunch out</span>
-        <span class="habit-row-amount">€44<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('coffee_out',this)">
-        <span class="habit-row-seq">04</span>
-        <span class="habit-row-name">Daily coffee out</span>
-        <span class="habit-row-amount">€61<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('drinks',this)">
-        <span class="habit-row-seq">05</span>
-        <span class="habit-row-name">A few drinks out</span>
-        <span class="habit-row-amount">€80<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('cigarettes_l',this)">
-        <span class="habit-row-seq">06</span>
-        <span class="habit-row-name">Cigarettes (light smoker)</span>
-        <span class="habit-row-amount">€85<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('rideshare',this)">
-        <span class="habit-row-seq">07</span>
-        <span class="habit-row-name">Uber</span>
-        <span class="habit-row-amount">€90<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('fashion',this)">
-        <span class="habit-row-seq">08</span>
-        <span class="habit-row-name">Fast fashion</span>
-        <span class="habit-row-amount">€90<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('latte',this)">
-        <span class="habit-row-seq">09</span>
-        <span class="habit-row-name">Daily latte</span>
-        <span class="habit-row-amount">€92<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('takeaway',this)">
-        <span class="habit-row-seq">10</span>
-        <span class="habit-row-name">Takeaways</span>
-        <span class="habit-row-amount">€110<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('nights',this)">
-        <span class="habit-row-seq">11</span>
-        <span class="habit-row-name">Nights out</span>
-        <span class="habit-row-amount">€130<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('shopping',this)">
-        <span class="habit-row-seq">12</span>
-        <span class="habit-row-name">Online shopping</span>
-        <span class="habit-row-amount">€150<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('dining',this)">
-        <span class="habit-row-seq">13</span>
-        <span class="habit-row-name">Dining out</span>
-        <span class="habit-row-amount">€170<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-      <button class="habit-row" onclick="selectHabit('cigarettes',this)">
-        <span class="habit-row-seq">14</span>
-        <span class="habit-row-name">Cigarettes (regular)</span>
-        <span class="habit-row-amount">€240<span class="habit-row-mo">/mo</span></span>
-        <span class="habit-row-arrow">→</span>
-      </button>
-    </div><!-- /habit-list -->
+    <!-- HABIT CAROUSEL -->
+    <div class="habit-carousel-wrap reveal" data-delay="4" id="habit-list">
+      <div class="habit-carousel-header">
+        <span class="habit-carousel-label" data-i18n="habitCarouselLabel">Expenditure Readings — Monthly</span>
+        <div class="habit-carousel-nav">
+          <button class="habit-carousel-btn" id="habit-prev" aria-label="Previous">←</button>
+          <span class="habit-carousel-counter" id="habit-counter">01 / 10</span>
+          <button class="habit-carousel-btn" id="habit-next" aria-label="Next">→</button>
+        </div>
+      </div>
+      <div class="habit-carousel-track-wrap">
+        <div class="habit-carousel-track" id="habit-track">
+          <button class="habit-slide" data-key="netflix"><div class="habit-slide-id">EXP-01</div><div class="habit-slide-amount">€15<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Netflix" data-name-de="Netflix">Netflix</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:12%"></div></div></button>
+          <button class="habit-slide" data-key="gym"><div class="habit-slide-id">EXP-02</div><div class="habit-slide-amount">€40<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="The gym you never go to" data-name-de="Das Fitnessstudio, das du nie besuchst">The gym you never go to</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:31%"></div></div></button>
+          <button class="habit-slide" data-key="coffee"><div class="habit-slide-id">EXP-03</div><div class="habit-slide-amount">€50<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Coffee on the go" data-name-de="Kaffee unterwegs">Coffee on the go</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:38%"></div></div></button>
+          <button class="habit-slide" data-key="lunch"><div class="habit-slide-id">EXP-04</div><div class="habit-slide-amount">€60<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Grabbing lunch" data-name-de="Mittagessen to go">Grabbing lunch</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:46%"></div></div></button>
+          <button class="habit-slide" data-key="takeaway"><div class="habit-slide-id">EXP-05</div><div class="habit-slide-amount">€80<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Takeaways" data-name-de="Bestellungen nach Hause">Takeaways</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:62%"></div></div></button>
+          <button class="habit-slide" data-key="drinks"><div class="habit-slide-id">EXP-06</div><div class="habit-slide-amount">€80<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Drinks after work" data-name-de="Drinks nach der Arbeit">Drinks after work</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:62%"></div></div></button>
+          <button class="habit-slide" data-key="uber"><div class="habit-slide-id">EXP-07</div><div class="habit-slide-amount">€90<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="A few Ubers" data-name-de="Ein paar Uber-Fahrten">A few Ubers</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:69%"></div></div></button>
+          <button class="habit-slide" data-key="fashion"><div class="habit-slide-id">EXP-08</div><div class="habit-slide-amount">€100<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Clothes you didn't need" data-name-de="Klamotten, die du nicht brauchtest">Clothes you didn't need</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:77%"></div></div></button>
+          <button class="habit-slide" data-key="dining"><div class="habit-slide-id">EXP-09</div><div class="habit-slide-amount">€120<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Dinner out" data-name-de="Essen gehen">Dinner out</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:92%"></div></div></button>
+          <button class="habit-slide" data-key="nights"><div class="habit-slide-id">EXP-10</div><div class="habit-slide-amount">€130<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="A proper night out" data-name-de="Ein richtiger Abend aus">A proper night out</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:100%"></div></div></button>
+        </div>
+      </div>
+      <div class="habit-carousel-cta">
+        <div class="habit-carousel-selected" data-i18n-prefix="habitSelected"><span data-i18n="habitSelectedPrefix">Selected:</span> <span id="habit-selected-name">—</span></div>
+        <button class="habit-carousel-calc" id="habit-calc-btn" onclick="triggerHabitCalc()" data-i18n="habitCalcBtn">Calculate →</button>
+      </div>
+    </div><!-- /habit-carousel -->
 
     <!-- RESULT — number dominates, then supporting evidence -->
     <div class="whatif-result-wrap" id="whatif-result-wrap" style="display:none;">
@@ -2572,6 +2465,9 @@
       whatifHeadline: "If you'd saved that monthly into Bitcoin since 2015, you'd have",
       whatifBigSub: 'today — instead of nothing',
       whatifChartLabel: 'Portfolio value over time',
+      habitCarouselLabel: 'Expenditure Readings — Monthly',
+      habitSelectedPrefix: 'Selected:',
+      habitCalcBtn: 'Calculate →',
       barInvested: 'Total invested',
       barValue: 'Value today',
       statMonthly: 'Monthly amount',
@@ -2735,6 +2631,9 @@
       whatifHeadline: 'Hättest du das monatlich seit 2015 in Bitcoin gesteckt, hättest du heute',
       whatifBigSub: 'statt bei nichts',
       whatifChartLabel: 'Portfolio-Wert im Zeitverlauf',
+      habitCarouselLabel: 'Ausgaben — Monatlich',
+      habitSelectedPrefix: 'Ausgewählt:',
+      habitCalcBtn: 'Berechnen →',
       barInvested: 'Gesamt investiert',
       barValue: 'Wert heute',
       statMonthly: 'Monatlicher Betrag',
@@ -2847,6 +2746,7 @@
 
   function setLang(lang) {
     applyLang(lang);
+    if (window._habitCarouselUpdate) window._habitCarouselUpdate();
   }
 
   // Auto-detect language on load
@@ -2880,15 +2780,15 @@
   }
 
   function updateHabitRowAmounts() {
-    if (currentCurrency === 'EUR') return; // already in EUR by default
+    if (currentCurrency === 'EUR') return;
     const sym = '$';
-    document.querySelectorAll('.habit-row').forEach(row => {
-      const key = row.getAttribute('onclick')?.match(/selectHabit\('(\w+)'/)?.[1];
+    document.querySelectorAll('.habit-slide').forEach(slide => {
+      const key = slide.dataset.key;
       if (!key || !HABITS[key]) return;
-      const amountEl = row.querySelector('.habit-row-amount');
+      const amountEl = slide.querySelector('.habit-slide-amount');
       if (!amountEl) return;
       const converted = Math.round(HABITS[key].monthly * eurUsdRate);
-      amountEl.innerHTML = `${sym}${converted}<span class="habit-row-mo">/mo</span>`;
+      amountEl.innerHTML = `${sym}${converted}<span class="habit-slide-mo">/mo</span>`;
     });
   }
 
@@ -3392,27 +3292,23 @@
 
   // All amounts in monthly EUR
   const HABITS = {
-    streaming:   { label: 'One streaming service',         monthly: 13   },
-    gym:         { label: 'A gym you rarely visit', monthly: 40   },
-    lunch:       { label: 'One lunch out',                     monthly: 44   },
-    coffee_out:  { label: 'Daily coffee out',              monthly: 61   },
-    drinks:      { label: 'A few drinks out',                monthly: 80   },
-    cigarettes_l:{ label: 'Cigarettes (light smoker)',     monthly: 85   },
-    rideshare:   { label: 'Uber',                  monthly: 90   },
-    fashion:     { label: 'Fast fashion',                  monthly: 90   },
-    latte:       { label: 'Daily latte',                   monthly: 92   },
-    takeaway:    { label: 'Takeaways',                     monthly: 110  },
-    nights:      { label: 'Nights out',                    monthly: 130  },
-    shopping:    { label: 'Online shopping',               monthly: 150  },
-    dining:      { label: 'Dining out',                    monthly: 170  },
-    cigarettes:  { label: 'Cigarettes (regular)',             monthly: 240  },
+    netflix:   { label: 'Netflix',                    labelDe: 'Netflix',                       monthly: 15  },
+    gym:       { label: 'The gym you never go to',    labelDe: 'Das Fitnessstudio, das du nie besuchst', monthly: 40  },
+    coffee:    { label: 'Coffee on the go',           labelDe: 'Kaffee unterwegs',              monthly: 50  },
+    lunch:     { label: 'Grabbing lunch',             labelDe: 'Mittagessen to go',             monthly: 60  },
+    takeaway:  { label: 'Takeaways',                  labelDe: 'Bestellungen nach Hause',       monthly: 80  },
+    drinks:    { label: 'Drinks after work',          labelDe: 'Drinks nach der Arbeit',        monthly: 80  },
+    uber:      { label: 'A few Ubers',                labelDe: 'Ein paar Uber-Fahrten',         monthly: 90  },
+    fashion:   { label: 'Clothes you didn\'t need',  labelDe: 'Klamotten, die du nicht brauchtest', monthly: 100 },
+    dining:    { label: 'Dinner out',                 labelDe: 'Essen gehen',                   monthly: 120 },
+    nights:    { label: 'A proper night out',         labelDe: 'Ein richtiger Abend aus',       monthly: 130 },
   };
 
   function selectHabit(key, el) {
     if (!currentPrice) return;
 
-    // Mark active row
-    document.querySelectorAll('.habit-row').forEach(c => c.classList.remove('active'));
+    // Mark active slide
+    document.querySelectorAll('.habit-slide').forEach(c => c.classList.remove('active'));
     if (el) el.classList.add('active');
 
     const habit = HABITS[key];
@@ -3470,7 +3366,8 @@
     }, 1800);
 
     // Set label
-    if (labelEl) labelEl.textContent = habit.label.toUpperCase();
+    const habitLabel = (currentLang === 'de' && habit.labelDe) ? habit.labelDe : habit.label;
+    if (labelEl) labelEl.textContent = habitLabel.toUpperCase();
 
     // Scroll to result
     requestAnimationFrame(() => wrap.classList.add('revealed'));
@@ -3670,30 +3567,85 @@
   }
 
 
-  // ── SCROLL PROGRESS (throttled) ──
-  // ── HABIT CARD STAGGERED LIFT ──
+  // ── HABIT CAROUSEL ──
   (function() {
-    const cards = Array.from(document.querySelectorAll('.habit-card'));
-    let stopped = false;
-    function liftCard(i) {
-      if (stopped || i >= cards.length) return;
-      const card = cards[i];
-      card.classList.add('lifting');
-      setTimeout(() => card.classList.remove('lifting'), 700);
-      setTimeout(() => liftCard(i + 1), 160);
+    const track    = document.getElementById('habit-track');
+    const counter  = document.getElementById('habit-counter');
+    const selName  = document.getElementById('habit-selected-name');
+    if (!track) return;
+
+    const slides = Array.from(track.querySelectorAll('.habit-slide'));
+    const total  = slides.length;
+    let current  = 0;
+
+    const isMobile  = () => window.innerWidth < 768;
+    const sideCount = () => isMobile() ? 1 : 2;
+
+    function slideWidth() {
+      return track.parentElement.offsetWidth / (isMobile() ? 3 : 5);
     }
-    // Run the wave once on load, then repeat every 6s
-    function runWave() {
-      if (!stopped) {
-        liftCard(0);
-        setTimeout(runWave, 6000);
-      }
+
+    function update() {
+      const sw   = slideWidth();
+      const wrap = track.parentElement.offsetWidth;
+      const off  = (wrap / 2) - (sw / 2) - current * sw;
+      track.style.transform = `translateX(${off.toFixed(1)}px)`;
+      counter.textContent   = String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+      const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+      slides.forEach((s, i) => {
+        const dist = Math.abs(i - current);
+        s.classList.remove('active','adjacent');
+        if (dist === 0)            s.classList.add('active');
+        else if (dist <= sideCount()) s.classList.add('adjacent');
+        // Update name language
+        const nameEl = s.querySelector('.habit-slide-name');
+        if (nameEl) nameEl.textContent = lang === 'de' ? (nameEl.dataset.nameDe || nameEl.dataset.nameEn) : nameEl.dataset.nameEn;
+      });
     }
-    setTimeout(runWave, 2200);
-    document.querySelectorAll('.habit-card').forEach(c => {
-      c.addEventListener('click', () => { stopped = true; }, { once: true });
+
+    function goTo(idx) {
+      current = Math.max(0, Math.min(total - 1, idx));
+      update();
+      const nameEl = slides[current].querySelector('.habit-slide-name');
+      if (selName) selName.textContent = nameEl ? nameEl.textContent : '—';
+    }
+
+    document.getElementById('habit-prev')?.addEventListener('click', () => goTo(current - 1));
+    document.getElementById('habit-next')?.addEventListener('click', () => goTo(current + 1));
+
+    // Click non-active slide to navigate
+    slides.forEach((s, i) => {
+      s.addEventListener('click', () => { if (i !== current) goTo(i); });
     });
+
+    // Touch swipe
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend',   e => {
+      const dx = tx - e.changedTouches[0].clientX;
+      if (Math.abs(dx) > 40) goTo(current + (dx > 0 ? 1 : -1));
+    }, { passive: true });
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      const rect = document.getElementById('habit-list')?.getBoundingClientRect();
+      if (!rect || rect.bottom < 0 || rect.top > window.innerHeight) return;
+      if (e.key === 'ArrowLeft')  goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    window.addEventListener('resize', update, { passive: true });
+    goTo(0);
+
+    // Re-run update when language switches so names update
+    window._habitCarouselUpdate = update;
   })();
+
+  function triggerHabitCalc() {
+    const active = document.querySelector('.habit-slide.active');
+    if (!active || !currentPrice) return;
+    selectHabit(active.dataset.key, active);
+  }
 
   // ── SCROLL PROGRESS + PARALLAX — single listener, no RAF loop, no smoothing
   let scrollHintHidden = false;
