@@ -1545,29 +1545,58 @@
     .habit-carousel-nav {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
     .habit-carousel-btn {
-      background: none;
-      border: 1px solid rgba(247,147,26,0.2);
+      background: rgba(247,147,26,0.08);
+      border: 1px solid rgba(247,147,26,0.4);
       color: var(--orange);
       font-family: var(--mono);
-      font-size: 0.75rem;
-      width: 28px; height: 28px;
+      font-size: 1rem;
+      width: 38px; height: 38px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.2s, border-color 0.2s;
+      opacity: 0.85;
+      transition: opacity 0.2s, border-color 0.2s, background 0.2s;
       flex-shrink: 0;
     }
-    .habit-carousel-btn:hover { opacity: 1; border-color: rgba(247,147,26,0.6); }
+    .habit-carousel-btn:hover { opacity: 1; border-color: var(--orange); background: rgba(247,147,26,0.15); }
     .habit-carousel-counter {
       font-family: var(--mono);
-      font-size: 0.55rem;
+      font-size: 0.6rem;
       letter-spacing: 0.15em;
-      color: var(--grey);
-      min-width: 2.8rem;
+      color: var(--orange);
+      opacity: 0.6;
+      min-width: 3rem;
       text-align: center;
+    }
+    /* Swipe hint — fades out after first interaction */
+    .habit-swipe-hint {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      opacity: 0.45;
+      padding: 0.4rem 0 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    .habit-swipe-hint.hidden { opacity: 0; }
+    .habit-swipe-hint-arrow {
+      animation: swipeNudge 1.8s ease-in-out infinite;
+    }
+    @keyframes swipeNudge {
+      0%, 100% { transform: translateX(0); }
+      40%       { transform: translateX(5px); }
+      60%       { transform: translateX(-5px); }
+    }
+    @media (max-width: 768px) {
+      .habit-swipe-hint { display: flex; }
     }
     .habit-carousel-track-wrap {
       position: relative;
@@ -2036,6 +2065,11 @@
           <button class="habit-slide" data-key="dining"><div class="habit-slide-id">EXP-09</div><div class="habit-slide-amount">€120<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Dinner out" data-name-de="Essen gehen">Dinner out</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:92%"></div></div></button>
           <button class="habit-slide" data-key="nights"><div class="habit-slide-id">EXP-10</div><div class="habit-slide-amount">€130<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="A proper night out" data-name-de="Ein richtiger Abend aus">A proper night out</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:100%"></div></div></button>
         </div>
+      </div>
+      <div class="habit-swipe-hint" id="habit-swipe-hint">
+        <span class="habit-swipe-hint-arrow">←</span>
+        <span>swipe to browse</span>
+        <span class="habit-swipe-hint-arrow">→</span>
       </div>
       <div class="habit-carousel-cta">
         <div class="habit-carousel-selected" data-i18n-prefix="habitSelected"><span data-i18n="habitSelectedPrefix">Selected:</span> <span id="habit-selected-name">—</span></div>
@@ -3575,11 +3609,15 @@
     const track    = document.getElementById('habit-track');
     const counter  = document.getElementById('habit-counter');
     const selName  = document.getElementById('habit-selected-name');
+    const swipeHint= document.getElementById('habit-swipe-hint');
+    const prevBtn  = document.getElementById('habit-prev');
+    const nextBtn  = document.getElementById('habit-next');
     if (!track) return;
 
     const slides = Array.from(track.querySelectorAll('.habit-slide'));
     const total  = slides.length;
     let current  = 0;
+    let hinted   = false;
 
     const isMobile  = () => window.innerWidth < 768;
     const sideCount = () => isMobile() ? 1 : 2;
@@ -3588,19 +3626,30 @@
       return track.parentElement.offsetWidth / (isMobile() ? 3 : 5);
     }
 
+    function dismissHint() {
+      if (!hinted && swipeHint) {
+        hinted = true;
+        swipeHint.classList.add('hidden');
+      }
+    }
+
     function update() {
-      const sw   = slideWidth();
-      const wrap = track.parentElement.offsetWidth;
-      const off  = (wrap / 2) - (sw / 2) - current * sw;
+      const sw  = slideWidth();
+      const wrapW = track.parentElement.offsetWidth;
+      const off = (wrapW / 2) - (sw / 2) - current * sw;
       track.style.transform = `translateX(${off.toFixed(1)}px)`;
       counter.textContent   = String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+
+      // Disable buttons at bounds
+      if (prevBtn) prevBtn.style.opacity = current === 0 ? '0.25' : '';
+      if (nextBtn) nextBtn.style.opacity = current === total - 1 ? '0.25' : '';
+
       const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
       slides.forEach((s, i) => {
         const dist = Math.abs(i - current);
         s.classList.remove('active','adjacent');
-        if (dist === 0)            s.classList.add('active');
+        if (dist === 0)               s.classList.add('active');
         else if (dist <= sideCount()) s.classList.add('adjacent');
-        // Update name language
         const nameEl = s.querySelector('.habit-slide-name');
         if (nameEl) nameEl.textContent = lang === 'de' ? (nameEl.dataset.nameDe || nameEl.dataset.nameEn) : nameEl.dataset.nameEn;
       });
@@ -3609,12 +3658,13 @@
     function goTo(idx) {
       current = Math.max(0, Math.min(total - 1, idx));
       update();
+      dismissHint();
       const nameEl = slides[current].querySelector('.habit-slide-name');
       if (selName) selName.textContent = nameEl ? nameEl.textContent : '—';
     }
 
-    document.getElementById('habit-prev')?.addEventListener('click', () => goTo(current - 1));
-    document.getElementById('habit-next')?.addEventListener('click', () => goTo(current + 1));
+    prevBtn?.addEventListener('click', () => goTo(current - 1));
+    nextBtn?.addEventListener('click', () => goTo(current + 1));
 
     // Click non-active slide to navigate
     slides.forEach((s, i) => {
@@ -3622,11 +3672,18 @@
     });
 
     // Touch swipe
-    let tx = 0;
-    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend',   e => {
+    let tx = 0, ty = 0;
+    track.addEventListener('touchstart', e => {
+      tx = e.touches[0].clientX;
+      ty = e.touches[0].clientY;
+    }, { passive: true });
+    track.addEventListener('touchend', e => {
       const dx = tx - e.changedTouches[0].clientX;
-      if (Math.abs(dx) > 40) goTo(current + (dx > 0 ? 1 : -1));
+      const dy = ty - e.changedTouches[0].clientY;
+      // Only fire if more horizontal than vertical (avoid scroll conflict)
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+        goTo(current + (dx > 0 ? 1 : -1));
+      }
     }, { passive: true });
 
     // Keyboard
@@ -3640,7 +3697,6 @@
     window.addEventListener('resize', update, { passive: true });
     goTo(0);
 
-    // Re-run update when language switches so names update
     window._habitCarouselUpdate = update;
   })();
 
