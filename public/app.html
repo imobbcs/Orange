@@ -1571,9 +1571,9 @@
     }
     .habit-carousel-track-wrap {
       position: relative;
-      padding: 2.5rem 0;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
-      mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+      padding: 1.75rem 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
       overflow: hidden;
     }
     .habit-carousel-track {
@@ -1589,41 +1589,41 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 1rem 0.75rem;
+      padding: 1rem 0.5rem;
       cursor: pointer;
       border: none;
       background: transparent;
-      gap: 0.4rem;
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
-      opacity: 0.2;
-      transform: scale(0.7);
+      gap: 0.35rem;
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      opacity: 0.12;
+      transform: scale(0.6);
       position: relative;
     }
-    .habit-slide.adjacent { opacity: 0.4; transform: scale(0.82); }
-    .habit-slide.active   { opacity: 1;   transform: scale(1); cursor: default; }
+    .habit-slide.adjacent { opacity: 0.28; transform: scale(0.72); }
+    .habit-slide.active   { opacity: 1;    transform: scale(1);    cursor: default; }
     .habit-slide.active::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 60%, rgba(247,147,26,0.07) 0%, transparent 70%);
+      inset: -10px;
+      background: radial-gradient(ellipse at 50% 55%, rgba(247,147,26,0.09) 0%, transparent 65%);
       pointer-events: none;
     }
     .habit-slide-id {
       font-family: var(--mono);
-      font-size: 0.5rem;
+      font-size: 0.48rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--grey);
-      opacity: 0.5;
+      opacity: 0.45;
     }
-    .habit-slide.active .habit-slide-id { color: var(--orange); opacity: 0.7; }
+    .habit-slide.active .habit-slide-id { color: var(--orange); opacity: 0.6; }
     .habit-slide-amount {
       font-family: var(--title);
       font-size: clamp(2.8rem, 5.5vw, 5rem);
       line-height: 0.88;
       letter-spacing: -0.02em;
       color: var(--orange);
-      opacity: 0.45;
+      opacity: 0.4;
       transition: opacity 0.3s;
       white-space: nowrap;
     }
@@ -1641,27 +1641,27 @@
       font-size: 0.575rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(237,232,222,0.35);
+      color: rgba(237,232,222,0.3);
       line-height: 1.4;
       transition: color 0.3s;
       white-space: nowrap;
     }
-    .habit-slide.active .habit-slide-name { color: rgba(237,232,222,0.75); }
+    .habit-slide.active .habit-slide-name { color: rgba(237,232,222,0.8); }
     .habit-slide-bar {
-      width: 36px; height: 1px;
-      background: rgba(247,147,26,0.12);
+      width: 32px; height: 1px;
+      background: rgba(247,147,26,0.1);
       position: relative;
       overflow: hidden;
-      margin-top: 0.2rem;
+      margin-top: 0.15rem;
     }
     .habit-slide-bar-fill {
       position: absolute;
       left: 0; top: 0; bottom: 0;
       background: var(--orange);
-      opacity: 0.3;
+      opacity: 0.25;
       transition: opacity 0.3s;
     }
-    .habit-slide.active .habit-slide-bar-fill { opacity: 0.8; }
+    .habit-slide.active .habit-slide-bar-fill { opacity: 0.85; }
     .habit-carousel-cta {
       padding: 1rem 2rem 1.25rem;
       border-top: 1px solid rgba(247,147,26,0.1);
@@ -1695,9 +1695,14 @@
     .habit-carousel-calc:hover { border-color: var(--orange); background: rgba(247,147,26,0.06); }
     @media (max-width: 768px) {
       .habit-slide { flex: 0 0 33.333%; }
-      .habit-slide-amount { font-size: clamp(1.8rem, 7vw, 3rem); }
-      .habit-slide-name { font-size: 0.5rem; }
+      .habit-slide-amount { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+      .habit-slide-name { font-size: 0.5rem; letter-spacing: 0.08em; }
+      .habit-slide-id { display: none; }
       .habit-carousel-header, .habit-carousel-cta { padding: 0.85rem 1.25rem; }
+      .habit-carousel-cta { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+      .habit-carousel-calc { text-align: center; padding: 0.75rem; }
+      .habit-slide.adjacent { opacity: 0.2; transform: scale(0.65); }
+      .habit-carousel-track-wrap { padding: 1.25rem 0; }
     }
 
     /* ══ WHATIF REVELATION — number dominates ══ */
@@ -2024,7 +2029,7 @@
           <button class="habit-slide" data-key="gym"><div class="habit-slide-id">EXP-02</div><div class="habit-slide-amount">€40<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="The gym you never go to" data-name-de="Das Fitnessstudio, das du nie besuchst">The gym you never go to</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:31%"></div></div></button>
           <button class="habit-slide" data-key="coffee"><div class="habit-slide-id">EXP-03</div><div class="habit-slide-amount">€50<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Coffee on the go" data-name-de="Kaffee unterwegs">Coffee on the go</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:38%"></div></div></button>
           <button class="habit-slide" data-key="lunch"><div class="habit-slide-id">EXP-04</div><div class="habit-slide-amount">€60<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Grabbing lunch" data-name-de="Mittagessen to go">Grabbing lunch</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:46%"></div></div></button>
-          <button class="habit-slide" data-key="takeaway"><div class="habit-slide-id">EXP-05</div><div class="habit-slide-amount">€80<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Takeaways" data-name-de="Bestellungen nach Hause">Takeaways</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:62%"></div></div></button>
+          <button class="habit-slide" data-key="takeaway"><div class="habit-slide-id">EXP-05</div><div class="habit-slide-amount">€70<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Takeaways" data-name-de="Bestellungen nach Hause">Takeaways</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:54%"></div></div></button>
           <button class="habit-slide" data-key="drinks"><div class="habit-slide-id">EXP-06</div><div class="habit-slide-amount">€80<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Drinks after work" data-name-de="Drinks nach der Arbeit">Drinks after work</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:62%"></div></div></button>
           <button class="habit-slide" data-key="uber"><div class="habit-slide-id">EXP-07</div><div class="habit-slide-amount">€90<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="A few Ubers" data-name-de="Ein paar Uber-Fahrten">A few Ubers</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:69%"></div></div></button>
           <button class="habit-slide" data-key="fashion"><div class="habit-slide-id">EXP-08</div><div class="habit-slide-amount">€100<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Clothes you didn't need" data-name-de="Klamotten, die du nicht brauchtest">Clothes you didn't need</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:77%"></div></div></button>
@@ -3294,7 +3299,7 @@
     gym:       { label: 'The gym you never go to',    labelDe: 'Das Fitnessstudio, das du nie besuchst', monthly: 40  },
     coffee:    { label: 'Coffee on the go',           labelDe: 'Kaffee unterwegs',              monthly: 50  },
     lunch:     { label: 'Grabbing lunch',             labelDe: 'Mittagessen to go',             monthly: 60  },
-    takeaway:  { label: 'Takeaways',                  labelDe: 'Bestellungen nach Hause',       monthly: 80  },
+    takeaway:  { label: 'Takeaways',                  labelDe: 'Bestellungen nach Hause',       monthly: 70  },
     drinks:    { label: 'Drinks after work',          labelDe: 'Drinks nach der Arbeit',        monthly: 80  },
     uber:      { label: 'A few Ubers',                labelDe: 'Ein paar Uber-Fahrten',         monthly: 90  },
     fashion:   { label: 'Clothes you didn\'t need',  labelDe: 'Klamotten, die du nicht brauchtest', monthly: 100 },
