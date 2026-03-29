@@ -1219,7 +1219,7 @@
       .section { padding: 4.5rem 1.5rem; }
       .section-inner { padding: 0; }
       .section-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
-      .section-anchor { font-size: clamp(1.9rem, 7vw, 3rem); }
+      .section-anchor { font-size: clamp(1.9rem, 7vw, 2.8rem); }
       .section-sub { font-size: 0.92rem; margin-bottom: 2.5rem; }
       .ornament-rule { padding: 0 0; }
 
@@ -1315,9 +1315,9 @@
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
     .section-anchor {
       font-family: var(--display);
-      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+      font-size: clamp(2.2rem, 5vw, 4rem);
       font-weight: 300; font-style: italic;
-      line-height: 1.15;
+      line-height: 1.18;
       letter-spacing: 0;
       color: var(--white); margin-bottom: 0.75rem;
       display: block;
@@ -1667,6 +1667,43 @@
       min-width: 3rem;
       text-align: center;
     }
+    /* Mobile nav bar — thumb-optimised controls at bottom of track */
+    .habit-carousel-mobile-nav {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(247,147,26,0.1);
+      border-bottom: 1px solid rgba(247,147,26,0.1);
+    }
+    .habit-carousel-mobile-btn {
+      background: none;
+      border: none;
+      color: var(--orange);
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      flex: 1;
+      height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .habit-carousel-mobile-btn:active { background: rgba(247,147,26,0.08); opacity: 1; }
+    .habit-carousel-mobile-counter {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--orange);
+      opacity: 0.5;
+      text-align: center;
+      flex: 0 0 4rem;
+      border-left: 1px solid rgba(247,147,26,0.1);
+      border-right: 1px solid rgba(247,147,26,0.1);
+    }
+    @media (max-width: 768px) {
+      .habit-carousel-nav { display: none; }
+      .habit-carousel-mobile-nav { display: flex; }
+    }
     /* Swipe hint — fades out after first interaction */
     .habit-swipe-hint {
       display: none;
@@ -1697,9 +1734,9 @@
     }
     .habit-carousel-track-wrap {
       position: relative;
-      padding: 1.75rem 0;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
-      mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
+      padding: 2.5rem 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
       overflow: hidden;
     }
     .habit-carousel-track {
@@ -1709,17 +1746,17 @@
       will-change: transform;
     }
     .habit-slide {
-      flex: 0 0 20%;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 1rem 0.5rem;
+      padding: 0.75rem 0.5rem;
       cursor: pointer;
       border: none;
       background: transparent;
-      gap: 0.35rem;
+      gap: 0.25rem;
       transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
       opacity: 0.12;
       transform: scale(0.6);
@@ -1789,21 +1826,9 @@
     }
     .habit-slide.active .habit-slide-bar-fill { opacity: 0.85; }
     .habit-carousel-cta {
-      padding: 1rem 2rem 1.25rem;
+      padding: 1rem 1.5rem 1.25rem;
       border-top: 1px solid rgba(247,147,26,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
     }
-    .habit-carousel-selected {
-      font-family: var(--mono);
-      font-size: 0.575rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--grey);
-    }
-    .habit-carousel-selected span { color: rgba(237,232,222,0.7); }
     .habit-carousel-calc {
       font-family: var(--mono);
       font-size: 0.6rem;
@@ -1812,23 +1837,24 @@
       color: var(--orange);
       background: none;
       border: 1px solid rgba(247,147,26,0.35);
-      padding: 0.5rem 1.25rem;
+      padding: 0.65rem 1.25rem;
       cursor: pointer;
       transition: border-color 0.2s, background 0.2s;
       white-space: nowrap;
-      flex-shrink: 0;
+      width: 100%;
+      text-align: center;
+      display: block;
     }
     .habit-carousel-calc:hover { border-color: var(--orange); background: rgba(247,147,26,0.06); }
     @media (max-width: 768px) {
-      .habit-slide { flex: 0 0 33.333%; }
-      .habit-slide-amount { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+      .habit-slide { padding: 0.5rem 0.25rem; }
+      .habit-slide-amount { font-size: clamp(3rem, 13vw, 4.5rem); }
       .habit-slide-name { font-size: 0.5rem; letter-spacing: 0.08em; }
       .habit-slide-id { display: none; }
-      .habit-carousel-header, .habit-carousel-cta { padding: 0.85rem 1.25rem; }
-      .habit-carousel-cta { flex-direction: column; align-items: stretch; gap: 0.75rem; }
-      .habit-carousel-calc { text-align: center; padding: 0.75rem; }
+      .habit-carousel-cta { padding: 0.75rem 1.25rem 1rem; }
+      .habit-carousel-calc { padding: 0.75rem; }
       .habit-slide.adjacent { opacity: 0.2; transform: scale(0.65); }
-      .habit-carousel-track-wrap { padding: 1.25rem 0; }
+      .habit-carousel-track-wrap { padding: 2rem 0; }
     }
 
     /* ══ WHATIF REVELATION — number dominates ══ */
@@ -2141,14 +2167,7 @@
 
     <!-- HABIT CAROUSEL -->
     <div class="habit-carousel-wrap reveal" data-delay="4" id="habit-list">
-      <div class="habit-carousel-header">
-        <span class="habit-carousel-label" data-i18n="habitCarouselLabel">Expenditure Readings — Monthly</span>
-        <div class="habit-carousel-nav">
-          <button class="habit-carousel-btn" id="habit-prev" aria-label="Previous">←</button>
-          <span class="habit-carousel-counter" id="habit-counter">01 / 10</span>
-          <button class="habit-carousel-btn" id="habit-next" aria-label="Next">→</button>
-        </div>
-      </div>
+
       <div class="habit-carousel-track-wrap">
         <div class="habit-carousel-track" id="habit-track">
           <button class="habit-slide" data-key="netflix"><div class="habit-slide-id">EXP-01</div><div class="habit-slide-amount">€15<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="Netflix" data-name-de="Netflix">Netflix</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:12%"></div></div></button>
@@ -2163,13 +2182,18 @@
           <button class="habit-slide" data-key="nights"><div class="habit-slide-id">EXP-10</div><div class="habit-slide-amount">€130<span class="habit-slide-mo">/mo</span></div><div class="habit-slide-name" data-name-en="A proper night out" data-name-de="Ein richtiger Abend aus">A proper night out</div><div class="habit-slide-bar"><div class="habit-slide-bar-fill" style="width:100%"></div></div></button>
         </div>
       </div>
+      <div class="habit-carousel-mobile-nav">
+        <button class="habit-carousel-mobile-btn" id="habit-prev-mobile" aria-label="Previous">←</button>
+        <span class="habit-carousel-mobile-counter" id="habit-counter-mobile">01 / 10</span>
+        <button class="habit-carousel-mobile-btn" id="habit-next-mobile" aria-label="Next">→</button>
+      </div>
+
       <div class="habit-swipe-hint" id="habit-swipe-hint">
         <span class="habit-swipe-hint-arrow">←</span>
         <span>swipe to browse</span>
         <span class="habit-swipe-hint-arrow">→</span>
       </div>
       <div class="habit-carousel-cta">
-        <div class="habit-carousel-selected" data-i18n-prefix="habitSelected"><span data-i18n="habitSelectedPrefix">Selected:</span> <span id="habit-selected-name">—</span></div>
         <button class="habit-carousel-calc" id="habit-calc-btn" onclick="triggerHabitCalc()" data-i18n="habitCalcBtn">Calculate →</button>
       </div>
     </div><!-- /habit-carousel -->
@@ -3718,11 +3742,14 @@
   // ── HABIT CAROUSEL ──
   (function() {
     const track    = document.getElementById('habit-track');
-    const counter  = document.getElementById('habit-counter');
+    const counter  = document.getElementById('habit-counter'); // desktop only, may be null
+    const counterMobile = document.getElementById('habit-counter-mobile');
     const selName  = document.getElementById('habit-selected-name');
     const swipeHint= document.getElementById('habit-swipe-hint');
-    const prevBtn  = document.getElementById('habit-prev');
-    const nextBtn  = document.getElementById('habit-next');
+    const prevBtn  = document.getElementById('habit-prev'); // desktop only, may be null
+    const nextBtn  = document.getElementById('habit-next'); // desktop only, may be null
+    const prevMobile = document.getElementById('habit-prev-mobile');
+    const nextMobile = document.getElementById('habit-next-mobile');
     if (!track) return;
 
     const slides = Array.from(track.querySelectorAll('.habit-slide'));
@@ -3734,7 +3761,8 @@
     const sideCount = () => isMobile() ? 1 : 2;
 
     function slideWidth() {
-      return track.parentElement.offsetWidth / (isMobile() ? 3 : 5);
+      const w = track.parentElement.offsetWidth / (isMobile() ? 3 : 5);
+      return w || 100; // fallback to prevent zero-width calculation
     }
 
     function dismissHint() {
@@ -3744,12 +3772,22 @@
       }
     }
 
+    function slideWidth() {
+      return Math.floor(track.parentElement.offsetWidth / (isMobile() ? 3 : 5));
+    }
+
     function update() {
-      const sw  = slideWidth();
+      const sw    = slideWidth();
       const wrapW = track.parentElement.offsetWidth;
+
+      // Set explicit pixel widths on every slide so CSS flex % isn't needed
+      slides.forEach(s => { s.style.width = sw + 'px'; s.style.flexShrink = '0'; });
+
       const off = (wrapW / 2) - (sw / 2) - current * sw;
       track.style.transform = `translateX(${off.toFixed(1)}px)`;
-      counter.textContent   = String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+      const cText = String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+      if (counter) counter.textContent = cText;
+      if (counterMobile) counterMobile.textContent = cText;
 
       // Buttons always fully active — carousel is infinite
       if (prevBtn) prevBtn.style.opacity = '';
@@ -3776,6 +3814,8 @@
 
     prevBtn?.addEventListener('click', () => goTo(current - 1));
     nextBtn?.addEventListener('click', () => goTo(current + 1));
+    prevMobile?.addEventListener('click', () => goTo(current - 1));
+    nextMobile?.addEventListener('click', () => goTo(current + 1));
 
     // Click non-active slide to navigate
     slides.forEach((s, i) => {
@@ -3806,7 +3846,8 @@
     });
 
     window.addEventListener('resize', update, { passive: true });
-    goTo(0);
+    // Defer init until after first paint so slideWidth() reads correct dimensions
+    requestAnimationFrame(() => requestAnimationFrame(() => goTo(0)));
 
     window._habitCarouselUpdate = update;
   })();
