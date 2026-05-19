@@ -1,0 +1,18 @@
+# When to Buy BTC
+> Free Bitcoin market signal for long-term holders. Combines the Fear & Greed Index, 200-day moving average, and ATH distance into a single Accumulate / Hold / Caution signal. No trading advice. No noise.
+
+## About
+- Tool: https://whentobuybtc.xyz/
+- Language: English and German (DACH audience)
+- Free to use, no account required
+
+## Author
+- Imo Babics — https://imobabics.com
+
+## Key sections
+- [Signal](https://whentobuybtc.xyz/#signal) — Current Bitcoin market signal based on three indicators
+- [What If?](https://whentobuybtc.xyz/#whatif) — Calculator showing the compounding value of small daily habits redirected into Bitcoin
+
+## Partners
+- Relai — Bitcoin-only savings app (https://relai.me/imo)
+- Trezor — Hardware wallet (https://trezorio.refr.cc/default/u/orange)
