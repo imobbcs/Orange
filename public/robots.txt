@@ -1,15 +1,30 @@
 User-agent: *
 Allow: /
-
 # Language variants
 Allow: /?lang=en
 Allow: /?lang=de
-
 # API endpoints
 Allow: /api/
+# Crawl delay
+Crawl-delay: 1
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
 
 # Sitemap
 Sitemap: https://whentobuybtc.xyz/sitemap.xml
-
-# Crawl delay
-Crawl-delay: 1
