@@ -23,6 +23,16 @@ const nextConfig = {
     '*.replit.dev',
     '*.riker.replit.dev'
   ],
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.whentobuybtc.xyz' }],
+        destination: 'https://whentobuybtc.xyz/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
@@ -51,7 +61,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store, no-cache, must-revalidate',
+            value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
           },
         ],
       },
@@ -61,6 +71,15 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
+      {
+        source: '/(robots.txt|llms.txt|manifest.json|humans.txt)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, s-maxage=86400',
           },
         ],
       },
@@ -86,6 +105,14 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
           }
         ]
       }
