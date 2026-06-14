@@ -548,6 +548,13 @@
       opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
     }
     .signal-reason.loading { color: var(--grey); font-style: normal; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.1em; }
+    .signal-quote-cite {
+      display: block; margin-top: 1rem;
+      font-family: var(--mono); font-style: normal;
+      font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(237,232,222,0.42);
+    }
+    .signal-quote-cite::before { content: "\2014\00a0"; }
 
     .hero-disclaimer {
       font-family: var(--mono); font-size: 0.625rem;
@@ -725,12 +732,12 @@
     }
 
     /* ═══ REDESIGN: WHAT-IF MULTIPLIER ═══ */
-    .whatif-multiplier-row { display: flex; justify-content: center; padding: 1.5rem 0 0.5rem; }
+    .whatif-multiplier-row { display: flex; justify-content: center; padding: 2.5rem 0 1.5rem; }
     .whatif-multiplier {
-      font-family: var(--title); font-size: 1.7rem; letter-spacing: 0.06em;
+      font-family: var(--title); font-size: clamp(2.8rem, 6vw, 4.5rem); letter-spacing: 0.06em;
       color: var(--green);
       border: 1px solid rgba(74,222,128,0.3); background: var(--green-dim);
-      padding: 0.5rem 1.4rem;
+      padding: 1rem 2.5rem;
     }
 
     /* ═══ REDESIGN: PUSH NOTIFICATION PREVIEW ═══ */
@@ -1052,18 +1059,6 @@
       letter-spacing: 0.14em; color: var(--grey);
       text-transform: uppercase; margin-top: 1rem;
     }
-    .whatif-chart-area { padding: 2.5rem 3.5rem 1.5rem; border-bottom: 1px solid var(--border2); }
-    .whatif-chart-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey); margin-bottom: 1.25rem; }
-    .whatif-canvas-wrap { position: relative; height: 200px; }
-    canvas#whatifChart { display: block; }
-    .whatif-bar-area {
-      padding: 2.5rem 3.5rem; border-bottom: 1px solid var(--border2);
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
-    }
-    .whatif-bar-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.75rem; }
-    .whatif-bar-track { height: 2px; background: var(--border2); margin-bottom: 0.75rem; }
-    .whatif-bar-fill { height: 100%; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
-    .whatif-bar-value { font-family: var(--title); font-size: 2rem; font-weight: 400; }
     .whatif-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
     .whatif-stat { padding: 2rem; border-right: 1px solid var(--border2); }
     .whatif-stat:last-child { border-right: none; }
@@ -1492,10 +1487,8 @@
       .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
       .instrument-sub { grid-column: 2; grid-row: 2; }
 
-      .whatif-chart-area { padding: 1.5rem 1rem 1rem; }
-      .whatif-canvas-wrap { height: 180px; }
-      .whatif-bar-area { padding: 1.5rem 1rem; gap: 1.5rem; }
-      .whatif-bar-value { font-size: 1.5rem; }
+      .whatif-multiplier-row { padding: 1.75rem 1rem 1rem; }
+      .whatif-multiplier { font-size: clamp(1.8rem, 9vw, 2.8rem); padding: 0.75rem 1.5rem; white-space: nowrap; }
       .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
       .whatif-stat { padding: 1.25rem 1rem; }
       .whatif-stat:nth-child(2) { border-right: none; }
@@ -2260,7 +2253,7 @@
       </div>
     </div>
 
-    <p class="signal-reason loading" id="signal-reason">Fetching live market data.</p>
+    <p class="signal-reason" id="signal-reason">&ldquo;It might make sense just to get some in case it catches on.&rdquo;<cite class="signal-quote-cite">Satoshi Nakamoto</cite></p>
 
     <div class="hero-actions">
       <a href="#signal" class="btn-primary" data-i18n="heroBtn1">Understand the signal</a>
@@ -2482,22 +2475,6 @@
 
       <!-- SUPPORTING EVIDENCE — lower weight, appears after number settles -->
       <div class="whatif-evidence" id="whatif-evidence">
-        <div class="whatif-chart-area">
-          <p class="whatif-chart-label" data-i18n="whatifChartLabel">Portfolio value over time</p>
-          <div class="whatif-canvas-wrap"></div>
-        </div>
-        <div class="whatif-bar-area">
-          <div class="whatif-bar-item">
-            <p class="whatif-bar-label" data-i18n="barInvested">Total invested</p>
-            <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-invested" style="width:0%;background:rgba(237,232,222,0.2);"></div></div>
-            <div class="whatif-bar-value" id="whatif-invested-bar" style="color:var(--white);">—</div>
-          </div>
-          <div class="whatif-bar-item">
-            <p class="whatif-bar-label" data-i18n="barValue">Value today</p>
-            <div class="whatif-bar-track"><div class="whatif-bar-fill" id="bar-value" style="width:0%;background:var(--orange);"></div></div>
-            <div class="whatif-bar-value" id="whatif-today" style="color:var(--orange);">—</div>
-          </div>
-        </div>
         <div class="whatif-multiplier-row"><span class="whatif-multiplier" id="whatif-multiplier">—</span></div>
         <div class="whatif-stats-grid">
           <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statMonthly">Monthly amount</p><div class="whatif-stat-value" id="whatif-monthly">—</div></div>
@@ -2893,28 +2870,6 @@
         "High greed readings have preceded corrections often enough in Bitcoin's history to be worth respecting. This doesn't mean the top is in — no one knows that. It means the asymmetry that makes accumulation zones compelling doesn't exist here in the same way. Caution isn't pessimism; it's proportionality.",
         "Near all-time highs with sentiment running hot is when Bitcoin feels most obvious to buy — and historically, that's been the highest-risk time to do so. The most durable Bitcoin positions were built during the periods that felt least comfortable. Right now doesn't feel uncomfortable. That's worth noticing.",
       ],
-      // Signal reason text — arrays, selected by day index
-      reasonAccumulate: [
-        (fg, maPct, athPct) => `Fear & Greed is at ${fg} and Bitcoin is ${maPct}% below its 200-day average — ${athPct}% from its all-time high. Historically, these are the conditions Bitcoiners act on.`,
-        (fg, maPct, athPct) => `Sentiment is at ${fg} on the Fear & Greed scale. Bitcoin is trading ${maPct}% below its 200-day average and ${athPct}% off its peak. The data points in one direction.`,
-        (fg, maPct, athPct) => `Fear & Greed reads ${fg} — firmly in fear territory. With Bitcoin ${maPct}% under its 200-day average and ${athPct}% below ATH, all three signals align toward accumulation.`,
-        (fg, maPct, athPct) => `At ${fg} on Fear & Greed, with Bitcoin ${maPct}% below its 200-day average and ${athPct}% from its all-time high — the kind of setup long-term Bitcoiners look for.`,
-        (fg, maPct, athPct) => `Three signals, one direction: Fear & Greed at ${fg}, Bitcoin ${maPct}% below its moving average, and ${athPct}% below its all-time high. This is the accumulation zone.`,
-      ],
-      reasonHold: [
-        (fg, maPct, athPct) => `Mixed signals — Fear & Greed at ${fg}, Bitcoin ${maPct}% from its 200-day average and ${athPct}% below ATH. Not a clear prompt to act in either direction.`,
-        (fg, maPct, athPct) => `Fear & Greed sits at ${fg} with Bitcoin ${maPct}% of its 200-day average and ${athPct}% off its peak. Conditions are neutral — the regular plan holds.`,
-        (fg, maPct, athPct) => `Sentiment reads ${fg}. Bitcoin is ${maPct}% from its 200-day average, ${athPct}% below ATH. No strong signal either way — most Bitcoiners stay their course.`,
-        (fg, maPct, athPct) => `At ${fg} on Fear & Greed and ${maPct}% from the 200-day average, the signals are mixed. ${athPct}% below ATH adds some context, but not a clear direction.`,
-        (fg, maPct, athPct) => `Nothing definitive right now: Fear & Greed at ${fg}, Bitcoin ${maPct}% from its moving average, ${athPct}% from its all-time high. The neutral zone — steady as she goes.`,
-      ],
-      reasonCaution: [
-        (fg, maPct, athPct) => `Greed is elevated at ${fg} with Bitcoin ${maPct}% above its 200-day average and only ${athPct}% from its all-time high. Many Bitcoiners are cautious here.`,
-        (fg, maPct, athPct) => `Fear & Greed reads ${fg} — deep into greed. Bitcoin is ${maPct}% above its 200-day average and ${athPct}% from ATH. The risk/reward has shifted.`,
-        (fg, maPct, athPct) => `At ${fg} on Fear & Greed, ${maPct}% above the 200-day average, and ${athPct}% from its all-time high — conditions that historically warrant stepping back rather than adding.`,
-        (fg, maPct, athPct) => `Sentiment is running hot at ${fg}. Bitcoin is extended ${maPct}% above its moving average and ${athPct}% from its peak. This is when conviction gets tested.`,
-        (fg, maPct, athPct) => `Three signals pointing toward caution: Fear & Greed at ${fg}, Bitcoin ${maPct}% above its 200-day average, just ${athPct}% from all-time highs. Not the accumulation zone.`,
-      ],
       // What If
       whatifLabel: 'What If?',
       whatifTitle: 'The money was always there.',
@@ -2928,10 +2883,7 @@
       habitBeer: 'Nights out',
       whatifHeadline: "If you'd saved that monthly into Bitcoin since 2015, you'd have",
       whatifBigSub: 'today — instead of nothing',
-      whatifChartLabel: 'Portfolio value over time',
       habitCalcBtn: 'Calculate →',
-      barInvested: 'Total invested',
-      barValue: 'Value today',
       statMonthly: 'Monthly amount',
       statInvested: 'Total invested',
       statGain: 'Total gain',
@@ -3082,28 +3034,6 @@
         'Hohe Gier-Werte sind in Bitcoins Geschichte oft genug Korrekturen vorangegangen, um respektiert zu werden. Das bedeutet nicht, dass das Hoch erreicht ist — das weiß niemand. Es bedeutet, dass die Asymmetrie, die Akkumulationszonen attraktiv macht, hier nicht in gleichem Maße existiert. Vorsicht ist kein Pessimismus; es ist Verhältnismäßigkeit.',
         'Nahe Allzeithochs mit heißer Stimmung fühlt sich Bitcoin am selbstverständlichsten zum Kaufen an — und historisch war das die risikoreichste Zeit. Die dauerhaftesten Bitcoin-Positionen wurden in Phasen aufgebaut, die sich am wenigsten angenehm anfühlten. Gerade fühlt es sich nicht unangenehm an. Das ist es wert, bemerkt zu werden.',
       ],
-      // Signal reason text — arrays, selected by day index
-      reasonAccumulate: [
-        (fg, maPct, athPct) => `Fear & Greed liegt bei ${fg} und Bitcoin handelt ${maPct}% unter seinem 200-Tage-Durchschnitt — ${athPct}% vom Allzeithoch. Historisch gesehen sind das die Bedingungen, unter denen Bitcoiner aktiv werden.`,
-        (fg, maPct, athPct) => `Die Stimmung liegt bei ${fg} auf der Fear & Greed-Skala. Bitcoin handelt ${maPct}% unter seinem 200-Tage-Durchschnitt und ${athPct}% unter seinem Höchststand. Die Daten zeigen in eine Richtung.`,
-        (fg, maPct, athPct) => `Fear & Greed zeigt ${fg} — klar im Angstbereich. Mit Bitcoin ${maPct}% unter seinem 200-Tage-Durchschnitt und ${athPct}% unter ATH zeigen alle drei Signale auf Akkumulation.`,
-        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed, ${maPct}% unter dem 200-Tage-Durchschnitt und ${athPct}% vom Allzeithoch — die Art von Konstellation, auf die langfristige Bitcoiner warten.`,
-        (fg, maPct, athPct) => `Drei Signale, eine Richtung: Fear & Greed bei ${fg}, Bitcoin ${maPct}% unter seinem Durchschnitt und ${athPct}% unter seinem Allzeithoch. Das ist die Akkumulationszone.`,
-      ],
-      reasonHold: [
-        (fg, maPct, athPct) => `Gemischte Signale — Fear & Greed bei ${fg}, Bitcoin ${Math.abs(maPct)}% ${maPct >= 0 ? 'über' : 'unter'} dem 200-Tage-Durchschnitt und ${athPct}% unter ATH. Kein klarer Anlass, in eine Richtung zu handeln.`,
-        (fg, maPct, athPct) => `Fear & Greed liegt bei ${fg}, Bitcoin ${Math.abs(maPct)}% ${maPct >= 0 ? 'über' : 'unter'} seinem 200-Tage-Durchschnitt und ${athPct}% unter seinem Höchststand. Neutrale Bedingungen — der reguläre Plan gilt.`,
-        (fg, maPct, athPct) => `Stimmung bei ${fg}. Bitcoin liegt ${Math.abs(maPct)}% ${maPct >= 0 ? 'über' : 'unter'} seinem 200-Tage-Durchschnitt, ${athPct}% unter ATH. Kein starkes Signal in eine Richtung — die meisten Bitcoiner bleiben ihrem Kurs treu.`,
-        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed und ${Math.abs(maPct)}% ${maPct >= 0 ? 'über' : 'unter'} dem 200-Tage-Durchschnitt sind die Signale gemischt. ${athPct}% unter ATH gibt etwas Kontext, aber keine klare Richtung.`,
-        (fg, maPct, athPct) => `Gerade nichts Eindeutiges: Fear & Greed bei ${fg}, Bitcoin ${Math.abs(maPct)}% ${maPct >= 0 ? 'über' : 'unter'} dem Durchschnitt, ${athPct}% vom Allzeithoch. Die neutrale Zone — weiter wie bisher.`,
-      ],
-      reasonCaution: [
-        (fg, maPct, athPct) => `Gier ist erhöht bei ${fg}, Bitcoin ${maPct}% über seinem 200-Tage-Durchschnitt und nur ${athPct}% vom Allzeithoch. Viele Bitcoiner sind hier vorsichtig.`,
-        (fg, maPct, athPct) => `Fear & Greed zeigt ${fg} — tief im Gier-Bereich. Bitcoin liegt ${maPct}% über seinem 200-Tage-Durchschnitt und ${athPct}% vom ATH. Das Chance-Risiko-Verhältnis hat sich verändert.`,
-        (fg, maPct, athPct) => `Bei ${fg} auf Fear & Greed, ${maPct}% über dem 200-Tage-Durchschnitt und ${athPct}% vom Allzeithoch — Bedingungen, die historisch eher zum Zurücktreten als zum Aufstocken einladen.`,
-        (fg, maPct, athPct) => `Die Stimmung läuft heiß bei ${fg}. Bitcoin ist ${maPct}% über seinem Durchschnitt ausgedehnt und ${athPct}% von seinem Höchststand entfernt. Hier wird Überzeugung auf die Probe gestellt.`,
-        (fg, maPct, athPct) => `Drei Signale in Richtung Vorsicht: Fear & Greed bei ${fg}, Bitcoin ${maPct}% über seinem 200-Tage-Durchschnitt, nur ${athPct}% unter Allzeithoch. Nicht die Akkumulationszone.`,
-      ],
       // What If
       whatifLabel: 'Was wäre wenn?',
       whatifTitle: 'Das Geld war immer da.',
@@ -3117,10 +3047,7 @@
       habitBeer: 'Ausgehen',
       whatifHeadline: 'Hättest du das monatlich seit 2015 in Bitcoin gesteckt, hättest du heute',
       whatifBigSub: 'statt bei nichts',
-      whatifChartLabel: 'Portfolio-Wert im Zeitverlauf',
       habitCalcBtn: 'Berechnen →',
-      barInvested: 'Gesamt investiert',
-      barValue: 'Wert heute',
       statMonthly: 'Monatlicher Betrag',
       statInvested: 'Gesamt investiert',
       statGain: 'Gesamtgewinn',
@@ -3521,14 +3448,12 @@
 
     const pill = document.getElementById('signal-pill');
     const text = document.getElementById('signal-text');
-    const reason = document.getElementById('signal-reason');
     const shareSignal = document.getElementById('share-signal');
     const expertTag = document.getElementById('expert-tag');
     const expertText = document.getElementById('expert-text');
     const expertLead = document.getElementById('expert-lead');
 
     pill.className = 'signal-pill';
-    reason.classList.remove('loading');
     const navDot = document.getElementById('nav-signal-dot');
     if (navDot) { navDot.className = 'nav-signal-dot'; }
 
@@ -3544,7 +3469,6 @@
       text.textContent = t.signalAccumulate;
       shareSignal.style.color = 'var(--green)';
       shareSignal.textContent = '● ' + t.signalAccumulate;
-      reason.textContent = t.reasonAccumulate[dayIndex % t.reasonAccumulate.length](fgValue, absMaPct, absAthPct);
       expertTag.textContent = t.expertTagAccumulate;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextAccumulate[dayIndex % t.expertTextAccumulate.length];
@@ -3557,7 +3481,6 @@
       text.textContent = t.signalHold;
       shareSignal.style.color = 'var(--amber)';
       shareSignal.textContent = '● ' + t.signalHold;
-      reason.textContent = t.reasonHold[dayIndex % t.reasonHold.length](fgValue, absMaPct, absAthPct);
       expertTag.textContent = t.expertTagHold;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextHold[dayIndex % t.expertTextHold.length];
@@ -3570,7 +3493,6 @@
       text.textContent = t.signalCaution;
       shareSignal.style.color = 'var(--red)';
       shareSignal.textContent = '● ' + t.signalCaution;
-      reason.textContent = t.reasonCaution[dayIndex % t.reasonCaution.length](fgValue, absMaPct, absAthPct);
       expertTag.textContent = t.expertTagCaution;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(248,113,113,0.3); background:var(--red-dim); color:var(--red); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextCaution[dayIndex % t.expertTextCaution.length];
@@ -4017,23 +3939,13 @@
     const livePrice = currentPrice;
 
     let totalInvested = 0, totalBTC = 0;
-    const chartLabels = [], chartValues = [], chartInvested = [];
-    let lastYear = null;
 
     for (const [monthKey, rawPrice] of Object.entries(BTC_MONTHLY_EUR)) {
       // Convert historical EUR price to USD if needed using live rate
       const monthPriceEur = (rawPrice == null) ? (currentCurrency === 'EUR' ? currentPrice : currentPrice / eurUsdRate) : rawPrice;
       const monthPrice = currentCurrency === 'EUR' ? monthPriceEur : monthPriceEur * eurUsdRate;
-      const [yearStr] = monthKey.split('-');
-      const year = parseInt(yearStr);
       totalInvested += habitMonthly;
       totalBTC += habitMonthly / monthPrice;
-      if (year !== lastYear) {
-        chartLabels.push(yearStr);
-        chartValues.push(Math.round(totalBTC * livePrice));
-        chartInvested.push(Math.round(totalInvested));
-        lastYear = year;
-      }
     }
 
     const finalValue  = Math.round(totalBTC * livePrice);
@@ -4054,20 +3966,12 @@
     // Populate supporting data (hidden until number settles)
     document.getElementById('whatif-monthly').textContent    = fmt(habitMonthly);
     document.getElementById('whatif-invested').textContent   = fmt(totalInvested);
-    document.getElementById('whatif-invested-bar').textContent = fmt(totalInvested);
-    document.getElementById('whatif-today').textContent      = fmt(finalValue);
     document.getElementById('whatif-gain').textContent       = fmt(gainValue);
     const multEl = document.getElementById('whatif-multiplier');
     if (multEl) {
       const mult = finalValue / totalInvested;
       multEl.textContent = translations[currentLang].statMultiplier(mult >= 10 ? mult.toFixed(0) : mult.toFixed(1));
     }
-
-    // Bar fills
-    setTimeout(() => {
-      document.getElementById('bar-invested').style.width = '33%';
-      document.getElementById('bar-value').style.width = '100%';
-    }, 1800);
 
     // Set label
     const habitLabel = (currentLang === 'de' && habit.labelDe) ? habit.labelDe : habit.label;
@@ -4096,9 +4000,6 @@
           // Hold the number for 400ms, then reveal evidence
           setTimeout(() => {
             if (evidence) evidence.classList.add('visible');
-            drawWhatIfChart(chartLabels, chartValues, chartInvested, sym);
-            // Redraw on resize so chart always fills container correctly
-            window._lastWhatifArgs = [chartLabels, chartValues, chartInvested, sym];
           }, 400);
         }
       }
@@ -4106,85 +4007,11 @@
     }
   }
 
-  function drawWhatIfChart(labels, values, invested, sym) {
-    const wrap = document.querySelector('.whatif-canvas-wrap');
-    if (!wrap) return;
-
-    // Read layout before any DOM writes — avoids forced reflow
-    const W = Math.floor(wrap.offsetWidth);
-    const H = 200;
-    if (!W) { requestAnimationFrame(() => drawWhatIfChart(labels, values, invested, sym)); return; }
-
-    const isMobile = W < 500;
-    const pad = { top: 16, right: isMobile ? 12 : 16, bottom: 28, left: isMobile ? 48 : 64 };
-    const cw = W - pad.left - pad.right;
-    const ch = H - pad.top - pad.bottom;
-
-    const maxVal = Math.max(...values);
-    const toX = i => pad.left + (i / (labels.length - 1)) * cw;
-    const toY = v => pad.top + ch - (v / maxVal) * ch;
-    const baseY = pad.top + ch;
-
-    // Build area path for values
-    const valuePts = values.map((v, i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ');
-    const valueArea = `M ${toX(0).toFixed(1)},${toY(values[0]).toFixed(1)} L ${valuePts} L ${toX(values.length-1).toFixed(1)},${baseY} L ${toX(0).toFixed(1)},${baseY} Z`;
-
-    const investedPts = invested.map((v, i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ');
-    const investedArea = `M ${toX(0).toFixed(1)},${toY(invested[0]).toFixed(1)} L ${investedPts} L ${toX(invested.length-1).toFixed(1)},${baseY} L ${toX(0).toFixed(1)},${baseY} Z`;
-    const investedLine = `M ${invested.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ')}`;
-    const valueLine   = `M ${values.map((v,i)    => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' L ')}`;
-
-    // Y-axis ticks
-    const ticks = 4;
-    let gridLines = '', yLabels = '';
-    for (let i = 0; i <= ticks; i++) {
-      const v = (i / ticks) * maxVal;
-      const y = toY(v).toFixed(1);
-      const lbl = maxVal >= 100000 ? sym + Math.round(v/1000) + 'k' : sym + Math.round(v).toLocaleString(numLocale());
-      gridLines += `<line x1="${pad.left}" y1="${y}" x2="${W - pad.right}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
-      yLabels   += `<text x="${pad.left - 4}" y="${y}" dy="0.35em" text-anchor="end" fill="rgba(107,101,96,0.7)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${lbl}</text>`;
-    }
-
-    // X-axis labels — only as many as fit
-    const minSpacing = isMobile ? 42 : 34;
-    const step = Math.max(1, Math.ceil((labels.length * minSpacing) / cw));
-    let xLabels = '';
-    labels.forEach((yr, i) => {
-      if (i % step !== 0 && i !== labels.length - 1) return;
-      if (i === labels.length - 1) {
-        const prev = labels.length - 1 - ((labels.length - 1) % step);
-        if (toX(i) - toX(prev) < minSpacing && prev !== i) return;
-      }
-      xLabels += `<text x="${toX(i).toFixed(1)}" y="${baseY + 14}" text-anchor="middle" fill="rgba(107,101,96,0.8)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${yr}</text>`;
-    });
-
-    const gradId = 'wg' + Date.now();
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" style="display:block;overflow:visible;">
-      <defs>
-        <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="rgba(247,147,26,0.35)"/>
-          <stop offset="100%" stop-color="rgba(247,147,26,0.02)"/>
-        </linearGradient>
-      </defs>
-      ${gridLines}
-      <path d="${investedArea}" fill="rgba(240,237,232,0.05)"/>
-      <path d="${valueArea}" fill="url(#${gradId})"/>
-      <line x1="${toX(0).toFixed(1)}" y1="${baseY}" x2="${toX(invested.length-1).toFixed(1)}" y2="${toY(invested[invested.length-1]).toFixed(1)}" stroke="rgba(240,237,232,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
-      <path d="${valueLine}" fill="none" stroke="#F7931A" stroke-width="2.5" stroke-linejoin="round"/>
-      <text x="${(toX(values.length-1) - 4).toFixed(1)}" y="${(toY(values[values.length-1]) - 8).toFixed(1)}" text-anchor="end" fill="#F7931A" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}" font-weight="500">${maxVal >= 100000 ? sym + Math.round(values[values.length-1]/1000) + 'k' : sym + values[values.length-1].toLocaleString(numLocale())}</text>
-      <text x="${(toX(invested.length-1) - 4).toFixed(1)}" y="${Math.min(toY(invested[invested.length-1]) - 8, baseY - 16).toFixed(1)}" text-anchor="end" fill="rgba(237,232,222,0.55)" font-family="DM Mono,monospace" font-size="${isMobile ? 9 : 10}">${maxVal >= 100000 ? sym + Math.round(invested[invested.length-1]/1000) + 'k invested' : sym + invested[invested.length-1].toLocaleString(numLocale()) + ' invested'}</text>
-      ${yLabels}
-      ${xLabels}
-    </svg>`;
-
-    // Replace canvas with SVG
-    wrap.innerHTML = svg;
-  }
 
 
   function shareWhatIfWhatsApp() {
     const label = document.getElementById('whatif-selected-label').textContent;
-    const val = document.getElementById('whatif-today').textContent;
+    const val = document.getElementById('whatif-btc-value').textContent;
     const invested = document.getElementById('whatif-invested').textContent;
     const text = currentLang === 'de'
       ? `${label}: Hätte ich das Geld stattdessen seit 2015 wöchentlich in Bitcoin gesteckt, hätte ich heute ${val} (investiert: ${invested}). Berechne deins: whentobuybtc.xyz`
@@ -4193,7 +4020,7 @@
   }
   function shareWhatIfTwitter() {
     const label = document.getElementById('whatif-selected-label').textContent;
-    const val = document.getElementById('whatif-today').textContent;
+    const val = document.getElementById('whatif-btc-value').textContent;
     const text = currentLang === 'de'
       ? `${label} — hätte ich das Geld seit 2015 wöchentlich in Bitcoin investiert, wäre es heute ${val} wert. 👀 whentobuybtc.xyz`
       : `${label} — if that money had gone into Bitcoin weekly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
@@ -5091,14 +4918,6 @@
     }, { passive: true });
   })();
 
-  // Redraw whatif chart on resize
-  let _whatifResizeTimer;
-  window.addEventListener('resize', () => {
-    if (window._lastWhatifArgs) {
-      clearTimeout(_whatifResizeTimer);
-      _whatifResizeTimer = setTimeout(() => drawWhatIfChart(...window._lastWhatifArgs), 150);
-    }
-  }, { passive: true });
   // ══ VISITOR COUNTER ══
   // Deferred: fires after page is fully loaded and idle — never blocks rendering
   (function() {
