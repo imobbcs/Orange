@@ -668,6 +668,7 @@
       .hero-strip-cell, .hero-strip-cell.fg { flex-direction: row; justify-content: space-between; align-items: center; padding: 0.7rem 1.1rem; gap: 1rem; }
       .hero-strip-cell + .hero-strip-cell { border-left: none; border-top: 1px solid rgba(247,147,26,0.1); }
       .hero-strip-gauge { display: none; }
+      .hero-strip-fg-body { display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; gap: 1rem; }
       .hero-strip-value { font-size: 1.3rem; }
       .hero-horizon { height: 150px; }
       .hero-horizon-label.left { left: 1.25rem; }
@@ -1413,7 +1414,8 @@
         font-size: 0.95rem;
         line-height: 1.65;
         padding: 0;
-        max-width: 32ch;
+        max-width: 40ch;
+        text-wrap: balance;
         margin-bottom: 0.5rem;
         color: rgba(237,232,222,0.72);
       }
@@ -1476,19 +1478,19 @@
       .instrument-metric {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto;
         gap: 0.5rem 1rem;
         padding: 1.5rem 1.25rem;
         border-bottom: 1px solid var(--border2);
         border-right: none;
       }
       .instrument-metric:last-child { border-bottom: none; }
-      .instrument-metric-id { grid-column: 1; grid-row: 1; align-self: start; }
-      .instrument-value, .value-row { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; justify-content: flex-end; }
-      .instrument-bar-track { grid-column: 1 / -1; grid-row: 2; }
+      .instrument-id { grid-column: 1; grid-row: 1; font-size: 0.625rem; align-self: start; }
+      .instrument-value { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; }
+      .instrument-bar-wrap { grid-column: 1 / -1; grid-row: 2; height: 2px; }
       .instrument-desc { grid-column: 1 / -1; grid-row: 3; font-size: 0.78rem; }
-      .instrument-sub { grid-column: 2; grid-row: 1; align-self: end; }
-      .metric-verdict { grid-column: 1 / -1; grid-row: 4; margin-top: 0.4rem; }
+      .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
+      .instrument-sub { grid-column: 2; grid-row: 2; }
 
       .whatif-chart-area { padding: 1.5rem 1rem 1rem; }
       .whatif-canvas-wrap { height: 180px; }
@@ -1530,7 +1532,7 @@
     /* ── 390px EXTREME NARROW ── */
     @media (max-width: 400px) {
       .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
-      .instrument-value, .value-row { font-size: 2rem; }
+      .instrument-value { font-size: 2rem; }
       .share-btns { grid-template-columns: 1fr; }
       .share-btns .share-btn.primary { grid-column: 1; }
     }
@@ -2243,7 +2245,7 @@
           <line id="hero-gauge-needle" x1="50" y1="54" x2="14" y2="26" stroke="#F7931A" stroke-width="1.5" stroke-linecap="round"/>
           <circle cx="50" cy="54" r="3" fill="#F7931A"/>
         </svg>
-        <div>
+        <div class="hero-strip-fg-body">
           <span class="hero-strip-label" data-i18n="heroStripFg">Fear &amp; Greed</span>
           <span class="hero-strip-value"><span id="hero-fg-value">—</span><span class="hero-strip-state" id="hero-fg-state"></span></span>
         </div>
@@ -2332,7 +2334,7 @@
         <!-- VS 200-DAY MA -->
         <div class="instrument-metric" id="ma-metric" style="color: var(--green);">
           <div class="instrument-metric-id">02 / vs. 200-Day Avg</div>
-          <div class="value-row" style="display:flex;align-items:baseline;gap:0.4rem;">
+          <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ma-value">—</div>
             <span id="ma-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
           </div>
@@ -2345,7 +2347,7 @@
         <!-- FROM ATH -->
         <div class="instrument-metric" id="ath-metric" style="color: var(--amber);">
           <div class="instrument-metric-id">03 / From All-Time High</div>
-          <div class="value-row" style="display:flex;align-items:baseline;gap:0.4rem;">
+          <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ath-value">—</div>
             <span id="ath-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
           </div>
