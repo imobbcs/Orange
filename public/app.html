@@ -1476,19 +1476,19 @@
       .instrument-metric {
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: auto auto auto auto;
         gap: 0.5rem 1rem;
         padding: 1.5rem 1.25rem;
         border-bottom: 1px solid var(--border2);
         border-right: none;
       }
       .instrument-metric:last-child { border-bottom: none; }
-      .instrument-id { grid-column: 1; grid-row: 1; font-size: 0.625rem; align-self: start; }
-      .instrument-value { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; }
-      .instrument-bar-wrap { grid-column: 1 / -1; grid-row: 2; height: 2px; }
+      .instrument-metric-id { grid-column: 1; grid-row: 1; align-self: start; }
+      .instrument-value, .value-row { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; justify-content: flex-end; }
+      .instrument-bar-track { grid-column: 1 / -1; grid-row: 2; }
       .instrument-desc { grid-column: 1 / -1; grid-row: 3; font-size: 0.78rem; }
-      .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
-      .instrument-sub { grid-column: 2; grid-row: 2; }
+      .instrument-sub { grid-column: 2; grid-row: 1; align-self: end; }
+      .metric-verdict { grid-column: 1 / -1; grid-row: 4; margin-top: 0.4rem; }
 
       .whatif-chart-area { padding: 1.5rem 1rem 1rem; }
       .whatif-canvas-wrap { height: 180px; }
@@ -1530,7 +1530,7 @@
     /* ── 390px EXTREME NARROW ── */
     @media (max-width: 400px) {
       .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
-      .instrument-value { font-size: 2rem; }
+      .instrument-value, .value-row { font-size: 2rem; }
       .share-btns { grid-template-columns: 1fr; }
       .share-btns .share-btn.primary { grid-column: 1; }
     }
@@ -2332,7 +2332,7 @@
         <!-- VS 200-DAY MA -->
         <div class="instrument-metric" id="ma-metric" style="color: var(--green);">
           <div class="instrument-metric-id">02 / vs. 200-Day Avg</div>
-          <div style="display:flex;align-items:baseline;gap:0.4rem;">
+          <div class="value-row" style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ma-value">—</div>
             <span id="ma-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
           </div>
@@ -2345,7 +2345,7 @@
         <!-- FROM ATH -->
         <div class="instrument-metric" id="ath-metric" style="color: var(--amber);">
           <div class="instrument-metric-id">03 / From All-Time High</div>
-          <div style="display:flex;align-items:baseline;gap:0.4rem;">
+          <div class="value-row" style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ath-value">—</div>
             <span id="ath-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
           </div>
@@ -2980,7 +2980,7 @@
       horizonLabelMa: '┄ 200-day average',
       legendPrice: 'BTC price',
       legendZone: 'Below avg — historically accumulation',
-      chipSupports: 'Supports accumulate',
+      chipSupports: 'Favors accumulating',
       chipNeutral: 'Neutral',
       chipCaution: 'Suggests caution',
       expertLeadAccumulate: 'Bitcoiners tend to treat deep fear as a signal, not a warning.',
@@ -3172,7 +3172,7 @@
       legendZone: 'Unter dem Schnitt — historisch Akkumulation',
       chipSupports: 'Spricht für Akkumulieren',
       chipNeutral: 'Neutral',
-      chipCaution: 'Mahnt zur Vorsicht',
+      chipCaution: 'Spricht für Vorsicht',
       expertLeadAccumulate: 'Bitcoiner sehen tiefe Angst als Signal, nicht als Warnung.',
       expertLeadHold: 'Stabile Bedingungen sprechen für stabile Pläne.',
       expertLeadCaution: 'Wenn die Gier heiß läuft, werden Bitcoiner still.',
