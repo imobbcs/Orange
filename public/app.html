@@ -134,47 +134,7 @@
 
   <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958"></script>
 
-  <!-- OneSignal — lazy loaded after page is interactive -->
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    function _loadOneSignal() {
-      if (window._oneSignalLoaded) return;
-      window._oneSignalLoaded = true;
-      const s = document.createElement('script');
-      s.src = 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';
-      s.async = true;
-      document.head.appendChild(s);
-    }
-    if (document.readyState === 'complete') {
-      setTimeout(_loadOneSignal, 3000);
-    } else {
-      window.addEventListener('load', () => setTimeout(_loadOneSignal, 3000), { once: true });
-    }
-    ['scroll','pointerdown','keydown','touchstart'].forEach(e =>
-      window.addEventListener(e, _loadOneSignal, { once: true, passive: true })
-    );
-  </script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: '528df914-2cb6-4e5b-af01-3c849ce8e393',
-        autoResubscribe: false, autoRegister: false,
-        promptOptions: { autoPrompt: false },
-        notifyButton: { enable: false },
-      });
-      window._OneSignal = OneSignal;
-      const permission = await OneSignal.Notifications.permission;
-      const btn = document.getElementById('push-btn');
-      if (btn && permission) { btn.textContent = '✓ Alerts enabled'; btn.style.opacity = '0.5'; btn.disabled = true; }
-      OneSignal.Notifications.addEventListener('permissionChange', async (granted) => {
-        const btn = document.getElementById('push-btn');
-        if (!btn) return;
-        if (granted) { btn.textContent = '✓ Alerts enabled'; btn.style.opacity = '0.5'; btn.disabled = true; }
-        else { btn.textContent = 'Enable Alerts'; btn.disabled = false; }
-      });
-    });
-  </script>
+
 
   <style>
     :root {
@@ -741,32 +701,78 @@
       padding: 1rem 2.5rem;
     }
 
-    /* ═══ REDESIGN: PUSH NOTIFICATION PREVIEW ═══ */
-    .push-copy { flex: 1 1 420px; min-width: 0; }
-    .push-preview { flex: 0 1 420px; display: flex; flex-direction: column; gap: 0.9rem; }
-    .push-preview-label {
-      font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.28em;
-      text-transform: uppercase; color: rgba(237,232,222,0.4);
+    /* ═══ EMAIL ALERTS SECTION ═══ */
+    .email-form-wrap {
+      width: 100%;
+      max-width: 560px;
     }
-    .push-notif {
-      display: flex; gap: 0.9rem; align-items: flex-start;
-      background: rgba(32,30,34,0.92);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 18px; padding: 1rem 1.1rem;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    .email-row {
+      display: flex;
+      gap: 0;
+      margin-top: 2.5rem;
+      border: 1px solid rgba(247,147,26,0.25);
+      border-radius: 2px;
+      overflow: hidden;
+      transition: border-color 0.2s;
     }
-    .push-notif.old { opacity: 0.55; transform: scale(0.97); background: rgba(32,30,34,0.6); border-color: rgba(255,255,255,0.05); box-shadow: none; }
-    .push-notif-icon {
-      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
-      background: var(--orange); color: #09080A;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--title); font-size: 1.3rem;
+    .email-row:focus-within { border-color: rgba(247,147,26,0.6); }
+    .email-input {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0 1.25rem;
+      height: 54px;
+      background: rgba(247,147,26,0.04);
+      border: none;
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      outline: none;
     }
-    .push-notif-body { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; flex: 1; }
-    .push-notif-top { display: flex; justify-content: space-between; gap: 0.75rem; }
-    .push-notif-app { font-family: var(--mono); font-size: 0.72rem; font-weight: 500; color: var(--white); }
-    .push-notif-time { font-family: var(--mono); font-size: 0.6rem; color: rgba(237,232,222,0.4); flex-shrink: 0; }
-    .push-notif-msg { font-family: var(--mono); font-size: 0.7rem; line-height: 1.5; color: rgba(237,232,222,0.72); margin: 0; }
+    .email-input::placeholder { color: rgba(237,232,222,0.3); }
+    .email-submit {
+      flex-shrink: 0;
+      padding: 0 1.75rem;
+      height: 54px;
+      background: var(--orange);
+      border: none;
+      color: #09080A;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .email-submit:hover   { opacity: 0.88; }
+    .email-submit:disabled { opacity: 0.45; cursor: default; }
+    .email-msg {
+      margin-top: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      min-height: 1.1rem;
+      color: rgba(237,232,222,0.45);
+      letter-spacing: 0.02em;
+    }
+    .email-msg.ok  { color: var(--green); }
+    .email-msg.err { color: var(--red); }
+    .email-trust {
+      margin-top: 1.25rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: rgba(237,232,222,0.35);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .email-trust.loaded { opacity: 1; }
+    .email-trust-count { color: var(--orange); }
+    @media (max-width: 480px) {
+      .email-row { flex-direction: column; border-radius: 2px; }
+      .email-input  { height: 50px; border-bottom: 1px solid rgba(247,147,26,0.15); }
+      .email-submit { height: 48px; width: 100%; }
+    }
 
     /* ═══ REDESIGN: PARTNER STEP LABELS ═══ */
     .partner-step {
@@ -1115,32 +1121,29 @@
     }
     .share-btn.primary:hover { opacity: 0.85; color: #000; }
 
-    /* ── PUSH ── */
-    /* ══ ALERTS / PUSH ══ */
-    .push-section {
-      padding-bottom: 4rem;
-    }
+    /* ── ALERTS ── */
+    .push-section { padding-bottom: 4rem; }
     .push-section::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
       pointer-events: none;
     }
-    .push-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 4rem; flex-wrap: wrap; }
+    .push-inner { max-width: 720px; margin: 0 auto; }
     .push-meta {
       font-family: var(--mono);
       font-size: 0.625rem;
       letter-spacing: 0.1em;
       color: var(--grey);
-      margin-top: 2rem;
+      margin-top: 1.5rem;
     }
     .push-title {
       font-family: var(--display);
       font-size: clamp(2rem, 4vw, 3.4rem);
       font-style: italic;
       font-weight: 300;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       line-height: 1.15;
       color: var(--white);
     }
@@ -1152,11 +1155,9 @@
       font-size: 1.05rem;
       color: var(--muted);
       line-height: 1.7;
-      margin-bottom: 2.5rem;
+      max-width: 52ch;
     }
-
     @media (max-width: 768px) {
-      #push-btn { width: 100%; text-align: center; }
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
     }
 
@@ -1510,7 +1511,6 @@
 
       /* ── PUSH / ALERTS ── */
       .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
-      #push-btn { width: 100%; text-align: center; }
 
       /* ── SHARE ── */
       .share-btns {
@@ -2509,33 +2509,27 @@
   </div>
 </section>
 
-<!-- PUSH NOTIFICATIONS -->
+<!-- EMAIL ALERTS -->
 <section class="section push-section" id="alerts">
   <div class="section-inner push-inner">
-    <div class="push-copy">
-      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
-      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
-      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.</p>
-      <button class="btn-primary reveal" data-delay="4" id="push-btn" onclick="requestPush()" data-umami-event="enable-alerts" data-i18n="pushBtn">Enable Alerts</button>
-      <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Turn off anytime</p>
-    </div>
-    <div class="push-preview reveal" data-delay="3" aria-hidden="true">
-      <p class="push-preview-label" data-i18n="pushMockupLabel">Example alert</p>
-      <div class="push-notif">
-        <div class="push-notif-icon">₿</div>
-        <div class="push-notif-body">
-          <div class="push-notif-top"><span class="push-notif-app">When to Buy BTC</span><span class="push-notif-time" data-i18n="pushNow">now</span></div>
-          <p class="push-notif-msg" data-i18n="pushExample">Signal changed: Fear &amp; Greed hit 18. Most Bitcoiners are accumulating. BTC is 24% below its 200-day average.</p>
-        </div>
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
+    <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
+    <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Monday.</p>
+
+    <div class="email-form-wrap reveal" data-delay="4">
+      <div class="email-row">
+        <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+        <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
       </div>
-      <div class="push-notif old">
-        <div class="push-notif-icon">₿</div>
-        <div class="push-notif-body">
-          <div class="push-notif-top"><span class="push-notif-app">When to Buy BTC</span><span class="push-notif-time" data-i18n="pushOld">3w ago</span></div>
-          <p class="push-notif-msg" data-i18n="pushExample2">Signal changed: price reclaimed the 200-day average. Most Bitcoiners are holding.</p>
-        </div>
-      </div>
+      <p class="email-msg" id="email-msg" aria-live="polite"></p>
+      <p class="email-trust" id="email-trust" aria-live="polite">
+        <span data-i18n="emailTrustPre">Join</span>
+        <span class="email-trust-count" id="subscriber-count"></span>
+        <span data-i18n="emailTrustPost">others on the signal.</span>
+      </p>
     </div>
+
+    <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
   </div>
 </section>
 
@@ -2920,14 +2914,18 @@
       // Alerts
       alertsLabel: 'Alerts',
       pushTitle: 'The signal, <em>the moment</em><br>it changes.',
-      pushSub: "Bitcoin moves fast. Enable alerts and we'll notify you the moment the signal shifts — so you can act with confidence, not FOMO.",
-      pushBtn: 'Enable Alerts',
-      pushBtnEnabled: '✓ Alerts enabled',
-      pushBtnLoading: 'Loading…',
-      pushBtnEnabling: 'Enabling…',
-      pushMeta: 'Free · No account needed · Turn off anytime',
-      pushExample: 'Signal changed: Fear & Greed hit 18. Most Bitcoiners are accumulating. BTC is 24% below its 200-day average.',
-      pushMockupLabel: 'Example alert',
+      pushSub: "Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Monday.",
+      pushMeta: 'Free · No account needed · Unsubscribe anytime',
+      emailPlaceholder: 'your@email.com',
+      emailSubmit: 'Notify me',
+      emailSending: 'Sending…',
+      emailOk: 'Check your inbox to confirm.',
+      emailErr: 'Something went wrong. Please try again.',
+      emailInvalid: 'Please enter a valid email address.',
+      emailConfirmed: 'You\'re confirmed. Alerts are on.',
+      emailUnsubscribed: 'You\'ve been unsubscribed.',
+      emailTrustPre: 'Join',
+      emailTrustPost: 'others on the signal.',
       // Partner section
       partnerEyebrow: 'Ready to act on the signal?',
       partnerRelaiDesc: "Buy Bitcoin in minutes. No altcoins, no complexity — just Bitcoin, straight to a wallet only you control.",
@@ -2958,9 +2956,6 @@
       expertLeadHold: 'Steady conditions favour steady plans.',
       expertLeadCaution: 'When greed runs hot, Bitcoiners get quiet.',
       statMultiplier: (x) => `${x}× your money`,
-      pushNow: 'now',
-      pushOld: '3w ago',
-      pushExample2: 'Signal changed: price reclaimed the 200-day average. Most Bitcoiners are holding.',
       partnerStep1: 'Step 01 — Buy',
       partnerStep2: 'Step 02 — Store',
       // Footer
@@ -3084,15 +3079,18 @@
       // Alerts
       alertsLabel: 'Benachrichtigungen',
       pushTitle: 'Das Signal — <em>sobald</em><br>es sich ändert.',
-      pushSub: 'Bitcoin bewegt sich schnell. Aktiviere Alerts und wir benachrichtigen dich sofort, wenn das Signal kippt — damit du mit Überzeugung entscheidest, nicht aus FOMO.',
-      pushBtn: 'Alerts aktivieren',
-      pushBtnEnabled: '✓ Alerts aktiv',
-      pushBtnLoading: 'Lädt…',
-      pushBtnEnabling: 'Aktiviere…',
-      pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit deaktivierbar',
-      pushExample: 'Signal geändert: Fear & Greed bei 18. Die meisten Bitcoiner akkumulieren. BTC liegt 24% unter dem 200-Tage-Durchschnitt.',
-      pushExampleState: 'Signal geändert · Akkumulieren',
-      pushMockupLabel: 'Beispiel-Benachrichtigung',
+      pushSub: 'Bitcoin bewegt sich schnell. Trag deine E-Mail ein und wir benachrichtigen dich sofort, wenn das Signal kippt — plus einen wöchentlichen Überblick jeden Montag.',
+      pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit abmeldbar',
+      emailPlaceholder: 'deine@email.com',
+      emailSubmit: 'Benachrichtigen',
+      emailSending: 'Wird gesendet…',
+      emailOk: 'Bitte bestätige deine E-Mail.',
+      emailErr: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
+      emailInvalid: 'Bitte eine gültige E-Mail-Adresse eingeben.',
+      emailConfirmed: 'Bestätigt. Du erhältst ab jetzt Alerts.',
+      emailUnsubscribed: 'Du wurdest abgemeldet.',
+      emailTrustPre: '',
+      emailTrustPost: 'weitere erhalten das Signal.',
       // Partner section
       partnerEyebrow: 'Bereit, auf das Signal zu reagieren?',
       partnerRelaiDesc: 'Bitcoin kaufen in Minuten. Keine Altcoins, keine Komplexität — nur Bitcoin, direkt in eine Wallet, die nur du kontrollierst.',
@@ -3123,9 +3121,6 @@
       expertLeadHold: 'Stabile Bedingungen sprechen für stabile Pläne.',
       expertLeadCaution: 'Wenn die Gier heiß läuft, werden Bitcoiner still.',
       statMultiplier: (x) => `${x}× dein Geld`,
-      pushNow: 'jetzt',
-      pushOld: 'vor 3 Wo.',
-      pushExample2: 'Signal geändert: Kurs hat den 200-Tage-Schnitt zurückerobert. Die meisten Bitcoiner halten.',
       partnerStep1: 'Schritt 01 — Kaufen',
       partnerStep2: 'Schritt 02 — Verwahren',
       // Footer
@@ -3173,6 +3168,13 @@
       }
     });
 
+    // Update placeholder text
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      const val = translations[lang][key];
+      if (val) el.setAttribute('placeholder', val);
+    });
+
     // Update lang toggle buttons
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
@@ -3184,17 +3186,6 @@
     }
     updateHeroStrip();
     drawHeroHorizon();
-
-    // Update push button if already in a state
-    const btn = document.getElementById('push-btn');
-    if (btn && btn.disabled) {
-      btn.textContent = translations[lang].pushBtnEnabled;
-    }
-
-    // OneSignal language tag
-    if (window._OneSignal?.User) {
-      window._OneSignal.User.addTag('lang', lang).catch(() => {});
-    }
 
     // Persist choice
     try { localStorage.setItem('wtb_lang', lang); } catch(e) {}
@@ -4086,33 +4077,70 @@
   }
 
   // ── PUSH ──
-  async function requestPush() {
-    const btn = document.getElementById('push-btn');
-    const OS = window._OneSignal;
-    if (!OS) {
-      btn.textContent = translations[currentLang].pushBtnLoading;
-      setTimeout(() => { btn.textContent = translations[currentLang].pushBtn; btn.disabled = false; }, 1500);
+  function submitEmail() {
+    const input = document.getElementById('email-input');
+    const btn   = document.getElementById('email-submit');
+    const msg   = document.getElementById('email-msg');
+    const t     = translations[currentLang] || translations.en;
+
+    const email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = t.emailInvalid;
+      msg.className   = 'email-msg err';
+      input.focus();
       return;
     }
-    try {
-      btn.textContent = translations[currentLang].pushBtnEnabling;
-      btn.disabled = true;
-      await OS.Notifications.requestPermission();
-      const granted = await OS.Notifications.permission;
-      if (granted) {
-        await OS.User.addTag('lang', currentLang);
-        btn.textContent = translations[currentLang].pushBtnEnabled;
-        btn.style.opacity = '0.6';
-      } else {
-        btn.textContent = 'Enable Alerts';
-        btn.disabled = false;
-      }
-    } catch (e) {
-      console.error('OneSignal error:', e);
-      btn.textContent = 'Enable Alerts';
-      btn.disabled = false;
-    }
+
+    btn.disabled    = true;
+    btn.textContent = t.emailSending;
+    msg.textContent = '';
+    msg.className   = 'email-msg';
+
+    fetch('/api/subscribe', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email, lang: currentLang }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          msg.textContent = t.emailOk;
+          msg.className   = 'email-msg ok';
+          input.value     = '';
+        } else {
+          throw new Error(data.error || 'unknown');
+        }
+      })
+      .catch(() => {
+        msg.textContent = t.emailErr;
+        msg.className   = 'email-msg err';
+        btn.disabled    = false;
+        btn.textContent = t.emailSubmit;
+      });
   }
+
+  // Handle ?email=confirmed / ?email=unsubscribed redirects from the API
+  (function handleEmailRedirect() {
+    const params = new URLSearchParams(window.location.search);
+    const state  = params.get('email');
+    if (!state) return;
+
+    window.history.replaceState({}, '', window.location.pathname);
+
+    const msg = document.getElementById('email-msg');
+    if (!msg) return;
+
+    const t = translations[currentLang] || translations.en;
+    if (state === 'confirmed' || state === 'already') {
+      msg.textContent = '✓ ' + t.emailConfirmed;
+      msg.className   = 'email-msg ok';
+    } else if (state === 'unsubscribed') {
+      msg.textContent = t.emailUnsubscribed;
+      msg.className   = 'email-msg';
+    }
+
+    document.getElementById('alerts')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  })();
 
 
   // ── HABIT CAROUSEL ──
@@ -4977,7 +5005,48 @@
   })();
 
 
-</script>
+  // ══ SUBSCRIBER COUNTER ══
+  // Deferred and intersection-triggered — same pattern as visitor counter.
+  // Hidden via opacity:0 until loaded; animates in when the section is visible.
+  (function() {
+    const countEl = document.getElementById('subscriber-count');
+    const trustEl = document.getElementById('email-trust');
+    if (!countEl || !trustEl) return;
+
+    function loadSubscriberCount() {
+      fetch('/api/subscriber-count')
+        .then(r => r.json())
+        .then(({ subscribers }) => {
+          if (!subscribers || subscribers < 10) return; // hide until meaningful
+          const target   = subscribers;
+          const duration = 1400;
+
+          function update(now) {
+            const startTime = update._startTime || (update._startTime = now);
+            const progress  = Math.min((now - startTime) / duration, 1);
+            const eased     = 1 - Math.pow(1 - progress, 3);
+            countEl.textContent = Math.round(eased * target).toLocaleString(numLocale()) + '+';
+            if (progress < 1) requestAnimationFrame(update);
+          }
+
+          const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+              trustEl.classList.add('loaded');
+              requestAnimationFrame(update);
+              observer.disconnect();
+            }
+          }, { threshold: 0.5 });
+          observer.observe(trustEl);
+        })
+        .catch(() => {});
+    }
+
+    if ('requestIdleCallback' in window) {
+      window.addEventListener('load', () => requestIdleCallback(loadSubscriberCount, { timeout: 5000 }));
+    } else {
+      window.addEventListener('load', () => setTimeout(loadSubscriberCount, 3000));
+    }
+  })();
 
   <noscript>
     <a href="/">When to Buy BTC — Bitcoin Signal</a>
