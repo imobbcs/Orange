@@ -18,9 +18,36 @@ function signalColor(s: SignalState): string {
 
 function signalLabel(s: SignalState, lang: Lang): string {
   const map: Record<SignalState, Record<Lang, string>> = {
-    accumulate: { en: 'Accumulate', de: 'Akkumulieren' },
-    hold:       { en: 'Hold',       de: 'Halten'       },
-    caution:    { en: 'Caution',    de: 'Vorsicht'      },
+    accumulate: { en: 'Accumulation zone', de: 'Akkumulierungszone' },
+    hold:       { en: 'Hold zone',         de: 'Haltezone'          },
+    caution:    { en: 'Caution zone',      de: 'Vorsichtszone'      },
+  };
+  return map[s][lang];
+}
+
+function signalBehaviour(s: SignalState, lang: Lang): string {
+  const map: Record<SignalState, Record<Lang, string>> = {
+    accumulate: { en: 'Most Bitcoiners are buying.',  de: 'Die meisten Bitcoiner kaufen.' },
+    hold:       { en: 'Most Bitcoiners are holding.', de: 'Die meisten Bitcoiner halten.' },
+    caution:    { en: 'Most Bitcoiners are cautious.', de: 'Die meisten Bitcoiner sind vorsichtig.' },
+  };
+  return map[s][lang];
+}
+
+function signalDigestHeadline(s: SignalState, lang: Lang): string {
+  const map: Record<SignalState, Record<Lang, string>> = {
+    accumulate: {
+      en: 'The data points to an <span style="font-style:italic;color:#F7931A;">accumulation zone</span> this week.',
+      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F7931A;">Akkumulierungszone</span> hin.',
+    },
+    hold: {
+      en: 'The data points to a <span style="font-style:italic;color:#FBBF24;">hold zone</span> this week.',
+      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#FBBF24;">Haltezone</span> hin.',
+    },
+    caution: {
+      en: 'The data points to a <span style="font-style:italic;color:#F87171;">caution zone</span> this week.',
+      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F87171;">Vorsichtszone</span> hin.',
+    },
   };
   return map[s][lang];
 }
@@ -277,8 +304,8 @@ export function alertEmail(opts: {
       : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
 
   const subject = lang === 'de'
-    ? `Bitcoin-Signal: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'fiel' : 'stieg'} ${pct}%`
-    : `Bitcoin signal: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'dropped' : 'surged'} ${pct}%`;
+    ? `Bitcoin-Marktzone: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'fiel' : 'stieg'} ${pct}%`
+    : `Bitcoin market zone: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'dropped' : 'surged'} ${pct}%`;
 
   const preheader = lang === 'de'
     ? `${headline} &#8202;&#8212;&#8202; das Signal hat sich geändert.`
@@ -307,8 +334,9 @@ export function alertEmail(opts: {
       <tr><td style="padding:20px 24px;">
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
           <td width="34%" style="padding-right:16px;">
-            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Signal</p>
-            <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${lang === 'de' ? 'Marktzone' : 'Market zone'}</p>
+            <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+            <p class="em2" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:9px;color:rgba(237,232,222,0.45);">${signalBehaviour(signal, lang)}</p>
           </td>
           <td width="1" style="background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td>
           <td width="33%" style="padding:0 16px;">
@@ -354,12 +382,12 @@ export function digestEmail(opts: {
   const chSign  = change24h >= 0 ? '+' : '';
 
   const subject = lang === 'de'
-    ? `Dein wöchentliches Bitcoin-Signal: ${label}`
-    : `Your weekly Bitcoin signal: ${label}`;
+    ? `Dein wöchentlicher Bitcoin-Überblick: ${signalLabel(signal, lang)}`
+    : `Your weekly Bitcoin snapshot: ${signalLabel(signal, lang)}`;
 
   const preheader = lang === 'de'
-    ? `${eur(price)} &#183; Signal: ${label} &#183; ${chSign}${change24h.toFixed(2)}% heute`
-    : `${eur(price)} &#183; Signal: ${label} &#183; ${chSign}${change24h.toFixed(2)}% today`;
+    ? `${eur(price)} &#183; ${signalLabel(signal, lang)} &#183; ${chSign}${change24h.toFixed(2)}% heute`
+    : `${eur(price)} &#183; ${signalLabel(signal, lang)} &#183; ${chSign}${change24h.toFixed(2)}% today`;
 
   const headerRight = lang === 'de' ? 'Wöchentlicher Überblick' : 'Weekly digest';
 
@@ -391,7 +419,7 @@ export function digestEmail(opts: {
     ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Ein Signal. Drei Indikatoren. Kein Rauschen.'
     : 'Here\'s your weekly Bitcoin signal snapshot. One number, three indicators, no noise.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
-  const signalLabel2 = lang === 'de' ? 'Aktuelles Signal' : 'Current signal';
+  const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
   const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : '200-day avg';
   const athLabel     = lang === 'de' ? 'Abstand ATH'      : 'From ATH';
   const contextText  = lang === 'de'
@@ -406,8 +434,8 @@ export function digestEmail(opts: {
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.72);">${greetingLine}</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.72);">${intro1}</p>
     <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${headerRight}</p>
-    <h1 class="ehl et" style="margin:0 0 8px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.25;color:#EDE8DE;">
-      ${lang === 'de' ? 'Das Signal steht diese Woche<br />auf' : 'The signal is'} <span style="font-style:italic;color:#F7931A;">${label}${lang === 'de' ? '.' : ' this week.'}</span>
+    <h1 class="ehl et" style="margin:0 0 8px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.35;color:#EDE8DE;">
+      ${signalDigestHeadline(signal, lang)}
     </h1>
     <p class="em2" style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.04em;color:rgba(237,232,222,0.4);">BTC &nbsp;&#183;&nbsp; ${eur(price)} &nbsp;&#183;&nbsp; ${chSign}${change24h.toFixed(2)}% ${lang === 'de' ? 'heute' : 'today'}</p>
     ${rule}
@@ -415,7 +443,8 @@ export function digestEmail(opts: {
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.18);margin-bottom:20px;">
       <tr><td style="padding:18px 24px;">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${signalLabel2}</p>
-        <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+        <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+        <p class="em2" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.45);">${signalBehaviour(signal, lang)}</p>
       </td></tr>
     </table>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:28px;"><tr>
