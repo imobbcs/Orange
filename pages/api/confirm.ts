@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { token } = req.query;
 
   if (!token || typeof token !== 'string') {
-    return res.redirect(`${BASE}?email=invalid`);
+    return res.redirect(`${BASE}?email=invalid#alerts`);
   }
 
   try {
@@ -29,11 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
 
     if (result.rowCount === 0) {
-      return res.redirect(`${BASE}?email=already`);
+      return res.redirect(`${BASE}?email=already#alerts`);
     }
 
     // Redirect immediately — don't wait for the welcome email
-    res.redirect(`${BASE}?email=confirmed`);
+    res.redirect(`${BASE}?email=confirmed#alerts`);
 
     // Send welcome email in the background
     const { email, lang, unsubscribe_token } = result.rows[0];
