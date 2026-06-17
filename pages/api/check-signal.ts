@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE     = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
-const MOVE_THRESHOLD = 0.045;
+const MOVE_THRESHOLD = 0.03;
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
 
 async function ensureTables() {
