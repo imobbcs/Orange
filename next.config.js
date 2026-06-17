@@ -66,6 +66,15 @@ const nextConfig = {
         ],
       },
       {
+        source: '/api/visitor-count',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store',
+          },
+        ],
+      },
+      {
         source: '/api/:path*',
         headers: [
           {
