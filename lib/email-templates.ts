@@ -101,7 +101,7 @@ function shell(opts: {
   <tr>
     <td class="eheader lb" style="padding:24px 40px;border-bottom:1px solid rgba(247,147,26,0.18);">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
-        <td><span style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;color:#F7931A;">&#8383;</span><span class="et" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#EDE8DE;padding-left:8px;">WHEN TO BUY BTC</span></td>
+        <td><img src="https://whentobuybtc.xyz/Bitcoin.svg" width="24" height="24" alt="Bitcoin" style="vertical-align:middle;border:0;display:inline-block;" /><span class="et" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#EDE8DE;padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></td>
         ${headerRight ? `<td align="right"><span class="em2" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${headerRight}</span></td>` : ''}
       </tr></table>
     </td>
