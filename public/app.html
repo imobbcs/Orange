@@ -786,10 +786,11 @@
     .email-trust.loaded { opacity: 1; }
     .email-trust-count { color: var(--orange); }
     @media (max-width: 600px) {
-      .email-form-wrap { max-width: 100%; }
-      .email-row { flex-direction: column; border-radius: 2px; }
-      .email-input  { height: 60px; border-bottom: 1px solid rgba(247,147,26,0.15); font-size: 1rem; padding: 0 1rem; }
-      .email-submit { height: 56px; width: 100%; font-size: 0.82rem; letter-spacing: 0.12em; }
+      .push-copy { width: 100%; flex: none; }
+      .email-form-wrap { width: 100%; max-width: none; }
+      .email-row { flex-direction: column; border-radius: 2px; width: 100%; }
+      .email-input  { width: 100%; height: 56px; min-height: 56px; max-height: 56px; border-bottom: 1px solid rgba(247,147,26,0.15); font-size: 1rem; padding: 0 1rem; box-sizing: border-box; }
+      .email-submit { width: 100%; height: 56px; min-height: 56px; max-height: 56px; line-height: 56px; padding: 0; font-size: 0.82rem; letter-spacing: 0.12em; box-sizing: border-box; }
     }
 
     /* ═══ REDESIGN: PARTNER STEP LABELS ═══ */
