@@ -13,7 +13,7 @@
   <link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/" />
   <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/?lang=de" />
   <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0800'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-family='Arial' font-size='20' fill='%23F7931A'>&#x20BF;</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="/Bitcoin.svg" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
@@ -41,6 +41,15 @@
     "description": "A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
+    "featureList": [
+      "Composite Bitcoin market signal (Accumulate / Hold / Caution)",
+      "Fear & Greed Index tracking",
+      "200-day moving average analysis",
+      "ATH distance indicator",
+      "What If? DCA calculator",
+      "Email signal alerts",
+      "Weekly Sunday digest"
+    ],
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -108,6 +117,14 @@
             "@type": "Service",
             "name": "What If? Calculator",
             "description": "Interactive calculator showing the compounding value of redirecting small daily habits into Bitcoin over time."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Bitcoin Signal Email Alerts",
+            "description": "Free email alerts when the Bitcoin signal changes, plus a weekly digest every Sunday. Available in English and German."
           }
         }
       ]
@@ -770,8 +787,8 @@
     .email-trust-count { color: var(--orange); }
     @media (max-width: 480px) {
       .email-row { flex-direction: column; border-radius: 2px; }
-      .email-input  { height: 50px; border-bottom: 1px solid rgba(247,147,26,0.15); }
-      .email-submit { height: 48px; width: 100%; }
+      .email-input  { height: 56px; border-bottom: 1px solid rgba(247,147,26,0.15); font-size: 1rem; }
+      .email-submit { height: 52px; width: 100%; font-size: 0.8rem; }
     }
 
     /* ═══ REDESIGN: PARTNER STEP LABELS ═══ */
@@ -1127,10 +1144,21 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 60% at 60% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
       pointer-events: none;
     }
-    .push-inner { max-width: 720px; margin: 0 auto; }
+    .push-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 5rem;
+    }
+    .push-copy { flex: 0 1 520px; }
+    .push-preview-col {
+      flex: 0 1 420px;
+      display: none;
+    }
     .push-meta {
       font-family: var(--mono);
       font-size: 0.625rem;
@@ -1140,7 +1168,7 @@
     }
     .push-title {
       font-family: var(--display);
-      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-size: clamp(2.2rem, 5vw, 4rem);
       font-style: italic;
       font-weight: 300;
       margin-bottom: 1.25rem;
@@ -1157,8 +1185,92 @@
       line-height: 1.7;
       max-width: 52ch;
     }
+
+    /* Phone inbox mockup */
+    .em-phone {
+      width: 100%;
+      max-width: 280px;
+      background: #0D0B0F;
+      border-radius: 36px;
+      border: 6px solid #1E1C22;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    .em-notch {
+      width: 80px; height: 22px;
+      background: #1E1C22;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto;
+    }
+    .em-screen { padding: 8px 0 20px; }
+    .em-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 18px 10px;
+    }
+    .em-time { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #EDE8DE; }
+    .em-status-right { display: flex; gap: 6px; align-items: center; }
+    .em-signal { font-size: 10px; color: rgba(237,232,222,0.6); }
+    .em-battery { font-size: 10px; color: rgba(237,232,222,0.6); }
+    .em-inbox-title {
+      padding: 0 14px 10px;
+      font-family: -apple-system, sans-serif;
+      font-size: 20px; font-weight: 700;
+      color: #EDE8DE; letter-spacing: -0.3px;
+    }
+    .em-email-item {
+      margin: 0 8px 2px;
+      padding: 10px 10px;
+      border-radius: 10px;
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .em-highlighted {
+      background: rgba(247,147,26,0.10);
+      border: 1px solid rgba(247,147,26,0.22);
+    }
+    .em-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, sans-serif;
+      font-size: 13px; font-weight: 700;
+    }
+    .em-avatar-dim {
+      background: rgba(237,232,222,0.1);
+      color: rgba(237,232,222,0.45);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: -apple-system, sans-serif;
+      font-size: 13px; font-weight: 700;
+    }
+    .em-unread-dot {
+      width: 7px; height: 7px;
+      background: #F7931A; border-radius: 50%;
+      flex-shrink: 0; margin-top: 5px;
+    }
+    .em-email-content { flex: 1; min-width: 0; }
+    .em-email-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+    .em-sender { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; color: #EDE8DE; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .em-sender-dim { color: rgba(237,232,222,0.4); font-weight: 400; }
+    .em-etime { font-family: -apple-system, sans-serif; font-size: 9px; color: rgba(237,232,222,0.35); flex-shrink: 0; margin-left: 4px; }
+    .em-orange { color: #F7931A !important; font-weight: 600; }
+    .em-subject { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 600; color: rgba(237,232,222,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+    .em-subject-dim { color: rgba(237,232,222,0.3); font-weight: 400; }
+    .em-preview { font-family: -apple-system, sans-serif; font-size: 9px; color: rgba(237,232,222,0.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .em-divider { height: 1px; background: rgba(237,232,222,0.06); margin: 3px 10px; }
+    .em-home-bar { width: 80px; height: 4px; background: rgba(237,232,222,0.2); border-radius: 2px; margin: 14px auto 0; }
+
+    @media (min-width: 900px) {
+      .push-preview-col { display: block; }
+    }
     @media (max-width: 768px) {
-      .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
+      .push-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
+      .push-inner { flex-direction: column; gap: 2.5rem; }
     }
 
     /* ── PARTNER SECTION ── */
@@ -1510,7 +1622,7 @@
       .whatif-revelation-context { font-size: 0.9rem; }
 
       /* ── PUSH / ALERTS ── */
-      .push-title { font-size: clamp(1.6rem, 6vw, 2rem); }
+      .push-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
 
       /* ── SHARE ── */
       .share-btns {
@@ -2512,24 +2624,91 @@
 <!-- EMAIL ALERTS -->
 <section class="section push-section" id="alerts">
   <div class="section-inner push-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
-    <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
-    <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Monday.</p>
 
-    <div class="email-form-wrap reveal" data-delay="4">
-      <div class="email-row">
-        <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-        <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
+    <!-- LEFT: copy + form -->
+    <div class="push-copy">
+      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
+      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
+      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Sunday.</p>
+
+      <div class="email-form-wrap reveal" data-delay="4">
+        <div class="email-row">
+          <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
+        </div>
+        <p class="email-msg" id="email-msg" aria-live="polite"></p>
+        <p class="email-trust" id="email-trust" aria-live="polite">
+          <span data-i18n="emailTrustPre">Join</span>
+          <span class="email-trust-count" id="subscriber-count"></span>
+          <span data-i18n="emailTrustPost">others on the signal.</span>
+        </p>
       </div>
-      <p class="email-msg" id="email-msg" aria-live="polite"></p>
-      <p class="email-trust" id="email-trust" aria-live="polite">
-        <span data-i18n="emailTrustPre">Join</span>
-        <span class="email-trust-count" id="subscriber-count"></span>
-        <span data-i18n="emailTrustPost">others on the signal.</span>
-      </p>
+
+      <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
     </div>
 
-    <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
+    <!-- RIGHT: email mockup (desktop only) -->
+    <div class="push-preview-col reveal reveal-fade" data-delay="4" aria-hidden="true">
+      <div class="em-phone">
+        <div class="em-notch"></div>
+        <div class="em-screen">
+          <div class="em-status">
+            <span class="em-time">09:41</span>
+            <div class="em-status-right">
+              <span class="em-signal">●●●</span>
+              <span class="em-battery">100%</span>
+            </div>
+          </div>
+          <p class="em-inbox-title">Inbox</p>
+
+          <!-- Highlighted email -->
+          <div class="em-email-item em-highlighted">
+            <div class="em-unread-dot"></div>
+            <img src="/Bitcoin.svg" width="36" height="36" alt="" class="em-avatar" />
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender">When to Buy BTC</span>
+                <span class="em-etime em-orange" data-i18n="mockupTimeNow">now</span>
+              </div>
+              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 4.1% in 4 hours.</p>
+              <p class="em-preview" data-i18n="mockupEmailPreview">Hey there, the signal just changed — markets are fearful…</p>
+            </div>
+          </div>
+
+          <div class="em-divider"></div>
+
+          <!-- Dimmed emails -->
+          <div class="em-email-item">
+            <div class="em-avatar em-avatar-dim">A</div>
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender em-sender-dim">Andreas K.</span>
+                <span class="em-etime">8:12</span>
+              </div>
+              <p class="em-subject em-subject-dim">Re: Q3 planning</p>
+              <p class="em-preview">Sounds good, let's sync on Friday…</p>
+            </div>
+          </div>
+
+          <div class="em-divider"></div>
+
+          <div class="em-email-item">
+            <div class="em-avatar em-avatar-dim">N</div>
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender em-sender-dim">Newsletter</span>
+                <span class="em-etime">Yesterday</span>
+              </div>
+              <p class="em-subject em-subject-dim">Your weekly roundup</p>
+              <p class="em-preview">Top stories this week…</p>
+            </div>
+          </div>
+
+          <div class="em-home-bar"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -2914,7 +3093,7 @@
       // Alerts
       alertsLabel: 'Alerts',
       pushTitle: 'The signal, <em>the moment</em><br>it changes.',
-      pushSub: "Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Monday.",
+      pushSub: "Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Sunday.",
       pushMeta: 'Free · No account needed · Unsubscribe anytime',
       emailPlaceholder: 'your@email.com',
       emailSubmit: 'Notify me',
@@ -2926,6 +3105,9 @@
       emailUnsubscribed: 'You\'ve been unsubscribed.',
       emailTrustPre: 'Join',
       emailTrustPost: 'others on the signal.',
+      mockupTimeNow: 'now',
+      mockupEmailSubject: 'Bitcoin dropped 4.1% in 4 hours.',
+      mockupEmailPreview: 'Hey there, the signal just changed — markets are fearful…',
       // Partner section
       partnerEyebrow: 'Ready to act on the signal?',
       partnerRelaiDesc: "Buy Bitcoin in minutes. No altcoins, no complexity — just Bitcoin, straight to a wallet only you control.",
@@ -3091,6 +3273,9 @@
       emailUnsubscribed: 'Du wurdest abgemeldet.',
       emailTrustPre: '',
       emailTrustPost: 'weitere erhalten das Signal.',
+      mockupTimeNow: 'jetzt',
+      mockupEmailSubject: 'Bitcoin fiel 4,1% in 4 Stunden.',
+      mockupEmailPreview: 'Hey, das Signal hat sich geändert — Märkte in Panik…',
       // Partner section
       partnerEyebrow: 'Bereit, auf das Signal zu reagieren?',
       partnerRelaiDesc: 'Bitcoin kaufen in Minuten. Keine Altcoins, keine Komplexität — nur Bitcoin, direkt in eine Wallet, die nur du kontrollierst.',
