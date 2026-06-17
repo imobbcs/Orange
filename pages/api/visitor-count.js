@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     const stats = await statsRes.json();
     console.log('visitor-count: stats response', JSON.stringify(stats));
 
-    const visitors = stats?.visitors?.value ?? null;
+    const visitors = stats?.visitors ?? null;
     console.log('visitor-count: visitors value', visitors);
     return res.status(200).json({ visitors });
 
