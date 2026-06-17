@@ -39,7 +39,7 @@ function shell(opts: {
 
   const unsubLabel  = lang === 'de' ? 'Abmelden'              : 'Unsubscribe';
   const disclaimer  = lang === 'de'
-    ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit &#8202;&#8212;&#8202; keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten. Triff deine eigenen Entscheidungen.'
+    ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit &#8202;&#8212;&#8202; keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten. Bitte triff eigene, informierte Entscheidungen.'
     : 'Not financial advice. When to Buy BTC provides market data only &#8202;&#8212;&#8202; not a recommendation to buy, sell, or hold any asset. Always do your own research.';
   const location    = lang === 'de' ? 'Wien, &#214;sterreich' : 'Vienna, Austria';
 
@@ -197,7 +197,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
       Ein Tap &#8202;&#8212;&#8202; und du erhältst Benachrichtigungen, sobald sich das Bitcoin-Signal ändert, sowie jeden Sonntag einen wöchentlichen Überblick.
     </p>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
-      Dies ist eine Double-Opt-in-Bestätigung &#8202;&#8212;&#8202; wir möchten sicherstellen, dass du es wirklich bist. Wir geben deine Adresse niemals an Dritte weiter, und du kannst dich jederzeit sofort abmelden.
+      Dies ist ein Double-Opt-in &#8202;&#8212;&#8202; wir möchten sicherstellen, dass du es wirklich bist. Deine Adresse wird niemals an Dritte weitergegeben, und du kannst dich jederzeit mit einem Klick abmelden.
     </p>
     ${ctaButton(confirmUrl, 'E-Mail bestätigen', 240)}
     <p class="ed" style="margin:22px 0 0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.28);line-height:1.7;">
@@ -206,7 +206,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
     </p>
     <div style="height:16px;">&nbsp;</div>
     <p class="ed" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.28);line-height:1.6;">
-      Wenn du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren. Es passiert nichts.
+      Falls du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren. Du wirst von uns nichts weiter hören.
     </p>
   ` : `
     <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.38);">One step left</p>
@@ -262,8 +262,8 @@ export function alertEmail(opts: {
 
   const greeting = lang === 'de'
     ? isDown
-      ? `Das Signal hat sich geändert. Bitcoin ist in den letzten 4 Stunden deutlich gefallen &#8202;&#8212;&#8202; genau die Art von Moment, auf den langfristige Bitcoiner vorbereitet sind.`
-      : `Das Signal hat sich geändert. Bitcoin ist in den letzten 4 Stunden stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner werden jetzt ruhiger, nicht aufgeregter.`
+      ? `Das Signal hat sich geändert. Bitcoin ist in den vergangenen 4 Stunden deutlich gefallen &#8202;&#8212;&#8202; genau die Art von Moment, auf den langfristige Bitcoiner vorbereitet sind.`
+      : `Das Signal hat sich geändert. Bitcoin ist in den vergangenen 4 Stunden stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner reagieren darauf mit Ruhe, nicht mit Aufregung.`
     : isDown
       ? `The signal just changed. Bitcoin has dropped sharply in the last 4 hours &#8202;&#8212;&#8202; exactly the kind of moment long-term Bitcoiners prepare for.`
       : `The signal just changed. Bitcoin has surged in the last 4 hours &#8202;&#8212;&#8202; long-term Bitcoiners tend to get quieter, not more excited, when this happens.`;
@@ -271,7 +271,7 @@ export function alertEmail(opts: {
   const context = lang === 'de'
     ? isDown
       ? 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Wenn diese Faktoren wie jetzt zusammentreffen, handeln langfristige Bitcoiner in der Regel entschlossen &#8202;&#8212;&#8202; statt auf Gewissheit zu warten.'
-      : 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Steigende Preise bei hoher Gier sind historisch ein Signal zur Vorsicht &#8202;&#8212;&#8202; nicht zur Panik, aber zum Innehalten.'
+      : 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Steigende Preise bei hoher Gier sind historisch ein Signal zur Vorsicht &#8202;&#8212;&#8202; kein Grund zur Panik, aber ein Grund innezuhalten.'
     : isDown
       ? 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. When conditions align like this, long-term Bitcoiners tend to act decisively rather than wait for certainty.'
       : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
@@ -291,9 +291,8 @@ export function alertEmail(opts: {
     : 'You\'re receiving this because you subscribed to Bitcoin signal alerts at whentobuybtc.xyz.';
 
   const disclaimerText = lang === 'de'
-    ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signal-Konditionen sind keine Garantie für zukünftige Entwicklungen. Triff stets deine eigenen informierten Entscheidungen.'
+    ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
     : 'This is market data, not financial advice. Past signal conditions are not a guarantee of future performance. Always make your own informed decisions.';
-
   const ctaLabel = lang === 'de' ? 'Signal ansehen &#8594;' : 'View full signal &#8594;';
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
 
@@ -375,29 +374,33 @@ export function digestEmail(opts: {
   const intros: Record<SignalState, Record<Lang, string>> = {
     accumulate: {
       en: 'Markets are fearful. Long-term Bitcoiners tend to treat moments like these as signal, not noise.',
-      de: 'Die Märkte sind in Angst. Langfristige Bitcoiner sehen solche Momente als Signal, nicht als Lärm.',
+      de: 'Die Stimmung am Markt ist angespannt. Langfristige Bitcoiner sehen solche Momente als Signal, nicht als Lärm.',
     },
     hold: {
       en: 'Markets are neither particularly fearful nor greedy. Steady conditions favour steady plans.',
-      de: 'Die Märkte sind weder besonders ängstlich noch gierig. Stabile Bedingungen sprechen für stabile Pläne.',
+      de: 'Die Märkte sind weder ängstlich noch überhitzt. Wer einen Plan hat, hält ihn.',
     },
     caution: {
       en: 'Greed is running high. Long-term Bitcoiners tend to get quiet when the market gets loud.',
-      de: 'Gier dominiert den Markt. Langfristige Bitcoiner werden ruhiger, wenn der Markt lauter wird.',
+      de: 'Gier bestimmt die Stimmung. Langfristige Bitcoiner halten inne, wenn der Markt überhitzt.',
     },
   };
 
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
   const intro1       = lang === 'de'
-    ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Eine Aussage, drei Indikatoren, kein Rauschen.'
+    ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Ein Signal. Drei Indikatoren. Kein Rauschen.'
     : 'Here\'s your weekly Bitcoin signal snapshot. One number, three indicators, no noise.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
   const signalLabel2 = lang === 'de' ? 'Aktuelles Signal' : 'Current signal';
   const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : '200-day avg';
   const athLabel     = lang === 'de' ? 'Abstand ATH'      : 'From ATH';
   const contextText  = lang === 'de'
-    ? 'Diese drei Indikatoren bilden gemeinsam das zusammengesetzte Signal. Fear &amp; Greed zeigt die aktuelle Marktstimmung, der 200-Tage-Durchschnitt gibt Kontext zum Trend, und der Abstand vom Allzeithoch zeigt, wo wir uns im längeren Zyklus befinden.'
+    ? 'Diese drei Indikatoren bilden gemeinsam das zusammengesetzte Signal. Fear &amp; Greed zeigt die aktuelle Marktstimmung, der 200-Tage-Durchschnitt gibt Kontext zum Trend, und der Abstand vom Allzeithoch zeigt, wo wir uns im längeren Zyklus befinden. Das vollständige Signal findest du auf whentobuybtc.xyz.'
     : 'These three indicators together form the composite signal. Fear &amp; Greed reflects current market sentiment, the 200-day average gives context on trend, and distance from ATH shows where we are in the longer cycle.';
+
+  const disclaimerText2 = lang === 'de'
+    ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
+    : 'This is market data, not financial advice. Past signal conditions are not a guarantee of future performance. Always make your own informed decisions.';
 
   const body = `
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.72);">${greetingLine}</p>
@@ -432,9 +435,139 @@ export function digestEmail(opts: {
       </td>
     </tr></table>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">${contextText}</p>
-    ${disclaimerBox(disclaimerText)}
+    ${disclaimerBox(disclaimerText2)}
     ${ctaButton('https://whentobuybtc.xyz', ctaLabel, 260)}
   `;
 
   return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TEMPLATE 4: Welcome (sent after double opt-in confirmed)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
+  subject: string; html: string;
+} {
+  const subject = lang === 'de'
+    ? 'Du bist dabei — Bitcoin-Signal-Alerts aktiv'
+    : 'You\'re in — Bitcoin signal alerts are on';
+
+  const preheader = lang === 'de'
+    ? 'Willkommen. Hier ist alles, was du über deine Alerts wissen musst.'
+    : 'Welcome. Here\'s everything you need to know about your alerts.';
+
+  const footerReason = lang === 'de'
+    ? 'Du erhältst diese E-Mail, weil du Bitcoin-Signal-Alerts auf whentobuybtc.xyz bestätigt hast.'
+    : 'You\'re receiving this because you confirmed your subscription to Bitcoin signal alerts at whentobuybtc.xyz.';
+
+  const disclaimerText = lang === 'de'
+    ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
+    : 'This is market data, not financial advice. Past signal conditions are not a guarantee of future performance. Always make your own informed decisions.';
+
+  const body = lang === 'de' ? `
+    <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.72);">Hey,</p>
+
+    <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Bestätigt</p>
+    <h1 class="ehl et" style="margin:0 0 6px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.25;color:#EDE8DE;">
+      Du bist dabei.<br /><span style="font-style:italic;color:#F7931A;">Alerts sind aktiv.</span>
+    </h1>
+    ${rule}
+
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.78);">
+      Deine Anmeldung ist bestätigt. Hier ist genau, was dich erwartet — und warum wir das so gebaut haben.
+    </p>
+
+    <!-- When alerts fire -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Wann du eine E-Mail erhältst</p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
+              <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Signal-Alert</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.72);">Sofort, wenn Bitcoin innerhalb von 4 Stunden um mehr als 3&nbsp;% steigt oder fällt. Maximal einmal alle 24 Stunden — kein Rauschen.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top:14px;">
+              <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Wöchentlicher Überblick</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.72);">Jeden Sonntag um 17:00 Uhr — aktuelles Signal, Fear &amp; Greed, 200-Tage-Durchschnitt und ATH-Abstand auf einen Blick.</p>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+
+    <!-- Why Bitcoin -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Warum Bitcoin</p>
+    <p class="em" style="margin:0 0 16px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Bitcoin ist das erste knappe digitale Gut der Geschichte — auf 21 Millionen Einheiten begrenzt, und niemand kann weitere Einheiten erzeugen. In einer Welt, in der Zentralbanken die Geldmenge jährlich ausweiten, bietet Bitcoin einen Ausweg aus der schleichenden Entwertung.
+    </p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Langfristige Bitcoiner kaufen nicht, weil sie den Kurs kennen. Sie kaufen, weil sie verstehen, was Bitcoin ist — und nutzen Momente der Panik, um konsequent zu akkumulieren, statt dem Hype hinterherzujagen.
+    </p>
+
+    <!-- Why DCA -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Warum DCA die beste Strategie ist</p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Dollar-Cost Averaging bedeutet, regelmäßig einen festen Betrag zu investieren — unabhängig vom Kurs. Es beseitigt emotionales Timing, mittelt den Einstiegspreis über einen längeren Zeitraum und nimmt den Druck, auf den perfekten Einstiegszeitpunkt zu warten. Das Signal hilft dir, in Phasen extremer Angst etwas mehr zu kaufen — ohne zu spekulieren.
+    </p>
+
+    ${disclaimerBox(disclaimerText)}
+    ${ctaButton('https://whentobuybtc.xyz', 'Signal ansehen →', 220)}
+  ` : `
+    <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.72);">Hey there,</p>
+
+    <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Confirmed</p>
+    <h1 class="ehl et" style="margin:0 0 6px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.25;color:#EDE8DE;">
+      You&#39;re in.<br /><span style="font-style:italic;color:#F7931A;">Alerts are on.</span>
+    </h1>
+    ${rule}
+
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.78);">
+      Your subscription is confirmed. Here&#39;s exactly what to expect — and why we built this.
+    </p>
+
+    <!-- When alerts fire -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">When you&#39;ll hear from us</p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
+              <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Signal alert</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.72);">Immediately when Bitcoin moves more than 3% in 4 hours and the signal changes. Maximum once every 24 hours — no noise.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top:14px;">
+              <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Weekly digest</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.72);">Every Sunday at 5PM Vienna time — current signal, Fear &amp; Greed, 200-day average, and ATH distance at a glance.</p>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+
+    <!-- Why Bitcoin -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Why Bitcoin</p>
+    <p class="em" style="margin:0 0 16px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Bitcoin is the first scarce digital asset in history — capped at 21 million units, with no authority able to print more. In a world where central banks expand the money supply every year, Bitcoin offers a way out of slow, silent devaluation.
+    </p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Long-term Bitcoiners don&#39;t buy because they know the price. They buy because they understand what Bitcoin is — and they use moments of market panic to accumulate steadily, rather than chasing hype.
+    </p>
+
+    <!-- Why DCA -->
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.38);">Why DCA is the best strategy</p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
+      Dollar-cost averaging means investing a fixed amount on a regular schedule — regardless of the price. It removes emotional timing, smooths your entry price over time, and takes the pressure off finding the "perfect moment". The signal helps you buy a little more in periods of extreme fear — without speculating.
+    </p>
+
+    ${disclaimerBox(disclaimerText)}
+    ${ctaButton('https://whentobuybtc.xyz', 'View the signal →', 220)}
+  `;
+
+  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl }) };
 }
