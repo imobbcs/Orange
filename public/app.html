@@ -5203,7 +5203,6 @@
   })();
 
   // ══ VISITOR COUNTER ══
-  // Deferred: fires after page is fully loaded and idle — never blocks rendering
   (function() {
     const el = document.getElementById('visitor-count');
     if (!el) return;
@@ -5222,14 +5221,7 @@
             el.textContent  = Math.round(eased * target).toLocaleString(numLocale());
             if (progress < 1) requestAnimationFrame(update);
           }
-          const container = document.getElementById('visitor-counter') || el;
-          const observer  = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-              requestAnimationFrame(update);
-              observer.disconnect();
-            }
-          }, { threshold: 0.1 });
-          observer.observe(container);
+          requestAnimationFrame(update);
         })
         .catch(() => {});
     }
