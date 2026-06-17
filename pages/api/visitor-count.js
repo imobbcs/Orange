@@ -37,8 +37,6 @@ export default async function handler(req, res) {
 
     const visitors = stats?.visitors?.value ?? null;
     console.log('visitor-count: visitors value', visitors);
-
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
     return res.status(200).json({ visitors });
 
   } catch (e) {
