@@ -317,8 +317,8 @@
     .announce-link:hover { border-color: var(--orange); }
     @media (max-width: 600px) {
       :root { --bar-height: 36px; }
-      .announce-text { font-size: 0.62rem; }
-      .announce-link { font-size: 0.62rem; }
+      .announce-text { display: none; }
+      .announce-link { font-size: 0.65rem; }
     }
 
     nav {
@@ -1541,7 +1541,7 @@
 
       /* hero-content: full width flex column, padded on sides */
       .hero-content {
-        padding: 11svh 1.5rem 0;
+        padding: calc(11svh + var(--bar-height)) 1.5rem 0;
         display: flex;
         flex-direction: column;
         align-items: center;
