@@ -5226,11 +5226,7 @@
         .catch(() => {});
     }
 
-    if ('requestIdleCallback' in window) {
-      window.addEventListener('load', () => requestIdleCallback(loadCounter, { timeout: 5000 }));
-    } else {
-      window.addEventListener('load', () => setTimeout(loadCounter, 3000));
-    }
+    window.addEventListener('load', function() { setTimeout(loadCounter, 1000); });
   })();
 
 
