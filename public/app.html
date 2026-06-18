@@ -1555,7 +1555,7 @@
       .hero-eyebrow {
         font-size: 0.72rem;
         letter-spacing: 0.18em;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.75rem;
       }
       .hero-price-block { text-align: center; width: 100%; padding-top: 0; }
       .hero-price { font-size: clamp(3.8rem, 17vw, 6.5rem); line-height: 0.88; }
@@ -1627,6 +1627,8 @@
       .signal-card-value { font-size: clamp(2.8rem, 12vw, 3.8rem); }
 
       /* ── INSTRUMENT PANEL — mobile ── */
+      .visitor-counter { padding: 3.5rem 0 0; }
+
       .instrument-body {
         display: flex;
         flex-direction: column;
@@ -1649,6 +1651,8 @@
       .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
       .instrument-sub { grid-column: 2; grid-row: 2; }
       .metric-verdict { grid-column: 1 / -1; justify-self: start; width: fit-content; }
+      .instrument-metric > div[style] { grid-column: 2; grid-row: 1; display: flex; align-items: baseline; gap: 0.3rem; justify-content: flex-end; }
+      .instrument-metric > div[style] .instrument-value { grid-column: unset; }
 
       .whatif-multiplier-row { padding: 1.75rem 1rem 1rem; }
       .whatif-multiplier { font-size: clamp(1.8rem, 9vw, 2.8rem); padding: 0.75rem 1.5rem; white-space: nowrap; }
