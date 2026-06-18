@@ -1,0 +1,3 @@
+Contact: mailto:WhenToBuyBTC@pm.me
+Expires: 2027-06-18T00:00:00.000Z
+Canonical: https://whentobuybtc.xyz/.well-known/security.txt
