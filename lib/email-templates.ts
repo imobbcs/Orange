@@ -18,8 +18,8 @@ function signalColor(s: SignalState): string {
 
 function signalLabel(s: SignalState, lang: Lang): string {
   const map: Record<SignalState, Record<Lang, string>> = {
-    accumulate: { en: 'Accumulation zone', de: 'Akkumulierungszone' },
-    hold:       { en: 'Hold zone',         de: 'Haltezone'          },
+    accumulate: { en: 'Buying zone',    de: 'Kaufzone'   },
+    hold:       { en: 'Watch and wait', de: 'Abwarten'   },
     caution:    { en: 'Caution zone',      de: 'Vorsichtszone'      },
   };
   return map[s][lang];
@@ -37,12 +37,12 @@ function signalBehaviour(s: SignalState, lang: Lang): string {
 function signalDigestHeadline(s: SignalState, lang: Lang): string {
   const map: Record<SignalState, Record<Lang, string>> = {
     accumulate: {
-      en: 'The data points to an <span style="font-style:italic;color:#F7931A;">accumulation zone</span> this week.',
-      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F7931A;">Akkumulierungszone</span> hin.',
+      en: 'The data points to a <span style="font-style:italic;color:#F7931A;">buying zone</span> this week.',
+      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F7931A;">Kaufzone</span> hin.',
     },
     hold: {
-      en: 'The data points to a <span style="font-style:italic;color:#FBBF24;">hold zone</span> this week.',
-      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#FBBF24;">Haltezone</span> hin.',
+      en: 'The data points to a <span style="font-style:italic;color:#FBBF24;">watch and wait</span> zone this week.',
+      de: 'Die Daten deuten diese Woche auf <span style="font-style:italic;color:#FBBF24;">Abwarten</span> hin.',
     },
     caution: {
       en: 'The data points to a <span style="font-style:italic;color:#F87171;">caution zone</span> this week.',
@@ -224,7 +224,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
       Ein Tap &#8202;&#8212;&#8202; und du erhältst Benachrichtigungen, sobald sich das Bitcoin-Signal ändert, sowie jeden Sonntag einen wöchentlichen Überblick.
     </p>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
-      Dies ist ein Double-Opt-in &#8202;&#8212;&#8202; wir möchten sicherstellen, dass du es wirklich bist. Deine Adresse wird niemals an Dritte weitergegeben, und du kannst dich jederzeit mit einem Klick abmelden.
+      Dies ist eine Sicherheitsbestätigung &#8202;&#8212;&#8202; wir möchten sicherstellen, dass du es wirklich bist. Deine Adresse wird niemals an Dritte weitergegeben, und du kannst dich jederzeit mit einem Klick abmelden.
     </p>
     ${ctaButton(confirmUrl, 'E-Mail bestätigen', 240)}
     <p class="ed" style="margin:22px 0 0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.28);line-height:1.7;">
@@ -245,7 +245,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
       You&#39;re one tap away from receiving alerts the moment the Bitcoin signal changes &#8202;&#8212;&#8202; and a weekly digest every Sunday.
     </p>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.62);">
-      This is a double opt-in confirmation &#8202;&#8212;&#8202; we want to make sure it&#39;s really you. We&#39;ll never share your address with third parties, and you can unsubscribe instantly at any time.
+      We sent this to make sure it's you. Your address will never be shared with third parties, and you can unsubscribe instantly at any time.
     </p>
     ${ctaButton(confirmUrl, 'Confirm my email', 220)}
     <p class="ed" style="margin:22px 0 0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.28);line-height:1.7;">
@@ -304,7 +304,7 @@ export function alertEmail(opts: {
       : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
 
   const subject = lang === 'de'
-    ? `Bitcoin-Marktzone: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'fiel' : 'stieg'} ${pct}%`
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% — Signal hat gewechselt`
     : `Bitcoin market zone: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'dropped' : 'surged'} ${pct}%`;
 
   const preheader = lang === 'de'
@@ -345,7 +345,7 @@ export function alertEmail(opts: {
           </td>
           <td width="1" style="background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td>
           <td width="32%" style="padding-left:16px;">
-            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${lang === 'de' ? 'vs 200-Tage-Schnitt' : 'vs 200D avg'}</p>
+            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.38);">${lang === 'de' ? 'vs 200-Tage-Schnitt' : 'Long-term avg'}</p>
             <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:500;color:#EDE8DE;">${maSign}${maPct.toFixed(1)}%</p>
           </td>
         </tr></table>
@@ -416,15 +416,15 @@ export function digestEmail(opts: {
 
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
   const intro1       = lang === 'de'
-    ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Ein Signal. Drei Indikatoren. Kein Rauschen.'
-    : 'Here\'s your weekly Bitcoin signal snapshot. One number, three indicators, no noise.';
+    ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
+    : 'Here\'s your weekly Bitcoin signal snapshot. Three indicators. One clear picture. No noise.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
   const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
-  const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : '200-day avg';
+  const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : 'Long-term avg';
   const athLabel     = lang === 'de' ? 'Abstand ATH'      : 'From ATH';
   const contextText  = lang === 'de'
-    ? 'Diese drei Indikatoren bilden gemeinsam das zusammengesetzte Signal. Fear &amp; Greed zeigt die aktuelle Marktstimmung, der 200-Tage-Durchschnitt gibt Kontext zum Trend, und der Abstand vom Allzeithoch zeigt, wo wir uns im längeren Zyklus befinden. Das vollständige Signal findest du auf whentobuybtc.xyz.'
-    : 'These three indicators together form the composite signal. Fear &amp; Greed reflects current market sentiment, the 200-day average gives context on trend, and distance from ATH shows where we are in the longer cycle.';
+    ? 'Diese drei Indikatoren bilden gemeinsam das zusammengesetzte Signal. Der Fear &amp; Greed Index misst, wie emotional der Markt gerade ist — von extremer Angst bis extremer Gier. Der 200-Tage-Durchschnitt ist der Durchschnittspreis der letzten 200 Tage und gilt als Maßstab für den langfristigen Trend. Der Abstand vom Allzeithoch zeigt, wie weit Bitcoin von seinem historischen Höchstpreis entfernt ist. Das vollständige Signal findest du auf whentobuybtc.xyz.'
+    : 'These three indicators together form the composite signal. The Fear &amp; Greed Index measures how emotional the market is right now — from extreme fear to extreme greed. The 200-day average is the average price over the past 200 days, used as a gauge of the long-term trend. Distance from ATH shows how far Bitcoin is from the highest price it has ever reached. The full signal is at whentobuybtc.xyz.';
 
   const disclaimerText2 = lang === 'de'
     ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
