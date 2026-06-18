@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(8000) }
     );
     const stats = await statsRes.json();
-    const visitors = stats?.visitors ?? null;
+    const visitors = stats?.visitors?.value ?? null;
     return res.status(200).json({ visitors });
   } catch (e) {
     return res.status(200).json({ visitors: null });
