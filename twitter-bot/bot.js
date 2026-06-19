@@ -82,48 +82,67 @@ async function postTweet(text) {
 }
 
 // ─── SIGNAL FETCH ────────────────────────────────────────────────────────────
+// Fetches data directly from whentobuybtc.xyz's own API endpoints.
+// Same sources, same logic as the site — guaranteed to match exactly.
+
+const SITE_BASE = 'https://whentobuybtc.xyz';
 
 async function fetchSignal() {
+  console.log('Fetching signal from whentobuybtc.xyz APIs...');
+
+  // Run all three fetches in parallel
+  const [fgRes, priceRes, athRes, historyRes] = await Promise.all([
+    fetch(`${SITE_BASE}/api/fear-greed`),
+    fetch(`${SITE_BASE}/api/price`),
+    fetch(`${SITE_BASE}/api/ath`),
+    fetch(`${SITE_BASE}/api/history?timeframe=1y&currency=eur`),
+  ]);
+
+  if (!fgRes.ok)      throw new Error(`fear-greed API ${fgRes.status}`);
+  if (!priceRes.ok)   throw new Error(`price API ${priceRes.status}`);
+  if (!athRes.ok)     throw new Error(`ath API ${athRes.status}`);
+  if (!historyRes.ok) throw new Error(`history API ${historyRes.status}`);
+
+  const [fgData, priceData, athData, historyData] = await Promise.all([
+    fgRes.json(),
+    priceRes.json(),
+    athRes.json(),
+    historyRes.json(),
+  ]);
+
   // Fear & Greed
-  const fgRes = await fetch('https://api.alternative.me/fng/?limit=1');
-  const fgData = await fgRes.json();
-  const fearGreed = parseInt(fgData.data[0].value, 10);
-  const fgLabel   = fgData.data[0].value_classification;
+  const fearGreed = parseInt(fgData.value, 10);
+  const fgLabel   = fgData.value_classification;
+  console.log(`Fear & Greed: ${fearGreed} (${fgLabel})`);
 
-  // BTC price + 200-day MA via CoinGecko
-  const cgRes = await fetch(
-    'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=210&interval=daily'
-  );
-  const cgData = await cgRes.json();
-  const prices = cgData.prices.map(p => p[1]);
-  const currentPrice = prices[prices.length - 1];
-  const ma200 = prices.slice(-200).reduce((a, b) => a + b, 0) / 200;
+  // Current price
+  const currentPrice = priceData.eur;
+  console.log(`Price: ${Math.round(currentPrice)} EUR`);
+
+  // 200-day MA from history
+  const prices = historyData.prices.map(p => p[1]);
+  const last200 = prices.slice(-200);
+  const ma200 = last200.reduce((a, b) => a + b, 0) / last200.length;
   const vsMA = ((currentPrice - ma200) / ma200 * 100).toFixed(1);
+  console.log(`MA200: ${Math.round(ma200)} EUR, vs MA: ${vsMA}%`);
 
-  // ATH distance via CoinGecko
-  const athRes = await fetch(
-    'https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true'
-  );
-  const athData = await athRes.json();
-  const ath = athData.market_data.ath.eur;
+  // ATH distance
+  const ath = athData.ath_eur;
   const fromATH = ((currentPrice - ath) / ath * 100).toFixed(1);
+  console.log(`ATH: ${Math.round(ath)} EUR, from ATH: ${fromATH}%`);
 
-  // Composite signal (same logic as your site)
-  let score = 0;
-  if (fearGreed < 25) score += 2;
-  else if (fearGreed < 45) score += 1;
-
-  if (parseFloat(vsMA) < -10) score += 2;
-  else if (parseFloat(vsMA) < 0) score += 1;
-
-  if (parseFloat(fromATH) < -40) score += 2;
-  else if (parseFloat(fromATH) < -20) score += 1;
+  // Composite signal — mirrors updateSignal() in app.html exactly
+  const fgScore  = fearGreed < 30 ? 2 : fearGreed < 50 ? 1 : fearGreed < 75 ? -1 : -2;
+  const maScore  = parseFloat(vsMA) < -10 ? 2 : parseFloat(vsMA) < 0 ? 1 : parseFloat(vsMA) < 20 ? -1 : -2;
+  const athScore = parseFloat(fromATH) < -50 ? 1 : parseFloat(fromATH) < -25 ? 0 : -1;
+  const score    = fgScore + maScore + athScore;
 
   let signal, emoji;
-  if (score >= 4)      { signal = 'ACCUMULATE'; emoji = '🟢'; }
-  else if (score >= 2) { signal = 'HOLD';       emoji = '🟡'; }
-  else                 { signal = 'CAUTION';     emoji = '🔴'; }
+  if (score >= 3)       { signal = 'ACCUMULATE'; emoji = '🟢'; }
+  else if (score >= -1) { signal = 'HOLD';       emoji = '🟡'; }
+  else                  { signal = 'CAUTION';     emoji = '🔴'; }
 
+  console.log(`Signal: ${signal} (score ${score})`);
   return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice) };
 }
 
