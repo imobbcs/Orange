@@ -4,6 +4,7 @@
   "description": "Daily X posting bot for whentobuybtc.xyz",
   "main": "bot.js",
   "scripts": {
+    "start": "node bot.js",
     "signal": "POST_TYPE=signal node bot.js",
     "bullish": "POST_TYPE=bullish node bot.js"
   },
