@@ -1,0 +1,13 @@
+{
+  "name": "whentobuybtc-twitter-bot",
+  "version": "1.0.0",
+  "description": "Daily X posting bot for whentobuybtc.xyz",
+  "main": "bot.js",
+  "scripts": {
+    "signal": "POST_TYPE=signal node bot.js",
+    "bullish": "POST_TYPE=bullish node bot.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
