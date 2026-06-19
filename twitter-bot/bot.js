@@ -158,11 +158,14 @@ async function postSignal() {
     day: 'numeric', month: 'short', year: 'numeric'
   });
 
+  const price = s.currentPrice.toLocaleString('en-GB');
+
   const text =
 `BTC signal - ${today}
 
 ${s.emoji} ${s.signal}
 
+€${price}
 Fear & Greed: ${s.fearGreed} (${s.fgLabel})
 vs 200-day avg: ${vsMAStr}
 From ATH: ${athStr}`;
