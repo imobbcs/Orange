@@ -163,7 +163,7 @@
       --orange:   #F7931A;
       --orange-dim: rgba(247,147,26,0.07);
       --white:    #EDE8DE;
-      --muted:    rgba(237,232,222,0.62);
+      --muted:    rgba(237,232,222,0.75);
       --grey:     #4A4540;
       --green:    #4ADE80;
       --green-dim: rgba(74,222,128,0.07);
@@ -1505,6 +1505,59 @@
       flex-wrap: wrap;
     }
     .footer-disclaimer { opacity: 0.45; }
+
+    /* ── FAQ SECTION ── */
+    .faq-section { }
+    .faq-list { margin-top: 3rem; border-top: 1px solid var(--border2); }
+    .faq-item { border-bottom: 1px solid var(--border2); }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.75rem 0;
+      gap: 2rem;
+      text-align: left;
+    }
+    .faq-question-text {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .faq-chevron {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--orange);
+      transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 600px; }
+    .faq-answer-inner {
+      padding-bottom: 1.75rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.85;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+    .faq-answer-inner p + p { margin-top: 0.85rem; }
+    .faq-answer-inner a { color: var(--orange); text-decoration: none; }
+    .faq-answer-inner a:hover { opacity: 0.8; }
+    @media (max-width: 768px) {
+      .faq-question-text { font-size: 1.05rem; }
+      .faq-answer-inner { font-size: 0.74rem; }
+    }
 
     /* ── REVEAL SYSTEM ── */
     .reveal {
@@ -2851,6 +2904,19 @@
     </div>
   </div>
 </section>
+
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
+
+<!-- FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="section-inner">
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="faqLabel">FAQ</p>
+    <h2 class="section-title reveal" data-delay="2" data-i18n="faqTitle">How this works.<br><em>And why.</em></h2>
+    <div class="faq-list reveal" data-delay="3" id="faq-list">
+      <!-- Items injected by JS from translations -->
+    </div>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -3249,6 +3315,35 @@
       maNeutral: 'Bitcoin is trading close to its 200-day moving average — the average price over the past 200 days, widely used as a gauge of the long-term trend. This is considered a neutral zone — neither particularly expensive nor cheap on a historical basis.',
       maAbove: (pct) => `Bitcoin is ${pct}% above its 200-day moving average — the average price over the past 200 days, widely used as a gauge of the long-term trend. Extended periods above this line have often preceded corrections historically.`,
       maError: 'Could not load moving average data.',
+      // FAQ
+      faqLabel: 'FAQ',
+      faqTitle: 'How this works.<br><em>And why.</em>',
+      faqItems: [
+        {
+          q: 'Who built this — and why should I trust it?',
+          a: `<p>This tool was built by <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a> — a Bitcoiner since 2017. He scaled Bitpanda to over 1 million users and currently serves as Chief Growth Officer at Relai, a MiCA-licensed Bitcoin app.</p><p>This is a personal project. It exists because the information that helps new Bitcoin investors make calm, informed decisions is scattered across charts, indices, and data sources — this tool brings it together in one place. It is listed on <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a>, Jameson Lopp's curated directory of Bitcoin resources.</p>`
+        },
+        {
+          q: 'Why the Fear & Greed Index?',
+          a: `<p>The Fear & Greed Index measures aggregate market sentiment — how emotional, panicked, or euphoric the crowd is at any given moment. It draws on factors like price momentum, volatility, social media activity, and trading volume.</p><p>Its value isn't in predicting the future. It's in identifying when the market is behaving irrationally — specifically, when fear is so widespread that it has historically created buying opportunities for long-term holders. The index runs from 0 (extreme fear) to 100 (extreme greed). Historically, the best times to accumulate Bitcoin have often coincided with fear readings below 30.</p>`
+        },
+        {
+          q: 'Why the 200-day moving average — and not some other timeframe?',
+          a: `<p>The 200-day moving average (200DMA) is the average of Bitcoin's closing price over the past 200 trading days. It's one of the most widely watched long-term trend indicators in both traditional finance and crypto — which is part of why it matters: when enough participants use the same signal, it becomes self-reinforcing.</p><p>200 days is long enough to smooth out short-term noise while staying responsive to genuine trend shifts. Shorter windows (50-day, 100-day) react too quickly; annual averages can lag meaningful turning points.</p><p>One known limitation: because the average is rolling, a sharp price move that happened ~200 days ago will drop out of the calculation as time passes, which can cause the average to shift noticeably even if recent price action is flat. This tool uses it as one of three inputs, not as a standalone signal, precisely for this reason.</p>`
+        },
+        {
+          q: 'Why distance from all-time high?',
+          a: `<p>Bitcoin's distance from its all-time high (ATH) is a simple but powerful measure of historical discount. The further Bitcoin is from its peak price, the deeper the drawdown — and historically, the deeper the drawdown, the more attractive the risk/reward for long-term buyers.</p><p>It's not a prediction. Bitcoin has gone to zero after major drawdowns in the minds of many commentators — and recovered each time. This metric captures where we are in that cycle relative to peak euphoria, which tends to correlate with where sentiment is and where prices may head over a long horizon.</p>`
+        },
+        {
+          q: 'Where does the data come from?',
+          a: `<p>Fear & Greed Index: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a>. Bitcoin price and 200-day moving average: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a> and <a href="https://www.coinmarketcap.com" target="_blank" rel="noopener">CoinMarketCap</a>. All-time high: CoinGecko. Data is fetched live on page load.</p>`
+        },
+        {
+          q: 'Is this financial advice?',
+          a: `<p>No. This tool shows what publicly available market data indicates, based on signals that long-term Bitcoin investors have historically found useful. It doesn't tell you what to do with your money. No one can predict the Bitcoin price — not this tool, not any analyst, not any algorithm.</p><p>Make your own decisions. If in doubt, speak to a qualified financial adviser.</p>`
+        },
+      ],
     },
     de: {
       // Page meta
@@ -3423,6 +3518,69 @@
       maNeutral: 'Bitcoin handelt nahe seinem 200-Tage-Durchschnitt — dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Das gilt als neutrale Zone — weder besonders teuer noch günstig auf historischer Basis.',
       maAbove: (pct) => `Bitcoin liegt ${pct}% über seinem 200-Tage-Durchschnitt — dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Längere Phasen über dieser Linie sind historisch oft Korrekturen vorangegangen.`,
       maError: 'Gleitender Durchschnitt konnte nicht geladen werden.',
+      // FAQ
+      faqLabel: 'FAQ',
+      faqTitle: 'Wie das funktioniert.<br><em>Und warum.</em>',
+      faqItems: [
+        {
+          q: 'Wer hat das gebaut — und warum sollte ich dem vertrauen?',
+          a: `<p>Dieses Tool wurde von <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a> entwickelt — Bitcoiner seit 2017. Er hat Bitpanda auf über 1 Million Nutzer skaliert und ist derzeit Chief Growth Officer bei Relai, einer MiCA-lizenzierten Bitcoin-App.</p><p>Dies ist ein persönliches Projekt. Es entstand, weil die Informationen, die neuen Bitcoin-Investoren helfen, ruhige und fundierte Entscheidungen zu treffen, über Charts, Indizes und Datenquellen verstreut sind — dieses Tool bündelt sie an einem Ort. Es ist auf <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a> gelistet, dem kuratierten Bitcoin-Ressourcenverzeichnis von Jameson Lopp.</p>`
+        },
+        {
+          q: 'Warum der Fear & Greed Index?',
+          a: `<p>Der Fear & Greed Index misst die allgemeine Marktstimmung — wie emotional, panisch oder euphorisch die Masse gerade ist. Er basiert auf Faktoren wie Preisdynamik, Volatilität, Social-Media-Aktivität und Handelsvolumen.</p><p>Sein Wert liegt nicht in der Zukunftsvorhersage. Er zeigt, wann der Markt irrational handelt — insbesondere, wenn Panik so weit verbreitet ist, dass historisch Kaufgelegenheiten für langfristige Halter entstanden sind. Der Index reicht von 0 (extreme Angst) bis 100 (extreme Gier). Historisch lagen die besten Akkumulationszeitpunkte oft bei Werten unter 30.</p>`
+        },
+        {
+          q: 'Warum der 200-Tage-Durchschnitt — und kein anderer Zeitraum?',
+          a: `<p>Der 200-Tage-Durchschnitt (200DMA) ist der Durchschnitt des Bitcoin-Schlusskurses über die letzten 200 Handelstage. Er ist einer der meistbeachteten Langzeittrend-Indikatoren sowohl in der traditionellen Finanzwelt als auch im Kryptobereich — was teilweise erklärt, warum er wichtig ist: Wenn genug Marktteilnehmer dasselbe Signal nutzen, verstärkt es sich selbst.</p><p>200 Tage sind lang genug, um kurzfristiges Rauschen zu glätten, ohne echte Trendwenden zu verschlafen. Kürzere Zeitfenster reagieren zu schnell; Jahresdurchschnitte können bedeutende Wendepunkte verpassen.</p><p>Eine bekannte Einschränkung: Da der Durchschnitt rollierend berechnet wird, fällt eine starke Preisbewegung von vor ~200 Tagen aus der Berechnung heraus — was den Durchschnitt merklich verschieben kann, auch wenn die jüngste Preisbewegung flach ist. Deshalb wird dieses Signal hier als eines von drei Inputs verwendet, nicht als alleiniger Indikator.</p>`
+        },
+        {
+          q: 'Warum der Abstand vom Allzeithoch?',
+          a: `<p>Bitcoins Abstand vom Allzeithoch (ATH) ist ein einfaches, aber aussagekräftiges Maß für den historischen Abschlag. Je weiter Bitcoin von seinem Höchstpreis entfernt ist, desto tiefer der Drawdown — und historisch gesehen, desto attraktiver das Chancen-Risiko-Verhältnis für langfristige Käufer.</p><p>Es ist keine Prognose. Diese Kennzahl zeigt, wo wir uns im Zyklus relativ zur Euphoriephase befinden — was tendenziell mit der Stimmung und der langfristigen Preisentwicklung korreliert.</p>`
+        },
+        {
+          q: 'Woher kommen die Daten?',
+          a: `<p>Fear & Greed Index: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a>. Bitcoin-Preis und 200-Tage-Durchschnitt: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a> und <a href="https://www.coinmarketcap.com" target="_blank" rel="noopener">CoinMarketCap</a>. Allzeithoch: CoinGecko. Daten werden beim Seitenaufruf live abgerufen.</p>`
+        },
+        {
+          q: 'Ist das eine Finanzberatung?',
+          a: `<p>Nein. Dieses Tool zeigt, was öffentlich verfügbare Marktdaten anzeigen — basierend auf Signalen, die langfristige Bitcoin-Investoren historisch als nützlich erachtet haben. Es sagt nicht, was du mit deinem Geld tun sollst. Niemand kann den Bitcoin-Preis vorhersagen — weder dieses Tool, noch ein Analyst, noch ein Algorithmus.</p><p>Triff deine eigenen Entscheidungen. Im Zweifel wende dich an einen qualifizierten Finanzberater.</p>`
+        },
+      ],
+    }
+  };
+
+  // ── FAQ RENDER ──
+  function renderFaq(lang) {
+    const list = document.getElementById('faq-list');
+    if (!list) return;
+    const items = (translations[lang] && translations[lang].faqItems) || [];
+    list.innerHTML = items.map((item, i) => `
+      <div class="faq-item" id="faq-item-${i}">
+        <button class="faq-question" aria-expanded="false" onclick="toggleFaq(${i})" aria-controls="faq-answer-${i}">
+          <span class="faq-question-text">${item.q}</span>
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-${i}" role="region">
+          <div class="faq-answer-inner">${item.a}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.toggleFaq = function(i) {
+    const item = document.getElementById('faq-item-' + i);
+    if (!item) return;
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+    });
+    // Open clicked if it was closed
+    if (!isOpen) {
+      item.classList.add('open');
+      item.querySelector('.faq-question').setAttribute('aria-expanded', 'true');
     }
   };
 
@@ -3464,6 +3622,9 @@
     }
     updateHeroStrip();
     drawHeroHorizon();
+
+    // Render FAQ in current language
+    renderFaq(lang);
 
     // Persist choice
     try { localStorage.setItem('wtb_lang', lang); } catch(e) {}
