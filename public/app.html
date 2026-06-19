@@ -1137,6 +1137,29 @@
     .whatif-disclaimer { padding: 1.5rem 3.5rem; font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.06em; color: var(--grey); border-top: 1px solid var(--border2); }
     .whatif-share-row { padding: 1.5rem 3.5rem 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
+    /* ── WHATIF INLINE EMAIL CTA ── */
+    .whatif-email-cta {
+      padding: 2rem 3.5rem 2.5rem;
+      border-top: 1px solid var(--border2);
+    }
+    .whatif-email-cta-label {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+    .whatif-email-cta-row { max-width: 520px; }
+    .whatif-email-cta-meta {
+      font-family: var(--mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      color: var(--grey);
+      margin-top: 0.85rem;
+    }
+
     /* ── SHARE ── */
     .share-section { }
     .share-preview {
@@ -1665,6 +1688,8 @@
       .whatif-disclaimer { padding: 1.25rem 1rem; }
       .whatif-share-row { padding: 1rem 1rem 1.5rem; flex-direction: column; }
       .whatif-share-row .share-btn { width: 100%; text-align: center; }
+      .whatif-email-cta { padding: 1.5rem 1rem 2rem; }
+      .whatif-email-cta-row { max-width: 100%; }
       /* ── WHAT IF ── */
       .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
       .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
@@ -2547,6 +2572,99 @@
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
+<!-- EMAIL ALERTS -->
+<section class="section push-section" id="alerts">
+  <div class="section-inner push-inner">
+
+    <!-- LEFT: copy + form -->
+    <div class="push-copy">
+      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
+      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">Never miss a <em>signal change.</em></h2>
+      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Sunday.</p>
+
+      <div class="email-form-wrap reveal" data-delay="4">
+        <div class="email-row">
+          <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
+        </div>
+        <p class="email-msg" id="email-msg" aria-live="polite"></p>
+        <p class="email-trust" id="email-trust" aria-live="polite">
+          <span data-i18n="emailTrustPre">Join</span>
+          <span class="email-trust-count" id="subscriber-count"></span>
+          <span data-i18n="emailTrustPost">others on the signal.</span>
+        </p>
+      </div>
+
+      <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
+    </div>
+
+    <!-- RIGHT: email mockup (desktop only) -->
+    <div class="push-preview-col reveal reveal-fade" data-delay="4" aria-hidden="true">
+      <div class="em-phone">
+        <div class="em-notch"></div>
+        <div class="em-screen">
+          <div class="em-status">
+            <span class="em-time">09:41</span>
+            <div class="em-status-right">
+              <span class="em-signal">●●●</span>
+              <span class="em-battery">100%</span>
+            </div>
+          </div>
+          <p class="em-inbox-title">Inbox</p>
+
+          <!-- Highlighted email -->
+          <div class="em-email-item em-highlighted">
+            <div class="em-unread-dot"></div>
+            <img src="/Bitcoin.svg" width="36" height="36" alt="" class="em-avatar" />
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender">When to Buy BTC</span>
+                <span class="em-etime em-orange" data-i18n="mockupTimeNow">now</span>
+              </div>
+              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 4.1% in 4 hours.</p>
+              <p class="em-preview" data-i18n="mockupEmailPreview">Hey there, the signal just changed — markets are fearful…</p>
+            </div>
+          </div>
+
+          <div class="em-divider"></div>
+
+          <!-- Dimmed emails -->
+          <div class="em-email-item">
+            <div class="em-avatar em-avatar-dim">A</div>
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender em-sender-dim">Andreas K.</span>
+                <span class="em-etime">8:12</span>
+              </div>
+              <p class="em-subject em-subject-dim">Re: Q3 planning</p>
+              <p class="em-preview">Sounds good, let's sync on Friday…</p>
+            </div>
+          </div>
+
+          <div class="em-divider"></div>
+
+          <div class="em-email-item">
+            <div class="em-avatar em-avatar-dim">N</div>
+            <div class="em-email-content">
+              <div class="em-email-top">
+                <span class="em-sender em-sender-dim">Newsletter</span>
+                <span class="em-etime">Yesterday</span>
+              </div>
+              <p class="em-subject em-subject-dim">Your weekly roundup</p>
+              <p class="em-preview">Top stories this week…</p>
+            </div>
+          </div>
+
+          <div class="em-home-bar"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
+
 <!-- PRICE CHART -->
 <section class="section chart-section" id="chart">
   <div class="section-inner">
@@ -2667,136 +2785,20 @@
           <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
         </div>
         <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
-        <div class="whatif-share-row">
-          <button class="share-btn primary" onclick="shareWhatIfWhatsApp()" data-umami-event="whatif-share-whatsapp" data-i18n="shareWhatsapp">Share on WhatsApp</button>
-          <button class="share-btn" onclick="shareWhatIfTwitter()" data-umami-event="whatif-share-x" data-i18n="shareX">Share on X</button>
+        <div class="whatif-email-cta">
+          <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">Want to know when the signal says it's time to act?</p>
+          <div class="whatif-email-cta-row">
+            <div class="email-row">
+              <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+              <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Notify me →</button>
+            </div>
+            <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
+          </div>
+          <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
         </div>
       </div><!-- /whatif-evidence -->
 
     </div><!-- /whatif-result-wrap -->
-  </div>
-</section>
-
-<!-- EMAIL ALERTS -->
-<section class="section push-section" id="alerts">
-  <div class="section-inner push-inner">
-
-    <!-- LEFT: copy + form -->
-    <div class="push-copy">
-      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
-      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The signal, <em>the moment</em><br>it changes.</h2>
-      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Sunday.</p>
-
-      <div class="email-form-wrap reveal" data-delay="4">
-        <div class="email-row">
-          <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
-        </div>
-        <p class="email-msg" id="email-msg" aria-live="polite"></p>
-        <p class="email-trust" id="email-trust" aria-live="polite">
-          <span data-i18n="emailTrustPre">Join</span>
-          <span class="email-trust-count" id="subscriber-count"></span>
-          <span data-i18n="emailTrustPost">others on the signal.</span>
-        </p>
-      </div>
-
-      <p class="push-meta reveal" data-delay="5" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
-    </div>
-
-    <!-- RIGHT: email mockup (desktop only) -->
-    <div class="push-preview-col reveal reveal-fade" data-delay="4" aria-hidden="true">
-      <div class="em-phone">
-        <div class="em-notch"></div>
-        <div class="em-screen">
-          <div class="em-status">
-            <span class="em-time">09:41</span>
-            <div class="em-status-right">
-              <span class="em-signal">●●●</span>
-              <span class="em-battery">100%</span>
-            </div>
-          </div>
-          <p class="em-inbox-title">Inbox</p>
-
-          <!-- Highlighted email -->
-          <div class="em-email-item em-highlighted">
-            <div class="em-unread-dot"></div>
-            <img src="/Bitcoin.svg" width="36" height="36" alt="" class="em-avatar" />
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender">When to Buy BTC</span>
-                <span class="em-etime em-orange" data-i18n="mockupTimeNow">now</span>
-              </div>
-              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 4.1% in 4 hours.</p>
-              <p class="em-preview" data-i18n="mockupEmailPreview">Hey there, the signal just changed — markets are fearful…</p>
-            </div>
-          </div>
-
-          <div class="em-divider"></div>
-
-          <!-- Dimmed emails -->
-          <div class="em-email-item">
-            <div class="em-avatar em-avatar-dim">A</div>
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender em-sender-dim">Andreas K.</span>
-                <span class="em-etime">8:12</span>
-              </div>
-              <p class="em-subject em-subject-dim">Re: Q3 planning</p>
-              <p class="em-preview">Sounds good, let's sync on Friday…</p>
-            </div>
-          </div>
-
-          <div class="em-divider"></div>
-
-          <div class="em-email-item">
-            <div class="em-avatar em-avatar-dim">N</div>
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender em-sender-dim">Newsletter</span>
-                <span class="em-etime">Yesterday</span>
-              </div>
-              <p class="em-subject em-subject-dim">Your weekly roundup</p>
-              <p class="em-preview">Top stories this week…</p>
-            </div>
-          </div>
-
-          <div class="em-home-bar"></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- RELAI CTA -->
-<section class="partner-section" id="relai">
-  <p class="partner-eyebrow reveal reveal-left" data-delay="1" data-i18n="partnerEyebrow">Ready to act on the signal?</p>
-  <div class="partner-grid">
-
-    <!-- RELAI -->
-    <div class="partner-card reveal" data-delay="2">
-      <p class="partner-step" data-i18n="partnerStep1">Step 01 — Buy</p>
-      <svg class="partner-logo" style="height:30px;" width="436" height="153" viewBox="0 0 436 153" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#relai_partner_clip)"><path d="M271.755 17.0998H235.715V150.8H271.755V17.0998Z" fill="white"/><path d="M379.242 69.1998C377.028 65.0785 373.898 61.5204 370.092 58.7998C365.699 55.6093 360.767 53.238 355.532 51.7998C349.259 50.0194 342.762 49.1505 336.242 49.2198C326.282 49.2198 317.969 50.7865 311.302 53.9198C304.635 57.0531 299.565 61.1865 296.092 66.3198C292.691 71.3227 290.673 77.1357 290.242 83.1698H323.412C323.523 81.8192 323.923 80.5081 324.584 79.3248C325.244 78.1415 326.151 77.1135 327.242 76.3098C329.745 74.6969 332.687 73.9003 335.662 74.0298C338.383 73.9096 341.075 74.6401 343.362 76.1198C344.334 76.7787 345.121 77.6767 345.647 78.7274C346.172 79.7782 346.418 80.9464 346.362 82.1198V82.3798C346.384 83.2808 346.187 84.1737 345.788 84.9819C345.39 85.79 344.8 86.4894 344.072 87.0198C342.552 88.1465 340.072 89.0365 336.632 89.6898C333.192 90.3431 328.689 90.8665 323.122 91.2598C318.223 91.6009 313.374 92.4522 308.652 93.7998C304.453 94.9863 300.498 96.9095 296.972 99.4798C293.608 101.981 290.914 105.275 289.132 109.07C287.159 113.467 286.202 118.252 286.332 123.07C286.332 129.736 287.725 135.22 290.512 139.52C293.283 143.822 297.287 147.189 302.002 149.18C311.23 152.755 321.352 153.322 330.922 150.8C334.469 149.813 337.777 148.112 340.642 145.8C343.67 143.305 346.157 140.218 347.952 136.73H348.742V150.8H382.432V82.1198C382.47 77.6136 381.373 73.1702 379.242 69.1998ZM346.662 115.29C346.743 118.054 345.941 120.773 344.372 123.05C342.861 125.181 340.811 126.872 338.432 127.95C336.025 129.085 333.393 129.666 330.732 129.65C328.052 129.762 325.41 128.981 323.222 127.43C322.247 126.683 321.47 125.71 320.958 124.595C320.445 123.479 320.213 122.255 320.282 121.03C320.261 119.38 320.69 117.755 321.522 116.33C322.487 114.806 323.84 113.567 325.442 112.74C327.584 111.624 329.906 110.896 332.302 110.59C333.735 110.37 335.105 110.13 336.412 109.87C337.762 109.61 339.022 109.32 340.202 109.02C341.382 108.72 342.552 108.39 343.592 108.02C344.632 107.65 345.702 107.3 346.662 106.91V115.29Z" fill="white"/><path d="M399.094 150.73V54.6598H435.094V150.73H399.094ZM417.094 33.7298C412.447 33.8164 407.95 32.083 404.564 28.8998C402.908 27.4529 401.585 25.6656 400.684 23.6601C399.783 21.6546 399.326 19.4783 399.344 17.2798C399.327 15.0814 399.784 12.9053 400.685 10.8999C401.586 8.89451 402.909 7.10714 404.564 5.6598C407.999 2.55106 412.466 0.829575 417.099 0.829575C421.731 0.829575 426.199 2.55106 429.634 5.6598C431.289 7.10714 432.612 8.89451 433.512 10.8999C434.413 12.9053 434.871 15.0814 434.854 17.2798C434.871 19.4783 434.414 21.6546 433.513 23.6601C432.612 25.6656 431.289 27.4529 429.634 28.8998C426.25 32.0841 421.749 33.8084 417.104 33.6998L417.094 33.7298Z" fill="white"/><path d="M170.993 152.5C160.326 152.5 151.1 150.453 143.313 146.36C135.735 142.349 129.53 136.164 125.493 128.6C121.366 120.86 119.3 111.59 119.293 100.79C119.293 90.4298 121.383 81.3765 125.563 73.6298C129.596 66.0287 135.734 59.7514 143.243 55.5498C150.856 51.2365 159.856 49.0831 170.243 49.0898C177.254 48.9901 184.224 50.1833 190.803 52.6098C196.738 54.8301 202.112 58.3296 206.543 62.8598C210.987 67.4859 214.396 73.0048 216.543 79.0498C218.985 85.9437 220.18 93.2171 220.073 100.53V108.89H154.273V89.0398H186.903C186.918 86.3538 186.146 83.7221 184.683 81.4698C183.303 79.2578 181.337 77.4716 179.003 76.3098C176.535 75.0235 173.785 74.3738 171.003 74.4198C168.223 74.3959 165.478 75.0443 163.003 76.3098C160.64 77.4716 158.618 79.2251 157.133 81.3998C155.665 83.6796 154.871 86.3282 154.843 89.0398V110.45C154.782 113.445 155.469 116.408 156.843 119.07C158.159 121.574 160.179 123.638 162.653 125.01C165.457 126.519 168.61 127.264 171.793 127.17C174.096 127.198 176.387 126.843 178.573 126.12C180.546 125.497 182.37 124.476 183.933 123.12C185.395 121.798 186.514 120.14 187.193 118.29H220.103C219.108 124.947 216.346 131.215 212.103 136.44C207.564 141.747 201.768 145.831 195.243 148.32C188.35 151.1 180.266 152.493 170.993 152.5Z" fill="white"/><path d="M0.863281 150.8V17.0998H58.5733C68.4933 17.0998 77.1766 18.9065 84.6233 22.5198C91.8147 25.9046 97.8519 31.3297 101.983 38.1198C106.123 44.9065 108.19 53.0465 108.183 62.5398C108.177 72.0331 106.047 80.1198 101.793 86.7998C97.4818 93.4402 91.2679 98.626 83.9633 101.68C76.3566 105.013 67.4566 106.68 57.2633 106.68H37.0833V78.4698H49.9533C53.6484 78.5524 57.3317 78.0219 60.8533 76.8998C63.6817 75.9792 66.137 74.1693 67.8533 71.7398C69.6143 69.0046 70.481 65.7895 70.3333 62.5398C70.4776 59.2451 69.6086 55.9854 67.8433 53.1998C66.1556 50.7011 63.6974 48.8224 60.8433 47.8498C57.3519 46.5861 53.6551 45.9858 49.9433 46.0798H37.1633V150.8H0.863281ZM85.4633 100.92L112.623 150.8H73.2433L49.7233 106.67" fill="white"/></g><defs><clipPath id="relai_partner_clip"><rect width="436" height="153" fill="white"/></clipPath></defs></svg>
-      <p class="partner-desc" data-i18n="partnerRelaiDesc">Buy Bitcoin in minutes. No altcoins, no complexity — just Bitcoin, straight to a wallet only you control.</p>
-      <div class="partner-cta">
-        <a href="https://relai.me/imo" target="_blank" class="partner-btn ghost" data-umami-event="relai-click" data-i18n="partnerRelaiBtn">Get the app →</a>
-      </div>
-      <p class="partner-ref"><span data-i18n="partnerRelaiRef">Use code</span> <strong>IMO</strong> <span data-i18n="partnerRelaiRef2">for 0.9% fees</span></p>
-    </div>
-
-    <div class="partner-divider"></div>
-
-    <!-- TREZOR -->
-    <div class="partner-card reveal" data-delay="3">
-      <p class="partner-step" data-i18n="partnerStep2">Step 02 — Store</p>
-      <svg class="partner-logo" style="height:28px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1482.08 378.41"><g><polygon points="915.31 115.89 1070.13 115.89 1070.13 156.63 985.93 270.71 1070.13 270.71 1070.13 318.69 915.31 318.69 915.31 277.95 999.51 163.87 915.31 163.87 915.31 115.89" style="fill:#fff;"/><path d="m1437.71,243.55c19-7.25,38.93-26.26,38.93-59.76,0-40.74-28.06-67-69.71-67h-95.06v201.9h52.51v-67.9h19.92l37.12,67.9h60.66l-44.37-75.14Zm-37.12-39.84h-36.21v-40.74h36.21c13.58,0,22.64,8.15,22.64,19.92,0,12.67-9.06,20.82-22.64,20.82Z" style="fill:#fff;"/><path d="m1184.21,113.17c-61.57,0-105,44.36-105,104.12s44.34,104.12,105,104.12,105.93-44.37,105.93-104.12-44.37-104.12-105.93-104.12Zm0,161.16c-30.78,0-51.61-23.54-51.61-57,0-34.4,20.83-57,51.61-57s52.51,23.54,52.51,57-21.73,57-52.51,57Z" style="fill:#fff;"/><polygon points="743.29 115.89 889.96 115.89 889.96 162.97 795.8 162.97 795.8 192.84 887.24 192.84 887.24 239.02 795.8 239.02 795.8 271.61 889.96 271.61 889.96 318.69 743.29 318.69 743.29 115.89" style="fill:#fff;"/><path d="m222.7,87.82C222.7,39.82,181.05,0,130.35,0S38,39.84,38,87.82v28.07H0v201.9l130.35,60.62,130.38-60.66V116.75h-38l-.03-28.93Zm-137.62,0c0-22.63,19.92-40.74,45.27-40.74s45.27,18.11,45.27,40.74v28.07h-90.54v-28.07Zm123.13,197.37l-77.86,36.22-77.86-36.22v-121.32h155.72v121.32Z" style="fill:#fff;"/><path d="m718.85,183.79c0-40.74-28.07-67-69.72-67h-95.06v201.9h52.51v-67.9h19.92l37.12,67.9h60.68l-44.37-75.14c19-7.25,38.92-26.26,38.92-59.76Zm-76.06,19.92h-36.21v-40.74h36.21c13.58,0,22.64,8.15,22.64,19.92,0,12.67-9.06,20.82-22.64,20.82Z" style="fill:#fff;"/><polygon points="366.66 115.89 530.53 115.89 530.53 163.87 474.4 163.87 474.4 318.69 421.88 318.69 421.88 163.87 366.66 163.87 366.66 115.89" style="fill:#fff;"/></g></svg>
-      <p class="partner-desc" data-i18n="partnerTrezorDesc">A hardware wallet keeps your Bitcoin offline and out of reach of exchanges and hacks. Trezor is open-source and built to last.</p>
-      <div class="partner-cta">
-        <a href="https://trezorio.refr.cc/default/u/orange?s=sp&t=cp" target="_blank" class="partner-btn ghost" data-umami-event="trezor-click" data-i18n="partnerTrezorBtn">Get a Trezor →</a>
-      </div>
-      <p class="partner-ref"> </p>
-    </div>
-
   </div>
 </section>
 
@@ -3150,7 +3152,7 @@
       shareX: 'Share on X',
       // Alerts
       alertsLabel: 'Alerts',
-      pushTitle: 'Know the moment<br><em>Bitcoin\'s outlook shifts.</em>',
+      pushTitle: 'Never miss a<br><em>signal change.</em>',
       pushSub: "Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts — plus a weekly digest every Sunday.",
       pushMeta: 'Free · No account needed · Unsubscribe anytime',
       emailPlaceholder: 'your@email.com',
@@ -3159,6 +3161,9 @@
       emailOk: 'Check your inbox to confirm.',
       emailErr: 'Something went wrong. Please try again.',
       emailInvalid: 'Please enter a valid email address.',
+      // Calculator inline CTA
+      whatifCtaLabel: 'Want to know when the signal says it\'s time to act?',
+      whatifCtaBtn: 'Notify me →',
       emailConfirmed: 'You\'re confirmed. Alerts are on.',
       emailUnsubscribed: 'You\'ve been unsubscribed.',
       emailTrustPre: 'Join',
@@ -3320,7 +3325,7 @@
       shareX: 'Auf X teilen',
       // Alerts
       alertsLabel: 'Benachrichtigungen',
-      pushTitle: 'Das Signal — <em>sobald</em><br>es sich ändert.',
+      pushTitle: 'Verpasse keine<br><em>Signaländerung.</em>',
       pushSub: 'Bitcoin bewegt sich schnell. Trag deine E-Mail ein und wir benachrichtigen dich sofort, wenn das Signal kippt — plus einen wöchentlichen Überblick jeden Sonntag.',
       pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit abmeldbar',
       emailPlaceholder: 'deine@email.com',
@@ -3336,6 +3341,9 @@
       mockupTimeNow: 'jetzt',
       mockupEmailSubject: 'Bitcoin fiel 4,1% in 4 Stunden.',
       mockupEmailPreview: 'Hey, das Signal hat sich geändert — Märkte in Panik…',
+      // Calculator inline CTA
+      whatifCtaLabel: 'Willst du wissen, wann das Signal zum Handeln aufruft?',
+      whatifCtaBtn: 'Benachrichtigen →',
       // Partner section
       partnerEyebrow: 'Bereit zu handeln?',
       partnerRelaiDesc: 'Bitcoin kaufen in Minuten. Keine Altcoins, keine Komplexität — nur Bitcoin, direkt in eine Wallet, die nur du kontrollierst.',
@@ -4361,6 +4369,48 @@
         msg.className   = 'email-msg err';
         btn.disabled    = false;
         btn.textContent = t.emailSubmit;
+      });
+  }
+
+  function submitEmailCalc() {
+    const input = document.getElementById('email-input-calc');
+    const btn   = document.getElementById('email-submit-calc');
+    const msg   = document.getElementById('email-msg-calc');
+    const t     = translations[currentLang] || translations.en;
+
+    const email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.textContent = t.emailInvalid;
+      msg.className   = 'email-msg err';
+      input.focus();
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = t.emailSending;
+    msg.textContent = '';
+    msg.className   = 'email-msg';
+
+    fetch('/api/subscribe', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email, lang: currentLang }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) {
+          msg.textContent = t.emailOk;
+          msg.className   = 'email-msg ok';
+          input.value     = '';
+        } else {
+          throw new Error(data.error || 'unknown');
+        }
+      })
+      .catch(() => {
+        msg.textContent = t.emailErr;
+        msg.className   = 'email-msg err';
+        btn.disabled    = false;
+        btn.textContent = t.whatifCtaBtn;
       });
   }
 
