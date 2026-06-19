@@ -753,12 +753,28 @@
     }
 
     /* ═══ REDESIGN: WHAT-IF MULTIPLIER ═══ */
-    .whatif-multiplier-row { display: flex; justify-content: center; padding: 2.5rem 0 1.5rem; }
+    /* Multiplier — full-width panel row, no box */
+    .whatif-multiplier-row {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 2.5rem 3.5rem 2rem;
+      border-bottom: 1px solid var(--border2);
+    }
     .whatif-multiplier {
-      font-family: var(--title); font-size: clamp(2.8rem, 6vw, 4.5rem); letter-spacing: 0.06em;
+      font-family: var(--title);
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      letter-spacing: 0.04em;
       color: var(--green);
-      border: 1px solid rgba(74,222,128,0.3); background: var(--green-dim);
-      padding: 1rem 2.5rem;
+      line-height: 1;
+    }
+    .whatif-multiplier-label {
+      font-family: var(--mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      padding-bottom: 0.2rem;
     }
 
     /* ═══ EMAIL ALERTS SECTION ═══ */
@@ -1128,36 +1144,39 @@
       letter-spacing: 0.14em; color: var(--grey);
       text-transform: uppercase; margin-top: 1rem;
     }
-    .whatif-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-    .whatif-stat { padding: 2rem; border-right: 1px solid var(--border2); }
+    .whatif-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .whatif-stat { padding: 2rem 3.5rem; border-right: 1px solid var(--border2); }
     .whatif-stat:last-child { border-right: none; }
     .whatif-stat-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.5rem; }
     .whatif-stat-value { font-family: var(--title); font-size: 1.8rem; font-weight: 400; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .whatif-stat-value.positive { color: var(--green); }
-    .whatif-disclaimer { padding: 1.5rem 3.5rem; font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.06em; color: var(--grey); border-top: 1px solid var(--border2); }
+    .whatif-disclaimer { padding: 1.25rem 3.5rem; font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.06em; color: var(--grey); border-top: 1px solid var(--border2); }
     .whatif-share-row { padding: 1.5rem 3.5rem 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
     /* ── WHATIF INLINE EMAIL CTA ── */
     .whatif-email-cta {
-      padding: 2rem 3.5rem 2.5rem;
+      padding: 2.5rem 3.5rem;
       border-top: 1px solid var(--border2);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
     }
     .whatif-email-cta-label {
       font-family: var(--display);
       font-style: italic;
       font-weight: 300;
-      font-size: 1.05rem;
+      font-size: 1.2rem;
       color: var(--white);
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
+      line-height: 1.45;
     }
-    .whatif-email-cta-row { max-width: 520px; }
+    .whatif-email-cta-right { display: flex; flex-direction: column; gap: 0.75rem; }
+    .whatif-email-cta-row { width: 100%; }
     .whatif-email-cta-meta {
       font-family: var(--mono);
       font-size: 0.625rem;
       letter-spacing: 0.1em;
       color: var(--grey);
-      margin-top: 0.85rem;
     }
 
     /* ── SHARE ── */
@@ -1677,18 +1696,17 @@
       .instrument-metric > div[style] { grid-column: 2; grid-row: 1; display: flex; align-items: baseline; gap: 0.3rem; justify-content: flex-end; }
       .instrument-metric > div[style] .instrument-value { grid-column: unset; }
 
-      .whatif-multiplier-row { padding: 1.75rem 1rem 1rem; }
-      .whatif-multiplier { font-size: clamp(1.8rem, 9vw, 2.8rem); padding: 0.75rem 1.5rem; white-space: nowrap; }
+      .whatif-multiplier-row { padding: 1.75rem 1rem 1.5rem; gap: 0.75rem; }
+      .whatif-multiplier { font-size: clamp(2.8rem, 11vw, 4rem); }
       .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
       .whatif-stat { padding: 1.25rem 1rem; }
       .whatif-stat:nth-child(2) { border-right: none; }
-      .whatif-stat:nth-child(3) { border-top: 1px solid var(--border2); }
-      .whatif-stat:nth-child(4) { border-top: 1px solid var(--border2); border-right: none; }
+      .whatif-stat:nth-child(3) { border-top: 1px solid var(--border2); border-right: none; grid-column: 1 / -1; }
       .whatif-stat-value { font-size: 1.4rem; }
       .whatif-disclaimer { padding: 1.25rem 1rem; }
       .whatif-share-row { padding: 1rem 1rem 1.5rem; flex-direction: column; }
       .whatif-share-row .share-btn { width: 100%; text-align: center; }
-      .whatif-email-cta { padding: 1.5rem 1rem 2rem; }
+      .whatif-email-cta { padding: 1.5rem 1rem 2rem; grid-template-columns: 1fr; gap: 1.25rem; }
       .whatif-email-cta-row { max-width: 100%; }
       /* ── WHAT IF ── */
       .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
@@ -2778,7 +2796,10 @@
 
       <!-- SUPPORTING EVIDENCE — lower weight, appears after number settles -->
       <div class="whatif-evidence" id="whatif-evidence">
-        <div class="whatif-multiplier-row"><span class="whatif-multiplier" id="whatif-multiplier">—</span></div>
+        <div class="whatif-multiplier-row">
+          <span class="whatif-multiplier" id="whatif-multiplier">—</span>
+          <span class="whatif-multiplier-label" data-i18n="multiplierLabel">your money back</span>
+        </div>
         <div class="whatif-stats-grid">
           <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statMonthly">Monthly amount</p><div class="whatif-stat-value" id="whatif-monthly">—</div></div>
           <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
@@ -2787,14 +2808,16 @@
         <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice — this is for perspective.</p>
         <div class="whatif-email-cta">
           <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">Want to know when the signal says it's time to act?</p>
-          <div class="whatif-email-cta-row">
-            <div class="email-row">
-              <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-              <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Notify me →</button>
+          <div class="whatif-email-cta-right">
+            <div class="whatif-email-cta-row">
+              <div class="email-row">
+                <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+                <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Notify me →</button>
+              </div>
+              <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
             </div>
-            <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
+            <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
           </div>
-          <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
         </div>
       </div><!-- /whatif-evidence -->
 
@@ -3164,6 +3187,7 @@
       // Calculator inline CTA
       whatifCtaLabel: 'Want to know when the signal says it\'s time to act?',
       whatifCtaBtn: 'Notify me →',
+      multiplierLabel: 'your money back',
       emailConfirmed: 'You\'re confirmed. Alerts are on.',
       emailUnsubscribed: 'You\'ve been unsubscribed.',
       emailTrustPre: 'Join',
@@ -3344,6 +3368,7 @@
       // Calculator inline CTA
       whatifCtaLabel: 'Willst du wissen, wann das Signal zum Handeln aufruft?',
       whatifCtaBtn: 'Benachrichtigen →',
+      multiplierLabel: 'dein Geld zurück',
       // Partner section
       partnerEyebrow: 'Bereit zu handeln?',
       partnerRelaiDesc: 'Bitcoin kaufen in Minuten. Keine Altcoins, keine Komplexität — nur Bitcoin, direkt in eine Wallet, die nur du kontrollierst.',
