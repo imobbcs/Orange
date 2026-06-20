@@ -200,15 +200,15 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
   const athColor = data.athPercent !== null ? (data.athPercent <= -30 ? '#4ADE80' : data.athPercent <= -10 ? '#FBBF24' : '#F87171') : '#4A4540';
 
   const fgDesc = data.fearGreed !== null
-    ? (data.fearGreed <= 25 ? 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten — und waren in der Vergangenheit oft genau die, die langfristige Bitcoiner abgewartet haben.'
-      : data.fearGreed <= 45 ? 'Viele sind unsicher und halten sich zurück. Der Markt ist nervös — nicht panisch, aber auch nicht entspannt.'
-      : data.fearGreed >= 75 ? 'Im Moment kaufen sehr viele — aus Angst, etwas zu verpassen. Solche Phasen enden oft mit einem Rückgang.'
+    ? (data.fearGreed <= 25 ? 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten. Sie waren in der Vergangenheit oft genau die, die langfristige Bitcoiner abgewartet haben.'
+      : data.fearGreed <= 45 ? 'Viele sind unsicher und halten sich zurück. Der Markt ist nervös, weder panisch noch entspannt.'
+      : data.fearGreed >= 75 ? 'Im Moment kaufen sehr viele, aus Angst, etwas zu verpassen. Solche Phasen enden oft mit einem Rückgang.'
       : 'Weder Panik noch Euphorie. Der Markt bewegt sich gerade ohne großen Druck in eine Richtung.')
     : 'Wird geladen.';
 
   const maDesc = data.maPercent !== null
     ? (data.maPercent <= -10 ? `Bitcoin kostet gerade ${Math.abs(data.maPercent).toFixed(0)}% weniger als sein 200-Tage-Durchschnitt. Das ist wie ein Produkt, das deutlich unter seinem üblichen Preis verkauft wird.`
-      : data.maPercent <= 10 ? `Bitcoin liegt nahe an seinem 200-Tage-Durchschnitt — das ist in etwa sein "normaler" Preis der letzten Monate.`
+      : data.maPercent <= 10 ? `Bitcoin liegt nahe an seinem 200-Tage-Durchschnitt, das ist in etwa sein "normaler" Preis der letzten Monate.`
       : `Bitcoin kostet gerade ${data.maPercent.toFixed(0)}% mehr als sein 200-Tage-Durchschnitt. Der Preis ist deutlich über dem, was in den letzten Monaten als normal galt.`)
     : 'Wird geladen.';
 
@@ -220,15 +220,15 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
     : 'Wird geladen.';
 
   const signalHeadline: Record<string, string> = {
-    accumulate: 'Der Markt zeigt gerade Schwäche — das Signal steht auf Akkumulieren.',
-    hold: 'Der Markt ist ruhig — das Signal steht auf Halten.',
-    caution: 'Der Markt läuft heiß — das Signal steht auf Vorsicht.',
+    accumulate: 'Der Markt zeigt gerade Schwäche. Das Signal steht auf Akkumulieren.',
+    hold: 'Der Markt ist ruhig. Das Signal steht auf Halten.',
+    caution: 'Der Markt läuft heiß. Das Signal steht auf Vorsicht.',
     unknown: 'Das Signal wird berechnet.',
   };
   const signalExplain: Record<string, string> = {
-    accumulate: 'Alle drei Indikatoren zeigen gleichzeitig Schwäche: Angst im Markt, Preis unter dem Durchschnitt, weit vom Höchststand entfernt. Das bedeutet nicht, dass der Preis morgen steigt — aber historisch waren das die Phasen, in denen langfristige Bitcoin-Käufer günstig eingestiegen sind.',
-    hold: 'Die Indikatoren zeigen kein klares Bild in eine Richtung. Weder besonders günstige noch besonders riskante Bedingungen — eine neutrale Phase.',
-    caution: 'Viele kaufen gerade, der Preis liegt weit über dem Durchschnitt und nahe am Höchststand. In der Vergangenheit folgten auf solche Phasen oft starke Rückgänge. Das heißt nicht, dass es so sein muss — aber es ist ein Zeichen, vorsichtig zu sein.',
+    accumulate: 'Alle drei Indikatoren zeigen gleichzeitig Schwäche: Angst im Markt, Preis unter dem Durchschnitt, weit vom Höchststand entfernt. Das bedeutet nicht, dass der Preis morgen steigt, aber historisch waren das die Phasen, in denen langfristige Bitcoin-Käufer günstig eingestiegen sind.',
+    hold: 'Die Indikatoren zeigen kein klares Bild in eine Richtung. Weder besonders günstige noch besonders riskante Bedingungen. Eine neutrale Phase.',
+    caution: 'Viele kaufen gerade, der Preis liegt weit über dem Durchschnitt und nahe am Höchststand. In der Vergangenheit folgten auf solche Phasen oft starke Rückgänge. Das heißt nicht, dass es so sein muss. Aber es ist ein Zeichen, vorsichtig zu sein.',
     unknown: '',
   };
 
@@ -425,8 +425,8 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
       `}</style>
 
       <head>
-        <title>Wann Bitcoin kaufen — Das aktuelle Marktsignal</title>
-        <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht — einfach erklärt, täglich aktualisiert. Kostenlos und ohne Anmeldung." />
+        <title>Wann Bitcoin kaufen: Das aktuelle Marktsignal</title>
+        <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht, einfach erklärt und täglich aktualisiert. Kostenlos und ohne Anmeldung." />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <link rel="canonical" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
         <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
@@ -434,8 +434,8 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
-        <meta property="og:title" content="Wann Bitcoin kaufen — Das aktuelle Marktsignal" />
-        <meta property="og:description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht — einfach erklärt, täglich aktualisiert." />
+        <meta property="og:title" content="Wann Bitcoin kaufen: Das aktuelle Marktsignal" />
+        <meta property="og:description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht, einfach erklärt und täglich aktualisiert." />
         <meta property="og:locale" content="de_DE" />
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -447,7 +447,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             { "@type": "Question", "name": "Was ist der Fear & Greed Index?", "acceptedAnswer": { "@type": "Answer", "text": "Der Fear & Greed Index misst die Marktstimmung auf einer Skala von 0 (extreme Angst) bis 100 (extreme Gier). Hohe Angst bedeutet: viele verkaufen. Hohe Gier bedeutet: viele kaufen — oft bis zu einem Punkt, wo es kippt." } },
             { "@type": "Question", "name": "Was ist der 200-Tage-Durchschnitt bei Bitcoin?", "acceptedAnswer": { "@type": "Answer", "text": "Der Durchschnittspreis der letzten 200 Tage. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt." } },
             { "@type": "Question", "name": "Lohnt es sich noch, in Bitcoin zu investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von deinem Zeithorizont, deiner Risikobereitschaft und davon ab, was du dir von einer Anlage erhoffst. Bitcoin hat eine begrenzte Maximalmenge von 21 Millionen Einheiten, ist dezentral und hat sich über mehrere Marktzyklen behauptet. Gleichzeitig ist der Kurs volatil. Eine pauschale Antwort gibt es nicht." } },
-            { "@type": "Question", "name": "Wie viel sollte ich in Bitcoin investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Nur so viel, wie du bereit bist, vollständig zu verlieren — ohne dass es dein Leben beeinflusst. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, trifft eine informiertere Entscheidung." } }
+            { "@type": "Question", "name": "Wie viel sollte ich in Bitcoin investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, trifft eine informiertere Entscheidung." } }
           ]
         })}} />
         <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
@@ -467,10 +467,10 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
         {/* ── HERO ── */}
         <section className="wbc-hero">
-          <p className="wbc-eyebrow">Bitcoin verstehen — für Einsteiger</p>
+          <p className="wbc-eyebrow">Bitcoin verstehen, für Einsteiger</p>
           <h1 className="wbc-h1">Wann<br /><em>Bitcoin</em><br />kaufen?</h1>
           <p className="wbc-hero-intro">
-            Eine Frage, die sich fast jeder stellt. Hier bekommst du keine Empfehlung —
+            Eine Frage, die sich fast jeder stellt. Hier bekommst du keine Empfehlung,
             aber die Daten, die dir helfen, selbst eine Entscheidung zu treffen.
           </p>
           <div className="wbc-signal-block">
@@ -491,13 +491,31 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <p className="wbc-section-label">Was gerade passiert</p>
           <h2 className="wbc-h2">Der Markt auf einen Blick.</h2>
           <div className="wbc-body">
-            <p>Bitcoin kostet gerade <strong>{priceStr}</strong>. Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen — sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht.</p>
+            <p>Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen, sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht.</p>
             <p>Dafür gibt es drei Indikatoren. Zusammen ergeben sie das Signal oben.</p>
           </div>
+          {data.currentPrice !== null && (
+            <div style={{
+              margin: '2rem 0',
+              padding: '1.75rem 2rem',
+              background: 'rgba(247,147,26,0.04)',
+              border: '1px solid rgba(247,147,26,0.12)',
+              borderLeftWidth: 3,
+              borderLeftColor: '#F7931A',
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '1rem',
+              flexWrap: 'wrap' as const,
+            }}>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.56rem', letterSpacing: '0.22em', textTransform: 'uppercase' as const, color: 'rgba(237,232,222,0.3)', flexBasis: '100%' }}>Bitcoin Preis gerade</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(2.8rem, 7vw, 4.5rem)', color: '#F7931A', lineHeight: 1, letterSpacing: '0.02em' }}>{priceStr}</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'rgba(237,232,222,0.3)' }}>EUR · Live</div>
+            </div>
+          )}
           <div className="wbc-signal-summary" style={{ borderLeftColor: signalColor }}>
             <p className="wbc-signal-summary-headline" style={{ color: signalColor }}>{signalHeadline[data.signal]}</p>
             {data.signal !== 'unknown' && <p className="wbc-signal-summary-explain">{signalExplain[data.signal]}</p>}
-            <p className="wbc-disclaimer">Kein Finanzrat. Das Signal zeigt, was die Daten sagen — nicht, was du tun sollst.</p>
+            <p className="wbc-disclaimer">Kein Finanzrat. Das Signal zeigt, was die Daten sagen, nicht was du tun sollst.</p>
           </div>
         </section>
 
@@ -508,7 +526,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <p className="wbc-section-label">Die drei Indikatoren</p>
           <h2 className="wbc-h2">So entsteht das Signal.</h2>
           <div className="wbc-body">
-            <p>Hinter dem Signal stecken drei Zahlen, die Bitcoiner seit Jahren beobachten. Keine davon ist ein Geheimtipp — aber zusammen geben sie ein klareres Bild als jede einzeln.</p>
+            <p>Hinter dem Signal stecken drei Zahlen, die Bitcoiner seit Jahren beobachten. Keine davon ist ein Geheimtipp, aber zusammen geben sie ein klareres Bild als jede einzeln.</p>
           </div>
           <div className="wbc-instrument">
             <div className="wbc-instrument-header">
@@ -547,28 +565,28 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <p className="wbc-section-label">Warum Bitcoin überhaupt</p>
           <h2 className="wbc-h2">Was Menschen an Bitcoin interessiert.</h2>
           <div className="wbc-body">
-            <p>Bevor du dich fragst, <em>wann</em> du kaufen sollst, lohnt sich die Frage <em>warum</em> überhaupt. Hier sind die Argumente, die langfristige Bitcoiner am häufigsten nennen — ohne Versprechen, ohne Hype.</p>
+            <p>Bevor du dich fragst, <em>wann</em> du kaufen sollst, lohnt sich die Frage <em>warum</em> überhaupt. Hier sind die Argumente, die langfristige Bitcoiner am häufigsten nennen, ohne Versprechen, ohne Hype.</p>
           </div>
           <div className="wbc-reasons">
             <div className="wbc-reason-card">
               <div className="wbc-reason-num">01</div>
               <div className="wbc-reason-title">Begrenzte Menge</div>
-              <p className="wbc-reason-body">Es wird nie mehr als 21 Millionen Bitcoin geben. Das ist im Code festgelegt und kann nicht geändert werden — im Gegensatz zu Fiat-Währungen, die beliebig vermehrt werden können.</p>
+              <p className="wbc-reason-body">Es wird nie mehr als 21 Millionen Bitcoin geben. Das ist im Code festgelegt und kann nicht geändert werden, im Gegensatz zu Fiat-Währungen, die beliebig vermehrt werden können.</p>
             </div>
             <div className="wbc-reason-card">
               <div className="wbc-reason-num">02</div>
               <div className="wbc-reason-title">Kein Mittelsmann</div>
-              <p className="wbc-reason-body">Bitcoin funktioniert ohne Bank, ohne Staat, ohne zentrale Kontrolle. Transaktionen werden vom Netzwerk selbst verifiziert — transparent und öffentlich nachvollziehbar.</p>
+              <p className="wbc-reason-body">Bitcoin funktioniert ohne Bank, ohne Staat, ohne zentrale Kontrolle. Transaktionen werden vom Netzwerk selbst verifiziert, transparent und öffentlich nachvollziehbar.</p>
             </div>
             <div className="wbc-reason-card">
               <div className="wbc-reason-num">03</div>
-              <div className="wbc-reason-title">Mehrere Marktzyklen</div>
-              <p className="wbc-reason-body">Bitcoin ist seit 2009 durch mehrere drastische Einbrüche gegangen — und hat sich jedes Mal erholt. Das ist keine Garantie für die Zukunft, aber es ist eine Geschichte, die viele andere Anlageklassen nicht haben.</p>
+              <div className="wbc-reason-title">Vier Halbierungen, vier neue Hochs</div>
+              <p className="wbc-reason-body">Alle vier Jahre wird die Menge neu erzeugter Bitcoin halbiert, das sogenannte Halving. Nach jedem der bisherigen vier Halvings hat Bitcoin ein neues Allzeithoch erreicht. Das ist keine Garantie, aber es ist ein Muster, das langfristige Halter aufmerksam verfolgen.</p>
             </div>
             <div className="wbc-reason-card">
               <div className="wbc-reason-num">04</div>
               <div className="wbc-reason-title">Wachsende Akzeptanz</div>
-              <p className="wbc-reason-body">Institutionelle Investoren, börsengehandelte Produkte, Zentralbanken die Bitcoin als Reserve halten — die Infrastruktur rund um Bitcoin wächst. Das verändert das Risikoprofil, macht es aber nicht risikolos.</p>
+              <p className="wbc-reason-body">Institutionelle Investoren, börsengehandelte Bitcoin-ETFs, Staaten die Bitcoin als Reserveanlage halten: Die Infrastruktur rund um Bitcoin wächst. Das verändert das Risikoprofil, macht es aber nicht risikolos.</p>
             </div>
           </div>
         </section>
@@ -580,24 +598,24 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <p className="wbc-section-label">Gegenargumente</p>
           <h2 className="wbc-h2">Was dagegen spricht.</h2>
           <div className="wbc-body">
-            <p>Wer dir nur die Chancen erklärt, hat etwas zu verkaufen. Hier sind die echten Risiken — ehrlich und ohne Beschönigung.</p>
+            <p>Wer dir nur die Chancen erklärt, hat etwas zu verkaufen. Hier sind die echten Risiken, ehrlich und ohne Beschönigung.</p>
           </div>
           <div className="wbc-risks">
             <div className="wbc-risk-item" style={{ borderLeftColor: '#F87171' }}>
               <div className="wbc-risk-title">Hohe Volatilität</div>
-              <p className="wbc-risk-body">Bitcoin kann innerhalb von Wochen 50%, 60%, 70% seines Wertes verlieren. Das ist keine Theorie — es ist mehrfach passiert. Wer das nicht emotional aushält oder finanziell nicht verkraften kann, sollte das ernst nehmen.</p>
+              <p className="wbc-risk-body">Bitcoin kann innerhalb von Wochen 50%, 60%, 70% seines Wertes verlieren. Das ist keine Theorie, es ist mehrfach passiert. Wer das nicht emotional aushält oder finanziell nicht verkraften kann, sollte das ernst nehmen.</p>
             </div>
             <div className="wbc-risk-item" style={{ borderLeftColor: '#FBBF24' }}>
-              <div className="wbc-risk-title">Regulatorische Unsicherheit</div>
-              <p className="wbc-risk-body">Gesetze rund um Kryptowährungen ändern sich laufend. Steuerliche Behandlung, Zugangsbeschränkungen, Reporting-Pflichten — was heute gilt, kann in zwei Jahren anders aussehen. Das ist ein reales Risiko, das viele unterschätzen.</p>
+              <div className="wbc-risk-title">Kein Einlagenschutz</div>
+              <p className="wbc-risk-body">Wenn eine Kryptobörse gehackt wird oder bankrottgeht, wie bei FTX oder Mt. Gox, gibt es keine staatliche Einlagensicherung wie bei einer Bank. Wer Bitcoin auf einer Exchange hält, trägt das Gegenparteirisiko dieser Plattform. Die Lösung: selbst verwahren oder ausschließlich MiCA-regulierte Anbieter nutzen.</p>
             </div>
             <div className="wbc-risk-item" style={{ borderLeftColor: '#FBBF24' }}>
-              <div className="wbc-risk-title">Kein innerer Wert</div>
-              <p className="wbc-risk-body">Bitcoin zahlt keine Dividende, wirft keine Miete ab und produziert nichts. Der Preis entsteht ausschließlich durch Angebot und Nachfrage. Das macht Bewertungsmodelle schwierig — und den Markt anfälliger für Stimmungsschwankungen.</p>
+              <div className="wbc-risk-title">Konzentrationsrisiko</div>
+              <p className="wbc-risk-body">Ein großer Teil aller Bitcoin liegt in relativ wenigen Wallets, darunter frühe Miner und Satoshi Nakamotos unverrückbare Coins. Wenn auch nur ein kleiner Teil davon in Bewegung gerät, kann das den Markt stark beeinflussen. Vollständige Transparenz ist Stärke und Schwäche zugleich.</p>
             </div>
             <div className="wbc-risk-item" style={{ borderLeftColor: 'rgba(247,147,26,0.4)' }}>
-              <div className="wbc-risk-title">Energieverbrauch</div>
-              <p className="wbc-risk-body">Das Bitcoin-Netzwerk verbraucht viel Strom. Der Anteil erneuerbarer Energien wächst, aber der Energiebedarf bleibt ein legitimes Gegenargument — besonders für Anleger, für die Nachhaltigkeit ein Kriterium ist.</p>
+              <div className="wbc-risk-title">Technische Komplexität</div>
+              <p className="wbc-risk-body">Seed Phrases vergessen, falsche Adressen, unsichere Wallets: Der häufigste Grund für Bitcoin-Verluste ist kein Hack, sondern menschlicher Fehler. Wer Bitcoin selbst verwahrt, trägt die volle Verantwortung. Das ist Freiheit, aber auch Verantwortung.</p>
             </div>
           </div>
         </section>
@@ -609,28 +627,28 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <p className="wbc-section-label">Häufige Missverständnisse</p>
           <h2 className="wbc-h2">Was über Bitcoin nicht stimmt.</h2>
           <div className="wbc-body">
-            <p>Rund um Bitcoin kursieren viele Annahmen, die man immer wieder hört — und die meistens nur zur Hälfte stimmen.</p>
+            <p>Rund um Bitcoin kursieren viele Annahmen, die man immer wieder hört, die aber meistens nur zur Hälfte stimmen.</p>
           </div>
           <div className="wbc-myths">
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 01</div>
               <div className="wbc-myth-title">„Bitcoin ist nichts wert"</div>
-              <p className="wbc-myth-truth">Bitcoin ist durch keinen physischen Vermögenswert gedeckt — das stimmt. Aber auch der Euro oder Dollar sind es nicht. <strong>Wert entsteht durch Nachfrage, Vertrauen und Nutzung.</strong> Beides hat Bitcoin in 15 Jahren aufgebaut.</p>
+              <p className="wbc-myth-truth">Bitcoin ist durch keinen physischen Vermögenswert gedeckt, das stimmt. Aber auch der Euro oder Dollar sind es nicht. <strong>Wert entsteht durch Nachfrage, Vertrauen und Nutzung.</strong> Beides hat Bitcoin in 15 Jahren aufgebaut.</p>
             </div>
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 02</div>
               <div className="wbc-myth-title">„Dafür ist es schon zu spät"</div>
-              <p className="wbc-myth-truth">Das wurde 2013 gesagt, 2017, 2020 und 2024. <strong>„Zu spät" hängt davon ab, was danach kommt</strong> — und das weiß niemand. Was man sagen kann: wer kauft, wenn alle ängstlich sind, hat historisch besser abgeschnitten als wer kauft, wenn alle euphorisch sind.</p>
+              <p className="wbc-myth-truth">Das wurde 2013 gesagt, 2017, 2020 und 2024. <strong>„Zu spät" hängt davon ab, was danach kommt</strong>, und das weiß niemand. Was man sagen kann: wer kauft, wenn alle ängstlich sind, hat historisch besser abgeschnitten als wer kauft, wenn alle euphorisch sind.</p>
             </div>
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 03</div>
               <div className="wbc-myth-title">„Bitcoin ist nur für Kriminelle"</div>
-              <p className="wbc-myth-truth">Alle Blockchain-Transaktionen sind öffentlich und dauerhaft nachvollziehbar. <strong>Bitcoin ist eines der am besten rückverfolgbaren Zahlungssysteme</strong>, das es gibt — das Gegenteil von anonym im traditionellen Sinne.</p>
+              <p className="wbc-myth-truth">Alle Blockchain-Transaktionen sind öffentlich und dauerhaft nachvollziehbar. <strong>Bitcoin ist eines der am besten rückverfolgbaren Zahlungssysteme</strong>, das es gibt, das Gegenteil von anonym im traditionellen Sinne.</p>
             </div>
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 04</div>
               <div className="wbc-myth-title">„Neue Coins ersetzen Bitcoin"</div>
-              <p className="wbc-myth-truth">Es gibt tausende Kryptowährungen. Viele sind technisch flexibler als Bitcoin. Aber <strong>Bitcoin hat etwas, das sich nicht kopieren lässt: Bekanntheit, Vertrauen und eine 15-jährige Geschichte</strong> ohne zentrale Kontrolle. Das ist sein Nischenprodukt.</p>
+              <p className="wbc-myth-truth">Es gibt tausende Kryptowährungen. Viele sind technisch flexibler als Bitcoin. Aber <strong>Bitcoin hat etwas, das sich nicht kopieren lässt: Bekanntheit, Vertrauen und eine 15-jährige Geschichte</strong> ohne zentrale Kontrolle. Das ist ein Vorteil, den keine neue Kryptowährung einfach replizieren kann.</p>
             </div>
           </div>
         </section>
@@ -644,27 +662,27 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <div className="wbc-faq">
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Soll ich jetzt Bitcoin kaufen oder warten?</p>
-              <p className="wbc-faq-a">Das kann dir niemand beantworten — und jeder, der es behauptet, lügt. Was du wissen kannst: ob der Markt gerade ängstlich oder euphorisch ist, ob Bitcoin historisch teuer oder günstig erscheint, und was in ähnlichen Situationen in der Vergangenheit passiert ist. Genau das zeigt dieses Tool.</p>
+              <p className="wbc-faq-a">Das kann dir niemand beantworten, und wer es behauptet, lügt. Was du wissen kannst: ob der Markt gerade ängstlich oder euphorisch ist, ob Bitcoin historisch teuer oder günstig erscheint, und was in ähnlichen Situationen in der Vergangenheit passiert ist. Genau das zeigt dieses Tool.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Wie viel sollte ich in Bitcoin investieren?</p>
-              <p className="wbc-faq-a">Nur so viel, wie du bereit bist, vollständig zu verlieren — ohne dass es dein Leben beeinflusst. Das klingt dramatisch, ist aber die ehrlichste Antwort. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, schläft besser und trifft bessere Entscheidungen.</p>
+              <p className="wbc-faq-a">Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Das klingt dramatisch, ist aber die ehrlichste Antwort. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, schläft ruhiger und trifft klarere Entscheidungen.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Was bedeutet „Akkumulieren"?</p>
-              <p className="wbc-faq-a">Nach und nach kaufen — über einen längeren Zeitraum, nicht alles auf einmal. Das Signal „Akkumulieren" bedeutet, dass alle drei Indikatoren gleichzeitig Schwäche zeigen. Historisch war das selten und hat nicht lange angedauert. Kein Versprechen, kein Rat.</p>
+              <p className="wbc-faq-a">Nach und nach kaufen, über einen längeren Zeitraum, nicht alles auf einmal. Das Signal „Akkumulieren" bedeutet, dass alle drei Indikatoren gleichzeitig Schwäche zeigen. Solche Phasen waren seltener als neutrale Marktphasen und sind bisher nie dauerhaft geblieben. Kein Versprechen, kein Rat.</p>
             </div>
             <div className="wbc-faq-item">
-              <p className="wbc-faq-q">Bitcoin kaufen oder nicht — wie entscheide ich das?</p>
-              <p className="wbc-faq-a">Indem du verstehst, was du kaufst. Bitcoin ist volatil — der Preis kann stark fallen. Wer das weiß, einen langen Zeithorizont hat und nur das investiert, was er nicht sofort braucht, trifft eine bessere Entscheidung als jemand, der aus Angst vor dem Verpassen kauft.</p>
+              <p className="wbc-faq-q">Bitcoin kaufen oder nicht: Wie entscheide ich das?</p>
+              <p className="wbc-faq-a">Indem du verstehst, was du kaufst. Bitcoin ist volatil, der Preis kann stark fallen. Wer das weiß, einen langen Zeithorizont hat und nur das investiert, was er nicht sofort braucht, trifft eine bessere Entscheidung als jemand, der aus Angst vor dem Verpassen kauft.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Was ist der 200-Tage-Durchschnitt?</p>
-              <p className="wbc-faq-a">Der Durchschnittspreis der letzten 200 Tage — eine der meistbeachteten Zahlen im Bitcoin-Markt. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt. Simpel, aber aussagekräftig.</p>
+              <p className="wbc-faq-a">Der Durchschnittspreis der letzten 200 Tage, eine der meistbeachteten Zahlen im Bitcoin-Markt. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt. Simpel, aber aussagekräftig.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Lohnt es sich noch, in Bitcoin zu investieren?</p>
-              <p className="wbc-faq-a">Das hängt von deinem Zeithorizont und deiner Risikobereitschaft ab. Bitcoin hat in 15 Jahren mehrere Einbrüche von über 80% erlebt — und sich jedes Mal erholt. Ob das wieder passiert, weiß niemand. Was man wissen kann: in welchem Marktumfeld man heute kauft. Dafür ist dieses Tool da.</p>
+              <p className="wbc-faq-a">Das hängt von deinem Zeithorizont und deiner Risikobereitschaft ab. Bitcoin hat in 15 Jahren mehrere Einbrüche von über 80% erlebt und sich jedes Mal erholt. Ob das wieder passiert, weiß niemand. Was man wissen kann: in welchem Marktumfeld man heute kauft. Dafür ist dieses Tool da.</p>
             </div>
           </div>
         </section>
@@ -678,17 +696,17 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <div className="wbc-body">
             <p>Meine Freunde und meine Familie haben mich immer wieder gefragt: <em>„Wann soll ich Bitcoin kaufen?"</em></p>
             <div className="wbc-origin">
-              <p className="wbc-origin-text">Ich wollte ihnen keine Antwort geben — ich wollte ihnen zeigen, wie man selbst eine findet. Was macht der Markt gerade? Was sagen die Daten? Warum bewegt sich der Preis so wie er sich bewegt? Die Entscheidung soll bei ihnen bleiben.</p>
+              <p className="wbc-origin-text">Ich wollte ihnen keine Antwort geben, sondern zeigen, wie man selbst eine findet. Was macht der Markt gerade? Was sagen die Daten? Warum macht der Preis, was er macht? Die Entscheidung soll bei ihnen bleiben.</p>
               <cite className="wbc-origin-cite">— Imo Babics, Gründer</cite>
             </div>
-            <p>Daraus ist When to Buy BTC geworden. Kostenlos, kein Account, keine Empfehlungen. Nur die Daten — täglich aktualisiert. Das Tool ist auf <strong>lopp.net</strong> gelistet, einer der bekanntesten Bitcoin-Ressourcen-Seiten weltweit.</p>
+            <p>Daraus ist When to Buy BTC geworden. Kostenlos, kein Account, keine Empfehlungen. Nur die Daten, täglich aktualisiert. Das Tool ist auf <strong>lopp.net</strong> gelistet, einer der bekanntesten Bitcoin-Ressourcen-Seiten weltweit.</p>
           </div>
           <div className="wbc-handoff">
             <p className="wbc-handoff-eyebrow">Das vollständige Tool</p>
             <p className="wbc-handoff-title">Signal. Chart. Kalkulator.</p>
-            <p className="wbc-handoff-sub">Die Hauptseite zeigt das komplette Dashboard — mit Preisverlauf, 200-Tage-Durchschnitt und dem „Was wäre wenn?"-Rechner.</p>
+            <p className="wbc-handoff-sub">Die Hauptseite zeigt das komplette Dashboard: Preisverlauf, 200-Tage-Durchschnitt und den 201eWas w00e4re wenn?201c-Rechner.</p>
             <a href="/" className="wbc-btn-primary">Zum Tool →</a>
-            <span className="wbc-handoff-bookmark">Tipp: Speichere die Hauptseite als Lesezeichen — das Signal ändert sich täglich.</span>
+            <span className="wbc-handoff-bookmark">Tipp: Speichere die Hauptseite als Lesezeichen. Das Signal ändert sich täglich.</span>
           </div>
         </section>
 
@@ -699,7 +717,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <div className="wbc-email-wrap">
             <p className="wbc-section-label" style={{ marginBottom: '0.9rem' }}>Signal-Benachrichtigungen</p>
             <h2 className="wbc-email-title">Den richtigen Moment<br /><em>nicht verpassen.</em></h2>
-            <p className="wbc-email-sub">Wenn das Signal wechselt, bekommst du eine E-Mail. Kein Lärm, kein Spam — nur der Moment, der zählt.</p>
+            <p className="wbc-email-sub">Wenn das Signal wechselt, bekommst du eine E-Mail. Kein Lärm, kein Spam. Nur der Moment, der zählt.</p>
             <div className="wbc-email-row">
               <input className="wbc-email-input" id="wbc-email-input" type="email" autoComplete="email" inputMode="email" placeholder="deine@email.com" />
               <button className="wbc-email-btn" id="wbc-email-btn"
