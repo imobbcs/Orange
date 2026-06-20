@@ -33,7 +33,7 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 | `/api/fear-greed` | CoinMarketCap | Alternative.me | — |
 | `/api/ath` | CoinGecko Demo | Stale cache | Hardcoded fallback |
 | `/api/history` | CoinGecko Demo | CryptoCompare | — |
-| `/api/btc-history-monthly` | CryptoCompare | Hardcoded fallback | — |
+| `/api/btc-history-monthly` | CoinGecko Demo (last 12 months merged over hardcoded baseline) | Hardcoded fallback (2015–early 2025) | — |
 
 ---
 ## API endpoints
