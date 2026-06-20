@@ -150,6 +150,8 @@ function shell(opts: {
         <a href="${unsubscribeUrl}" class="el" style="color:rgba(247,147,26,0.6);text-decoration:none;">${unsubLabel}</a>
         &nbsp;&nbsp;&#183;&nbsp;&nbsp;
         <a href="https://whentobuybtc.xyz" class="el" style="color:rgba(247,147,26,0.6);text-decoration:none;">whentobuybtc.xyz</a>
+        &nbsp;&nbsp;&#183;&nbsp;&nbsp;
+        <a href="https://x.com/WhenToBuyBTC" class="el" style="color:rgba(247,147,26,0.6);text-decoration:none;">@WhenToBuyBTC</a>
         &nbsp;&nbsp;&#183;&nbsp;&nbsp;${location}
       </p>
     </td>
