@@ -32,7 +32,7 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 | `/api/price` | CoinGecko Demo | CoinMarketCap | CryptoCompare |
 | `/api/fear-greed` | CoinMarketCap | Alternative.me | — |
 | `/api/ath` | CoinGecko Demo | Stale cache | Hardcoded fallback |
-| `/api/history` | CoinGecko Demo | CryptoCompare | — |
+| `/api/history` | CoinGecko Demo | Stale cache | — |
 | `/api/btc-history-monthly` | CoinGecko Demo (last 12 months merged over hardcoded baseline) | Hardcoded fallback (2015–early 2025) | — |
 
 ---
@@ -61,7 +61,7 @@ Deployed on [Railway](https://railway.app) via GitHub. Every push to `main` trig
 ```bash
 # Environment variables required
 COINGECKO_API_KEY=your_coingecko_demo_key_here
-CRYPTOCOMPARE_API_KEY=your_key_here
+COINMARKETCAP_API_KEY=your_key_here
 UMAMI_PASSWORD=your_umami_password_here
 ```
 ---
