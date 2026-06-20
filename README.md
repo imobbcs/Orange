@@ -1,10 +1,7 @@
 # When to Buy BTC
 A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 200-day moving average, and ATH distance into one clear signal. No noise. No trading advice.
-
 🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz)
-
 ---
-
 ## What it does
 - **Live Bitcoin signal** — Accumulate / Hold / Caution, updated in real time
 - **Three indicators** — Fear & Greed Index, 200-day moving average, distance from ATH
@@ -18,9 +15,7 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 - **Trezor integration** — Direct link to hardware wallet via Trezor referral
 - **EN / DE** — English and German language support
 - **Cinematic design** — Dark, atmospheric UI with animated starfield, particle energy field, horizon chart, and film grain — CSSDA Best UI, Best UX, Best Innovation, and Special Kudos awards
-
 ---
-
 ## Tech stack
 - **Framework** — Next.js
 - **Frontend** — Single-page `app.html` served via Next.js rewrite from `/`
@@ -28,10 +23,8 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 - **Charts** — Hand-built Canvas (price chart, hero horizon chart), no charting library
 - **Analytics** — Umami v3 (self-hosted on Railway)
 - **Internationalization** — next-i18next (EN / DE)
-- **APIs** — CoinGecko, CryptoCompare (fallback), CoinMarketCap, Alternative.me
-
+- **APIs** — CoinGecko Demo (primary), CoinMarketCap (fallback), CryptoCompare (fallback), Alternative.me (Fear & Greed)
 ---
-
 ## API endpoints
 | Endpoint | Description |
 |---|---|
@@ -44,43 +37,37 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 | `/api/subscriber-count` | Email subscriber count |
 | `/api/subscribe` | Handles email subscription (POST) |
 | `/api/sitemap` | XML sitemap |
-
 ---
-
 ## Local development
 ```bash
 npm install
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000).
-
 ---
-
 ## Deployment
 Deployed on [Railway](https://railway.app) via GitHub. Every push to `main` triggers a new deployment automatically.
-
 ```bash
 # Environment variables required
+COINGECKO_API_KEY=your_coingecko_demo_key_here
 CRYPTOCOMPARE_API_KEY=your_key_here
 UMAMI_PASSWORD=your_umami_password_here
 ```
-
 ---
-
 ## Project structure
 ```
 /pages
-  index.tsx          # Redirects to /app.html
+  index.tsx          # Serves app.html directly via getServerSideProps (200, no redirect)
   /api               # All API route handlers
-    price.js
-    fear-greed.js
-    ath.js
-    history.js
-    btc-history-monthly.js
-    visitor-count.js
-    subscriber-count.js
-    subscribe.js
-    sitemap.js
+    price.ts
+    fear-greed.ts
+    ath.ts
+    history.ts
+    btc-history-monthly.ts
+    visitor-count.ts
+    subscriber-count.ts
+    subscribe.ts
+    sitemap.ts
 /public
   app.html           # Main frontend (single page)
   Bitcoin.svg        # Favicon and email avatar
@@ -90,14 +77,11 @@ UMAMI_PASSWORD=your_umami_password_here
 next.config.js
 next-i18next.config.js
 ```
-
 ---
-
 ## Notes
-- `app.html` is edited directly via the GitHub web editor and served via a Next.js rewrite — no build step required for frontend changes
+- `app.html` is edited directly via the GitHub web editor and served via a Next.js `getServerSideProps` in `index.tsx` — no redirect, URL stays clean at `whentobuybtc.xyz/`
+- CoinGecko Demo API key is passed as `x_cg_demo_api_key` query param — if env var is missing, falls back to keyless request gracefully
 - Umami v3 returns visitor stats as plain numbers (e.g. `stats.visitors`), not as `{value, prev}` objects
 - Railway container restarts resolve simultaneous API timeout errors (`UND_ERR_CONNECT_TIMEOUT`) across multiple external APIs
-
 ---
-
 Built by [Imo Babics](https://imobabics.com) · Not financial advice
