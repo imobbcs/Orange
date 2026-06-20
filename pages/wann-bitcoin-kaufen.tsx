@@ -437,7 +437,11 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <meta property="og:title" content="Wann Bitcoin kaufen: Das aktuelle Marktsignal" />
         <meta property="og:description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht, einfach erklärt und täglich aktualisiert." />
         <meta property="og:locale" content="de_DE" />
+        <meta property="og:image" content="https://whentobuybtc.xyz/og-wann-bitcoin-kaufen.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://whentobuybtc.xyz/og-wann-bitcoin-kaufen.png" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
@@ -704,7 +708,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           <div className="wbc-handoff">
             <p className="wbc-handoff-eyebrow">Das vollständige Tool</p>
             <p className="wbc-handoff-title">Signal. Chart. Kalkulator.</p>
-            <p className="wbc-handoff-sub">Die Hauptseite zeigt das komplette Dashboard: Preisverlauf, 200-Tage-Durchschnitt und den 201eWas w00e4re wenn?201c-Rechner.</p>
+            <p className="wbc-handoff-sub">Die Hauptseite zeigt das komplette Dashboard: Preisverlauf, 200-Tage-Durchschnitt und den „Was wäre wenn?“-Rechner.</p>
             <a href="/" className="wbc-btn-primary">Zum Tool →</a>
             <span className="wbc-handoff-bookmark">Tipp: Speichere die Hauptseite als Lesezeichen. Das Signal ändert sich täglich.</span>
           </div>
