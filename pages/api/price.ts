@@ -11,10 +11,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json(cache);
   }
 
-  // 1. CoinGecko (free, no key)
+  // 1. CoinGecko (Demo API key)
   try {
+    const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
     const r = await fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,eur&include_24hr_change=true',
+      `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,eur&include_24hr_change=true${cgKey}`,
       {
         headers: { 'User-Agent': 'whentobuybtc.xyz/1.0' },
         signal: AbortSignal.timeout(8000),
