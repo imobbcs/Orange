@@ -90,9 +90,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     if (histRes.status === 'fulfilled' && histRes.value.ok) {
       const hist = await histRes.value.json();
-      if (hist.ma200 && data.currentPrice) {
-        data.maPrice = hist.ma200;
-        data.maPercent = ((data.currentPrice - hist.ma200) / hist.ma200) * 100;
+      if (hist.prices && hist.prices.length >= 200 && data.currentPrice) {
+        const prices = hist.prices.map((p: number[]) => p[1]);
+        const last200 = prices.slice(-200);
+        data.maPrice = last200.reduce((a: number, b: number) => a + b, 0) / last200.length;
+        data.maPercent = ((data.currentPrice - data.maPrice) / data.maPrice) * 100;
       }
     }
   } catch (_) {}
@@ -264,27 +266,27 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html {
-          background: #0e0c10;
+          background: #16131a;
           color: #EDE8DE;
           font-family: 'Cormorant Garamond', Georgia, serif;
           -webkit-font-smoothing: antialiased;
           scroll-behavior: smooth;
         }
 
-        body { background: #0e0c10; min-height: 100vh; }
+        body { background: #16131a; min-height: 100vh; }
 
         /* ── WARM AMBIENT GLOW — this page breathes ── */
         body::before {
           content: '';
           position: fixed; inset: 0; z-index: 0; pointer-events: none;
           background:
-            radial-gradient(ellipse 80% 50% at 50% 0%,
-              rgba(247,147,26,0.07) 0%,
-              rgba(247,147,26,0.025) 40%,
+            radial-gradient(ellipse 90% 55% at 50% 0%,
+              rgba(247,147,26,0.12) 0%,
+              rgba(247,147,26,0.05) 45%,
               transparent 70%),
-            radial-gradient(ellipse 60% 40% at 50% 100%,
-              rgba(247,147,26,0.04) 0%,
-              transparent 60%);
+            radial-gradient(ellipse 70% 45% at 50% 100%,
+              rgba(247,147,26,0.07) 0%,
+              transparent 65%);
         }
 
         /* ── NAV ── */
@@ -292,12 +294,12 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           position: fixed; top: 0; left: 0; right: 0; z-index: 100;
           display: flex; justify-content: space-between; align-items: center;
           padding: 1.5rem 4rem;
-          background: linear-gradient(180deg, rgba(14,12,16,0.98) 0%, transparent 100%);
+          background: linear-gradient(180deg, rgba(22,19,26,0.98) 0%, transparent 100%);
         }
         .wbc-nav-logo {
           font-family: 'DM Mono', monospace; font-size: 0.65rem;
           letter-spacing: 0.12em; text-transform: uppercase;
-          color: #EDE8DE; text-decoration: none; opacity: 0.65;
+          color: #EDE8DE; text-decoration: none; opacity: 0.75;
           transition: opacity 0.2s;
         }
         .wbc-nav-logo:hover { opacity: 1; }
@@ -305,7 +307,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-nav-back {
           font-family: 'DM Mono', monospace; font-size: 0.6rem;
           letter-spacing: 0.1em; text-transform: uppercase;
-          color: rgba(237,232,222,0.3); text-decoration: none;
+          color: rgba(237,232,222,0.45); text-decoration: none;
           transition: color 0.2s;
         }
         .wbc-nav-back:hover { color: #F7931A; }
@@ -388,7 +390,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-body {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: clamp(1.1rem, 2vw, 1.25rem);
-          line-height: 1.85; color: rgba(237,232,222,0.75);
+          line-height: 1.85; color: rgba(237,232,222,0.88);
         }
         .wbc-body p + p { margin-top: 1.2rem; }
         .wbc-body strong { color: #EDE8DE; font-weight: 600; }
@@ -420,7 +422,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-signal-summary-explain {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: 1.05rem; line-height: 1.8;
-          color: rgba(237,232,222,0.65);
+          color: rgba(237,232,222,0.82);
         }
         .wbc-disclaimer {
           margin-top: 1.25rem; padding-top: 1.25rem;
@@ -433,8 +435,8 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         /* ── INSTRUMENT PANEL ── */
         .wbc-instrument {
           margin-top: 2.5rem;
-          background: rgba(14,12,16,0.6);
-          border: 1px solid rgba(247,147,26,0.1);
+          background: rgba(22,19,26,0.7);
+          border: 1px solid rgba(247,147,26,0.12);
         }
         .wbc-instrument-header {
           padding: 0.85rem 1.75rem;
@@ -487,7 +489,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-metric-desc {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: 1.05rem; font-style: italic;
-          color: rgba(237,232,222,0.62); line-height: 1.7;
+          color: rgba(237,232,222,0.82); line-height: 1.7;
         }
 
         /* ── FAQ ── */
@@ -508,7 +510,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-faq-a {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: clamp(1.05rem, 2vw, 1.15rem);
-          line-height: 1.8; color: rgba(237,232,222,0.68);
+          line-height: 1.8; color: rgba(237,232,222,0.82);
           font-style: italic;
         }
 
@@ -520,7 +522,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-origin-text {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: clamp(1.1rem, 2vw, 1.25rem);
-          font-style: italic; color: rgba(237,232,222,0.72);
+          font-style: italic; color: rgba(237,232,222,0.88);
           line-height: 1.8;
         }
         .wbc-origin-cite {
@@ -533,7 +535,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         /* ── HOMEPAGE HANDOFF ── */
         .wbc-handoff {
           margin-top: 2.5rem;
-          background: rgba(247,147,26,0.04);
+          background: rgba(247,147,26,0.05);
           border: 1px solid rgba(247,147,26,0.15);
           padding: 2.5rem;
           text-align: center;
@@ -552,7 +554,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-handoff-sub {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: 1.1rem; font-style: italic;
-          color: rgba(237,232,222,0.55); line-height: 1.65;
+          color: rgba(237,232,222,0.72); line-height: 1.65;
           max-width: 420px; margin: 0 auto 1.75rem;
         }
         .wbc-handoff-bookmark {
@@ -578,7 +580,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           padding: 0 2rem 6rem;
         }
         .wbc-email-wrap {
-          background: rgba(14,12,16,0.7);
+          background: rgba(22,19,26,0.7);
           border: 1px solid rgba(247,147,26,0.15);
           padding: 3rem; text-align: center;
         }
@@ -592,7 +594,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-email-sub {
           font-family: 'Cormorant Garamond', Georgia, serif;
           font-size: 1.1rem; font-style: italic;
-          color: rgba(237,232,222,0.6); line-height: 1.65;
+          color: rgba(237,232,222,0.78); line-height: 1.65;
           max-width: 400px; margin: 0 auto 2rem;
         }
         .wbc-email-row {
@@ -763,7 +765,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── HERO ── */}
         <section className="wbc-hero">
           <p className="wbc-eyebrow">Bitcoin verstehen — für Einsteiger</p>
-          <h1 className="wbc-h1">Wann<br />Bitcoin<br /><em>kaufen?</em></h1>
+          <h1 className="wbc-h1">Wann<br /><em>Bitcoin</em><br />kaufen?</h1>
           <p className="wbc-hero-intro">
             Eine Frage, die sich fast jeder stellt. Hier bekommst du keine Empfehlung —
             aber die Daten, die dir helfen, selbst eine Entscheidung zu treffen.
@@ -913,7 +915,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
                 eine findet. Was macht der Markt gerade? Was sagen die Daten? Warum bewegt sich
                 der Preis so wie er sich bewegt? Die Entscheidung soll bei ihnen bleiben.
               </p>
-              <cite className="wbc-origin-cite">— Imo Babics, Entwickler</cite>
+              <cite className="wbc-origin-cite">— Imo Babics, Gründer</cite>
             </div>
             <p>
               Daraus ist When to Buy BTC geworden. Kostenlos, kein Account, keine Empfehlungen.
