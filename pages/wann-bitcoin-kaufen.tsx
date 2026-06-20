@@ -183,6 +183,8 @@ function MetricRow({ id, value, label, desc, color }: {
         fontStyle: 'italic',
       }}>{desc}</div>
     </div>
+  );
+}
 
 export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
