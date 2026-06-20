@@ -39,6 +39,10 @@ const nextConfig = {
         source: '/',
         destination: '/app.html',
       },
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
     ];
   },
   async headers() {
