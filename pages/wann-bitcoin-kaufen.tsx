@@ -369,7 +369,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-btn-primary:hover { opacity: 0.85; }
 
         /* ── EMAIL ── */
-        .wbc-email-section { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 0 2rem 8rem; }
+        .wbc-email-section { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 0 2rem 6rem; }
         .wbc-email-wrap { background: rgba(22,19,26,0.7); border: 1px solid rgba(247,147,26,0.15); padding: 3.5rem; text-align: center; }
         .wbc-email-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem); color: #EDE8DE; letter-spacing: 0.02em; margin-bottom: 0.65rem; line-height: 1.05; }
         .wbc-email-title em { color: #F7931A; font-style: normal; }
@@ -406,7 +406,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           .wbc-hero { padding: 7rem 1.25rem 4rem; }
           .wbc-section { padding: 4rem 1.25rem; }
           .wbc-section--tight { padding: 3rem 1.25rem; }
-          .wbc-email-section { padding: 0 1.25rem 8rem; }
+          .wbc-email-section { padding: 0 1.25rem 6rem; }
           .wbc-email-wrap { padding: 2.25rem 1.25rem; }
           .wbc-email-row { flex-direction: column; max-width: 100%; }
           .wbc-email-input { border-right: 1px solid rgba(247,147,26,0.2); border-bottom: none; }
@@ -659,6 +659,56 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
         <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
 
+        {/* ── EMAIL ── */}
+        <section className="wbc-email-section" id="email">
+          <div className="wbc-email-wrap">
+            <p className="wbc-section-label" style={{ marginBottom: '0.9rem' }}>Signal-Benachrichtigungen</p>
+            <h2 className="wbc-email-title">Den richtigen Moment<br /><em>nicht verpassen.</em></h2>
+            <p className="wbc-email-sub">Wenn das Signal wechselt, bekommst du eine E-Mail. Kein Lärm, kein Spam. Nur der Moment, der zählt.</p>
+            <div className="wbc-email-row">
+              <input className="wbc-email-input" id="wbc-email-input" type="email" autoComplete="email" inputMode="email" placeholder="deine@email.com" />
+              <button className="wbc-email-btn" id="wbc-email-btn"
+                onClick={() => {
+                  if (typeof window === 'undefined') return;
+                  const input = document.getElementById('wbc-email-input') as HTMLInputElement;
+                  const btn = document.getElementById('wbc-email-btn') as HTMLButtonElement;
+                  const msg = document.getElementById('wbc-email-msg') as HTMLParagraphElement;
+                  const email = input.value.trim();
+                  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+                    msg.className = 'wbc-email-msg err';
+                    input.focus(); return;
+                  }
+                  btn.disabled = true; btn.textContent = 'Wird eingetragen…';
+                  msg.textContent = ''; msg.className = 'wbc-email-msg';
+                  fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, lang: 'de' }),
+                  })
+                    .then(r => r.json())
+                    .then(d => {
+                      if (d.ok) {
+                        msg.textContent = 'Du bist dabei. Das nächste Signal kommt direkt in dein Postfach.';
+                        msg.className = 'wbc-email-msg ok';
+                        input.value = ''; btn.textContent = 'Eingetragen ✓';
+                      } else throw new Error();
+                    })
+                    .catch(() => {
+                      msg.textContent = 'Etwas ist schiefgelaufen. Versuch es nochmal.';
+                      msg.className = 'wbc-email-msg err';
+                      btn.disabled = false; btn.textContent = 'Benachrichtigen';
+                    });
+                }}
+              >Benachrichtigen</button>
+            </div>
+            <p className="wbc-email-msg" id="wbc-email-msg" aria-live="polite" />
+            <p className="wbc-email-meta">Kostenlos · Kein Account · Jederzeit abmeldbar</p>
+          </div>
+        </section>
+
+        <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
+
         {/* ── FAQ ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Häufige Fragen</p>
@@ -711,56 +761,6 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             <p className="wbc-handoff-sub">Die Hauptseite zeigt das komplette Dashboard: Preisverlauf, 200-Tage-Durchschnitt und den „Was wäre wenn?“-Rechner.</p>
             <a href="/" className="wbc-btn-primary">Zum Tool →</a>
             <span className="wbc-handoff-bookmark">Tipp: Speichere die Hauptseite als Lesezeichen. Das Signal ändert sich täglich.</span>
-          </div>
-        </section>
-
-        <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
-
-        {/* ── EMAIL ── */}
-        <section className="wbc-email-section" id="email">
-          <div className="wbc-email-wrap">
-            <p className="wbc-section-label" style={{ marginBottom: '0.9rem' }}>Signal-Benachrichtigungen</p>
-            <h2 className="wbc-email-title">Den richtigen Moment<br /><em>nicht verpassen.</em></h2>
-            <p className="wbc-email-sub">Wenn das Signal wechselt, bekommst du eine E-Mail. Kein Lärm, kein Spam. Nur der Moment, der zählt.</p>
-            <div className="wbc-email-row">
-              <input className="wbc-email-input" id="wbc-email-input" type="email" autoComplete="email" inputMode="email" placeholder="deine@email.com" />
-              <button className="wbc-email-btn" id="wbc-email-btn"
-                onClick={() => {
-                  if (typeof window === 'undefined') return;
-                  const input = document.getElementById('wbc-email-input') as HTMLInputElement;
-                  const btn = document.getElementById('wbc-email-btn') as HTMLButtonElement;
-                  const msg = document.getElementById('wbc-email-msg') as HTMLParagraphElement;
-                  const email = input.value.trim();
-                  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein.';
-                    msg.className = 'wbc-email-msg err';
-                    input.focus(); return;
-                  }
-                  btn.disabled = true; btn.textContent = 'Wird eingetragen…';
-                  msg.textContent = ''; msg.className = 'wbc-email-msg';
-                  fetch('/api/subscribe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, lang: 'de' }),
-                  })
-                    .then(r => r.json())
-                    .then(d => {
-                      if (d.ok) {
-                        msg.textContent = 'Du bist dabei. Das nächste Signal kommt direkt in dein Postfach.';
-                        msg.className = 'wbc-email-msg ok';
-                        input.value = ''; btn.textContent = 'Eingetragen ✓';
-                      } else throw new Error();
-                    })
-                    .catch(() => {
-                      msg.textContent = 'Etwas ist schiefgelaufen. Versuch es nochmal.';
-                      msg.className = 'wbc-email-msg err';
-                      btn.disabled = false; btn.textContent = 'Benachrichtigen';
-                    });
-                }}
-              >Benachrichtigen</button>
-            </div>
-            <p className="wbc-email-msg" id="wbc-email-msg" aria-live="polite" />
-            <p className="wbc-email-meta">Kostenlos · Kein Account · Jederzeit abmeldbar</p>
           </div>
         </section>
 
