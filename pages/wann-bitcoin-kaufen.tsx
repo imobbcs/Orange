@@ -426,9 +426,10 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
       <head>
         <title>Wann Bitcoin kaufen: Das aktuelle Marktsignal</title>
-        <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht, einfach erklärt und täglich aktualisiert. Kostenlos und ohne Anmeldung." />
+        <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen live, was der Markt macht. Einfach erklärt, täglich aktualisiert, kostenlos." />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <link rel="canonical" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
         <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
         <link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/" />
         <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
@@ -442,18 +443,68 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://whentobuybtc.xyz/og-wann-bitcoin-kaufen.png" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": [
-            { "@type": "Question", "name": "Wann ist ein guter Zeitpunkt, Bitcoin zu kaufen?", "acceptedAnswer": { "@type": "Answer", "text": "Einen perfekten Zeitpunkt gibt es nicht. Drei Indikatoren helfen aber einzuschätzen, ob der Markt gerade günstig oder überhitzt ist: der Fear & Greed Index, der Abstand zum 200-Tage-Durchschnitt und der Abstand vom Allzeithoch." } },
-            { "@type": "Question", "name": "Soll ich jetzt Bitcoin kaufen oder warten?", "acceptedAnswer": { "@type": "Answer", "text": "Das kann dir niemand beantworten. Was du wissen kannst: ob der Markt gerade ängstlich oder euphorisch ist, ob Bitcoin historisch teuer oder günstig erscheint, und was in ähnlichen Situationen in der Vergangenheit passiert ist." } },
-            { "@type": "Question", "name": "Was ist der Fear & Greed Index?", "acceptedAnswer": { "@type": "Answer", "text": "Der Fear & Greed Index misst die Marktstimmung auf einer Skala von 0 (extreme Angst) bis 100 (extreme Gier). Hohe Angst bedeutet: viele verkaufen. Hohe Gier bedeutet: viele kaufen — oft bis zu einem Punkt, wo es kippt." } },
-            { "@type": "Question", "name": "Was ist der 200-Tage-Durchschnitt bei Bitcoin?", "acceptedAnswer": { "@type": "Answer", "text": "Der Durchschnittspreis der letzten 200 Tage. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt." } },
-            { "@type": "Question", "name": "Lohnt es sich noch, in Bitcoin zu investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von deinem Zeithorizont, deiner Risikobereitschaft und davon ab, was du dir von einer Anlage erhoffst. Bitcoin hat eine begrenzte Maximalmenge von 21 Millionen Einheiten, ist dezentral und hat sich über mehrere Marktzyklen behauptet. Gleichzeitig ist der Kurs volatil. Eine pauschale Antwort gibt es nicht." } },
-            { "@type": "Question", "name": "Wie viel sollte ich in Bitcoin investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, trifft eine informiertere Entscheidung." } }
-          ]
-        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "https://whentobuybtc.xyz/#website",
+            "url": "https://whentobuybtc.xyz/",
+            "name": "When to Buy BTC",
+            "inLanguage": ["en", "de"]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": "https://whentobuybtc.xyz/#organization",
+            "name": "When to Buy BTC",
+            "url": "https://whentobuybtc.xyz/",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Vienna",
+              "addressCountry": "AT"
+            },
+            "sameAs": [
+              "https://www.linkedin.com/in/imobabics/"
+            ],
+            "knowsAbout": [
+              "Bitcoin",
+              "Bitcoin Marktanalyse",
+              "Fear and Greed Index",
+              "200-Tage-Durchschnitt",
+              "Bitcoin Signal",
+              "Kryptowährungen"
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": "https://whentobuybtc.xyz/#founder",
+            "name": "Imo Babics",
+            "jobTitle": "Gründer",
+            "url": "https://imobabics.com",
+            "sameAs": ["https://www.linkedin.com/in/imobabics/"]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://whentobuybtc.xyz/" },
+              { "@type": "ListItem", "position": 2, "name": "Wann Bitcoin kaufen", "item": "https://whentobuybtc.xyz/wann-bitcoin-kaufen" }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "Wann ist ein guter Zeitpunkt, Bitcoin zu kaufen?", "acceptedAnswer": { "@type": "Answer", "text": "Einen perfekten Zeitpunkt gibt es nicht. Drei Indikatoren helfen einzuschätzen, ob der Markt gerade günstig oder überhitzt ist: der Fear & Greed Index, der Abstand zum 200-Tage-Durchschnitt und der Abstand vom Allzeithoch." } },
+              { "@type": "Question", "name": "Soll ich jetzt Bitcoin kaufen oder warten?", "acceptedAnswer": { "@type": "Answer", "text": "Das kann dir niemand beantworten. Was du wissen kannst: ob der Markt gerade ängstlich oder euphorisch ist, ob Bitcoin historisch teuer oder günstig erscheint, und was in ähnlichen Situationen in der Vergangenheit passiert ist." } },
+              { "@type": "Question", "name": "Was ist der Fear & Greed Index?", "acceptedAnswer": { "@type": "Answer", "text": "Der Fear & Greed Index misst die Marktstimmung auf einer Skala von 0 (extreme Angst) bis 100 (extreme Gier). Hohe Angst bedeutet: viele verkaufen. Hohe Gier bedeutet: viele kaufen, oft bis zu einem Punkt, wo es kippt." } },
+              { "@type": "Question", "name": "Was ist der 200-Tage-Durchschnitt bei Bitcoin?", "acceptedAnswer": { "@type": "Answer", "text": "Der Durchschnittspreis der letzten 200 Tage. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt." } },
+              { "@type": "Question", "name": "Lohnt es sich noch, in Bitcoin zu investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von deinem Zeithorizont, deiner Risikobereitschaft und davon ab, was du dir von einer Anlage erhoffst. Bitcoin hat eine begrenzte Maximalmenge von 21 Millionen Einheiten, ist dezentral und hat sich über mehrere Marktzyklen behauptet. Gleichzeitig ist der Kurs volatil." } },
+              { "@type": "Question", "name": "Wie viel sollte ich in Bitcoin investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, trifft eine informiertere Entscheidung." } }
+            ]
+          }
+        ])}} />
         <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
       </head>
 
@@ -493,7 +544,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── WAS PASSIERT GERADE ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Was gerade passiert</p>
-          <h2 className="wbc-h2">Der Markt auf einen Blick.</h2>
+          <h2 className="wbc-h2">Was macht der Markt gerade?</h2>
           <div className="wbc-body">
             <p>Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen, sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht.</p>
             <p>Dafür gibt es drei Indikatoren. Zusammen ergeben sie das Signal oben.</p>
@@ -528,7 +579,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── SO ENTSTEHT DAS SIGNAL ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Die drei Indikatoren</p>
-          <h2 className="wbc-h2">So entsteht das Signal.</h2>
+          <h2 className="wbc-h2">Wie entsteht das Signal?</h2>
           <div className="wbc-body">
             <p>Hinter dem Signal stecken drei Zahlen, die Bitcoiner seit Jahren beobachten. Keine davon ist ein Geheimtipp, aber zusammen geben sie ein klareres Bild als jede einzeln.</p>
           </div>
@@ -567,7 +618,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── WARUM BITCOIN ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Warum Bitcoin überhaupt</p>
-          <h2 className="wbc-h2">Was Menschen an Bitcoin interessiert.</h2>
+          <h2 className="wbc-h2">Warum interessiert sich jemand für Bitcoin?</h2>
           <div className="wbc-body">
             <p>Bevor du dich fragst, <em>wann</em> du kaufen sollst, lohnt sich die Frage <em>warum</em> überhaupt. Hier sind die Argumente, die langfristige Bitcoiner am häufigsten nennen, ohne Versprechen, ohne Hype.</p>
           </div>
@@ -600,7 +651,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── RISIKEN ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Gegenargumente</p>
-          <h2 className="wbc-h2">Was dagegen spricht.</h2>
+          <h2 className="wbc-h2">Was spricht gegen Bitcoin?</h2>
           <div className="wbc-body">
             <p>Wer dir nur die Chancen erklärt, hat etwas zu verkaufen. Hier sind die echten Risiken, ehrlich und ohne Beschönigung.</p>
           </div>
@@ -629,7 +680,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── MYTHEN ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Häufige Missverständnisse</p>
-          <h2 className="wbc-h2">Was über Bitcoin nicht stimmt.</h2>
+          <h2 className="wbc-h2">Welche Bitcoin-Mythen stimmen nicht?</h2>
           <div className="wbc-body">
             <p>Rund um Bitcoin kursieren viele Annahmen, die man immer wieder hört, die aber meistens nur zur Hälfte stimmen.</p>
           </div>
@@ -712,7 +763,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── FAQ ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Häufige Fragen</p>
-          <h2 className="wbc-h2">Was viele sich fragen.</h2>
+          <h2 className="wbc-h2">Welche Fragen stellen sich Einsteiger?</h2>
           <div className="wbc-faq">
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Soll ich jetzt Bitcoin kaufen oder warten?</p>
@@ -746,7 +797,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         {/* ── ORIGIN + HANDOFF ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Warum dieses Tool existiert</p>
-          <h2 className="wbc-h2">Gebaut für eine einfache Frage.</h2>
+          <h2 className="wbc-h2">Warum gibt es dieses Tool?</h2>
           <div className="wbc-body">
             <p>Meine Freunde und meine Familie haben mich immer wieder gefragt: <em>„Wann soll ich Bitcoin kaufen?"</em></p>
             <div className="wbc-origin">
