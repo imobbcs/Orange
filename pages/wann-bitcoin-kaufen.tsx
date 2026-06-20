@@ -818,7 +818,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
       </main>
 
       <footer className="wbc-footer">
-        <p><a href="/">When to Buy BTC</a> · <a href="https://imobabics.com" target="_blank" rel="noopener noreferrer">Imo Babics</a> · <a href="mailto:WhenToBuyBTC@pm.me">Kontakt</a></p>
+        <p><a href="/">When to Buy BTC</a> · <a href="https://imobabics.com" target="_blank" rel="noopener noreferrer">Imo Babics</a> · <a href="https://x.com/WhenToBuyBTC" target="_blank" rel="noopener noreferrer">Follow @WhenToBuyBTC</a> · <a href="mailto:WhenToBuyBTC@pm.me">Kontakt</a></p>
         <p>Kein Finanzrat. Nur Daten. Die Entscheidung liegt bei dir.</p>
       </footer>
 
