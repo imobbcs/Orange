@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 const FALLBACK: Record<string, number> = {
   '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
   '2015-07':268,'2015-08':263,'2015-09':211,'2015-10':267,'2015-11':313,'2015-12':384,
@@ -23,49 +22,38 @@ const FALLBACK: Record<string, number> = {
   '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
   '2025-01':85000,'2025-02':77000,'2025-03':75000,
 };
-
 function toYYYYMM(ts: number): string {
   const d = new Date(ts);
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
 }
-
 async function fetchFromCoinGecko(): Promise<Record<string, number>> {
-  // Fetch last 365 days of daily data and average by month
-  const url = 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily';
+  const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
+  const url = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily${cgKey}`;
   const res = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'whentobuybtc.xyz/1.0' },
     signal: AbortSignal.timeout(10000),
   });
   if (!res.ok) throw new Error(`CoinGecko ${res.status}`);
   const data = await res.json();
-
   const byMonth: Record<string, number[]> = {};
   for (const [ts, price] of data.prices as [number, number][]) {
     const key = toYYYYMM(ts);
     if (!byMonth[key]) byMonth[key] = [];
     byMonth[key].push(price);
   }
-
   const monthly: Record<string, number> = {};
   for (const [key, prices] of Object.entries(byMonth)) {
     monthly[key] = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
   }
   return monthly;
 }
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  // Cache for 6 hours — monthly averages don't need to be fresher than that
   res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=3600');
-
-  // Start with the fallback data (2015 → early 2025)
   const monthly: Record<string, number> = { ...FALLBACK };
-
   try {
-    // Fetch the last 12 months from CoinGecko and merge/overwrite
     const recent = await fetchFromCoinGecko();
     Object.assign(monthly, recent);
-
     return res.status(200).json({
       monthly,
       count: Object.keys(monthly).length,
