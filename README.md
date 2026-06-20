@@ -23,7 +23,18 @@ A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 
 - **Charts** — Hand-built Canvas (price chart, hero horizon chart), no charting library
 - **Analytics** — Umami v3 (self-hosted on Railway)
 - **Internationalization** — next-i18next (EN / DE)
-- **APIs** — CoinGecko Demo (primary), CoinMarketCap (fallback), CryptoCompare (fallback), Alternative.me (Fear & Greed)
+- **APIs** — see Data sources section below
+---
+## Data sources
+
+| Endpoint | Primary | Fallback 1 | Fallback 2 |
+|---|---|---|---|
+| `/api/price` | CoinGecko Demo | CoinMarketCap | CryptoCompare |
+| `/api/fear-greed` | CoinMarketCap | Alternative.me | — |
+| `/api/ath` | CoinGecko Demo | Stale cache | Hardcoded fallback |
+| `/api/history` | CoinGecko Demo | CryptoCompare | — |
+| `/api/btc-history-monthly` | CryptoCompare | Hardcoded fallback | — |
+
 ---
 ## API endpoints
 | Endpoint | Description |
@@ -57,7 +68,8 @@ UMAMI_PASSWORD=your_umami_password_here
 ## Project structure
 ```
 /pages
-  index.tsx          # Serves app.html directly via getServerSideProps (200, no redirect)
+  index.tsx                  # Serves app.html directly via getServerSideProps (200, no redirect)
+  wann-bitcoin-kaufen.tsx    # German SEO landing page (SSR, targets "wann bitcoin kaufen")
   /api               # All API route handlers
     price.ts
     fear-greed.ts
@@ -77,6 +89,13 @@ UMAMI_PASSWORD=your_umami_password_here
 next.config.js
 next-i18next.config.js
 ```
+---
+## SEO
+- **German landing page** at `/wann-bitcoin-kaufen` — purpose-built SSR page targeting "wann bitcoin kaufen" and related DACH queries. Uses `getServerSideProps` to fetch live signal data server-side so Google can index it. Includes FAQPage schema markup, hreflang tags, mobile sticky bar, and a footer link from `app.html` (visible only in DE language mode). Submitted to Google Search Console.
+- **Sitemap** at `/sitemap.xml` includes both the homepage and the German SEO page (priority 0.9, daily changefreq)
+- **hreflang** configured across homepage, SEO page, and sitemap — homepage points German users to `/?lang=de`, SEO page has its own de/en/x-default triangle
+- **Glossary pages** (`/200-tage-durchschnitt-bitcoin`, `/fear-and-greed-index-bitcoin`) deferred pending keyword volume validation
+
 ---
 ## Notes
 - `app.html` is edited directly via the GitHub web editor and served via a Next.js `getServerSideProps` in `index.tsx` — no redirect, URL stays clean at `whentobuybtc.xyz/`
