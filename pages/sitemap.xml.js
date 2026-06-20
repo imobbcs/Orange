@@ -15,6 +15,14 @@ export async function getServerSideProps({ res }) {
     <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/?lang=de"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/"/>
   </url>
+  <url>
+    <loc>https://whentobuybtc.xyz/wann-bitcoin-kaufen</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/"/>
+  </url>
 </urlset>`;
 
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
