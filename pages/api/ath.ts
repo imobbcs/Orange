@@ -13,8 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // 1. CoinGecko
   try {
+    const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
     const r = await fetch(
-      'https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false',
+      `https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false${cgKey}`,
       {
         headers: { 'User-Agent': 'whentobuybtc.xyz/1.0' },
         signal: AbortSignal.timeout(10000),
