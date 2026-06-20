@@ -8,7 +8,7 @@ export async function getServerSideProps({ res }) {
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://whentobuybtc.xyz/</loc>
-    <lastmod>2026-03-26</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/"/>
