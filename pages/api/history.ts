@@ -3,8 +3,9 @@ import { HistoryData } from '../../types';
 
 async function fetchHistoryFromCoinGecko(days: number = 30, currency: string = 'eur'): Promise<HistoryData | null> {
   try {
+    const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}`
+      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}${cgKey}`
     );
     if (!response.ok) {
       console.error('CoinGecko History API response:', response.status, response.statusText);
