@@ -161,14 +161,16 @@ async function postSignal() {
   const price = s.currentPrice.toLocaleString('en-GB');
 
   const text =
-`BTC signal - ${today}
+`$BTC price signal - ${today}
 
 ${s.emoji} ${s.signal}
 
-€${price}
+Bitcoin price: €${price}
 Fear & Greed: ${s.fearGreed} (${s.fgLabel})
 vs 200-day avg: ${vsMAStr}
-From ATH: ${athStr}`;
+From ATH: ${athStr}
+
+#Bitcoin #BTC`;
 
   console.log('Posting signal:\n', text);
   const result = await postTweet(text);
