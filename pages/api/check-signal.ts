@@ -21,10 +21,11 @@ async function ensureTables() {
     move_pct NUMERIC NOT NULL, direction TEXT NOT NULL)`);
 }
 
-async function getCurrentPrice(): Promise<number> {
+async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
   const res = await fetch(`${BASE}/api/price`, { signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`Price API ${res.status}`);
-  return (await res.json()).eur;
+  const data = await res.json();
+  return { eur: data.eur, change24h: data.change24h ?? 0 };
 }
 
 async function storePriceSnapshot(price: number) {
@@ -67,7 +68,7 @@ async function fetchFgAndMa(): Promise<{ fgValue: number; maPct: number }> {
   return { fgValue: fg.value, maPct };
 }
 
-async function sendEmailAlerts(price: number, movePct: number, direction: 'up' | 'down') {
+async function sendEmailAlerts(price: number, change24h: number, movePct: number, direction: 'up' | 'down') {
   const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
     `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
   );
@@ -81,7 +82,7 @@ async function sendEmailAlerts(price: number, movePct: number, direction: 'up' |
   const sends = rows.map(({ email, lang, unsubscribe_token }) => {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html } = alertEmail({
-      price, movePct, direction, signal, fgValue, maPct, unsubscribeUrl, replyTo: REPLY_TO, lang,
+      price, change24h, movePct, direction, signal, fgValue, maPct, unsubscribeUrl, replyTo: REPLY_TO, lang,
     });
     return resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
@@ -102,7 +103,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await ensureTables();
-    const currentPrice = await getCurrentPrice();
+    const { eur: currentPrice, change24h } = await getCurrentPrice();
     await storePriceSnapshot(currentPrice);
 
     const refPrice = await getPriceFromHoursAgo(4);
@@ -118,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (lastAlert && Date.now() - lastAlert.getTime() < COOLDOWN_MS)
       return res.status(200).json({ status: 'cooldown', lastAlertHoursAgo: ((Date.now() - lastAlert.getTime()) / 3600000).toFixed(1) });
 
-    await sendEmailAlerts(currentPrice, movePct, direction as 'up' | 'down');
+    await sendEmailAlerts(currentPrice, change24h, movePct, direction as 'up' | 'down');
     await logAlert(currentPrice, refPrice, movePct, direction);
 
     return res.status(200).json({ status: 'alert_sent', direction, movePct: (movePct * 100).toFixed(2) + '%' });
