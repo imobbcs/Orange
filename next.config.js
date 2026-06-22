@@ -34,17 +34,21 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: '/',
-        destination: '/app.html',
-      },
-      {
-        source: '/sitemap.xml',
-        destination: '/api/sitemap',
-        locale: false,
-      },
-    ];
+    return {
+      beforeFiles: [
+        {
+          source: '/sitemap.xml',
+          destination: '/api/sitemap',
+        },
+      ],
+      afterFiles: [
+        {
+          source: '/',
+          destination: '/app.html',
+        },
+      ],
+      fallback: [],
+    };
   },
   async headers() {
     return [
