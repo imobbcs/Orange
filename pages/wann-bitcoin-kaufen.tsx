@@ -238,8 +238,6 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap');
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html {
@@ -425,17 +423,21 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
       `}</style>
 
       <head>
-        <title>Wann Bitcoin kaufen: Das aktuelle Marktsignal</title>
+        <title>Wann Bitcoin kaufen 2026: Das aktuelle Marktsignal</title>
         <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen live, was der Markt macht. Einfach erklärt, täglich aktualisiert, kostenlos." />
+        <meta name="author" content="Imo Babics" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <link rel="canonical" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
         <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
         <link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/" />
         <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
-        <meta property="og:title" content="Wann Bitcoin kaufen: Das aktuelle Marktsignal" />
+        <meta property="og:title" content="Wann Bitcoin kaufen 2026: Das aktuelle Marktsignal" />
         <meta property="og:description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen, was der Markt gerade macht, einfach erklärt und täglich aktualisiert." />
         <meta property="og:locale" content="de_DE" />
         <meta property="og:image" content="https://whentobuybtc.xyz/og-wann-bitcoin-kaufen.png" />
@@ -505,6 +507,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             ]
           }
         ])}} />
+        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.lang="de";' }} />
         <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
       </head>
 
@@ -804,7 +807,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <p className="wbc-origin-text">Ich wollte ihnen keine Antwort geben, sondern zeigen, wie man selbst eine findet. Was macht der Markt gerade? Was sagen die Daten? Warum macht der Preis, was er macht? Die Entscheidung soll bei ihnen bleiben.</p>
               <cite className="wbc-origin-cite">— Imo Babics, Gründer</cite>
             </div>
-            <p>Daraus ist When to Buy BTC geworden. Kostenlos, kein Account, keine Empfehlungen. Nur die Daten, täglich aktualisiert. Das Tool ist auf <strong>lopp.net</strong> gelistet, einer der bekanntesten Bitcoin-Ressourcen-Seiten weltweit.</p>
+            <p>Daraus ist When to Buy BTC geworden. Kostenlos, kein Account, keine Empfehlungen. Nur die Daten, täglich aktualisiert. Das Tool ist auf <a href="https://www.lopp.net/bitcoin-information.html" target="_blank" rel="noopener noreferrer" style={{color:"#F7931A",textDecoration:"none",borderBottom:"1px solid rgba(247,147,26,0.3)"}}>lopp.net</a> gelistet, einer der bekanntesten Bitcoin-Ressourcen-Seiten weltweit.</p>
           </div>
           <div className="wbc-handoff">
             <p className="wbc-handoff-eyebrow">Das vollständige Tool</p>
