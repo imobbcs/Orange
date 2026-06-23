@@ -1111,8 +1111,12 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <p className="wbc-faq-a">Das hängt von deinem Zeithorizont und deiner Risikobereitschaft ab. Bitcoin hat in 17 Jahren mehrere Einbrüche von über 80% erlebt und sich jedes Mal erholt. Ob das wieder passiert, weiß niemand. Was man wissen kann: in welchem Marktumfeld man heute kauft. Dafür ist dieses Tool da.</p>
             </div>
             <div className="wbc-faq-item">
+              <p className="wbc-faq-q">Was ist ein Bitcoin-Halving?</p>
+              <p className="wbc-faq-a">Neue Bitcoin entstehen nicht durch eine Zentralbank, sondern durch sogenanntes Mining: Computer lösen rechenintensive Aufgaben und werden dafür mit neu erzeugten Bitcoin belohnt. Diese Belohnung wird alle 210.000 Blöcke automatisch halbiert, daher der Name Halving. Beim ersten Halving 2012 sank sie von 50 auf 25 Bitcoin pro Block. Heute, nach vier Halvings, liegt sie bei 3,125 Bitcoin. Im April 2028 wird sie auf 1,5625 sinken. Das ist kein Beschluss, keine Entscheidung, sondern im Code von Anfang an festgelegt. Das Ergebnis: weniger neues Angebot bei gleichbleibender oder steigender Nachfrage.</p>
+            </div>
+            <div className="wbc-faq-item">
               <p className="wbc-faq-q">Wann ist das nächste Bitcoin-Halving?</p>
-              <p className="wbc-faq-a">Alle vier Jahre wird die Menge neu erzeugter Bitcoin halbiert. Das nächste Halving wird bei Block 1.050.000 erwartet, voraussichtlich im April 2028. Historisch hat jedes Halving den Beginn einer neuen Marktphase markiert, weil das Angebot an neuen Coins plötzlich sinkt, während die Nachfrage gleich bleibt oder steigt. Kein Versprechen, aber ein Muster, das Bitcoiner aufmerksam beobachten.</p>
+              <p className="wbc-faq-a">Das nächste Halving wird bei Block 1.050.000 erwartet, voraussichtlich im April 2028. Der genaue Zeitpunkt hängt davon ab, wie schnell die Blöcke gemined werden, im Schnitt alle zehn Minuten. Der Countdown unten berechnet sich aus der aktuellen Blockhöhe, live abgerufen von mempool.space.</p>
               <HalvingCountdown />
             </div>
           </div>
