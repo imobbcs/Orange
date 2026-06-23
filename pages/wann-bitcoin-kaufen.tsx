@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import { useState, useEffect } from 'react';
 
 interface SignalData {
   fearGreed: number | null;
@@ -182,6 +183,90 @@ function MetricRow({ id, value, label, desc, color }: {
         lineHeight: 1.6,
         fontStyle: 'italic',
       }}>{desc}</div>
+    </div>
+  );
+}
+
+function HalvingCountdown() {
+  const HALVING_BLOCK = 1_050_000;
+  const AVG_BLOCK_MS = 10 * 60 * 1000; // 10 min in ms
+  const FALLBACK_DATE = new Date('2028-04-19T00:00:00Z');
+
+  const [blocksLeft, setBlocksLeft] = useState<number | null>(null);
+  const [targetDate, setTargetDate] = useState<Date>(FALLBACK_DATE);
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>(() => {
+    const diff = FALLBACK_DATE.getTime() - Date.now();
+    return {
+      days:    Math.max(0, Math.floor(diff / 86400000)),
+      hours:   Math.max(0, Math.floor((diff % 86400000) / 3600000)),
+      minutes: Math.max(0, Math.floor((diff % 3600000) / 60000)),
+      seconds: Math.max(0, Math.floor((diff % 60000) / 1000)),
+    };
+  });
+
+  // Fetch current block height from Mempool.space once on mount
+  useEffect(() => {
+    fetch('https://mempool.space/api/blocks/tip/height')
+      .then(r => r.json())
+      .then((height: number) => {
+        const remaining = HALVING_BLOCK - height;
+        if (remaining <= 0) return;
+        setBlocksLeft(remaining);
+        setTargetDate(new Date(Date.now() + remaining * AVG_BLOCK_MS));
+      })
+      .catch(() => { /* silently keep FALLBACK_DATE */ });
+  }, []);
+
+  // Tick every second against targetDate
+  useEffect(() => {
+    function calc() {
+      const diff = targetDate.getTime() - Date.now();
+      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
+      setTimeLeft({
+        days:    Math.floor(diff / 86400000),
+        hours:   Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    }
+    calc();
+    const id = setInterval(calc, 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  return (
+    <div style={{ marginTop: '1.25rem' }}>
+      {/* Time countdown */}
+      <div style={{
+        display: 'inline-flex', alignItems: 'baseline', flexWrap: 'wrap' as const,
+        fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.04em',
+      }}>
+        {[
+          { value: timeLeft.days,    label: 'Tage' },
+          { value: timeLeft.hours,   label: 'Std' },
+          { value: timeLeft.minutes, label: 'Min' },
+          { value: timeLeft.seconds, label: 'Sek' },
+        ].map(({ value, label }, i) => (
+          <span key={label} style={{ display: 'inline-flex', alignItems: 'baseline', gap: '0.2rem' }}>
+            {i > 0 && <span style={{ color: 'rgba(247,147,26,0.25)', fontSize: '1.1rem', margin: '0 0.3rem' }}>·</span>}
+            <span style={{ fontSize: '2rem', color: '#F7931A', lineHeight: 1 }}>{i === 0 ? timeLeft.days : pad(value)}</span>
+            <span style={{ fontSize: '0.52rem', letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(237,232,222,0.3)', fontFamily: "'DM Mono', monospace" }}>{label}</span>
+          </span>
+        ))}
+      </div>
+      {/* Blocks remaining / source note */}
+      <div style={{
+        marginTop: '0.6rem',
+        fontFamily: "'DM Mono', monospace", fontSize: '0.54rem',
+        letterSpacing: '0.14em', textTransform: 'uppercase' as const,
+        color: 'rgba(237,232,222,0.22)',
+      }}>
+        {blocksLeft !== null
+          ? `${blocksLeft.toLocaleString('de-DE')} Blöcke bis Block 1.050.000 · Live via mempool.space`
+          : `Schätzung · ca. April 2028 · Block 1.050.000`}
+      </div>
     </div>
   );
 }
@@ -827,13 +912,15 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <span>Aktualisiert: {updatedStr}</span>
             </div>
           </div>
+          <div className="wbc-body" style={{ marginTop: '2.5rem' }}>
+            <p>Eine Strategie, die viele langfristige Käufer verwenden: nicht alles auf einmal investieren, sondern regelmäßig kleine Beträge, unabhängig vom Preis. Das nennt sich Cost-Average-Effekt oder DCA (Dollar-Cost Averaging). Der Vorteil: Man kauft automatisch mehr, wenn der Preis niedrig ist, und weniger, wenn er hoch ist. Kein perfektes Timing nötig. Gerade für Einsteiger ist das oft der ruhigere Weg als der Versuch, den idealen Einstiegspunkt zu erwischen.</p>
+          </div>
         </section>
 
         <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
 
         {/* ── WARUM BITCOIN ── */}
         <section className="wbc-section">
-          <p className="wbc-section-label">Warum Bitcoin überhaupt</p>
           <h2 className="wbc-h2">Warum interessiert sich jemand für Bitcoin?</h2>
           <div className="wbc-body">
             <p>Bevor du dich fragst, <em>wann</em> du kaufen sollst, lohnt sich die Frage <em>warum</em> überhaupt. Hier sind die Argumente, die langfristige Bitcoiner am häufigsten nennen, ohne Versprechen, ohne Hype.</p>
@@ -918,7 +1005,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 01</div>
               <div className="wbc-myth-title">„Bitcoin ist nichts wert"</div>
-              <p className="wbc-myth-truth">Bitcoin ist durch keinen physischen Vermögenswert gedeckt, das stimmt. Aber auch der Euro oder Dollar sind es nicht. <strong>Wert entsteht durch Nachfrage, Vertrauen und Nutzung.</strong> Beides hat Bitcoin in 15 Jahren aufgebaut.</p>
+              <p className="wbc-myth-truth">Bitcoin ist durch keinen physischen Vermögenswert gedeckt, das stimmt. Aber auch der Euro oder Dollar sind es nicht. <strong>Wert entsteht durch Nachfrage, Vertrauen und Nutzung.</strong> Beides hat Bitcoin in 17 Jahren aufgebaut.</p>
             </div>
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 02</div>
@@ -933,7 +1020,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             <div className="wbc-myth-card">
               <div className="wbc-myth-badge">Mythos 04</div>
               <div className="wbc-myth-title">„Neue Coins ersetzen Bitcoin"</div>
-              <p className="wbc-myth-truth">Es gibt tausende Kryptowährungen. Viele sind technisch flexibler als Bitcoin. Aber <strong>Bitcoin hat etwas, das sich nicht kopieren lässt: Bekanntheit, Vertrauen und eine 15-jährige Geschichte</strong> ohne zentrale Kontrolle. Das ist ein Vorteil, den keine neue Kryptowährung einfach replizieren kann.</p>
+              <p className="wbc-myth-truth">Es gibt tausende Kryptowährungen. Viele sind technisch flexibler als Bitcoin. Aber <strong>Bitcoin hat etwas, das sich nicht kopieren lässt: Bekanntheit, Vertrauen und eine 17-jährige Geschichte</strong> ohne zentrale Kontrolle. Das ist ein Vorteil, den keine neue Kryptowährung einfach replizieren kann.</p>
             </div>
           </div>
         </section>
@@ -1021,7 +1108,12 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Lohnt es sich noch, in Bitcoin zu investieren?</p>
-              <p className="wbc-faq-a">Das hängt von deinem Zeithorizont und deiner Risikobereitschaft ab. Bitcoin hat in 15 Jahren mehrere Einbrüche von über 80% erlebt und sich jedes Mal erholt. Ob das wieder passiert, weiß niemand. Was man wissen kann: in welchem Marktumfeld man heute kauft. Dafür ist dieses Tool da.</p>
+              <p className="wbc-faq-a">Das hängt von deinem Zeithorizont und deiner Risikobereitschaft ab. Bitcoin hat in 17 Jahren mehrere Einbrüche von über 80% erlebt und sich jedes Mal erholt. Ob das wieder passiert, weiß niemand. Was man wissen kann: in welchem Marktumfeld man heute kauft. Dafür ist dieses Tool da.</p>
+            </div>
+            <div className="wbc-faq-item">
+              <p className="wbc-faq-q">Wann ist das nächste Bitcoin-Halving?</p>
+              <p className="wbc-faq-a">Alle vier Jahre wird die Menge neu erzeugter Bitcoin halbiert. Das nächste Halving wird bei Block 1.050.000 erwartet, voraussichtlich im April 2028. Historisch hat jedes Halving den Beginn einer neuen Marktphase markiert, weil das Angebot an neuen Coins plötzlich sinkt, während die Nachfrage gleich bleibt oder steigt. Kein Versprechen, aber ein Muster, das Bitcoiner aufmerksam beobachten.</p>
+              <HalvingCountdown />
             </div>
           </div>
         </section>
