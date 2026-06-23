@@ -124,14 +124,11 @@ function shell(opts: {
 <tr><td align="center" style="padding:40px 16px;">
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="580" class="es" style="max-width:580px;width:100%;background-color:#1C1917;">
 
-  <!-- TOP ACCENT BAR -->
-  <tr><td style="height:3px;background-color:#F7931A;padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>
-
   <!-- HEADER -->
   <tr>
     <td class="eheader lb" style="padding:24px 40px;border-bottom:1px solid rgba(247,147,26,0.18);">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
-        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64" style="vertical-align:middle;display:inline-block;border:0;"><g transform="translate(0.006,-0.003)"><path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/><path fill="#ffffff" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></g></svg><span class="et" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#EDE8DE;padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></td>
+        <td><img src="https://whentobuybtc.xyz/bitcoin-logo_48.png" width="24" height="24" alt="&#8383;" style="vertical-align:middle;display:inline-block;border:0;" /><span class="et" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#EDE8DE;padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></td>
         ${headerRight ? `<td align="right"><span class="em2" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${headerRight}</span></td>` : ''}
       </tr></table>
     </td>
@@ -146,9 +143,9 @@ function shell(opts: {
 
   <!-- FOOTER -->
   <tr>
-    <td class="efooter lb" style="padding:28px 40px;border-top:1px solid rgba(247,147,26,0.08);">
+    <td class="efooter lb" style="padding:24px 40px;border-top:1px solid rgba(247,147,26,0.08);">
       <p class="ed" style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${footerReason}</p>
-      <p class="ed" style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${disclaimer}</p>
+      <p class="ed" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${disclaimer}</p>
       <p class="ed" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.42);">
         <a href="${unsubscribeUrl}" class="el" style="color:rgba(247,147,26,0.75);text-decoration:none;">${unsubLabel}</a>
         &nbsp;&nbsp;&#183;&nbsp;&nbsp;
@@ -163,13 +160,6 @@ function shell(opts: {
 </table>
 </td></tr>
 </table>
-
-  <!-- BOTTOM CLOSING BAR -->
-  <tr><td style="height:2px;background-color:rgba(247,147,26,0.3);padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>
-
-</table>
-</td></tr>
-</table>
 </body>
 </html>`;
 }
@@ -179,13 +169,13 @@ function shell(opts: {
 function ctaButton(href: string, label: string, width = 220): string {
   return `<!--[if mso]>
   <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-    href="${href}" style="height:48px;v-text-anchor:middle;width:${width}px;" arcsize="4%" stroke="f" fillcolor="#F7931A">
-  <w:anchorlock/><center style="color:#09080A;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">${label.toUpperCase()}</center>
+    href="${href}" style="height:48px;v-text-anchor:middle;width:${width}px;" arcsize="0%" stroke="f" fillcolor="#F7931A">
+  <w:anchorlock/><center style="color:#09080A;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">${label.toUpperCase()}</center>
   </v:roundrect><![endif]-->
   <!--[if !mso]><!-->
   <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>
-    <td style="background-color:#F7931A;border-radius:3px;">
-      <a href="${href}" style="display:inline-block;padding:14px 30px;background-color:#F7931A;border-radius:3px;color:#09080A;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;mso-hide:all;">${label}</a>
+    <td style="background-color:#F7931A;">
+      <a href="${href}" style="display:inline-block;padding:14px 30px;background-color:#F7931A;color:#09080A;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;mso-hide:all;">${label}</a>
     </td>
   </tr></table>
   <!--<![endif]-->`;
@@ -220,13 +210,13 @@ function signalShareText(signal: SignalState, lang: Lang): string {
 function shareButton(href: string, label: string, width = 200): string {
   return `<!--[if mso]>
   <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-    href="${href}" style="height:46px;v-text-anchor:middle;width:${width}px;" arcsize="4%" strokecolor="#F7931A" fillcolor="#1C1917">
-  <w:anchorlock/><center style="color:#F7931A;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">${label.toUpperCase()}</center>
+    href="${href}" style="height:46px;v-text-anchor:middle;width:${width}px;" arcsize="0%" strokecolor="#F7931A" fillcolor="#1C1917">
+  <w:anchorlock/><center style="color:#F7931A;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">${label.toUpperCase()}</center>
   </v:roundrect><![endif]-->
   <!--[if !mso]><!-->
   <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>
-    <td style="border:1px solid rgba(247,147,26,0.6);border-radius:3px;">
-      <a href="${href}" target="_blank" style="display:inline-block;padding:13px 28px;border-radius:3px;color:#F7931A;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;mso-hide:all;">${label}</a>
+    <td style="border:1px solid #F7931A;">
+      <a href="${href}" target="_blank" style="display:inline-block;padding:13px 28px;color:#F7931A;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;mso-hide:all;">${label}</a>
     </td>
   </tr></table>
   <!--<![endif]-->`;
@@ -245,25 +235,17 @@ function spreadSection(opts: { lang: Lang; lead: string; shareText: string; butt
 // ─── Rule ─────────────────────────────────────────────────────────────────────
 
 const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-  <tr><td class="lr" style="height:1px;background-color:rgba(247,147,26,0.22);padding:0;">&nbsp;</td></tr>
+  <tr><td class="lr" style="height:1px;background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td></tr>
 </table><div style="height:28px;">&nbsp;</div>`;
 
 // ─── Disclaimer box ───────────────────────────────────────────────────────────
 
 function disclaimerBox(text: string): string {
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:28px;">
-    <tr><td style="border-left:2px solid rgba(247,147,26,0.35);padding:10px 16px;">
+    <tr><td style="border-left:2px solid rgba(247,147,26,0.3);padding:10px 16px;">
       <p class="ed" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${text}</p>
     </td></tr>
   </table>`;
-}
-
-// ─── Signal badge ─────────────────────────────────────────────────────────────
-
-function signalBadge(s: SignalState, lang: Lang): string {
-  const color = signalColor(s);
-  const bg = s === 'accumulate' ? 'rgba(74,222,128,0.12)' : s === 'caution' ? 'rgba(248,113,113,0.12)' : 'rgba(251,191,36,0.12)';
-  return `<span style="display:inline-block;background:${bg};border:1px solid ${color}30;padding:4px 12px;border-radius:3px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.03em;color:${color};">${signalLabel(s, lang)}</span>`;
 }
 
 // ─── Price block ──────────────────────────────────────────────────────────────
@@ -273,12 +255,12 @@ function priceBlock(price: number, change24h: number, lang: Lang): string {
   const chColor = change24h >= 0 ? '#4ADE80' : '#F87171';
   const priceLabel = lang === 'de' ? 'Bitcoin-Preis' : 'Bitcoin price';
   const changeLabel = lang === 'de' ? '24h' : '24h';
-  return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);border-left:3px solid rgba(247,147,26,0.7);margin-bottom:8px;">
+  return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:8px;">
     <tr><td style="padding:20px 24px;">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
         <td>
           <p class="em2" style="margin:0 0 6px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${priceLabel}</p>
-          <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:700;letter-spacing:0.02em;color:#EDE8DE;">${eur(price)}</p>
+          <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:32px;font-weight:700;letter-spacing:0.02em;color:#EDE8DE;">${eur(price)}</p>
         </td>
         <td align="right" style="vertical-align:bottom;">
           <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:14px;font-weight:600;color:${chColor};">${chSign}${change24h.toFixed(2)}%</p>
@@ -430,8 +412,8 @@ export function alertEmail(opts: {
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
           <td width="34%" style="padding-right:16px;">
             <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Marktzone' : 'Market zone'}</p>
-            ${signalBadge(signal, lang)}
-            <p class="em2" style="margin:4px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:rgba(237,232,222,0.55);">${signalBehaviour(signal, lang)}</p>
+            <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+            <p class="em2" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:9px;color:rgba(237,232,222,0.55);">${signalBehaviour(signal, lang)}</p>
           </td>
           <td width="1" style="background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td>
           <td width="33%" style="padding:0 16px;">
@@ -546,22 +528,22 @@ export function digestEmail(opts: {
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:20px;">
       <tr><td style="padding:18px 24px;">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${signalLabel2}</p>
-        ${signalBadge(signal, lang)}
-        <p class="em2" style="margin:4px 0 0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.55);">${signalBehaviour(signal, lang)}</p>
+        <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
+        <p class="em2" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.55);">${signalBehaviour(signal, lang)}</p>
       </td></tr>
     </table>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:28px;"><tr>
-      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);border-top:2px solid ${color}40;">
+      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Fear &amp; Greed</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${fgValue}</p>
       </td>
       <td width="8" style="padding:0;">&nbsp;</td>
-      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);border-top:2px solid ${color}40;">
+      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${maLabel}</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${maSign}${maPct.toFixed(1)}%</p>
       </td>
       <td width="8" style="padding:0;">&nbsp;</td>
-      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);border-top:2px solid ${color}40;">
+      <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${athLabel}</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${athSign}${athPct.toFixed(1)}%</p>
       </td>
