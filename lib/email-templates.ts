@@ -181,6 +181,57 @@ function ctaButton(href: string, label: string, width = 220): string {
   <!--<![endif]-->`;
 }
 
+// ─── Share helpers (growth: prefilled X post + forward/share asks) ─────────────
+
+function shareTweetUrl(text: string): string {
+  return 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+}
+
+function signalShareText(signal: SignalState, lang: Lang): string {
+  const map: Record<SignalState, Record<Lang, string>> = {
+    accumulate: {
+      en: 'Bitcoin is in the buying zone right now. Live signal for long-term holders: https://whentobuybtc.xyz',
+      de: 'Bitcoin ist gerade in der Kaufzone. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
+    },
+    hold: {
+      en: 'Bitcoin signal: watch and wait. Live signal for long-term holders: https://whentobuybtc.xyz',
+      de: 'Bitcoin-Signal: abwarten. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
+    },
+    caution: {
+      en: 'Bitcoin is in the caution zone right now. Live signal for long-term holders: https://whentobuybtc.xyz',
+      de: 'Bitcoin ist gerade in der Vorsichtszone. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
+    },
+  };
+  return map[signal][lang];
+}
+
+// Secondary (outline) button — used for the share-to-X action so it does not
+// compete with the primary orange CTA.
+function shareButton(href: string, label: string, width = 200): string {
+  return `<!--[if mso]>
+  <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
+    href="${href}" style="height:46px;v-text-anchor:middle;width:${width}px;" arcsize="0%" strokecolor="#F7931A" fillcolor="#1C1917">
+  <w:anchorlock/><center style="color:#F7931A;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">${label.toUpperCase()}</center>
+  </v:roundrect><![endif]-->
+  <!--[if !mso]><!-->
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>
+    <td style="border:1px solid #F7931A;">
+      <a href="${href}" target="_blank" style="display:inline-block;padding:13px 28px;color:#F7931A;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;mso-hide:all;">${label}</a>
+    </td>
+  </tr></table>
+  <!--<![endif]-->`;
+}
+
+// Forward + share-to-X block appended to digest and alert emails.
+function spreadSection(opts: { lang: Lang; lead: string; shareText: string; buttonLabel: string }): string {
+  const { lead, shareText, buttonLabel } = opts;
+  const heading = opts.lang === 'de' ? 'Signal weitergeben' : 'Spread the signal';
+  return `${rule}
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${heading}</p>
+    <p class="em" style="margin:0 0 18px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">${lead}</p>
+    ${shareButton(shareTweetUrl(shareText), buttonLabel)}`;
+}
+
 // ─── Rule ─────────────────────────────────────────────────────────────────────
 
 const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -380,6 +431,16 @@ export function alertEmail(opts: {
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${context}</p>
     ${disclaimerBox(disclaimerText)}
     ${ctaButton('https://whentobuybtc.xyz', ctaLabel, 240)}
+    ${spreadSection({
+      lang,
+      lead: lang === 'de'
+        ? 'Das Signal hat gerade gewechselt. Teile es mit deinen Followern.'
+        : 'The signal just changed. Worth sharing with your followers.',
+      shareText: lang === 'de'
+        ? `Bitcoin ist gerade ${pct}% ${isDown ? 'gefallen' : 'gestiegen'}, das Signal steht jetzt auf ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
+        : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% and the signal moved to ${label.toLowerCase()}. Live signal for long-term holders: https://whentobuybtc.xyz`,
+      buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+    })}
   `;
 
   return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
@@ -406,9 +467,12 @@ export function digestEmail(opts: {
   const maSign  = maPct   >= 0 ? '+' : '';
   const athSign = athPct  >= 0 ? '+' : '';
 
-  const subject = lang === 'de'
-    ? `Dein wöchentlicher Bitcoin-Überblick: ${signalLabel(signal, lang)}`
-    : `Your weekly Bitcoin snapshot: ${signalLabel(signal, lang)}`;
+  const subjectMap: Record<SignalState, Record<Lang, string>> = {
+    accumulate: { en: 'Bitcoin is in the buying zone this week',  de: 'Bitcoin ist diese Woche in der Kaufzone' },
+    hold:       { en: 'Bitcoin this week: watch and wait',        de: 'Bitcoin diese Woche: abwarten' },
+    caution:    { en: 'Bitcoin is in the caution zone this week', de: 'Bitcoin ist diese Woche in der Vorsichtszone' },
+  };
+  const subject = subjectMap[signal][lang];
 
   const preheader = lang === 'de'
     ? `${eur(price)} &#183; ${signalLabel(signal, lang)}`
@@ -437,8 +501,8 @@ export function digestEmail(opts: {
 
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
   const intro1       = lang === 'de'
-    ? 'Hier ist dein wöchentlicher Bitcoin-Signal-Überblick. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
-    : 'Here\'s your weekly Bitcoin signal snapshot. Three indicators. One clear picture. No noise.';
+    ? 'Hier ist, wo Bitcoin diese Woche steht. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
+    : 'Here\'s where Bitcoin sits this week. Three indicators. One clear picture. No noise.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
   const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
   const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : 'Long-term avg';
@@ -487,6 +551,14 @@ export function digestEmail(opts: {
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${contextText}</p>
     ${disclaimerBox(disclaimerText2)}
     ${ctaButton('https://whentobuybtc.xyz', ctaLabel, 260)}
+    ${spreadSection({
+      lang,
+      lead: lang === 'de'
+        ? 'Leite diese Mail an jemanden weiter, der Sats sammelt. Oder teile das Signal mit deinen Followern.'
+        : 'Forward this to someone who&#39;s stacking sats, or post the signal to your followers.',
+      shareText: signalShareText(signal, lang),
+      buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+    })}
   `;
 
   return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
@@ -564,6 +636,11 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
       Dollar-Cost Averaging bedeutet, regelmäßig einen festen Betrag zu investieren — unabhängig vom Kurs. Es beseitigt emotionales Timing, mittelt den Einstiegspreis über einen längeren Zeitraum und nimmt den Druck, auf den perfekten Einstiegszeitpunkt zu warten. Das Signal hilft dir, in Phasen extremer Angst etwas mehr zu kaufen — ohne zu spekulieren.
     </p>
 
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal weitergeben</p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
+      Noch etwas: Wenn du jemanden kennst, der Sats sammelt, leite diese Mail einfach weiter. Genau so wächst das Projekt.
+    </p>
+
     ${disclaimerBox(disclaimerText)}
     ${ctaButton('https://whentobuybtc.xyz', 'Signal ansehen →', 220)}
   ` : `
@@ -613,6 +690,11 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Why DCA is the best strategy</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
       Dollar-cost averaging means investing a fixed amount on a regular schedule — regardless of the price. It removes emotional timing, smooths your entry price over time, and takes the pressure off finding the "perfect moment". The signal helps you buy a little more in periods of extreme fear — without speculating.
+    </p>
+
+    <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Spread the signal</p>
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
+      One more thing: if you know someone who&#39;s stacking sats, forward this email along. That&#39;s exactly how this grows.
     </p>
 
     ${disclaimerBox(disclaimerText)}
