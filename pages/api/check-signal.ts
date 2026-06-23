@@ -53,7 +53,7 @@ async function logAlert(price: number, refPrice: number, movePct: number, direct
   );
 }
 
-async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; athPct: number; signal: 'accumulate' | 'hold' | 'caution' }> {
+async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; signal: 'accumulate' | 'hold' | 'caution' }> {
   const [fgRes, histRes, priceRes, athRes] = await Promise.all([
     fetch(`${BASE}/api/fear-greed`,                        { signal: AbortSignal.timeout(8000) }),
     fetch(`${BASE}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(8000) }),
@@ -77,17 +77,22 @@ async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; athP
   const score    = fgScore + maScore + athScore;
   const signal   = score >= 3 ? 'accumulate' as const : score <= -2 ? 'caution' as const : 'hold' as const;
 
-  return { fgValue, maPct, athPct, signal };
+  return { fgValue, maPct, signal };
 }
 
-async function sendEmailAlerts(price: number, change24h: number, movePct: number, direction: 'up' | 'down') {
+async function sendEmailAlerts(
+  price: number,
+  change24h: number,
+  movePct: number,
+  direction: 'up' | 'down',
+  fgValue: number,
+  maPct: number,
+  signal: 'accumulate' | 'hold' | 'caution',
+) {
   const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
     `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
   );
   if (rows.length === 0) return;
-
-  let fgValue = 50; let maPct = 0; let signal: 'accumulate' | 'hold' | 'caution' = 'hold';
-  try { ({ fgValue, maPct, signal } = await fetchSignalData()); } catch { /* use defaults */ }
 
   const sends = rows.map(({ email, lang, unsubscribe_token }) => {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
@@ -100,12 +105,20 @@ async function sendEmailAlerts(price: number, change24h: number, movePct: number
       ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
       subject,
       html,
+    }).then(result => {
+      if (result.error) console.error(`sendEmailAlerts: failed for ${email}:`, JSON.stringify(result.error));
+      return result;
     });
   });
 
   const results = await Promise.allSettled(sends);
   const failed  = results.filter(r => r.status === 'rejected');
-  if (failed.length > 0) console.error(`sendEmailAlerts: ${failed.length}/${rows.length} failed`);
+  if (failed.length > 0) {
+    failed.forEach((r, i) => {
+      if (r.status === 'rejected') console.error(`sendEmailAlerts: rejected [${i}]:`, r.reason);
+    });
+  }
+  console.log(`sendEmailAlerts: ${results.length - failed.length}/${rows.length} sent successfully`);
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -129,7 +142,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (lastAlert && Date.now() - lastAlert.getTime() < COOLDOWN_MS)
       return res.status(200).json({ status: 'cooldown', lastAlertHoursAgo: ((Date.now() - lastAlert.getTime()) / 3600000).toFixed(1) });
 
-    await sendEmailAlerts(currentPrice, change24h, movePct, direction as 'up' | 'down');
+    let fgValue = 50; let maPct = 0; let signal: 'accumulate' | 'hold' | 'caution' = 'hold';
+    try { ({ fgValue, maPct, signal } = await fetchSignalData()); } catch (e: any) {
+      console.error('fetchSignalData failed, using defaults:', e.message);
+    }
+
+    await sendEmailAlerts(currentPrice, change24h, movePct, direction as 'up' | 'down', fgValue, maPct, signal);
     await logAlert(currentPrice, refPrice, movePct, direction);
 
     return res.status(200).json({ status: 'alert_sent', direction, movePct: (movePct * 100).toFixed(2) + '%' });
