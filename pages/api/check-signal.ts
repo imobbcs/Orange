@@ -80,6 +80,8 @@ async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; sign
   return { fgValue, maPct, signal };
 }
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 async function sendEmailAlerts(
   price: number,
   change24h: number,
@@ -94,31 +96,28 @@ async function sendEmailAlerts(
   );
   if (rows.length === 0) return;
 
-  const sends = rows.map(({ email, lang, unsubscribe_token }) => {
+  let sent = 0; let failed = 0;
+  for (const { email, lang, unsubscribe_token } of rows) {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html } = alertEmail({
       price, change24h, movePct, direction, signal, fgValue, maPct, unsubscribeUrl, replyTo: REPLY_TO, lang,
     });
-    return resend.emails.send({
+    const result = await resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email,
       ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
       subject,
       html,
-    }).then(result => {
-      if (result.error) console.error(`sendEmailAlerts: failed for ${email}:`, JSON.stringify(result.error));
-      return result;
     });
-  });
-
-  const results = await Promise.allSettled(sends);
-  const failed  = results.filter(r => r.status === 'rejected');
-  if (failed.length > 0) {
-    failed.forEach((r, i) => {
-      if (r.status === 'rejected') console.error(`sendEmailAlerts: rejected [${i}]:`, r.reason);
-    });
+    if (result.error) {
+      console.error(`sendEmailAlerts: failed for ${email}:`, JSON.stringify(result.error));
+      failed++;
+    } else {
+      sent++;
+    }
+    await delay(250);
   }
-  console.log(`sendEmailAlerts: ${results.length - failed.length}/${rows.length} sent successfully`);
+  console.log(`sendEmailAlerts: ${sent}/${rows.length} sent successfully, ${failed} failed`);
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
