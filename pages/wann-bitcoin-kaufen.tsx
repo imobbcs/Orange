@@ -270,23 +270,126 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-nav-back { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(237,232,222,0.45); text-decoration: none; transition: color 0.2s; }
         .wbc-nav-back:hover { color: #F7931A; }
 
-        /* ── HERO ── */
+        /* ── HERO — two column ── */
         .wbc-hero {
-          position: relative; z-index: 1;
+          position: relative;
           min-height: 100vh;
-          display: flex; flex-direction: column;
-          justify-content: center; align-items: center; text-align: center;
-          padding: 10rem 2rem 6rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          overflow: hidden;
         }
+
+        /* ambient glow overlay */
+        .wbc-hero::before {
+          content: '';
+          position: absolute; inset: 0; pointer-events: none; z-index: 0;
+          background:
+            radial-gradient(ellipse 80% 60% at 75% 50%, rgba(247,147,26,0.10) 0%, transparent 65%),
+            radial-gradient(ellipse 60% 40% at 20% 30%, rgba(247,147,26,0.05) 0%, transparent 60%);
+        }
+
+        .wbc-hero-left {
+          position: relative; z-index: 2;
+          padding: 10rem 4rem 6rem 4rem;
+          display: flex; flex-direction: column; gap: 0;
+        }
+
+        .wbc-hero-right {
+          position: relative; z-index: 2;
+          display: flex; align-items: center; justify-content: center;
+          padding: 10rem 4rem 6rem 2rem;
+          min-height: 100vh;
+        }
+
+        /* vertical dividing rule */
+        .wbc-hero-divider {
+          position: absolute; top: 15%; bottom: 15%; left: 50%;
+          width: 1px;
+          background: linear-gradient(
+            to bottom,
+            transparent,
+            rgba(247,147,26,0.12) 30%,
+            rgba(247,147,26,0.12) 70%,
+            transparent
+          );
+          z-index: 1;
+        }
+
+        /* BTC visual wrapper */
+        .wbc-btc-visual {
+          position: relative;
+          display: flex; align-items: center; justify-content: center;
+          width: 100%; max-width: 480px;
+        }
+
+        .wbc-chart-bg {
+          position: absolute; inset: 0;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        /* orange glow bloom behind logo */
+        .wbc-btc-glow {
+          position: absolute;
+          width: 340px; height: 340px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(247,147,26,0.22) 0%,
+            rgba(247,147,26,0.10) 35%,
+            rgba(247,147,26,0.03) 60%,
+            transparent 75%
+          );
+        }
+
+        .wbc-btc-logo {
+          position: relative; z-index: 2;
+          width: 160px; height: 160px;
+          filter:
+            drop-shadow(0 0 32px rgba(247,147,26,0.5))
+            drop-shadow(0 0 80px rgba(247,147,26,0.2));
+        }
+
+        @keyframes breathe {
+          0%,100% { opacity: 0.55; transform: scale(1); }
+          50%      { opacity: 0.85; transform: scale(1.04); }
+        }
+
         .wbc-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: #F7931A; margin-bottom: 2rem; opacity: 0.85; }
         .wbc-h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 14vw, 11rem); font-weight: 400; line-height: 0.88; letter-spacing: 0.01em; color: #EDE8DE; margin-bottom: 2rem; }
         .wbc-h1 em { color: #F7931A; font-style: normal; }
         .wbc-hero-intro { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.2rem, 2.5vw, 1.5rem); font-style: italic; color: rgba(237,232,222,0.78); max-width: 520px; line-height: 1.7; margin-bottom: 3.5rem; }
-        .wbc-signal-block { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
+        .wbc-signal-block { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; }
         .wbc-signal-label { font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(237,232,222,0.3); }
         .wbc-updated { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.08em; color: rgba(237,232,222,0.2); margin-top: 0.15rem; }
-        .wbc-scroll-hint { margin-top: 3.5rem; font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,222,0.18); display: flex; flex-direction: column; align-items: center; gap: 0.65rem; }
+        .wbc-scroll-hint { margin-top: 3.5rem; font-family: 'DM Mono', monospace; font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,232,222,0.18); display: flex; flex-direction: column; align-items: flex-start; gap: 0.65rem; }
         .wbc-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(247,147,26,0.35), transparent); }
+
+        /* ── Mobile overrides ── */
+        @media (max-width: 820px) {
+          .wbc-hero {
+            grid-template-columns: 1fr;
+            min-height: auto;
+          }
+          .wbc-hero-divider { display: none; }
+          .wbc-hero-left {
+            padding: 8rem 1.5rem 2rem;
+            align-items: center;
+            text-align: center;
+            order: 2;
+          }
+          .wbc-hero-intro { max-width: 100%; }
+          .wbc-signal-badge { align-self: center; }
+          .wbc-signal-block { align-items: center; }
+          .wbc-hero-right {
+            order: 1;
+            padding: 5rem 1.5rem 1.5rem;
+            min-height: auto;
+          }
+          .wbc-btc-logo { width: 110px; height: 110px; }
+          .wbc-btc-glow { width: 240px; height: 240px; }
+          .wbc-scroll-hint { align-items: center; }
+        }
 
         /* ── LAYOUT ── */
         .wbc-section { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 6rem 2rem; }
@@ -409,7 +512,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         /* ── RESPONSIVE ── */
         @media (max-width: 700px) {
           .wbc-nav { padding: 1.1rem 1.25rem; }
-          .wbc-hero { padding: 7rem 1.25rem 4rem; }
+          .wbc-hero { padding: 0; }
           .wbc-section { padding: 4rem 1.25rem; }
           .wbc-section--tight { padding: 3rem 1.25rem; }
           .wbc-email-section { padding: 0 1.25rem 6rem; }
@@ -534,20 +637,116 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
         {/* ── HERO ── */}
         <section className="wbc-hero">
-          <p className="wbc-eyebrow">Bitcoin verstehen, für Einsteiger</p>
-          <h1 className="wbc-h1">Wann<br /><em>Bitcoin</em><br />kaufen?</h1>
-          <p className="wbc-hero-intro">
-            Eine Frage, die sich fast jeder stellt. Hier bekommst du keine Empfehlung,
-            aber die Daten, die dir helfen, selbst eine Entscheidung zu treffen.
-          </p>
-          <div className="wbc-signal-block">
-            <span className="wbc-signal-label">Das Signal gerade</span>
-            <SignalBadge signal={data.signal} />
-            <span className="wbc-updated">Aktualisiert: {updatedStr}</span>
+          <div className="wbc-hero-divider" />
+
+          {/* LEFT: headline + signal */}
+          <div className="wbc-hero-left">
+            <p className="wbc-eyebrow">Bitcoin verstehen, für Einsteiger</p>
+            <h1 className="wbc-h1">Wann<br /><em>Bitcoin</em><br />kaufen?</h1>
+            <p className="wbc-hero-intro">
+              Eine Frage, die sich fast jeder stellt. Hier bekommst du keine Empfehlung,
+              aber die Daten, die dir helfen, selbst eine Entscheidung zu treffen.
+            </p>
+            <div className="wbc-signal-block">
+              <span className="wbc-signal-label">Das Signal gerade</span>
+              <SignalBadge signal={data.signal} />
+              <span className="wbc-updated">Aktualisiert: {updatedStr}</span>
+            </div>
+            <div className="wbc-scroll-hint">
+              <span>Was bedeutet das?</span>
+              <div className="wbc-scroll-line" />
+            </div>
           </div>
-          <div className="wbc-scroll-hint">
-            <span>Was bedeutet das?</span>
-            <div className="wbc-scroll-line" />
+
+          {/* RIGHT: BTC logo + candlestick art */}
+          <div className="wbc-hero-right">
+            <div className="wbc-btc-visual">
+
+              {/* Candlestick chart — decorative SVG */}
+              <div className="wbc-chart-bg">
+                <svg
+                  width="420" height="360" viewBox="0 0 420 360"
+                  fill="none" xmlns="http://www.w3.org/2000/svg"
+                  style={{ position: 'absolute', opacity: 0.18 }}
+                >
+                  {/* grid lines */}
+                  <line x1="0" y1="72"  x2="420" y2="72"  stroke="#F7931A" strokeWidth="0.5" strokeDasharray="4 6"/>
+                  <line x1="0" y1="144" x2="420" y2="144" stroke="#F7931A" strokeWidth="0.5" strokeDasharray="4 6"/>
+                  <line x1="0" y1="216" x2="420" y2="216" stroke="#F7931A" strokeWidth="0.5" strokeDasharray="4 6"/>
+                  <line x1="0" y1="288" x2="420" y2="288" stroke="#F7931A" strokeWidth="0.5" strokeDasharray="4 6"/>
+                  {/* candles — green */}
+                  <line x1="32"  y1="200" x2="32"  y2="255" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="26"  y="218" width="12" height="30" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="104" y1="175" x2="104" y2="240" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="98"  y="190" width="12" height="32" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="140" y1="155" x2="140" y2="230" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="134" y="168" width="12" height="48" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="212" y1="132" x2="212" y2="195" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="206" y="145" width="12" height="36" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="284" y1="100" x2="284" y2="172" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="278" y="112" width="12" height="48" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="320" y1="88"  x2="320" y2="155" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="314" y="100" width="12" height="40" fill="#4ADE80" opacity="0.7"/>
+                  <line x1="392" y1="75"  x2="392" y2="145" stroke="#4ADE80" strokeWidth="1.5"/>
+                  <rect x="386" y="88"  width="12" height="38" fill="#4ADE80" opacity="0.7"/>
+                  {/* candles — red */}
+                  <line x1="68"  y1="190" x2="68"  y2="260" stroke="#F87171" strokeWidth="1.5"/>
+                  <rect x="62"  y="210" width="12" height="35" fill="#F87171" opacity="0.7"/>
+                  <line x1="176" y1="148" x2="176" y2="210" stroke="#F87171" strokeWidth="1.5"/>
+                  <rect x="170" y="160" width="12" height="36" fill="#F87171" opacity="0.7"/>
+                  <line x1="248" y1="128" x2="248" y2="185" stroke="#F87171" strokeWidth="1.5"/>
+                  <rect x="242" y="140" width="12" height="28" fill="#F87171" opacity="0.7"/>
+                  <line x1="356" y1="95"  x2="356" y2="165" stroke="#F87171" strokeWidth="1.5"/>
+                  <rect x="350" y="108" width="12" height="42" fill="#F87171" opacity="0.7"/>
+                  {/* trend line — orange dashed */}
+                  <path
+                    d="M32,235 C80,210 140,185 210,160 C280,135 340,108 420,82"
+                    stroke="#F7931A" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.6"
+                  />
+                  {/* 200-day MA line — white */}
+                  <path
+                    d="M0,250 C60,240 120,225 180,210 C240,195 310,175 420,155"
+                    stroke="#EDE8DE" strokeWidth="1" opacity="0.35"
+                  />
+                </svg>
+              </div>
+
+              {/* glow bloom */}
+              <div className="wbc-btc-glow" />
+
+              {/* Bitcoin logo */}
+              <svg
+                className="wbc-btc-logo"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0.003 64 64"
+              >
+                <g transform="translate(0.00630876,-0.00301984)">
+                  <path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/>
+                  <path fill="#FFF" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/>
+                </g>
+              </svg>
+
+              {/* floating price label */}
+              {data.currentPrice !== null && (
+                <div style={{
+                  position: 'absolute', bottom: '-2.5rem',
+                  left: '50%', transform: 'translateX(-50%)',
+                  whiteSpace: 'nowrap',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
+                }}>
+                  <span style={{
+                    fontFamily: "'DM Mono', monospace", fontSize: '0.54rem',
+                    letterSpacing: '0.22em', textTransform: 'uppercase' as const,
+                    color: 'rgba(237,232,222,0.28)',
+                  }}>Bitcoin Preis</span>
+                  <span style={{
+                    fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.9rem',
+                    color: '#F7931A', letterSpacing: '0.03em', lineHeight: 1,
+                  }}>€{formatPrice(data.currentPrice)}</span>
+                </div>
+              )}
+
+            </div>
           </div>
         </section>
 
