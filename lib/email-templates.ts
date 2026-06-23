@@ -381,8 +381,8 @@ export function alertEmail(opts: {
       : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
 
   const subject = lang === 'de'
-    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% — Signal hat gewechselt`
-    : `Bitcoin market zone: ${label} &#8202;&#8212;&#8202; BTC ${isDown ? 'dropped' : 'surged'} ${pct}%`;
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% \u2014 Signal hat gewechselt`
+    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% \u2014 signal changed`;
 
   const preheader = lang === 'de'
     ? `${headline} &#8202;&#8212;&#8202; das Signal hat sich geändert.`
