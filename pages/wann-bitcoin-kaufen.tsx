@@ -298,6 +298,14 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         .wbc-body strong { color: #EDE8DE; font-weight: 600; }
         .wbc-body em { font-style: italic; }
 
+        /* ── DIRECT ANSWER BOX (featured snippet target) ── */
+        .wbc-answer { margin-top: 1.5rem; padding: 1.75rem 2rem; background: rgba(247,147,26,0.04); border: 1px solid rgba(247,147,26,0.14); border-left-width: 3px; border-left-color: #F7931A; }
+        .wbc-answer p { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.1rem, 2vw, 1.25rem); line-height: 1.7; color: rgba(237,232,222,0.9); }
+        .wbc-answer strong { color: #EDE8DE; font-weight: 600; }
+
+        /* ── TAX TIMING ── */
+        .wbc-tax-note { margin-top: 2rem; padding: 1.25rem 1.5rem; background: rgba(237,232,222,0.03); border: 1px solid rgba(237,232,222,0.08); font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em; line-height: 1.7; color: rgba(237,232,222,0.3); text-transform: uppercase; }
+
         /* ── DIVIDER ── */
         .wbc-divider { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; padding: 0 2rem; }
         .wbc-divider-line { flex: 1; height: 1px; background: rgba(247,147,26,0.07); }
@@ -503,6 +511,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               { "@type": "Question", "name": "Was ist der Fear & Greed Index?", "acceptedAnswer": { "@type": "Answer", "text": "Der Fear & Greed Index misst die Marktstimmung auf einer Skala von 0 (extreme Angst) bis 100 (extreme Gier). Hohe Angst bedeutet: viele verkaufen. Hohe Gier bedeutet: viele kaufen, oft bis zu einem Punkt, wo es kippt." } },
               { "@type": "Question", "name": "Was ist der 200-Tage-Durchschnitt bei Bitcoin?", "acceptedAnswer": { "@type": "Answer", "text": "Der Durchschnittspreis der letzten 200 Tage. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt." } },
               { "@type": "Question", "name": "Lohnt es sich noch, in Bitcoin zu investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Das hängt von deinem Zeithorizont, deiner Risikobereitschaft und davon ab, was du dir von einer Anlage erhoffst. Bitcoin hat eine begrenzte Maximalmenge von 21 Millionen Einheiten, ist dezentral und hat sich über mehrere Marktzyklen behauptet. Gleichzeitig ist der Kurs volatil." } },
+              { "@type": "Question", "name": "Wann ist der Bitcoin-Verkauf in Deutschland steuerfrei?", "acceptedAnswer": { "@type": "Answer", "text": "In Deutschland gilt Bitcoin als privates Veräußerungsgeschäft nach § 23 EStG. Wer länger als ein Jahr hält, kann nach Ablauf dieser Haltefrist steuerfrei verkaufen. Der Kaufzeitpunkt startet diese Einjahresfrist. Dies ist allgemeine Information und keine Steuerberatung." } },
               { "@type": "Question", "name": "Wie viel sollte ich in Bitcoin investieren?", "acceptedAnswer": { "@type": "Answer", "text": "Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, trifft eine informiertere Entscheidung." } }
             ]
           }
@@ -548,8 +557,11 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <section className="wbc-section">
           <p className="wbc-section-label">Was gerade passiert</p>
           <h2 className="wbc-h2">Was macht der Markt gerade?</h2>
-          <div className="wbc-body">
-            <p>Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen, sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht.</p>
+          <div className="wbc-answer">
+            <p><strong>Wann Bitcoin kaufen?</strong> Den perfekten Zeitpunkt gibt es nicht, aber es gibt günstigere und riskantere Phasen. Ob sich der Bitcoin-Kauf gerade lohnt, lässt sich an drei Daten ablesen: dem Fear &amp; Greed Index, dem Abstand zum 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Stehen alle drei auf Schwäche, war das historisch ein guter Einstieg für langfristige Käufer.</p>
+          </div>
+          <div className="wbc-body" style={{ marginTop: '1.75rem' }}>
+            <p>Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen, sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht. Genau hier setzt die Frage an, ob man jetzt Bitcoin kaufen soll oder lieber wartet.</p>
             <p>Dafür gibt es drei Indikatoren. Zusammen ergeben sie das Signal oben.</p>
           </div>
           {data.currentPrice !== null && (
@@ -680,6 +692,20 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
         <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
 
+        {/* ── STEUER / HALTEFRIST ── */}
+        <section className="wbc-section">
+          <p className="wbc-section-label">Steuer und Timing</p>
+          <h2 className="wbc-h2">Wann lohnt sich der Bitcoin-Kauf steuerlich?</h2>
+          <div className="wbc-body">
+            <p>In Deutschland spielt nicht nur die Frage eine Rolle, <em>wann</em> du Bitcoin kaufst, sondern auch, wann du wieder verkaufst. Denn der Kaufzeitpunkt bestimmt, ab wann ein Verkauf steuerfrei sein kann.</p>
+            <p>Bitcoin gilt steuerlich als privates Veräußerungsgeschäft nach <strong>§ 23 EStG</strong>. Wer seine Bitcoin <strong>länger als ein Jahr hält</strong>, kann sie nach Ablauf dieser Haltefrist steuerfrei verkaufen, unabhängig von der Höhe des Gewinns. Wer innerhalb des ersten Jahres verkauft, zahlt auf den Gewinn den persönlichen Einkommensteuersatz, sofern die Freigrenze überschritten wird.</p>
+            <p>Für langfristige Käufer heißt das: Der Tag des Kaufs ist auch der Startpunkt der Einjahresfrist. Je früher du kaufst, desto früher beginnt diese Frist zu laufen. Das ist einer der Gründe, warum viele Bitcoiner Zeit im Markt höher gewichten als das perfekte Timing.</p>
+          </div>
+          <p className="wbc-tax-note">Allgemeine Information, keine Steuerberatung. Steuerregeln können sich ändern und hängen von deiner persönlichen Situation ab. Im Zweifel hilft ein Steuerberater.</p>
+        </section>
+
+        <div className="wbc-divider"><div className="wbc-divider-line" /><span className="wbc-divider-center">✦</span><div className="wbc-divider-line" /></div>
+
         {/* ── MYTHEN ── */}
         <section className="wbc-section">
           <p className="wbc-section-label">Häufige Missverständnisse</p>
@@ -787,6 +813,10 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Was ist der 200-Tage-Durchschnitt?</p>
               <p className="wbc-faq-a">Der Durchschnittspreis der letzten 200 Tage, eine der meistbeachteten Zahlen im Bitcoin-Markt. Liegt der aktuelle Preis darunter, gilt Bitcoin historisch als günstig bewertet. Liegt er weit darüber, ist der Markt aufgeheizt. Simpel, aber aussagekräftig.</p>
+            </div>
+            <div className="wbc-faq-item">
+              <p className="wbc-faq-q">Wann ist der Bitcoin-Verkauf steuerfrei?</p>
+              <p className="wbc-faq-a">In Deutschland gilt Bitcoin als privates Veräußerungsgeschäft nach § 23 EStG. Wer länger als ein Jahr hält, kann nach Ablauf dieser Haltefrist steuerfrei verkaufen. Der Kaufzeitpunkt startet diese Einjahresfrist. Das ist allgemeine Information, keine Steuerberatung.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Lohnt es sich noch, in Bitcoin zu investieren?</p>
