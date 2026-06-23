@@ -53,19 +53,31 @@ async function logAlert(price: number, refPrice: number, movePct: number, direct
   );
 }
 
-async function fetchFgAndMa(): Promise<{ fgValue: number; maPct: number }> {
-  const [fgRes, histRes, priceRes] = await Promise.all([
+async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; athPct: number; signal: 'accumulate' | 'hold' | 'caution' }> {
+  const [fgRes, histRes, priceRes, athRes] = await Promise.all([
     fetch(`${BASE}/api/fear-greed`,                        { signal: AbortSignal.timeout(8000) }),
     fetch(`${BASE}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(8000) }),
     fetch(`${BASE}/api/price`,                             { signal: AbortSignal.timeout(8000) }),
+    fetch(`${BASE}/api/ath`,                               { signal: AbortSignal.timeout(8000) }),
   ]);
   const fg      = await fgRes.json();
   const history = await histRes.json();
   const price   = await priceRes.json();
+  const ath     = await athRes.json();
+
   const prices  = (history.prices as [number, number][]).map(p => p[1]);
   const ma      = prices.slice(-200).reduce((a: number, b: number) => a + b, 0) / Math.min(prices.length, 200);
+  const fgValue = fg.value as number;
   const maPct   = ((price.eur - ma) / ma) * 100;
-  return { fgValue: fg.value, maPct };
+  const athPct  = ((price.eur - (ath.ath_eur as number)) / (ath.ath_eur as number)) * 100;
+
+  const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
+  const maScore  = maPct   < -10 ? 2 : maPct   < 0  ? 1 : maPct   < 20 ? -1 : -2;
+  const athScore = athPct  < -50 ? 1 : athPct  < -25 ? 0 : -1;
+  const score    = fgScore + maScore + athScore;
+  const signal   = score >= 3 ? 'accumulate' as const : score <= -2 ? 'caution' as const : 'hold' as const;
+
+  return { fgValue, maPct, athPct, signal };
 }
 
 async function sendEmailAlerts(price: number, change24h: number, movePct: number, direction: 'up' | 'down') {
@@ -74,10 +86,8 @@ async function sendEmailAlerts(price: number, change24h: number, movePct: number
   );
   if (rows.length === 0) return;
 
-  let fgValue = 50; let maPct = 0;
-  try { ({ fgValue, maPct } = await fetchFgAndMa()); } catch { /* use defaults */ }
-
-  const signal = movePct < 0 ? 'accumulate' as const : 'caution' as const;
+  let fgValue = 50; let maPct = 0; let signal: 'accumulate' | 'hold' | 'caution' = 'hold';
+  try { ({ fgValue, maPct, signal } = await fetchSignalData()); } catch { /* use defaults */ }
 
   const sends = rows.map(({ email, lang, unsubscribe_token }) => {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
