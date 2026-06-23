@@ -12,15 +12,6 @@ const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 const MOVE_THRESHOLD = 0.03;
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
 
-async function ensureTables() {
-  await pool.query(`CREATE TABLE IF NOT EXISTS btc_price_history (
-    recorded_at TIMESTAMPTZ PRIMARY KEY DEFAULT NOW(), price_eur NUMERIC NOT NULL)`);
-  await pool.query(`CREATE TABLE IF NOT EXISTS alert_log (
-    id SERIAL PRIMARY KEY, fired_at TIMESTAMPTZ DEFAULT NOW(),
-    price_eur NUMERIC NOT NULL, reference_price_eur NUMERIC NOT NULL,
-    move_pct NUMERIC NOT NULL, direction TEXT NOT NULL)`);
-}
-
 async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
   const res = await fetch(`${BASE}/api/price`, { signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`Price API ${res.status}`);
@@ -29,7 +20,10 @@ async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
 }
 
 async function storePriceSnapshot(price: number) {
-  await pool.query('INSERT INTO btc_price_history (price_eur) VALUES ($1)', [price]);
+  await pool.query(
+    'INSERT INTO btc_price_history (recorded_at, price_eur) VALUES (NOW(), $1)',
+    [price]
+  );
   await pool.query("DELETE FROM btc_price_history WHERE recorded_at < NOW() - INTERVAL '7 days'");
 }
 
@@ -42,13 +36,13 @@ async function getPriceFromHoursAgo(hours: number): Promise<number | null> {
 }
 
 async function getLastAlertTime(): Promise<Date | null> {
-  const r = await pool.query('SELECT fired_at FROM alert_log ORDER BY fired_at DESC LIMIT 1');
+  const r = await pool.query('SELECT fired_at FROM alert_log WHERE fired_at IS NOT NULL ORDER BY fired_at DESC LIMIT 1');
   return r.rows.length ? new Date(r.rows[0].fired_at) : null;
 }
 
 async function logAlert(price: number, refPrice: number, movePct: number, direction: string) {
   await pool.query(
-    'INSERT INTO alert_log (price_eur, reference_price_eur, move_pct, direction) VALUES ($1,$2,$3,$4)',
+    'INSERT INTO alert_log (fired_at, price_eur, reference_price_eur, move_pct, direction) VALUES (NOW(), $1, $2, $3, $4)',
     [price, refPrice, movePct, direction]
   );
 }
@@ -124,7 +118,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method !== 'GET' && req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    await ensureTables();
     const { eur: currentPrice, change24h } = await getCurrentPrice();
     await storePriceSnapshot(currentPrice);
 
