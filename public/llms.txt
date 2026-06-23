@@ -4,15 +4,16 @@
 ## About
 - Tool: https://whentobuybtc.xyz/
 - Language: English and German (DACH audience)
-- Free to use, no account required
+- Free to use, no account required, no ads, no affiliate links
 
 ## Author
-- Imo Babics — https://imobabics.com
+- Imo Babics, Gründer — https://imobabics.com
 
-## Key sections
-- [Signal](https://whentobuybtc.xyz/#signal) — Current Bitcoin market signal based on three indicators
-- [What If?](https://whentobuybtc.xyz/#whatif) — Calculator showing the compounding value of small daily habits redirected into Bitcoin
+## Key pages
+- [Signal](https://whentobuybtc.xyz/) — Current Bitcoin market signal based on three indicators: Fear & Greed Index, 200-day moving average, and distance from all-time high
+- [Wann Bitcoin kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen) — Deutschsprachiger Einsteiger-Guide: Was macht der Markt gerade, wie entsteht das Signal, wann lohnt sich der Bitcoin-Kauf, und die steuerliche Haltefrist nach § 23 EStG (privates Veräußerungsgeschäft, Einjahresfrist)
+- [What If?](https://whentobuybtc.xyz/#whatif) — Calculator showing the compounding value of small daily habits redirected into Bitcoin over time
 
-## Partners
-- Relai — Bitcoin-only savings app (https://relai.me/imo)
-- Trezor — Hardware wallet (https://trezorio.refr.cc/default/u/orange)
+## Data sources
+- Fear & Greed Index: alternative.me
+- Bitcoin price, 200-day average, all-time high: CoinGecko
