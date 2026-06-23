@@ -195,7 +195,7 @@ function signalShareText(signal: SignalState, lang: Lang): string {
     },
     hold: {
       en: 'Bitcoin signal: watch and wait. Live signal for long-term holders: https://whentobuybtc.xyz',
-      de: 'Bitcoin-Signal: abwarten. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
+      de: 'Bitcoin-Signal diese Woche: Abwarten. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
     },
     caution: {
       en: 'Bitcoin is in the caution zone right now. Live signal for long-term holders: https://whentobuybtc.xyz',
@@ -253,7 +253,7 @@ function disclaimerBox(text: string): string {
 function priceBlock(price: number, change24h: number, lang: Lang): string {
   const chSign = change24h >= 0 ? '+' : '';
   const chColor = change24h >= 0 ? '#4ADE80' : '#F87171';
-  const priceLabel = lang === 'de' ? 'Bitcoin Preis' : 'Bitcoin price';
+  const priceLabel = lang === 'de' ? 'Bitcoin-Preis' : 'Bitcoin price';
   const changeLabel = lang === 'de' ? '24h' : '24h';
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:8px;">
     <tr><td style="padding:20px 24px;">
@@ -434,7 +434,7 @@ export function alertEmail(opts: {
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Das Signal hat gerade gewechselt. Teile es mit deinen Followern.'
+        ? 'Das Signal hat gerade gewechselt — teile es mit deinen Followern.'
         : 'The signal just changed. Worth sharing with your followers.',
       shareText: lang === 'de'
         ? `Bitcoin ist gerade ${pct}% ${isDown ? 'gefallen' : 'gestiegen'}, das Signal steht jetzt auf ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
@@ -469,7 +469,7 @@ export function digestEmail(opts: {
 
   const subjectMap: Record<SignalState, Record<Lang, string>> = {
     accumulate: { en: 'Bitcoin is in the buying zone this week',  de: 'Bitcoin ist diese Woche in der Kaufzone' },
-    hold:       { en: 'Bitcoin this week: watch and wait',        de: 'Bitcoin diese Woche: abwarten' },
+    hold:       { en: 'Bitcoin this week: watch and wait',        de: 'Bitcoin diese Woche: Abwarten' },
     caution:    { en: 'Bitcoin is in the caution zone this week', de: 'Bitcoin ist diese Woche in der Vorsichtszone' },
   };
   const subject = subjectMap[signal][lang];
@@ -501,7 +501,7 @@ export function digestEmail(opts: {
 
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
   const intro1       = lang === 'de'
-    ? 'Hier ist, wo Bitcoin diese Woche steht. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
+    ? 'So steht Bitcoin diese Woche. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
     : 'Here\'s where Bitcoin sits this week. Three indicators. One clear picture. No noise.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
   const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
@@ -554,7 +554,7 @@ export function digestEmail(opts: {
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Leite diese Mail an jemanden weiter, der Sats sammelt. Oder teile das Signal mit deinen Followern.'
+        ? 'Schick diese Mail an jemanden weiter, der Sats sammelt. Oder teile das Signal mit deinen Followern.'
         : 'Forward this to someone who&#39;s stacking sats, or post the signal to your followers.',
       shareText: signalShareText(signal, lang),
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
@@ -638,7 +638,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
 
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal weitergeben</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      Noch etwas: Wenn du jemanden kennst, der Sats sammelt, leite diese Mail einfach weiter. Genau so wächst das Projekt.
+      Noch etwas: Wenn du jemanden kennst, der Bitcoin sammelt, schick diese Mail einfach weiter. So wächst das hier.
     </p>
 
     ${disclaimerBox(disclaimerText)}
