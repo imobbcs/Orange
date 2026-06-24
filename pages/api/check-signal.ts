@@ -16,7 +16,7 @@ async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
   const res = await fetch(`${BASE}/api/price`, { signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`Price API ${res.status}`);
   const data = await res.json();
-  return { eur: data.eur, change24h: data.change24h ?? 0 };
+  return { eur: data.eur, change24h: data.eur_24h_change ?? data.usd_24h_change ?? 0 };
 }
 
 async function storePriceSnapshot(price: number) {
