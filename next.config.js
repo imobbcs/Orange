@@ -25,10 +25,55 @@ const nextConfig = {
   ],
   async redirects() {
     return [
+      // www → non-www
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.whentobuybtc.xyz' }],
         destination: 'https://whentobuybtc.xyz/:path*',
+        permanent: true,
+      },
+      // Old German locale routes → German SEO page
+      {
+        source: '/de',
+        destination: '/wann-bitcoin-kaufen',
+        permanent: true,
+      },
+      {
+        source: '/de/:path*',
+        destination: '/wann-bitcoin-kaufen',
+        permanent: true,
+      },
+      // Old French locale routes → homepage
+      {
+        source: '/fr',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/fr/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      // Old Italian locale routes → homepage
+      {
+        source: '/it',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/it/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      // Old blog routes → homepage
+      {
+        source: '/blog',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/blog/:path*',
+        destination: '/',
         permanent: true,
       },
     ];
