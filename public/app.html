@@ -1775,7 +1775,7 @@
     /* Touch tap targets */
     @media (max-width: 768px) {
       button, a.btn-primary, a.btn-ghost, a.partner-btn,
-      .chart-tab, .lang-btn, .share-btn { min-height: 44px; }
+      .chart-tf, .lang-btn, .share-btn { min-height: 44px; }
     }
   
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
@@ -2736,7 +2736,7 @@
       <button class="share-btn" onclick="shareTwitter()" data-umami-event="share-x" data-i18n="shareX">X / Twitter</button>
       <button class="share-btn" onclick="shareSignal()" data-umami-event="share-signal">Signal</button>
       <button class="share-btn" onclick="shareTelegram()" data-umami-event="share-telegram">Telegram</button>
-      <button class="share-btn" onclick="copyLink()" data-i18n="shareCopy">Copy Link</button>
+      <button class="share-btn" onclick="copyLink(this)" data-i18n="shareCopy">Copy Link</button>
     </div>
   </div>
 </section>
@@ -3957,7 +3957,7 @@
 
   // ── CHART ──
   async function loadChart(days, triggerEl) {
-    document.querySelectorAll('.chart-tf, .chart-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.chart-tf').forEach(t => t.classList.remove('active'));
     if (triggerEl) triggerEl.classList.add('active');
     const timeframeMap = { '30': '1m', '90': '3m', '365': '1y' };
     const timeframe = timeframeMap[days] || '1m';
@@ -3970,7 +3970,13 @@
       if (timeframe === '1y') _heroPrices = data.prices || [];
       drawChart(_chartPrices, _chartDays);
       drawHeroHorizon();
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Chart data unavailable', e);
+      if (!_chartPrices.length) {
+        const sk = document.getElementById('chart-skeleton');
+        if (sk) sk.classList.add('hidden');
+      }
+    }
   }
 
   function redrawChart() {
@@ -4231,51 +4237,32 @@
   }
 
   // ── SHARE ──
-  function shareWhatsApp() {
-    const sig = document.getElementById('signal-text').textContent;
+  function _shareText(short) {
+    const sig   = document.getElementById('signal-text').textContent;
     const price = document.getElementById('share-price').textContent;
-    const text = currentLang === 'de'
-      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
-      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
-    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    if (currentLang === 'de') {
+      return short ? `Bitcoin steht gerade bei ${price} — ${sig}. 👉 whentobuybtc.xyz` : `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`;
+    }
+    return short ? `Bitcoin is at ${price} right now — ${sig}. 👉 whentobuybtc.xyz` : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
   }
-  function copyLink() {
+  function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent(_shareText(false)), '_blank'); }
+  function shareSignal()   { window.open('https://signal.me/#p/?message=' + encodeURIComponent(_shareText(false)), '_blank'); }
+  function shareTelegram() { window.open('https://t.me/share/url?url=https://whentobuybtc.xyz&text=' + encodeURIComponent(_shareText(false)), '_blank'); }
+  function shareTwitter()  { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(_shareText(true)), '_blank'); }
+  function copyLink(btn) {
+    if (!navigator.clipboard) return;
     navigator.clipboard.writeText('https://whentobuybtc.xyz').then(() => {
-      const btn = event.target;
+      if (!btn) return;
       btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy Link', 2000);
-    });
-  }
-  function shareSignal() {
-    const sig = document.getElementById('signal-text').textContent;
-    const price = document.getElementById('share-price').textContent;
-    const text = currentLang === 'de'
-      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
-      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
-    window.open('https://signal.me/#p/?message=' + encodeURIComponent(text), '_blank');
-  }
-  function shareTelegram() {
-    const sig = document.getElementById('signal-text').textContent;
-    const price = document.getElementById('share-price').textContent;
-    const text = currentLang === 'de'
-      ? `Bitcoin steht gerade bei ${price} — ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`
-      : `Bitcoin is at ${price} right now — ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
-    window.open('https://t.me/share/url?url=https://whentobuybtc.xyz&text=' + encodeURIComponent(text), '_blank');
-  }
-  function shareTwitter() {
-    const sig = document.getElementById('signal-text').textContent;
-    const price = document.getElementById('share-price').textContent;
-    const text = currentLang === 'de'
-      ? `Bitcoin steht gerade bei ${price} — ${sig}. 👉 whentobuybtc.xyz`
-      : `Bitcoin is at ${price} right now — ${sig}. 👉 whentobuybtc.xyz`;
-    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+      setTimeout(() => { btn.textContent = 'Copy Link'; }, 2000);
+    }).catch(() => {});
   }
 
   // ── PUSH ──
-  function submitEmail() {
-    const input = document.getElementById('email-input');
-    const btn   = document.getElementById('email-submit');
-    const msg   = document.getElementById('email-msg');
+  function subscribeEmail(inputId, btnId, msgId, resetKey) {
+    const input = document.getElementById(inputId);
+    const btn   = document.getElementById(btnId);
+    const msg   = document.getElementById(msgId);
     const t     = translations[currentLang] || translations.en;
 
     const email = input.value.trim();
@@ -4310,51 +4297,11 @@
         msg.textContent = t.emailErr;
         msg.className   = 'email-msg err';
         btn.disabled    = false;
-        btn.textContent = t.emailSubmit;
+        btn.textContent = t[resetKey];
       });
   }
-
-  function submitEmailCalc() {
-    const input = document.getElementById('email-input-calc');
-    const btn   = document.getElementById('email-submit-calc');
-    const msg   = document.getElementById('email-msg-calc');
-    const t     = translations[currentLang] || translations.en;
-
-    const email = input.value.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      msg.textContent = t.emailInvalid;
-      msg.className   = 'email-msg err';
-      input.focus();
-      return;
-    }
-
-    btn.disabled    = true;
-    btn.textContent = t.emailSending;
-    msg.textContent = '';
-    msg.className   = 'email-msg';
-
-    fetch('/api/subscribe', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email, lang: currentLang }),
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (data.ok) {
-          msg.textContent = t.emailOk;
-          msg.className   = 'email-msg ok';
-          input.value     = '';
-        } else {
-          throw new Error(data.error || 'unknown');
-        }
-      })
-      .catch(() => {
-        msg.textContent = t.emailErr;
-        msg.className   = 'email-msg err';
-        btn.disabled    = false;
-        btn.textContent = t.whatifCtaBtn;
-      });
-  }
+  function submitEmail()     { subscribeEmail('email-input',      'email-submit',      'email-msg',      'emailSubmit');   }
+  function submitEmailCalc() { subscribeEmail('email-input-calc', 'email-submit-calc', 'email-msg-calc', 'whatifCtaBtn'); }
 
   // Handle ?email=confirmed / ?email=unsubscribed redirects from the API
   (function handleEmailRedirect() {
@@ -4677,7 +4624,7 @@
     // Fear/Greed, ATH and MA can run in parallel after price is known
     await Promise.all([fetchFearGreed(), fetchATH(), fetch200MA()]);
     // Load default chart after MA is available (so 200MA line renders)
-    const defaultTab = document.querySelector('.chart-tab.active');
+    const defaultTab = document.querySelector('.chart-tf.active');
     loadChart('365', defaultTab);
   }
 
