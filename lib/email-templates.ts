@@ -52,6 +52,23 @@ function signalDigestHeadline(s: SignalState, lang: Lang): string {
   return map[s][lang];
 }
 
+// ─── Cycle marker (halving context — date math only, no API) ──────────────────
+// Anchored to the confirmed 4th halving: 2024-04-20 (block 840,000). This date
+// is in the past and never changes, so "days since" is always correct. We do NOT
+// compute "days until" the next halving: it is block-height based and drifts by
+// days across sources, so a hard-coded target would ship a wrong number.
+
+const LAST_HALVING = Date.UTC(2024, 3, 20); // month is 0-indexed: 3 = April
+
+function cycleMarker(lang: Lang): { label: string; text: string } {
+  const daysSince = Math.floor((Date.now() - LAST_HALVING) / 86400000);
+  const label = lang === 'de' ? 'Halving-Zyklus' : 'Halving cycle';
+  const text = lang === 'de'
+    ? `Tag <strong style="color:#F7931A;">${daysSince}</strong> in Zyklus 5 &#8202;&#8212;&#8202; ${daysSince} Tage seit dem letzten Halving.`
+    : `Day <strong style="color:#F7931A;">${daysSince}</strong> of cycle 5 &#8202;&#8212;&#8202; ${daysSince} days since the last halving.`;
+  return { label, text };
+}
+
 // ─── Shared shell ─────────────────────────────────────────────────────────────
 
 function shell(opts: {
@@ -232,6 +249,32 @@ function spreadSection(opts: { lang: Lang; lead: string; shareText: string; butt
     ${shareButton(shareTweetUrl(shareText), buttonLabel)}`;
 }
 
+// Subscribe block aimed at a reader who received the email as a forward.
+// Used by both the digest and the alert. The URL must put the query string
+// before the #alerts fragment so Umami records the UTM params.
+function subscribeBlock(lang: Lang, campaign: string): string {
+  const url = `https://whentobuybtc.xyz/?utm_source=email&utm_medium=${campaign}&utm_campaign=forward#alerts`;
+  const heading = lang === 'de' ? 'Wurde dir diese Mail weitergeleitet?' : 'Was this forwarded to you?';
+  const body    = lang === 'de'
+    ? 'Hol dir das Signal in dein eigenes Postfach — kostenlos, kein Lärm, jederzeit mit einem Klick abbestellbar.'
+    : 'Get the signal in your own inbox — free, no noise, one-click unsubscribe any time.';
+  const button  = lang === 'de' ? 'Kostenlos abonnieren &#8594;' : 'Subscribe free &#8594;';
+  return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:8px;">
+      <tr><td style="padding:22px 24px;">
+        <p class="em2" style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${heading}</p>
+        <p class="em" style="margin:0 0 18px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.7;color:rgba(237,232,222,0.88);">${body}</p>
+        ${ctaButton(url, button, 220)}
+      </td></tr>
+    </table>`;
+}
+
+// Plain hyperlinked text — the most demoted CTA form (below the outline button).
+function textLink(href: string, label: string): string {
+  return `<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.02em;">
+    <a href="${href}" class="el" style="color:rgba(247,147,26,0.75);text-decoration:none;">${label}</a>
+  </p>`;
+}
+
 // ─── Rule ─────────────────────────────────────────────────────────────────────
 
 const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -254,7 +297,7 @@ function priceBlock(price: number, change24h: number, lang: Lang): string {
   const chSign = change24h >= 0 ? '+' : '';
   const chColor = change24h >= 0 ? '#4ADE80' : '#F87171';
   const priceLabel = lang === 'de' ? 'Bitcoin-Preis' : 'Bitcoin price';
-  const changeLabel = lang === 'de' ? '24h' : '24h';
+  const changeLabel = '24h';
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:8px;">
     <tr><td style="padding:20px 24px;">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
@@ -385,8 +428,8 @@ export function alertEmail(opts: {
     : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% \u2014 signal changed`;
 
   const preheader = lang === 'de'
-    ? `${headline} &#8202;&#8212;&#8202; das Signal hat sich geändert.`
-    : `${headline} &#8202;&#8212;&#8202; the signal just changed.`;
+    ? `${headline} &#8202;&#8212;&#8202; Signal jetzt: ${label}.`
+    : `${headline} &#8202;&#8212;&#8202; signal now: ${label.toLowerCase()}.`;
 
   const headerRight = lang === 'de' ? 'Signal-Alert' : 'Signal alert';
 
@@ -430,7 +473,7 @@ export function alertEmail(opts: {
     </table>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${context}</p>
     ${disclaimerBox(disclaimerText)}
-    ${ctaButton('https://whentobuybtc.xyz', ctaLabel, 240)}
+    ${shareButton('https://whentobuybtc.xyz/?utm_source=email&utm_medium=alert&utm_campaign=cta#alerts', ctaLabel, 240)}
     ${spreadSection({
       lang,
       lead: lang === 'de'
@@ -441,6 +484,8 @@ export function alertEmail(opts: {
         : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% and the signal moved to ${label.toLowerCase()}. Live signal for long-term holders: https://whentobuybtc.xyz`,
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
     })}
+    ${rule}
+    ${subscribeBlock(lang, 'alert')}
   `;
 
   return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
@@ -474,9 +519,12 @@ export function digestEmail(opts: {
   };
   const subject = subjectMap[signal][lang];
 
-  const preheader = lang === 'de'
-    ? `${eur(price)} &#183; ${signalLabel(signal, lang)}`
-    : `${eur(price)} &#183; ${signalLabel(signal, lang)}`;
+  const preheaderMap: Record<SignalState, Record<Lang, string>> = {
+    accumulate: { en: 'Markets are fearful — here\'s where the three indicators stand.', de: 'Angst am Markt — so stehen die drei Indikatoren.' },
+    hold:       { en: 'Steady week — here\'s where the three indicators stand.',         de: 'Ruhige Woche — so stehen die drei Indikatoren.' },
+    caution:    { en: 'Greed is running high — here\'s where the three indicators stand.', de: 'Gier am Markt — so stehen die drei Indikatoren.' },
+  };
+  const preheader = `${eur(price)} &#183; ${signalLabel(signal, lang)} &#183; ${preheaderMap[signal][lang]}`;
 
   const headerRight = lang === 'de' ? 'Wöchentlicher Überblick' : 'Weekly digest';
 
@@ -501,8 +549,8 @@ export function digestEmail(opts: {
 
   const greetingLine = lang === 'de' ? 'Hey,' : 'Hey there,';
   const intro1       = lang === 'de'
-    ? 'So steht Bitcoin diese Woche. Drei Indikatoren. Ein klares Bild. Kein Rauschen.'
-    : 'Here\'s where Bitcoin sits this week. Three indicators. One clear picture. No noise.';
+    ? 'ich hoffe, deine Woche läuft gut. Hier ist, wo Bitcoin gerade steht — drei Indikatoren, kein Lärm, einfach das, was die Daten zeigen.'
+    : 'Hope you\'re having a good week. Here\'s where Bitcoin stands right now — three indicators, no noise, just what the data shows.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
   const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
   const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : 'Long-term avg';
@@ -514,6 +562,13 @@ export function digestEmail(opts: {
   const disclaimerText2 = lang === 'de'
     ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
     : 'This is market data, not financial advice. Past signal conditions are not a guarantee of future performance. Always make your own informed decisions.';
+
+  // Cycle marker (date math only).
+  const cycle = cycleMarker(lang);
+
+  // UTM-tagged CTA. Query string MUST come before the #alerts fragment, or the
+  // params get swallowed into the hash and Umami never sees them.
+  const ctaUrl = 'https://whentobuybtc.xyz/?utm_source=email&utm_medium=digest&utm_campaign=cta#alerts';
 
   const body = `
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.88);">${greetingLine}</p>
@@ -548,14 +603,22 @@ export function digestEmail(opts: {
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${athSign}${athPct.toFixed(1)}%</p>
       </td>
     </tr></table>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:28px;">
+      <tr><td style="border-left:2px solid rgba(247,147,26,0.3);padding:10px 16px;">
+        <p class="em2" style="margin:0 0 4px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${cycle.label}</p>
+        <p class="em" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:12px;line-height:1.6;color:rgba(237,232,222,0.88);">${cycle.text}</p>
+      </td></tr>
+    </table>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${contextText}</p>
     ${disclaimerBox(disclaimerText2)}
-    ${ctaButton('https://whentobuybtc.xyz', ctaLabel, 260)}
+    ${textLink(ctaUrl, ctaLabel)}
+    ${rule}
+    ${subscribeBlock(lang, 'digest')}
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Schick diese Mail an jemanden weiter, der Sats sammelt. Oder teile das Signal mit deinen Followern.'
-        : 'Forward this to someone who&#39;s stacking sats, or post the signal to your followers.',
+        ? 'Wenn dir diese Mails weiterhelfen, leite sie gerne an jemanden weiter, der öfter auf den Bitcoin-Kurs schaut, als er zugeben würde — oder teile sie auf X. Ich bin ein Ein-Personen-Projekt und will 1.000 Abonnenten erreichen — über Mundpropaganda komme ich dahin. Danke dir! &#10084;&#65039;'
+        : 'If you find these useful, forward this to someone who checks the Bitcoin price more than they&#39;d like to admit — or share it on X. I&#39;m a one-person project trying to reach 1,000 subscribers, and word of mouth is how I get there. Thank you! &#10084;&#65039;',
       shareText: signalShareText(signal, lang),
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
     })}
