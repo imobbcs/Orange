@@ -56,6 +56,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({ status: 'cooldown', hoursSinceLast: hoursSinceLast.toFixed(1) });
     }
 
+    await pool.query('INSERT INTO digest_log (sent_at) VALUES (NOW())');
+
     const { currentPrice, fgValue, maPct, athPct, change24h, signal } = await fetchSignalData();
     const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
       `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
@@ -85,7 +87,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await delay(250);
     }
 
-    await pool.query('INSERT INTO digest_log (sent_at) VALUES (NOW())');
     console.log(`weekly-digest: ${sent}/${rows.length} sent successfully, ${failed} failed`);
     return res.status(200).json({ status: 'done', sent, failed });
   } catch (err: any) {
