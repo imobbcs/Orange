@@ -10,6 +10,8 @@ const resend   = new Resend(process.env.RESEND_API_KEY);
 const BASE     = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
 async function fetchSignalData() {
   const [priceRes, fgRes, athRes, histRes] = await Promise.all([
     fetch(`${BASE}/api/price`,                             { signal: AbortSignal.timeout(10000) }),
@@ -45,6 +47,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`)
     return res.status(401).json({ error: 'Unauthorized' });
   try {
+    const lastDigest = await pool.query(
+      'SELECT sent_at FROM digest_log ORDER BY sent_at DESC LIMIT 1'
+    );
+    if (lastDigest.rows.length > 0) {
+      const hoursSinceLast = (Date.now() - new Date(lastDigest.rows[0].sent_at).getTime()) / 3600000;
+      if (hoursSinceLast < 24)
+        return res.status(200).json({ status: 'cooldown', hoursSinceLast: hoursSinceLast.toFixed(1) });
+    }
+
     const { currentPrice, fgValue, maPct, athPct, change24h, signal } = await fetchSignalData();
     const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
       `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
@@ -74,6 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await delay(250);
     }
 
+    await pool.query('INSERT INTO digest_log (sent_at) VALUES (NOW())');
     console.log(`weekly-digest: ${sent}/${rows.length} sent successfully, ${failed} failed`);
     return res.status(200).json({ status: 'done', sent, failed });
   } catch (err: any) {
