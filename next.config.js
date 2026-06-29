@@ -25,6 +25,13 @@ const nextConfig = {
   ],
   async redirects() {
     return [
+      // Defensive domain → German SEO page (single-hop 301)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: '(www\\.)?wannbitcoinkaufen\\.de' }],
+        destination: 'https://whentobuybtc.xyz/wann-bitcoin-kaufen',
+        permanent: true,
+      },
       // www → non-www
       {
         source: '/:path*',
