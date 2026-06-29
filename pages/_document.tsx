@@ -19,15 +19,7 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#F7931A" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          
-          {/* Canonical and Language Alternates */}
-          <link rel="canonical" href="https://whentobuybtc.xyz" />
-          <link rel="alternate" hrefLang="en" href="https://whentobuybtc.xyz/en" />
-          <link rel="alternate" hrefLang="fr" href="https://whentobuybtc.xyz/fr" />
-          <link rel="alternate" hrefLang="de" href="https://whentobuybtc.xyz/de" />
-          <link rel="alternate" hrefLang="it" href="https://whentobuybtc.xyz/it" />
-          <link rel="alternate" hrefLang="x-default" href="https://whentobuybtc.xyz" />
-          
+
           {/* Performance and Resource Hints */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -36,13 +28,13 @@ class MyDocument extends Document {
           <link rel="dns-prefetch" href="https://api.cryptocompare.com" />
           <link rel="dns-prefetch" href="https://alternative.me" />
           <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" as="style" />
-          
+
           {/* Favicon and App Icons */}
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/manifest.json" />
-          
+
           {/* Structured Data for Bitcoin Price */}
           <script
             type="application/ld+json"
