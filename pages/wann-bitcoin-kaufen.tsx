@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
 interface SignalData {
@@ -619,7 +620,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         }
       `}</style>
 
-      <head>
+      <Head>
         <title>Wann Bitcoin kaufen 2026: Das aktuelle Marktsignal</title>
         <meta name="description" content="Jetzt Bitcoin kaufen oder warten? Drei Indikatoren zeigen live, was der Markt macht. Einfach erklärt, täglich aktualisiert, kostenlos." />
         <meta name="author" content="Imo Babics" />
@@ -642,7 +643,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://whentobuybtc.xyz/og-wann-bitcoin-kaufen.png" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+        <script type="application/ld+json" key="ld-json-de" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           {
             "@context": "https://schema.org",
             "@type": "WebSite",
@@ -705,9 +706,9 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             ]
           }
         ])}} />
-        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.lang="de";' }} />
-        <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
-      </head>
+        <script key="set-lang-de" dangerouslySetInnerHTML={{ __html: 'document.documentElement.lang="de";' }} />
+        <script defer key="umami" src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
+      </Head>
 
       <div className="wbc-sticky-bar" id="wbc-sticky-bar">
         <a href="#email" className="wbc-sticky-btn-ghost">Email-Alerts</a>
