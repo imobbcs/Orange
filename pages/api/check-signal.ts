@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE     = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
-const MOVE_THRESHOLD = 0.03;
+const MOVE_THRESHOLD = 0.03;              // 3% — compared against the 24h change
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
 
 async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
@@ -27,17 +27,15 @@ async function storePriceSnapshot(price: number) {
   await pool.query("DELETE FROM btc_price_history WHERE recorded_at < NOW() - INTERVAL '7 days'");
 }
 
-async function getPriceFromHoursAgo(hours: number): Promise<number | null> {
+// Returns the most recent alert's timestamp AND direction so the cooldown can be
+// direction-aware: a repeat move in the same direction is suppressed during cooldown,
+// but a fresh move in the opposite direction is allowed through.
+async function getLastAlert(): Promise<{ firedAt: Date; direction: string | null } | null> {
   const r = await pool.query(
-    `SELECT price_eur FROM btc_price_history WHERE recorded_at <= NOW() - ($1 || ' hours')::INTERVAL ORDER BY recorded_at DESC LIMIT 1`,
-    [hours]
+    'SELECT fired_at, direction FROM alert_log WHERE fired_at IS NOT NULL ORDER BY fired_at DESC LIMIT 1'
   );
-  return r.rows.length ? parseFloat(r.rows[0].price_eur) : null;
-}
-
-async function getLastAlertTime(): Promise<Date | null> {
-  const r = await pool.query('SELECT fired_at FROM alert_log WHERE fired_at IS NOT NULL ORDER BY fired_at DESC LIMIT 1');
-  return r.rows.length ? new Date(r.rows[0].fired_at) : null;
+  if (!r.rows.length) return null;
+  return { firedAt: new Date(r.rows[0].fired_at), direction: r.rows[0].direction ?? null };
 }
 
 async function logAlert(price: number, refPrice: number, movePct: number, direction: string) {
@@ -121,28 +119,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { eur: currentPrice, change24h } = await getCurrentPrice();
     await storePriceSnapshot(currentPrice);
 
-    const refPrice = await getPriceFromHoursAgo(4);
-    if (!refPrice) return res.status(200).json({ status: 'no_reference' });
-
-    const movePct   = (currentPrice - refPrice) / refPrice;
-    const direction = movePct >= 0 ? 'up' : 'down';
+    // Trigger is now the 24h change (the number subscribers actually watch),
+    // not a self-computed 4h rolling window. movePct is the fractional form of change24h.
+    const movePct   = change24h / 100;
+    const direction: 'up' | 'down' = movePct >= 0 ? 'up' : 'down';
 
     if (Math.abs(movePct) < MOVE_THRESHOLD)
-      return res.status(200).json({ status: 'no_alert', movePct: (movePct * 100).toFixed(2) + '%' });
+      return res.status(200).json({ status: 'no_alert', movePct: change24h.toFixed(2) + '%' });
 
-    const lastAlert = await getLastAlertTime();
-    if (lastAlert && Date.now() - lastAlert.getTime() < COOLDOWN_MS)
-      return res.status(200).json({ status: 'cooldown', lastAlertHoursAgo: ((Date.now() - lastAlert.getTime()) / 3600000).toFixed(1) });
+    // Direction-aware cooldown: suppress a repeat alert only if it's within the cooldown
+    // window AND in the same direction as the last one (so a lingering 24h reading can't
+    // re-fire the same move). An opposite-direction move bypasses cooldown and fires,
+    // so subscribers don't miss a reversal. Missing/NULL last direction fails open (fires).
+    const lastAlert = await getLastAlert();
+    if (lastAlert
+        && Date.now() - lastAlert.firedAt.getTime() < COOLDOWN_MS
+        && lastAlert.direction === direction) {
+      return res.status(200).json({
+        status: 'cooldown',
+        direction,
+        lastAlertHoursAgo: ((Date.now() - lastAlert.firedAt.getTime()) / 3600000).toFixed(1),
+      });
+    }
 
     let fgValue = 50; let maPct = 0; let signal: 'accumulate' | 'hold' | 'caution' = 'hold';
     try { ({ fgValue, maPct, signal } = await fetchSignalData()); } catch (e: any) {
       console.error('fetchSignalData failed, using defaults:', e.message);
     }
 
-    await sendEmailAlerts(currentPrice, change24h, movePct, direction as 'up' | 'down', fgValue, maPct, signal);
+    await sendEmailAlerts(currentPrice, change24h, movePct, direction, fgValue, maPct, signal);
+    // reference_price_eur is derived from the 24h change so the logged row stays self-consistent.
+    const refPrice = currentPrice / (1 + movePct);
     await logAlert(currentPrice, refPrice, movePct, direction);
 
-    return res.status(200).json({ status: 'alert_sent', direction, movePct: (movePct * 100).toFixed(2) + '%' });
+    return res.status(200).json({ status: 'alert_sent', direction, movePct: change24h.toFixed(2) + '%' });
 
   } catch (err: any) {
     console.error('check-signal error:', err.message);
