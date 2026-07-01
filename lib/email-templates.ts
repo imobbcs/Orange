@@ -404,16 +404,16 @@ export function alertEmail(opts: {
   const maSign = maPct >= 0 ? '+' : '';
 
   const headline = lang === 'de'
-    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% in 4 Stunden`
-    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% in 4 hours`;
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% heute`
+    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% today`;
 
   const greeting = lang === 'de'
     ? isDown
-      ? `Das Signal hat sich geändert. Bitcoin ist in den vergangenen 4 Stunden deutlich gefallen &#8202;&#8212;&#8202; genau die Art von Moment, auf den langfristige Bitcoiner vorbereitet sind.`
-      : `Das Signal hat sich geändert. Bitcoin ist in den vergangenen 4 Stunden stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner reagieren darauf mit Ruhe, nicht mit Aufregung.`
+      ? `Bitcoin ist heute deutlich gefallen &#8202;&#8212;&#8202; genau die Art von Moment, auf den langfristige Bitcoiner vorbereitet sind.`
+      : `Bitcoin ist heute stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner reagieren darauf mit Ruhe, nicht mit Aufregung.`
     : isDown
-      ? `The signal just changed. Bitcoin has dropped sharply in the last 4 hours &#8202;&#8212;&#8202; exactly the kind of moment long-term Bitcoiners prepare for.`
-      : `The signal just changed. Bitcoin has surged in the last 4 hours &#8202;&#8212;&#8202; long-term Bitcoiners tend to get quieter, not more excited, when this happens.`;
+      ? `Bitcoin has dropped sharply today &#8202;&#8212;&#8202; exactly the kind of moment long-term Bitcoiners prepare for.`
+      : `Bitcoin has surged today &#8202;&#8212;&#8202; long-term Bitcoiners tend to get quieter, not more excited, when this happens.`;
 
   const context = lang === 'de'
     ? isDown
@@ -424,8 +424,8 @@ export function alertEmail(opts: {
       : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
 
   const subject = lang === 'de'
-    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% \u2014 Signal hat gewechselt`
-    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% \u2014 signal changed`;
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% \u2014 Signal jetzt: ${label}`
+    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% \u2014 signal now: ${label.toLowerCase()}`;
 
   const preheader = lang === 'de'
     ? `${headline} &#8202;&#8212;&#8202; Signal jetzt: ${label}.`
@@ -446,7 +446,7 @@ export function alertEmail(opts: {
   const body = `
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.88);">${greetingLine}</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.88);">${greeting}</p>
-    <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Signal geändert' : 'Signal update'}</p>
+    <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Große Bewegung' : 'Big move'}</p>
     <h1 class="ehl" style="margin:0 0 8px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.25;color:#F7931A;font-style:italic;">${headline}</h1>
     ${rule}
     ${priceBlock(price, change24h, lang)}
@@ -477,11 +477,11 @@ export function alertEmail(opts: {
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Das Signal hat gerade gewechselt — teile es mit deinen Followern.'
-        : 'The signal just changed. Worth sharing with your followers.',
+        ? 'Bitcoin hat sich gerade stark bewegt — teile es mit deinen Followern.'
+        : 'Bitcoin just made a big move. Worth sharing with your followers.',
       shareText: lang === 'de'
         ? `Bitcoin ist gerade ${pct}% ${isDown ? 'gefallen' : 'gestiegen'}, das Signal steht jetzt auf ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
-        : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% and the signal moved to ${label.toLowerCase()}. Live signal for long-term holders: https://whentobuybtc.xyz`,
+        : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% and the signal is now ${label.toLowerCase()}. Live signal for long-term holders: https://whentobuybtc.xyz`,
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
     })}
     ${rule}
@@ -671,7 +671,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
           <tr>
             <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
               <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal-Alert</p>
-              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Sofort, wenn Bitcoin innerhalb von 4 Stunden um mehr als 3&nbsp;% steigt oder fällt. Maximal einmal alle 24 Stunden — kein Rauschen.</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Sofort, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Maximal einmal alle 24 Stunden — kein Rauschen.</p>
             </td>
           </tr>
           <tr>
@@ -727,7 +727,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
           <tr>
             <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
               <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal alert</p>
-              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Immediately when Bitcoin moves more than 3% in 4 hours and the signal changes. Maximum once every 24 hours — no noise.</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Immediately when Bitcoin moves more than 3% in a day and the signal changes. Maximum once every 24 hours — no noise.</p>
             </td>
           </tr>
           <tr>
