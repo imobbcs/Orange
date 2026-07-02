@@ -135,7 +135,7 @@ function shell(opts: {
 </head>
 <body class="eb" style="margin:0;padding:0;background-color:#1C1917;">
 
-<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
 
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="eb" style="background-color:#1C1917;">
 <tr><td align="center" style="padding:40px 16px;">
@@ -204,22 +204,28 @@ function shareTweetUrl(text: string): string {
   return 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
 }
 
-function signalShareText(signal: SignalState, lang: Lang): string {
-  const map: Record<SignalState, Record<Lang, string>> = {
-    accumulate: {
-      en: 'Bitcoin is in the buying zone right now. Live signal for long-term holders: https://whentobuybtc.xyz',
-      de: 'Bitcoin ist gerade in der Kaufzone. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
-    },
-    hold: {
-      en: 'Bitcoin signal: watch and wait. Live signal for long-term holders: https://whentobuybtc.xyz',
-      de: 'Bitcoin-Signal diese Woche: Abwarten. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
-    },
-    caution: {
-      en: 'Bitcoin is in the caution zone right now. Live signal for long-term holders: https://whentobuybtc.xyz',
-      de: 'Bitcoin ist gerade in der Vorsichtszone. Live-Signal für langfristige Halter: https://whentobuybtc.xyz',
-    },
-  };
-  return map[signal][lang];
+// Plain-language label for a raw Fear & Greed value (0-100), standard bands.
+function fgWord(value: number, lang: Lang): string {
+  const bands: Array<[number, Record<Lang, string>]> = [
+    [24,  { en: 'Extreme Fear',  de: 'Extreme Angst' }],
+    [44,  { en: 'Fear',          de: 'Angst' }],
+    [55,  { en: 'Neutral',       de: 'Neutral' }],
+    [75,  { en: 'Greed',         de: 'Gier' }],
+    [100, { en: 'Extreme Greed', de: 'Extreme Gier' }],
+  ];
+  for (const [max, labels] of bands) {
+    if (value <= max) return labels[lang];
+  }
+  return bands[bands.length - 1][1][lang];
+}
+
+function signalShareText(signal: SignalState, lang: Lang, price: number, change24h: number, fgValue: number): string {
+  const label = signalLabel(signal, lang);
+  const sign  = change24h >= 0 ? '+' : '';
+  const word  = fgWord(fgValue, lang);
+  return lang === 'de'
+    ? `Bitcoin: ${eur(price)}, ${sign}${change24h.toFixed(1)}% heute. Fear & Greed bei ${fgValue} (${word}). Signal: ${label}. Kostenloser Live-Tracker für langfristige Halter: https://whentobuybtc.xyz`
+    : `Bitcoin: ${eur(price)}, ${sign}${change24h.toFixed(1)}% today. Fear & Greed at ${fgValue} (${word}). Signal: ${label}. Free live tracker for long-term holders: https://whentobuybtc.xyz`;
 }
 
 // Secondary (outline) button — used for the share-to-X action so it does not
@@ -246,7 +252,8 @@ function spreadSection(opts: { lang: Lang; lead: string; shareText: string; butt
   return `${rule}
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${heading}</p>
     <p class="em" style="margin:0 0 18px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">${lead}</p>
-    ${shareButton(shareTweetUrl(shareText), buttonLabel)}`;
+    ${shareButton(shareTweetUrl(shareText), buttonLabel)}
+    <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>`;
 }
 
 // Subscribe block aimed at a reader who received the email as a forward.
@@ -278,8 +285,8 @@ function textLink(href: string, label: string): string {
 // ─── Rule ─────────────────────────────────────────────────────────────────────
 
 const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-  <tr><td class="lr" style="height:1px;background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td></tr>
-</table><div style="height:28px;">&nbsp;</div>`;
+  <tr><td class="lr" style="height:1px;font-size:1px;line-height:1px;mso-line-height-rule:exactly;background-color:rgba(247,147,26,0.15);padding:0;">&nbsp;</td></tr>
+</table><div style="height:28px;line-height:28px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>`;
 
 // ─── Disclaimer box ───────────────────────────────────────────────────────────
 
@@ -474,14 +481,15 @@ export function alertEmail(opts: {
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${context}</p>
     ${disclaimerBox(disclaimerText)}
     ${shareButton('https://whentobuybtc.xyz/?utm_source=email&utm_medium=alert&utm_campaign=cta#alerts', ctaLabel, 240)}
+    <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Bitcoin hat sich gerade stark bewegt — teile es mit deinen Followern.'
-        : 'Bitcoin just made a big move. Worth sharing with your followers.',
+        ? 'Hilf mir, 1.000 Abonnenten zu erreichen — teile das mit deinen Freunden oder Followern.'
+        : 'Help me reach 1,000 subscribers — share this with your friends or followers.',
       shareText: lang === 'de'
-        ? `Bitcoin ist gerade ${pct}% ${isDown ? 'gefallen' : 'gestiegen'}, das Signal steht jetzt auf ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
-        : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% and the signal is now ${label.toLowerCase()}. Live signal for long-term holders: https://whentobuybtc.xyz`,
+        ? `Bitcoin ist gerade um ${pct}% auf ${eur(price)} ${isDown ? 'gefallen' : 'gestiegen'}. Fear & Greed bei ${fgValue} (${fgWord(fgValue, lang)}). Signal jetzt: ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
+        : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% to ${eur(price)}. Fear & Greed at ${fgValue} (${fgWord(fgValue, lang)}). Signal now: ${label}. Live signal for long-term holders: https://whentobuybtc.xyz`,
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
     })}
     ${rule}
@@ -617,9 +625,9 @@ export function digestEmail(opts: {
     ${spreadSection({
       lang,
       lead: lang === 'de'
-        ? 'Wenn dir diese Mails weiterhelfen, leite sie gerne an jemanden weiter, der öfter auf den Bitcoin-Kurs schaut, als er zugeben würde — oder teile sie auf X. Ich bin ein Ein-Personen-Projekt und will 1.000 Abonnenten erreichen — über Mundpropaganda komme ich dahin. Danke dir! &#10084;&#65039;'
-        : 'If you find these useful, forward this to someone who checks the Bitcoin price more than they&#39;d like to admit — or share it on X. I&#39;m a one-person project trying to reach 1,000 subscribers, and word of mouth is how I get there. Thank you! &#10084;&#65039;',
-      shareText: signalShareText(signal, lang),
+        ? 'Ich bin ein Ein-Personen-Projekt und will 1.000 Abonnenten erreichen. Wenn dir das hier weiterhilft, teile es mit deinen Freunden oder Followern — so komme ich dahin. Danke dir! &#10084;&#65039;'
+        : 'I&#39;m a one-person project trying to reach 1,000 subscribers. If this is useful, share it with your friends or followers — that&#39;s how I get there. Thank you! &#10084;&#65039;',
+      shareText: signalShareText(signal, lang, price, change24h, fgValue),
       buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
     })}
   `;
