@@ -1,13 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HistoryData } from '../../types';
 
-let cache: { data: HistoryData; timeframe: string; currency: string } | null = null;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes, matches old Cache-Control intent
+
+const cacheStore: Map<string, { data: HistoryData; timestamp: number }> = new Map();
 
 async function fetchHistoryFromCoinGecko(days: number = 30, currency: string = 'eur'): Promise<HistoryData | null> {
   try {
-    const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
+    const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_pro_api_key=${process.env.COINGECKO_API_KEY}` : '';
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}${cgKey}`
+      `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}${cgKey}`
     );
     if (!response.ok) {
       console.error('CoinGecko History API response:', response.status, response.statusText);
@@ -45,19 +47,28 @@ export default async function handler(
     ? (currency as string).toLowerCase()
     : 'eur';
 
+  const cacheKey = `${days}_${resolvedCurrency}`;
+  const cached = cacheStore.get(cacheKey);
+
+  // Serve from cache if fresh — this is the fix; previously every request hit CoinGecko
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    return res.status(200).json(cached.data);
+  }
+
   const historyData = await fetchHistoryFromCoinGecko(days, resolvedCurrency);
 
   if (historyData) {
-    cache = { data: historyData, timeframe: timeframe as string, currency: resolvedCurrency };
+    cacheStore.set(cacheKey, { data: historyData, timestamp: Date.now() });
     res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     return res.status(200).json(historyData);
   }
 
-  // Stale cache fallback
-  if (cache) {
+  // Stale cache fallback (serve even if expired, better than nothing)
+  if (cached) {
     console.log('history: CoinGecko failed, serving stale cache');
     res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
-    return res.status(200).json(cache.data);
+    return res.status(200).json(cached.data);
   }
 
   return res.status(500).json({ error: 'Failed to fetch historical data' });
