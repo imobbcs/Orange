@@ -1,4 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+
+const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours, matches old Cache-Control intent
+let cache: { monthly: Record<string, number>; timestamp: number } | null = null;
+
 const FALLBACK: Record<string, number> = {
   '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
   '2015-07':268,'2015-08':263,'2015-09':211,'2015-10':267,'2015-11':313,'2015-12':384,
@@ -22,13 +26,15 @@ const FALLBACK: Record<string, number> = {
   '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
   '2025-01':85000,'2025-02':77000,'2025-03':75000,
 };
+
 function toYYYYMM(ts: number): string {
   const d = new Date(ts);
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
 }
+
 async function fetchFromCoinGecko(): Promise<Record<string, number>> {
-  const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}` : '';
-  const url = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily${cgKey}`;
+  const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_pro_api_key=${process.env.COINGECKO_API_KEY}` : '';
+  const url = `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily${cgKey}`;
   const res = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'whentobuybtc.xyz/1.0' },
     signal: AbortSignal.timeout(10000),
@@ -47,13 +53,26 @@ async function fetchFromCoinGecko(): Promise<Record<string, number>> {
   }
   return monthly;
 }
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=3600');
+
+  // Serve from in-memory cache if fresh — this is the fix; previously every
+  // request hit CoinGecko's 365-day daily endpoint regardless of the header
+  if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
+    return res.status(200).json({
+      monthly: cache.monthly,
+      count: Object.keys(cache.monthly).length,
+      source: 'coingecko-cached',
+    });
+  }
+
   const monthly: Record<string, number> = { ...FALLBACK };
   try {
     const recent = await fetchFromCoinGecko();
     Object.assign(monthly, recent);
+    cache = { monthly, timestamp: Date.now() };
     return res.status(200).json({
       monthly,
       count: Object.keys(monthly).length,
@@ -61,6 +80,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (err) {
     console.error('btc-history-monthly: CoinGecko fetch failed, using fallback only', err);
+    // Serve stale cache over hardcoded fallback if we have one
+    if (cache) {
+      return res.status(200).json({
+        monthly: cache.monthly,
+        count: Object.keys(cache.monthly).length,
+        source: 'coingecko-stale',
+      });
+    }
     return res.status(200).json({
       monthly,
       count: Object.keys(monthly).length,
