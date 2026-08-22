@@ -12,6 +12,11 @@ const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 const MOVE_THRESHOLD = 0.03;              // 3% — compared against the 24h change
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
 
+// Manually-updated for now (per Imo — live query comes later). Bump this
+// every so often; keep in sync with the same constant in weekly-digest.ts.
+const SUBSCRIBER_COUNT = 612;
+const SUBSCRIBER_GOAL  = 1000;
+
 async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
   const res = await fetch(`${BASE}/api/price`, { signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`Price API ${res.status}`);
@@ -93,6 +98,7 @@ async function sendEmailAlerts(
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html } = alertEmail({
       price, change24h, movePct, direction, signal, fgValue, maPct, unsubscribeUrl, replyTo: REPLY_TO, lang,
+      subscriberCount: SUBSCRIBER_COUNT, subscriberGoal: SUBSCRIBER_GOAL,
     });
     const result = await resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
