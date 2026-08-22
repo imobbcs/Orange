@@ -69,6 +69,39 @@ function cycleMarker(lang: Lang): { label: string; text: string } {
   return { label, text };
 }
 
+// ─── Week-over-week delta helpers (digest) ─────────────────────────────────────
+// digest_log now stores each week's fg_value/ma_pct/ath_pct/price_eur, so the
+// digest can say what changed instead of just what the numbers are today.
+
+function fgTrendWord(curr: number, prev: number, lang: Lang): string {
+  const diff = curr - prev;
+  if (Math.abs(diff) < 3) return lang === 'de' ? 'kaum verändert' : 'little changed';
+  if (lang === 'de') return diff > 0 ? 'deutlich gestiegen' : 'deutlich gefallen';
+  return diff > 0 ? 'risen notably' : 'fallen notably';
+}
+
+// One-sentence "what changed" line for the digest body. Returns null on the
+// first-ever send (no prior row to compare against), in which case the digest
+// falls back to the static definitions paragraph instead.
+function weekChangeSummary(fgValue: number, prevFgValue: number | undefined, lang: Lang): string | null {
+  if (prevFgValue == null || prevFgValue === fgValue) return null;
+  const trend = fgTrendWord(fgValue, prevFgValue, lang);
+  return lang === 'de'
+    ? `Fear &amp; Greed ist seit letzter Woche von ${prevFgValue} auf ${fgValue} ${trend} &#8202;&#8212;&#8202; das ist die eigentliche Geschichte dieser Woche.`
+    : `Fear &amp; Greed has ${trend} since last week, from ${prevFgValue} to ${fgValue} &#8202;&#8212;&#8202; that's the real story this week.`;
+}
+
+// Small "was X" subtext rendered under a stat box when a prior value exists
+// and differs meaningfully from the current one.
+function statDelta(curr: number, prev: number | undefined, lang: Lang, isPct: boolean): string {
+  if (prev == null) return '';
+  const same = isPct ? Math.abs(curr - prev) < 0.05 : curr === prev;
+  if (same) return '';
+  const prevStr = isPct ? `${prev >= 0 ? '+' : ''}${prev.toFixed(1)}%` : `${prev}`;
+  const was = lang === 'de' ? 'war' : 'was';
+  return `<p class="em2" style="margin:3px 0 0;font-family:'Courier New',Courier,monospace;font-size:9px;color:rgba(237,232,222,0.4);">${was} ${prevStr}</p>`;
+}
+
 // ─── Shared shell ─────────────────────────────────────────────────────────────
 
 function shell(opts: {
@@ -78,10 +111,16 @@ function shell(opts: {
   body:           string;
   footerReason:   string;
   unsubscribeUrl: string;
+  replyTo?:       string;
 }): string {
-  const { lang, preheader, headerRight = '', body, footerReason, unsubscribeUrl } = opts;
+  const { lang, preheader, headerRight = '', body, footerReason, unsubscribeUrl, replyTo = '' } = opts;
 
   const unsubLabel  = lang === 'de' ? 'Abmelden'              : 'Unsubscribe';
+  const replyLine   = replyTo
+    ? (lang === 'de'
+        ? 'Fragen? Antworte einfach auf diese Mail &#8202;&#8212;&#8202; ich lese sie persönlich.'
+        : 'Questions? Just hit reply &#8202;&#8212;&#8202; it&#39;s really me.')
+    : '';
   const disclaimer  = lang === 'de'
     ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit &#8202;&#8212;&#8202; keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten. Bitte triff eigene, informierte Entscheidungen.'
     : 'Not financial advice. When to Buy BTC provides market data only &#8202;&#8212;&#8202; not a recommendation to buy, sell, or hold any asset. Always do your own research.';
@@ -161,6 +200,7 @@ function shell(opts: {
   <!-- FOOTER -->
   <tr>
     <td class="efooter lb" style="padding:24px 40px;border-top:1px solid rgba(247,147,26,0.08);">
+      ${replyLine ? `<p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.55);">${replyLine}</p>` : ''}
       <p class="ed" style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${footerReason}</p>
       <p class="ed" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${disclaimer}</p>
       <p class="ed" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.42);">
@@ -245,20 +285,38 @@ function shareButton(href: string, label: string, width = 200): string {
   <!--<![endif]-->`;
 }
 
-// Forward + share-to-X block appended to digest and alert emails.
-function spreadSection(opts: { lang: Lang; lead: string; shareText: string; buttonLabel: string }): string {
-  const { lead, shareText, buttonLabel } = opts;
-  const heading = opts.lang === 'de' ? 'Signal weitergeben' : 'Spread the signal';
+// Forward + share-to-X block appended to digest and alert emails. Forwarding is
+// the primary ask (native to email, and the actual growth mechanic that matters);
+// X is offered as a secondary option underneath. subscriberCount, when passed,
+// renders a live progress line ("612 / 1,000 subscribers").
+function spreadSection(opts: {
+  lang:             Lang;
+  forwardLead:      string;
+  shareText:        string;
+  shareLabel:       string;
+  subscriberCount?: number;
+  subscriberGoal?:  number;
+}): string {
+  const { lang, forwardLead, shareText, shareLabel, subscriberCount, subscriberGoal = 1000 } = opts;
+  const heading = lang === 'de' ? 'Signal weitergeben' : 'Spread the signal';
+  const locale  = lang === 'de' ? 'de-DE' : 'en-US';
+  const progress = subscriberCount != null
+    ? `<p class="em2" style="margin:0 0 12px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.05em;color:rgba(237,232,222,0.55);">${subscriberCount.toLocaleString(locale)} / ${subscriberGoal.toLocaleString(locale)} ${lang === 'de' ? 'Abonnenten' : 'subscribers'}</p>`
+    : '';
+  const secondaryLabel = lang === 'de' ? 'Oder auf X teilen:' : 'Or share on X:';
   return `${rule}
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${heading}</p>
-    <p class="em" style="margin:0 0 18px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">${lead}</p>
-    ${shareButton(shareTweetUrl(shareText), buttonLabel)}
+    ${progress}
+    <p class="em" style="margin:0 0 18px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">${forwardLead}</p>
+    <p class="ed" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(237,232,222,0.42);">${secondaryLabel}</p>
+    ${shareButton(shareTweetUrl(shareText), shareLabel)}
     <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>`;
 }
 
 // Subscribe block aimed at a reader who received the email as a forward.
-// Used by both the digest and the alert. The URL must put the query string
-// before the #alerts fragment so Umami records the UTM params.
+// Used by the alert email (alerts get forwarded on big moves — worth the full
+// box). The digest uses the smaller subscribeLineSmall() below instead, since
+// digests are read by the already-subscribed majority.
 function subscribeBlock(lang: Lang, campaign: string): string {
   const url = `https://whentobuybtc.xyz/?utm_source=email&utm_medium=${campaign}&utm_campaign=forward#alerts`;
   const heading = lang === 'de' ? 'Wurde dir diese Mail weitergeleitet?' : 'Was this forwarded to you?';
@@ -273,6 +331,17 @@ function subscribeBlock(lang: Lang, campaign: string): string {
         ${ctaButton(url, button, 220)}
       </td></tr>
     </table>`;
+}
+
+// De-emphasized, single-line version for the digest — the box competed with
+// the site's own CTA for attention, which is backwards given 99% of digest
+// readers are already subscribed.
+function subscribeLineSmall(lang: Lang, campaign: string): string {
+  const url = `https://whentobuybtc.xyz/?utm_source=email&utm_medium=${campaign}&utm_campaign=forward#alerts`;
+  const text = lang === 'de'
+    ? `Wurde dir das weitergeleitet? <a href="${url}" class="el" style="color:rgba(247,147,26,0.75);text-decoration:none;">Kostenlos abonnieren &#8594;</a>`
+    : `Was this forwarded to you? <a href="${url}" class="el" style="color:rgba(247,147,26,0.75);text-decoration:none;">Subscribe free &#8594;</a>`;
+  return `<p class="ed" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.42);">${text}</p>`;
 }
 
 // Plain hyperlinked text — the most demoted CTA form (below the outline button).
@@ -324,10 +393,19 @@ function priceBlock(price: number, change24h: number, lang: Lang): string {
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEMPLATE 1: Confirmation
 // ═══════════════════════════════════════════════════════════════════════════════
+// `opts` is a new optional 4th arg so existing call sites (positional 3-arg
+// calls) keep compiling unchanged. Pass opts.signal once the confirm route has
+// it available to tease the current signal above the CTA.
 
-export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, lang: Lang): {
-  subject: string; html: string;
-} {
+export function confirmationEmail(
+  confirmUrl: string,
+  unsubscribeUrl: string,
+  lang: Lang,
+  opts?: { signal?: SignalState; replyTo?: string }
+): { subject: string; html: string } {
+  const signal  = opts?.signal;
+  const replyTo = opts?.replyTo ?? '';
+
   const subject = lang === 'de'
     ? 'Bitte bestätige deine Bitcoin-Signal-Alerts'
     : 'Confirm your Bitcoin signal alerts';
@@ -340,12 +418,17 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
     ? 'Du erhältst diese E-Mail, weil du dich auf whentobuybtc.xyz angemeldet hast. Dies ist eine einmalige Bestätigung &#8202;&#8212;&#8202; bis zur Bestätigung werden keine weiteren E-Mails versendet.'
     : 'You\'re receiving this because you subscribed at whentobuybtc.xyz. This is a one-time confirmation &#8202;&#8212;&#8202; no further emails will be sent until you confirm.';
 
+  const signalTeaser = signal
+    ? `<p class="em2" style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Gerade jetzt' : 'Right now'}: <span style="color:${signalColor(signal)};font-weight:700;">${signalLabel(signal, lang)}</span></p>`
+    : '';
+
   const body = lang === 'de' ? `
     <p class="em2" style="margin:0 0 14px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Fast geschafft</p>
     <h1 class="ehl et" style="margin:0 0 6px;font-family:Georgia,'Times New Roman',Times,serif;font-size:28px;font-weight:400;line-height:1.25;color:#EDE8DE;">
       Bestätige deine<br /><span class="hem" style="font-style:italic;color:#F7931A;">Bitcoin-Alerts.</span>
     </h1>
     ${rule}
+    ${signalTeaser}
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
       Ein Tap &#8202;&#8212;&#8202; und du erhältst Benachrichtigungen, sobald sich das Bitcoin-Signal ändert, sowie jeden Sonntag einen wöchentlichen Überblick.
     </p>
@@ -367,6 +450,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
       Confirm your<br /><span class="hem" style="font-style:italic;color:#F7931A;">signal alerts.</span>
     </h1>
     ${rule}
+    ${signalTeaser}
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
       You&#39;re one tap away from receiving alerts the moment the Bitcoin signal changes &#8202;&#8212;&#8202; and a weekly digest every Sunday.
     </p>
@@ -384,7 +468,7 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
     </p>
   `;
 
-  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl }) };
+  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo }) };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -392,18 +476,20 @@ export function confirmationEmail(confirmUrl: string, unsubscribeUrl: string, la
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export function alertEmail(opts: {
-  price:          number;
-  movePct:        number;
-  direction:      'up' | 'down';
-  signal:         SignalState;
-  fgValue:        number;
-  maPct:          number;
-  change24h:      number;
-  unsubscribeUrl: string;
-  replyTo:        string;
-  lang:           Lang;
+  price:            number;
+  movePct:          number;
+  direction:        'up' | 'down';
+  signal:           SignalState;
+  fgValue:          number;
+  maPct:            number;
+  change24h:        number;
+  unsubscribeUrl:   string;
+  replyTo:          string;
+  lang:             Lang;
+  subscriberCount?: number;
+  subscriberGoal?:  number;
 }): { subject: string; html: string; replyTo: string } {
-  const { price, movePct, direction, signal, fgValue, maPct, change24h, unsubscribeUrl, replyTo, lang } = opts;
+  const { price, movePct, direction, signal, fgValue, maPct, change24h, unsubscribeUrl, replyTo, lang, subscriberCount, subscriberGoal } = opts;
   const pct    = Math.abs(movePct * 100).toFixed(1);
   const isDown = direction === 'down';
   const color  = signalColor(signal);
@@ -484,19 +570,21 @@ export function alertEmail(opts: {
     <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>
     ${spreadSection({
       lang,
-      lead: lang === 'de'
-        ? 'Hilf mir, 1.000 Abonnenten zu erreichen — teile das mit deinen Freunden oder Followern.'
-        : 'Help me reach 1,000 subscribers — share this with your friends or followers.',
+      forwardLead: lang === 'de'
+        ? 'Der einfachste Weg zu helfen: Leite diese Mail an eine Person weiter, die das sehen sollte.'
+        : 'The easiest way to help: forward this email to one person who should see it.',
       shareText: lang === 'de'
         ? `Bitcoin ist gerade um ${pct}% auf ${eur(price)} ${isDown ? 'gefallen' : 'gestiegen'}. Fear & Greed bei ${fgValue} (${fgWord(fgValue, lang)}). Signal jetzt: ${label}. Live-Signal für langfristige Halter: https://whentobuybtc.xyz`
         : `Bitcoin just ${isDown ? 'dropped' : 'surged'} ${pct}% to ${eur(price)}. Fear & Greed at ${fgValue} (${fgWord(fgValue, lang)}). Signal now: ${label}. Live signal for long-term holders: https://whentobuybtc.xyz`,
-      buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+      shareLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+      subscriberCount,
+      subscriberGoal,
     })}
     ${rule}
     ${subscribeBlock(lang, 'alert')}
   `;
 
-  return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
+  return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl, replyTo }), replyTo };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -504,17 +592,25 @@ export function alertEmail(opts: {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export function digestEmail(opts: {
-  price:          number;
-  signal:         SignalState;
-  fgValue:        number;
-  maPct:          number;
-  athPct:         number;
-  change24h:      number;
-  unsubscribeUrl: string;
-  replyTo:        string;
-  lang:           Lang;
+  price:            number;
+  signal:           SignalState;
+  fgValue:          number;
+  maPct:            number;
+  athPct:           number;
+  change24h:        number;
+  unsubscribeUrl:   string;
+  replyTo:          string;
+  lang:             Lang;
+  prevFgValue?:     number;
+  prevMaPct?:       number;
+  prevAthPct?:      number;
+  subscriberCount?: number;
+  subscriberGoal?:  number;
 }): { subject: string; html: string; replyTo: string } {
-  const { price, signal, fgValue, maPct, athPct, change24h, unsubscribeUrl, replyTo, lang } = opts;
+  const {
+    price, signal, fgValue, maPct, athPct, change24h, unsubscribeUrl, replyTo, lang,
+    prevFgValue, prevMaPct, prevAthPct, subscriberCount, subscriberGoal,
+  } = opts;
   const color   = signalColor(signal);
   const label   = signalLabel(signal, lang);
   const maSign  = maPct   >= 0 ? '+' : '';
@@ -525,7 +621,13 @@ export function digestEmail(opts: {
     hold:       { en: 'Bitcoin this week: watch and wait',        de: 'Bitcoin diese Woche: Abwarten' },
     caution:    { en: 'Bitcoin is in the caution zone this week', de: 'Bitcoin ist diese Woche in der Vorsichtszone' },
   };
-  const subject = subjectMap[signal][lang];
+  // Subject always carries the current F&G value (so it varies week to week
+  // even on a flat "hold" streak), and shows the prior→current arrow once
+  // history exists — that's the actual delta story, right in the inbox list.
+  const baseSubject = subjectMap[signal][lang];
+  const subject = prevFgValue != null && prevFgValue !== fgValue
+    ? `${baseSubject} (F&G ${prevFgValue}\u2192${fgValue})`
+    : `${baseSubject} (F&G ${fgValue})`;
 
   const preheaderMap: Record<SignalState, Record<Lang, string>> = {
     accumulate: { en: 'Markets are fearful — here\'s where the three indicators stand.', de: 'Angst am Markt — so stehen die drei Indikatoren.' },
@@ -574,6 +676,10 @@ export function digestEmail(opts: {
   // Cycle marker (date math only).
   const cycle = cycleMarker(lang);
 
+  // "What changed since last week" — the actual reason to open a weekly email.
+  // Falls back to nothing (not an error) on the first-ever send.
+  const changeSummary = weekChangeSummary(fgValue, prevFgValue, lang);
+
   // UTM-tagged CTA. Query string MUST come before the #alerts fragment, or the
   // params get swallowed into the hash and Umami never sees them.
   const ctaUrl = 'https://whentobuybtc.xyz/?utm_source=email&utm_medium=digest&utm_campaign=cta#alerts';
@@ -587,6 +693,7 @@ export function digestEmail(opts: {
     </h1>
     ${rule}
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">${intros[signal][lang]}</p>
+    ${changeSummary ? `<p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${changeSummary}</p>` : ''}
     ${priceBlock(price, change24h, lang)}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:20px;">
       <tr><td style="padding:18px 24px;">
@@ -599,16 +706,19 @@ export function digestEmail(opts: {
       <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Fear &amp; Greed</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${fgValue}</p>
+        ${statDelta(fgValue, prevFgValue, lang, false)}
       </td>
       <td width="8" style="padding:0;">&nbsp;</td>
       <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${maLabel}</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${maSign}${maPct.toFixed(1)}%</p>
+        ${statDelta(maPct, prevMaPct, lang, true)}
       </td>
       <td width="8" style="padding:0;">&nbsp;</td>
       <td class="mc" width="32%" style="padding:14px 16px;background-color:rgba(247,147,26,0.05);border:1px solid rgba(247,147,26,0.15);">
         <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${athLabel}</p>
         <p class="et" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:20px;font-weight:500;color:#EDE8DE;">${athSign}${athPct.toFixed(1)}%</p>
+        ${statDelta(athPct, prevAthPct, lang, true)}
       </td>
     </tr></table>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:28px;">
@@ -619,29 +729,40 @@ export function digestEmail(opts: {
     </table>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${contextText}</p>
     ${disclaimerBox(disclaimerText2)}
-    ${textLink(ctaUrl, ctaLabel)}
-    ${rule}
-    ${subscribeBlock(lang, 'digest')}
+    ${ctaButton(ctaUrl, ctaLabel, 240)}
+    <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>
     ${spreadSection({
       lang,
-      lead: lang === 'de'
-        ? 'Ich bin ein Ein-Personen-Projekt und will 1.000 Abonnenten erreichen. Wenn dir das hier weiterhilft, teile es mit deinen Freunden oder Followern — so komme ich dahin. Danke dir! &#10084;&#65039;'
-        : 'I&#39;m a one-person project trying to reach 1,000 subscribers. If this is useful, share it with your friends or followers — that&#39;s how I get there. Thank you! &#10084;&#65039;',
+      forwardLead: lang === 'de'
+        ? 'Ich bin ein Ein-Personen-Projekt und will 1.000 Abonnenten erreichen. Wenn dir das hier weiterhilft, leite diese Mail an eine Person weiter, die das sehen sollte — so komme ich dahin. Danke dir! &#10084;&#65039;'
+        : 'I&#39;m a one-person project trying to reach 1,000 subscribers. If this is useful, forward it to one person who should see it — that&#39;s how I get there. Thank you! &#10084;&#65039;',
       shareText: signalShareText(signal, lang, price, change24h, fgValue),
-      buttonLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+      shareLabel: lang === 'de' ? 'Auf X teilen' : 'Share on X',
+      subscriberCount,
+      subscriberGoal,
     })}
+    ${rule}
+    ${subscribeLineSmall(lang, 'digest')}
   `;
 
-  return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl }), replyTo };
+  return { subject, html: shell({ lang, preheader, headerRight, body, footerReason, unsubscribeUrl, replyTo }), replyTo };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEMPLATE 4: Welcome (sent after double opt-in confirmed)
 // ═══════════════════════════════════════════════════════════════════════════════
+// `opts` is a new optional 3rd arg so an existing 2-arg call site keeps
+// compiling unchanged until it's updated to pass replyTo/subscriberCount.
 
-export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
-  subject: string; html: string;
-} {
+export function welcomeEmail(
+  unsubscribeUrl: string,
+  lang: Lang,
+  opts?: { replyTo?: string; subscriberCount?: number; subscriberGoal?: number }
+): { subject: string; html: string } {
+  const replyTo         = opts?.replyTo ?? '';
+  const subscriberCount = opts?.subscriberCount;
+  const subscriberGoal  = opts?.subscriberGoal ?? 1000;
+
   const subject = lang === 'de'
     ? 'Du bist dabei — Bitcoin-Signal-Alerts aktiv'
     : 'You\'re in — Bitcoin signal alerts are on';
@@ -658,6 +779,40 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
     ? 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Signallagen sind keine Garantie für zukünftige Entwicklungen. Bitte triff eigene, informierte Entscheidungen.'
     : 'This is market data, not financial advice. Past signal conditions are not a guarantee of future performance. Always make your own informed decisions.';
 
+  // Above-the-fold reply ask. Welcome emails get the best open rates of any
+  // send type; a first-day reply from a new subscriber is one of the
+  // strongest deliverability signals a small sender can get.
+  const replyCallout = lang === 'de' ? `
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <p class="em2" style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Sag Hallo</p>
+        <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.75;color:rgba(237,232,222,0.88);">Antworte einfach auf diese Mail und erzähl mir kurz, wie du Bitcoin ansammelst — ich lese jede Antwort persönlich.</p>
+      </td></tr>
+    </table>
+  ` : `
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="sb" style="background-color:rgba(247,147,26,0.07);border:1px solid rgba(247,147,26,0.22);margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <p class="em2" style="margin:0 0 8px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Say hello</p>
+        <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.75;color:rgba(237,232,222,0.88);">Just hit reply and tell me how you stack sats — I read every reply myself.</p>
+      </td></tr>
+    </table>
+  `;
+
+  // Alert-trigger description, corrected to match check-signal.ts exactly:
+  // fires on |24h change| >= 3% alone (no "and the signal changes" condition —
+  // that clause was in the EN copy but not the trigger logic). Also now
+  // reflects the direction-aware cooldown: same-direction moves are capped at
+  // once per 24h, but an opposite-direction reversal can fire sooner.
+  const alertRow = lang === 'de'
+    ? 'Sofort, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Maximal einmal alle 24 Stunden in dieselbe Richtung — bei einer Trendwende kann trotzdem früher eine neue Meldung kommen.'
+    : 'Immediately when Bitcoin moves more than 3% in a day. Capped at once every 24 hours in the same direction — a sharp reversal can still trigger a fresh alert sooner.';
+
+  const counterLine = subscriberCount != null
+    ? (lang === 'de'
+        ? ` Aktuell sind wir bei ${subscriberCount.toLocaleString('de-DE')} von ${subscriberGoal.toLocaleString('de-DE')} Abonnenten.`
+        : ` We&#39;re at ${subscriberCount.toLocaleString('en-US')} of ${subscriberGoal.toLocaleString('en-US')} subscribers right now.`)
+    : '';
+
   const body = lang === 'de' ? `
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.88);">Hey,</p>
 
@@ -667,8 +822,10 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
     </h1>
     ${rule}
 
-    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
-      Deine Anmeldung ist bestätigt. Hier ist genau, was dich erwartet — und warum wir das so gebaut haben.
+    ${replyCallout}
+
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">
+      Deine Anmeldung ist bestätigt. Hier ist genau, was dich erwartet.
     </p>
 
     <!-- When alerts fire -->
@@ -679,7 +836,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
           <tr>
             <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
               <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal-Alert</p>
-              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Sofort, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Maximal einmal alle 24 Stunden — kein Rauschen.</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">${alertRow}</p>
             </td>
           </tr>
           <tr>
@@ -709,7 +866,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
 
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal weitergeben</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      Noch etwas: Wenn du jemanden kennst, der Bitcoin sammelt, schick diese Mail einfach weiter. So wächst das hier.
+      Noch etwas: Wenn du jemanden kennst, der Bitcoin sammelt, schick diese Mail einfach weiter. So wächst das hier.${counterLine}
     </p>
 
     ${disclaimerBox(disclaimerText)}
@@ -723,8 +880,10 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
     </h1>
     ${rule}
 
-    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
-      Your subscription is confirmed. Here&#39;s exactly what to expect — and why we built this.
+    ${replyCallout}
+
+    <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.8;color:rgba(237,232,222,0.78);">
+      Your subscription is confirmed. Here&#39;s exactly what to expect.
     </p>
 
     <!-- When alerts fire -->
@@ -735,7 +894,7 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
           <tr>
             <td style="padding-bottom:14px;border-bottom:1px solid rgba(247,147,26,0.1);">
               <p class="em2" style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Signal alert</p>
-              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">Immediately when Bitcoin moves more than 3% in a day and the signal changes. Maximum once every 24 hours — no noise.</p>
+              <p class="em" style="margin:0;font-family:Georgia,'Times New Roman',Times,serif;font-size:13px;line-height:1.7;color:rgba(237,232,222,0.88);">${alertRow}</p>
             </td>
           </tr>
           <tr>
@@ -765,12 +924,12 @@ export function welcomeEmail(unsubscribeUrl: string, lang: Lang): {
 
     <p class="em2" style="margin:0 0 10px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(237,232,222,0.55);">Spread the signal</p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      One more thing: if you know someone who&#39;s stacking sats, forward this email along. That&#39;s exactly how this grows.
+      One more thing: if you know someone who&#39;s stacking sats, forward this email along. That&#39;s exactly how this grows.${counterLine}
     </p>
 
     ${disclaimerBox(disclaimerText)}
     ${ctaButton('https://whentobuybtc.xyz', 'View the signal →', 220)}
   `;
 
-  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl }) };
+  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo }) };
 }
