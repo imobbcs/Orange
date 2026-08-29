@@ -1632,8 +1632,14 @@
       .hero-price-change { font-size: 0.65rem; margin-top: 0.6rem; }
 
       /* Signal zone: sits below price with fixed gap */
-      .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
-      .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
+      .signal-pill {
+        padding: 0.65rem 1.25rem;
+        gap: 0.6rem;
+        align-items: flex-start;
+        max-width: 80vw;
+      }
+      .signal-dot { margin-top: 0.45em; }
+      .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; text-align: left; }
       .signal-wrap { margin: 1.75rem 0 0.75rem; }
       .signal-reason {
         font-size: 0.95rem;
