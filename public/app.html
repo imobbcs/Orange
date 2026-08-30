@@ -513,6 +513,20 @@
       padding: 0.25rem 0;
       position: relative;
     }
+    /* Long/wrapping headline copy (esp. DE): stack the dot above a
+       centered multi-line headline instead of forcing a wide single-row
+       flex box that pins the dot off to one side. Toggled via JS once
+       actual wrap is measured — see syncSignalPillLayout(). */
+    .signal-pill.stacked {
+      flex-direction: column;
+      gap: 0.6rem;
+      max-width: 30ch;
+      margin: 0 auto;
+    }
+    .signal-pill.stacked .signal-text {
+      text-align: center;
+      text-wrap: balance;
+    }
     .signal-pill.accumulate { color: var(--green); }
     .signal-pill.hold       { color: var(--amber); }
     .signal-pill.caution    { color: var(--red);   }
@@ -550,6 +564,7 @@
       letter-spacing: 0.18em; text-transform: uppercase;
       font-weight: 500; color: currentColor; position: relative; z-index: 1;
       text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+      line-height: 1.5;
     }
 
     .signal-updated {
@@ -1632,14 +1647,9 @@
       .hero-price-change { font-size: 0.65rem; margin-top: 0.6rem; }
 
       /* Signal zone: sits below price with fixed gap */
-      .signal-pill {
-        padding: 0.65rem 1.25rem;
-        gap: 0.6rem;
-        align-items: flex-start;
-        max-width: 80vw;
-      }
-      .signal-dot { margin-top: 0.45em; }
-      .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; text-align: left; }
+      .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
+      .signal-pill.stacked { gap: 0.5rem; max-width: 80vw; }
+      .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
       .signal-wrap { margin: 1.75rem 0 0.75rem; }
       .signal-reason {
         font-size: 0.95rem;
@@ -3925,7 +3935,30 @@
       scoreFill.style.width = Math.max(4, Math.min(100, ((score + 5) / 10) * 100)) + '%';
       scoreFill.style.background = score >= 3 ? 'var(--green)' : score >= -1 ? 'var(--amber)' : 'var(--red)';
     }
+
+    syncSignalPillLayout();
   }
+
+  // Headline copy length varies a lot by language and by rotation pool
+  // (DE runs noticeably longer than EN). Rather than hand-tune a max-width
+  // per case, measure whether the text actually wrapped and switch the
+  // pill from a side-by-side dot+text row to a centered dot-above-headline
+  // stack. Keeps the dot meaningfully placed at any length.
+  function syncSignalPillLayout() {
+    const pill = document.getElementById('signal-pill');
+    const text = document.getElementById('signal-text');
+    if (!pill || !text) return;
+    pill.classList.remove('stacked');
+    const lineHeight = parseFloat(getComputedStyle(text).lineHeight) || (parseFloat(getComputedStyle(text).fontSize) * 1.4);
+    const actualHeight = text.getBoundingClientRect().height;
+    if (actualHeight > lineHeight * 1.4) {
+      pill.classList.add('stacked');
+    }
+  }
+  window.addEventListener('resize', () => {
+    clearTimeout(window._signalPillResizeT);
+    window._signalPillResizeT = setTimeout(syncSignalPillLayout, 150);
+  });
 
   function updateSignalText() {
     // Placeholder only — updateSignal() runs right after this on the same
@@ -3936,6 +3969,7 @@
     if (pill.classList.contains('accumulate')) text.textContent = translations[currentLang].signalAccumulate[0];
     else if (pill.classList.contains('hold')) text.textContent = translations[currentLang].signalHold[0];
     else text.textContent = translations[currentLang].signalCaution[0];
+    syncSignalPillLayout();
   }
 
   // ── HERO STRIP + HORIZON (redesign) ──
