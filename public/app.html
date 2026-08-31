@@ -513,52 +513,11 @@
       padding: 0.25rem 0;
       position: relative;
     }
-    /* Long/wrapping headline copy (esp. DE): stack the dot above a
-       centered multi-line headline instead of forcing a wide single-row
-       flex box that pins the dot off to one side. Toggled via JS once
-       actual wrap is measured — see syncSignalPillLayout(). */
-    .signal-pill.stacked {
-      flex-direction: column;
-      gap: 0.6rem;
-      max-width: 30ch;
-      margin: 0 auto;
-    }
-    .signal-pill.stacked .signal-text {
-      text-align: center;
-      text-wrap: balance;
-    }
     .signal-pill.accumulate { color: var(--green); }
     .signal-pill.hold       { color: var(--amber); }
     .signal-pill.caution    { color: var(--red);   }
     .signal-pill.loading    { color: var(--grey); pointer-events: none; }
 
-    .signal-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: currentColor;
-      box-shadow: 0 0 8px currentColor, 0 0 20px currentColor;
-      animation: verdictPulse 2.5s ease infinite;
-      flex-shrink: 0;
-    }
-    @keyframes verdictPulse {
-      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
-    /* State-specific heartbeat overrides — replace verdictPulse per state */
-    .signal-pill.accumulate .signal-dot { animation: heartbeat-calm 3s ease-in-out infinite; }
-    .signal-pill.hold       .signal-dot { animation: heartbeat-calm 2s ease-in-out infinite; }
-    .signal-pill.caution    .signal-dot { animation: heartbeat-urgent 0.85s ease-in-out infinite; }
-    .signal-pill.loading    .signal-dot { animation: none; opacity: 0.3; }
-    @keyframes heartbeat-calm {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.35; transform: scale(0.65); }
-    }
-    @keyframes heartbeat-urgent {
-      0%   { opacity: 1; transform: scale(1); }
-      15%  { opacity: 1; transform: scale(1.45); }
-      30%  { opacity: 0.5; transform: scale(0.8); }
-      50%  { opacity: 1; transform: scale(1.2); }
-      100% { opacity: 0.4; transform: scale(1); }
-    }
-      50% { opacity: 0.5; transform: scale(1.5); box-shadow: 0 0 4px currentColor, 0 0 8px currentColor; }
-    }
     .signal-text {
       font-family: var(--mono); font-size: 0.78rem;
       letter-spacing: 0.18em; text-transform: uppercase;
@@ -1648,7 +1607,6 @@
 
       /* Signal zone: sits below price with fixed gap */
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
-      .signal-pill.stacked { gap: 0.5rem; max-width: 80vw; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
       .signal-wrap { margin: 1.75rem 0 0.75rem; }
       .signal-reason {
@@ -2376,7 +2334,6 @@
 
     <div class="signal-wrap">
       <div class="signal-pill loading" id="signal-pill">
-        <div class="signal-dot"></div>
         <span class="signal-text loading" id="signal-text">Reading the signal…</span>
       </div>
     </div>
@@ -3935,30 +3892,7 @@
       scoreFill.style.width = Math.max(4, Math.min(100, ((score + 5) / 10) * 100)) + '%';
       scoreFill.style.background = score >= 3 ? 'var(--green)' : score >= -1 ? 'var(--amber)' : 'var(--red)';
     }
-
-    syncSignalPillLayout();
   }
-
-  // Headline copy length varies a lot by language and by rotation pool
-  // (DE runs noticeably longer than EN). Rather than hand-tune a max-width
-  // per case, measure whether the text actually wrapped and switch the
-  // pill from a side-by-side dot+text row to a centered dot-above-headline
-  // stack. Keeps the dot meaningfully placed at any length.
-  function syncSignalPillLayout() {
-    const pill = document.getElementById('signal-pill');
-    const text = document.getElementById('signal-text');
-    if (!pill || !text) return;
-    pill.classList.remove('stacked');
-    const lineHeight = parseFloat(getComputedStyle(text).lineHeight) || (parseFloat(getComputedStyle(text).fontSize) * 1.4);
-    const actualHeight = text.getBoundingClientRect().height;
-    if (actualHeight > lineHeight * 1.4) {
-      pill.classList.add('stacked');
-    }
-  }
-  window.addEventListener('resize', () => {
-    clearTimeout(window._signalPillResizeT);
-    window._signalPillResizeT = setTimeout(syncSignalPillLayout, 150);
-  });
 
   function updateSignalText() {
     // Placeholder only — updateSignal() runs right after this on the same
@@ -3969,7 +3903,6 @@
     if (pill.classList.contains('accumulate')) text.textContent = translations[currentLang].signalAccumulate[0];
     else if (pill.classList.contains('hold')) text.textContent = translations[currentLang].signalHold[0];
     else text.textContent = translations[currentLang].signalCaution[0];
-    syncSignalPillLayout();
   }
 
   // ── HERO STRIP + HORIZON (redesign) ──
