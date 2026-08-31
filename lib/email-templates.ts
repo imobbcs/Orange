@@ -37,9 +37,9 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
   const pools: Record<SignalState, Record<Lang, string[]>> = {
     accumulate: {
       en: hardDump ? [
-        'Most long-term Bitcoiners see this drop as the entry, not the exit.',
+        'Most long-term Bitcoiners read this drop as an entry point.',
         'Most Bitcoiners are buying into this dip, not running from it.',
-        'Most long-term holders are adding here, not selling.',
+        'Most long-term holders are adding to their stack right here.',
         'Most Bitcoiners are treating this sell-off as an opportunity.',
       ] : [
         'Most Bitcoiners are buying.',
@@ -48,9 +48,9 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
         'Most Bitcoiners are adding to their stack right now.',
       ],
       de: hardDump ? [
-        'Für die meisten langfristigen Bitcoiner ist dieser Rückgang der Einstieg, nicht der Ausstieg.',
+        'Für die meisten langfristigen Bitcoiner ist dieser Rückgang ein Einstiegspunkt.',
         'Die meisten Bitcoiner kaufen bei diesem Rücksetzer zu, statt wegzulaufen.',
-        'Die meisten langfristigen Halter kaufen hier zu, statt zu verkaufen.',
+        'Die meisten langfristigen Halter bauen genau jetzt ihre Position aus.',
         'Die meisten Bitcoiner sehen diesen Ausverkauf als Chance.',
       ] : [
         'Die meisten Bitcoiner kaufen.',
@@ -76,8 +76,8 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
     caution: {
       en: hotPump ? [
         'Most Bitcoiners are staying disciplined instead of chasing this move.',
-        'Most Bitcoiners are watching their position size, not the price pump.',
-        'Most experienced Bitcoiners get quieter, not louder, when it moves like this.',
+        'Most Bitcoiners are more focused on position size than the price spike.',
+        'Most experienced Bitcoiners go quiet when it moves like this.',
         'Most Bitcoiners are sitting this spike out.',
       ] : [
         'Most Bitcoiners are cautious.',
@@ -86,9 +86,9 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
         'Most Bitcoiners are being more selective here.',
       ],
       de: hotPump ? [
-        'Die meisten Bitcoiner bleiben diszipliniert, statt dieser Bewegung hinterherzujagen.',
+        'Die meisten Bitcoiner bleiben bei so einer Bewegung diszipliniert.',
         'Die meisten Bitcoiner achten gerade eher auf ihre Positionsgröße als auf den Kurssprung.',
-        'Erfahrene Bitcoiner werden bei so einer Bewegung meist ruhiger, nicht lauter.',
+        'Erfahrene Bitcoiner werden bei so einer Bewegung meist ruhiger.',
         'Die meisten Bitcoiner lassen diesen Ausschlag aus.',
       ] : [
         'Die meisten Bitcoiner sind vorsichtig.',
@@ -571,19 +571,19 @@ export function alertEmail(opts: {
 
   const greeting = lang === 'de'
     ? isDown
-      ? `Bitcoin ist heute deutlich gefallen &#8202;&#8212;&#8202; genau die Art von Moment, auf den langfristige Bitcoiner vorbereitet sind.`
-      : `Bitcoin ist heute stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner reagieren darauf mit Ruhe, nicht mit Aufregung.`
+      ? `Bitcoin ist heute deutlich gefallen &#8202;&#8212;&#8202; ein Tag, auf den langfristige Bitcoiner vorbereitet sind.`
+      : `Bitcoin ist heute stark gestiegen &#8202;&#8212;&#8202; langfristige Bitcoiner bleiben dabei meist ruhig.`
     : isDown
-      ? `Bitcoin has dropped sharply today &#8202;&#8212;&#8202; exactly the kind of moment long-term Bitcoiners prepare for.`
-      : `Bitcoin has surged today &#8202;&#8212;&#8202; long-term Bitcoiners tend to get quieter, not more excited, when this happens.`;
+      ? `Bitcoin has dropped sharply today &#8202;&#8212;&#8202; the kind of day long-term Bitcoiners plan for in advance.`
+      : `Bitcoin has surged today &#8202;&#8212;&#8202; long-term Bitcoiners tend to get quieter when this happens.`;
 
   const context = lang === 'de'
     ? isDown
-      ? 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Wenn diese Faktoren wie jetzt zusammentreffen, handeln langfristige Bitcoiner in der Regel entschlossen &#8202;&#8212;&#8202; statt auf Gewissheit zu warten.'
-      : 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Steigende Preise bei hoher Gier sind historisch ein Signal zur Vorsicht &#8202;&#8212;&#8202; kein Grund zur Panik, aber ein Grund innezuhalten.'
+      ? 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Wenn diese Faktoren wie jetzt zusammentreffen, handeln langfristige Bitcoiner in der Regel entschlossen und warten nicht auf Gewissheit.'
+      : 'Das Signal basiert auf drei Indikatoren: Fear &amp; Greed, dem 200-Tage-Durchschnitt und dem Abstand vom Allzeithoch. Steigende Preise bei hoher Gier waren historisch oft ein Signal zur Vorsicht: Zeit, kurz innezuhalten.'
     : isDown
-      ? 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. When conditions align like this, long-term Bitcoiners tend to act decisively rather than wait for certainty.'
-      : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for caution &#8202;&#8212;&#8202; not panic, but patience.';
+      ? 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. When conditions align like this, long-term Bitcoiners tend to act decisively instead of waiting for certainty.'
+      : 'The signal is based on three indicators: Fear &amp; Greed, the 200-day moving average, and distance from the all-time high. Rising prices with elevated greed have historically been a signal for patience.';
 
   const subject = lang === 'de'
     ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% \u2014 Signal jetzt: ${label}`
@@ -924,7 +924,7 @@ export function welcomeEmail(
       Bitcoin ist das erste knappe digitale Gut der Geschichte, auf 21 Millionen Einheiten begrenzt, und niemand kann weitere Einheiten erzeugen. In einer Welt, in der Zentralbanken die Geldmenge jährlich ausweiten, bietet Bitcoin einen Ausweg aus der schleichenden Entwertung.
     </p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      Langfristige Bitcoiner kaufen nicht, weil sie den Kurs kennen. Sie kaufen, weil sie verstehen, was Bitcoin ist, und nutzen Momente der Panik, um konsequent zu akkumulieren, statt dem Hype hinterherzujagen.
+      Langfristige Bitcoiner verstehen, was Bitcoin ist, und das reicht ihnen. Wenn der Markt in Panik gerät, kaufen sie in Ruhe weiter. Wenn er hypt, machen sie meist gar nichts.
     </p>
 
     <!-- Why DCA -->
@@ -982,7 +982,7 @@ export function welcomeEmail(
       Bitcoin is the first scarce digital asset in history, capped at 21 million units, with no authority able to print more. In a world where central banks expand the money supply every year, Bitcoin offers a way out of slow, silent devaluation.
     </p>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      Long-term Bitcoiners don&#39;t buy because they know the price. They buy because they understand what Bitcoin is, and they use moments of market panic to accumulate steadily, rather than chasing hype.
+      Long-term Bitcoiners understand what Bitcoin is, and that&#39;s enough for them. When the market panics, they keep buying steadily. When it hypes, they mostly ignore it.
     </p>
 
     <!-- Why DCA -->
