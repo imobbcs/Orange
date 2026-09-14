@@ -42,7 +42,7 @@
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "featureList": [
-      "Composite Bitcoin market signal (Accumulate / Hold / Caution)",
+      "Composite Bitcoin market signal (Accumulate / Hold / Patience)",
       "Fear & Greed Index tracking",
       "200-day moving average analysis",
       "ATH distance indicator",
@@ -108,7 +108,7 @@
           "itemOffered": {
             "@type": "Service",
             "name": "Bitcoin Market Signal",
-            "description": "Free composite signal combining Fear & Greed Index, 200-day moving average, and ATH distance into a single Accumulate / Hold / Caution indicator."
+            "description": "Free composite signal combining Fear & Greed Index, 200-day moving average, and ATH distance into a single Accumulate / Hold / Patience indicator."
           }
         },
         {
@@ -515,7 +515,11 @@
     }
     .signal-pill.accumulate { color: var(--green); }
     .signal-pill.hold       { color: var(--amber); }
-    .signal-pill.caution    { color: var(--red);   }
+    /* 'caution' uses the brand orange, not red — red is reserved for an
+       actual negative price move (see .hero-price-change.down). Elevated
+       greed near a price high isn't danger, and the pill's text-shadow glow
+       (currentColor) reads as an alarm in red but as warm/energetic in orange. */
+    .signal-pill.caution    { color: var(--orange); }
     .signal-pill.loading    { color: var(--grey); pointer-events: none; }
 
     .signal-text {
@@ -690,7 +694,7 @@
     .metric-verdict.show { opacity: 1; }
     .metric-verdict.good { color: var(--green); border-color: rgba(74,222,128,0.3); background: var(--green-dim); }
     .metric-verdict.neutral { color: var(--amber); border-color: rgba(251,191,36,0.3); background: var(--amber-dim); }
-    .metric-verdict.bad { color: var(--red); border-color: rgba(248,113,113,0.3); background: var(--red-dim); }
+    .metric-verdict.bad { color: var(--orange); border-color: rgba(247,147,26,0.3); background: var(--orange-dim); }
     .instrument-score-bar {
       display: inline-block; width: 64px; height: 3px;
       background: rgba(255,255,255,0.08);
@@ -2056,7 +2060,7 @@
     .nav-signal-dot.active { opacity: 1; }
     .nav-signal-dot.accumulate { background: var(--green); box-shadow: 0 0 6px rgba(74,222,128,0.6); }
     .nav-signal-dot.hold      { background: var(--amber); box-shadow: 0 0 6px rgba(251,191,36,0.6); }
-    .nav-signal-dot.caution   { background: var(--red);   box-shadow: 0 0 6px rgba(248,113,113,0.6); }
+    .nav-signal-dot.caution   { background: var(--orange); box-shadow: 0 0 6px rgba(247,147,26,0.6); }
 
 
     /* ══ WHAT IF STEPPER ══ */
@@ -2409,7 +2413,7 @@
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
     <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
-    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">No jargon. Here's what the data actually shows right now, and what it has meant historically.</p>
+    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">No jargon. Just what the data shows right now, and what it's meant historically.</p>
 
     <!-- INSTRUMENT PANEL -->
     <div class="instrument-panel reveal" data-delay="4" id="instrument-panel">
@@ -2423,7 +2427,7 @@
 
       <div class="instrument-body">
         <!-- FEAR & GREED — primary, larger -->
-        <div class="instrument-metric primary" id="fg-metric" style="color: var(--red);">
+        <div class="instrument-metric primary" id="fg-metric" style="color: var(--amber);">
           <div class="instrument-metric-id">01 / Fear &amp; Greed Index</div>
           <div class="instrument-value loading" id="fg-value">—</div>
           <div class="instrument-gauge">
@@ -2437,7 +2441,7 @@
               <circle cx="50" cy="54" r="3" fill="#F7931A"/>
             </svg>
           </div>
-          <div class="instrument-bar-track"><div class="instrument-bar-fill" id="fg-bar" style="background: var(--red);"></div></div>
+          <div class="instrument-bar-track"><div class="instrument-bar-fill" id="fg-bar" style="background: var(--amber);"></div></div>
           <p class="instrument-desc loading" id="fg-desc"></p>
           <div class="metric-verdict" id="fg-verdict"></div>
         </div>
@@ -3003,7 +3007,7 @@
         'Quiet week for the data. Most Bitcoiners are not changing anything.',
       ],
       signalCaution: [
-        'Many Bitcoiners are being cautious',
+        'Many Bitcoiners are being patient',
         'Conditions favour patience over new buys right now',
         'Most Bitcoiners are pausing new buys here',
         'The data leans toward patience rather than urgency right now',
@@ -3012,20 +3016,20 @@
         'Prices are extended, so most Bitcoiners are being more selective about new buys',
       ],
       signalCautionHot: [
-        'Bitcoin is surging, and that is exactly when the data says to slow down',
-        'Big green candles today. Most Bitcoiners are staying disciplined instead of chasing.',
-        'The excitement is real. So is the historical case for caution here.',
-        'Everyone is watching the price pump. Most Bitcoiners are watching their position size.',
-        'It feels unstoppable right now, which has usually been the cue to pause.',
-        'Prices are ripping higher, and most experienced Bitcoiners tend to go quiet when that happens',
-        'A move this fast tends to draw the crowd in late. Most long-term Bitcoiners are sitting this spike out.',
+        'Bitcoin is surging. If you held through the quiet stretches, this is the part that pays off.',
+        'Big green candles today. Nothing wrong with enjoying it, the data just is not calling this a moment to add extra.',
+        'This is what holding looks like when it works. No need to chase it from here though.',
+        'A move like this is the reward for not selling on the way down.',
+        'Green day. The signal just is not flagging it as an add-more moment, that is all.',
+        'Prices are ripping higher, exactly the kind of day that makes patience through the dumps worth it.',
+        'Enjoy the move. Fear & Greed just is not treating it as a moment to buy more.',
       ],
       signalUpdatedPrefix: 'Updated at',
       statusLive: 'Receiving signal',
       // Signal breakdown
       signalBreakdownLabel: 'Signal Breakdown',
       signalBreakdownTitle: 'Three signals.<br>One clear picture.',
-      signalBreakdownSub: "No jargon. Here's what the data actually shows right now, and what it has meant historically.",
+      signalBreakdownSub: "No jargon. Just what the data shows right now, and what it's meant historically.",
       fgLabel: 'Fear & Greed Index',
       maLabel: 'vs. 200-Day Average',
       athLabel: 'From All-Time High',
@@ -3042,11 +3046,11 @@
       legend200ma: '200-Day Moving Average',
       // Expert section
       expertsLabel: 'What Bitcoiners Do',
-      expertsTitle: "In moments like this,<br>here's what tends to happen.",
+      expertsTitle: "What tends to happen<br>in moments like this.",
       expertDate: 'Updated today · Based on current market conditions',
       expertTagAccumulate: 'Current signal: Buying zone',
       expertTagHold: 'Current signal: Watch and wait',
-      expertTagCaution: 'Current signal: Caution zone',
+      expertTagCaution: 'Current signal: Patience zone',
       expertTextAccumulate: [
         "When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows. The logic: if your conviction hasn't changed, a lower price is simply a better entry point.",
         "Extreme fear has a pattern in Bitcoin's history: it marks the moments most people want nothing to do with it. Those who kept buying through those periods didn't need perfect timing. They just needed to not stop. The data tends to reward the ones who treat fear as noise rather than instruction.",
@@ -3145,10 +3149,10 @@
       legendZone: 'Below avg: historically accumulation',
       chipSupports: 'Points toward buying',
       chipNeutral: 'Neutral',
-      chipCaution: 'Suggests caution',
+      chipCaution: 'Suggests patience',
       expertLeadAccumulate: 'Bitcoiners tend to treat deep fear as a signal, not a warning.',
       expertLeadHold: 'Steady conditions favour steady plans.',
-      expertLeadCaution: 'When greed runs hot, Bitcoiners get quiet.',
+      expertLeadCaution: 'High greed isn\'t a problem to fix. It\'s the signal\'s cue to pace new buys.',
       statMultiplier: (x) => `${x}× your money`,
       partnerStep1: 'Step 01: Buy',
       partnerStep2: 'Step 02: Store',
@@ -3165,12 +3169,12 @@
       fgExtremeFear: 'Extreme Fear. The Fear & Greed Index measures how emotional the market is right now. Extreme fear means most people are panicking or staying away. Historically, these moments have aligned with Bitcoin price bottoms. Long-term Bitcoiners have often treated this as an opportunity.',
       fgFear: 'Fear in the market. The Fear & Greed Index measures how emotional the market is right now. Fear means uncertainty is high and many people are pulling back. Long-term Bitcoiners have often used periods like this to accumulate.',
       fgNeutral: 'Neutral market sentiment. The Fear & Greed Index measures how emotional the market is right now. Neutral means it is neither particularly fearful nor greedy.',
-      fgGreed: 'Greed is building. The Fear & Greed Index measures how emotional the market is right now. Greed means enthusiasm is high and prices often feel like they can only go up. Long-term Bitcoiners have historically become more cautious in these periods.',
-      fgExtremeGreed: 'Extreme Greed. The Fear & Greed Index measures how emotional the market is right now. Extreme greed means the market is running hot and euphoria is widespread. Historically a warning sign. Long-term Bitcoiners have tended to be cautious in periods like this.',
+      fgGreed: 'Greed is building. The Fear & Greed Index measures how emotional the market is right now. Greed means enthusiasm is high and prices often feel like they can only go up. Long-term Bitcoiners have historically started pacing new buys in these periods.',
+      fgExtremeGreed: 'Extreme Greed. The Fear & Greed Index measures how emotional the market is right now. Extreme greed means the market is running hot and euphoria is widespread. Historically a cue for patience over urgency. Long-term Bitcoiners have tended to pace new buys in periods like this.',
       fgError: 'Could not load Fear & Greed data.',
       athDeep: (pct) => `Bitcoin is ${pct}% below its all-time high, the highest price it has ever reached. The further Bitcoin is from that peak, the larger the historical discount. Deep drawdowns like this have historically been when long-term Bitcoiners accumulated most aggressively.`,
       athMid: (pct) => `${pct}% below its all-time high, the highest price Bitcoin has ever reached. A meaningful correction from that peak. Long-term Bitcoiners have often seen this range as reasonable entry territory.`,
-      athNear: 'Near all-time high territory, close to the highest price Bitcoin has ever reached. Long-term Bitcoiners have historically become more cautious when Bitcoin is this close to its peak.',
+      athNear: 'Near all-time high territory, close to the highest price Bitcoin has ever reached. Long-term Bitcoiners have historically paced new buys when Bitcoin is this close to its peak.',
       athError: 'Could not load ATH data.',
       maBelow: (pct) => `Bitcoin is ${pct}% below its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. Trading below this line has historically been one of the strongest buy signals in Bitcoin's history.`,
       maNeutral: 'Bitcoin is trading close to its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. This is considered a neutral zone: neither particularly expensive nor cheap on a historical basis.',
@@ -3250,7 +3254,7 @@
         'Ruhige Woche für die Daten. Die meisten Bitcoiner ändern nichts.',
       ],
       signalCaution: [
-        'Viele Bitcoiner sind gerade vorsichtig',
+        'Viele Bitcoiner sind gerade geduldig',
         'Die Lage spricht gerade eher für Geduld als für neue Käufe',
         'Die meisten Bitcoiner pausieren gerade neue Käufe',
         'Die Daten sprechen gerade eher für Geduld als für Eile',
@@ -3259,20 +3263,20 @@
         'Die Kurse sind stark gestiegen, also werden die meisten Bitcoiner bei neuen Käufen wählerischer',
       ],
       signalCautionHot: [
-        'Bitcoin schießt gerade nach oben, und genau dann raten die Daten zur Vorsicht',
-        'Viele grüne Kerzen heute. Die meisten Bitcoiner bleiben diszipliniert, statt hinterherzujagen.',
-        'Die Euphorie ist echt. Genauso echt ist der historische Grund zur Vorsicht.',
-        'Alle schauen auf den Kurssprung. Die meisten Bitcoiner schauen lieber auf ihre Positionsgröße.',
-        'Gerade fühlt sich alles unaufhaltsam an, historisch war das oft das Signal zum Innehalten',
-        'Die Kurse schießen nach oben, und erfahrene Bitcoiner werden dabei meist ruhiger',
-        'Ein so schneller Anstieg zieht oft spät noch Käufer an. Die meisten langfristigen Bitcoiner lassen diesen Ausschlag aus.',
+        'Bitcoin schießt nach oben. Wenn du die ruhigen Phasen durchgehalten hast, ist das hier der Teil, der sich auszahlt.',
+        'Viele grüne Kerzen heute. Genieß es ruhig, die Daten markieren es nur nicht als Moment zum Nachkaufen.',
+        'So sieht Durchhalten aus, wenn es sich auszahlt. Nachjagen muss man von hier aus trotzdem nicht.',
+        'So eine Bewegung ist die Belohnung dafür, beim Rückgang nicht verkauft zu haben.',
+        'Grüner Tag. Das Signal markiert ihn nur nicht als Moment zum Nachkaufen, mehr nicht.',
+        'Die Kurse schießen nach oben, genau der Tag, der Geduld durch die Rücksetzer wert macht.',
+        'Genieß die Bewegung. Fear & Greed behandelt sie nur nicht als Moment zum Nachkaufen.',
       ],
       signalUpdatedPrefix: 'Aktualisiert um',
       statusLive: 'Signal empfangen',
       // Signal breakdown
       signalBreakdownLabel: 'Signal im Detail',
       signalBreakdownTitle: 'Drei Signale.<br>Ein klares Bild.',
-      signalBreakdownSub: 'Kein Fachjargon. Hier siehst du, was die Daten gerade zeigen und was das historisch bedeutet hat.',
+      signalBreakdownSub: 'Kein Fachjargon. Nur was die Daten gerade zeigen, und was das historisch bedeutet hat.',
       fgLabel: 'Fear & Greed Index',
       maLabel: 'vs. 200-Tage-Durchschnitt',
       athLabel: 'Vom Allzeithoch',
@@ -3289,11 +3293,11 @@
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
       expertsLabel: 'Was Bitcoiner tun',
-      expertsTitle: 'In Momenten wie diesem:<br>was Bitcoiner typischerweise tun.',
+      expertsTitle: 'Was in Momenten wie diesem<br>typischerweise passiert.',
       expertDate: 'Heute aktualisiert · Basierend auf aktuellen Marktbedingungen',
       expertTagAccumulate: 'Aktuelles Signal: Kaufzone',
       expertTagHold: 'Aktuelles Signal: Abwarten',
-      expertTagCaution: 'Aktuelles Signal: Vorsichtszone',
+      expertTagCaution: 'Aktuelles Signal: Geduldzone',
       expertTextAccumulate: [
         'Fällt der Fear & Greed Index in den Angstbereich, werten Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regelmäßigen Betrag. Die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
         'Extreme Angst hat in der Geschichte von Bitcoin ein Muster: Sie markiert die Momente, in denen die meisten Menschen nichts damit zu tun haben wollen. Wer in diesen Phasen weiter kaufte, brauchte kein perfektes Timing. Er musste nur nicht aufhören. Die Daten belohnen tendenziell die, die Angst als Rauschen behandeln, nicht als Anweisung.',
@@ -3392,10 +3396,10 @@
       legendZone: 'Unter dem Schnitt: historisch Akkumulation',
       chipSupports: 'Spricht für Kaufen',
       chipNeutral: 'Neutral',
-      chipCaution: 'Spricht für Vorsicht',
+      chipCaution: 'Spricht für Geduld',
       expertLeadAccumulate: 'Bitcoiner sehen tiefe Angst als Signal, nicht als Warnung.',
       expertLeadHold: 'Stabile Bedingungen sprechen für stabile Pläne.',
-      expertLeadCaution: 'Wenn die Gier heiß läuft, werden Bitcoiner still.',
+      expertLeadCaution: 'Hohe Gier ist kein Alarmsignal, sondern das Zeichen des Signals, kürzerzutreten.',
       statMultiplier: (x) => `${x}× dein Geld`,
       partnerStep1: 'Schritt 01: Kaufen',
       partnerStep2: 'Schritt 02: Verwahren',
@@ -3412,12 +3416,12 @@
       fgExtremeFear: 'Extreme Angst. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Angst bedeutet, dass die meisten Menschen in Panik sind oder sich fernhalten. Historisch haben sich solche Momente mit Bitcoin-Kurstiefs gedeckt, langfristige Bitcoiner haben das oft als Einstiegschance gesehen.',
       fgFear: 'Angst im Markt. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Angst bedeutet, dass die Unsicherheit hoch ist und viele sich zurückziehen. Langfristige Bitcoiner haben solche Phasen oft genutzt, um zu kaufen.',
       fgNeutral: 'Neutrale Marktstimmung. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Neutral bedeutet weder besonders ängstlich noch gierig.',
-      fgGreed: 'Gier baut sich auf. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Gier bedeutet, dass die Begeisterung hoch ist und Preise unaufhaltsam wirken. Langfristige Bitcoiner sind in solchen Phasen historisch vorsichtiger geworden.',
-      fgExtremeGreed: 'Extreme Gier. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Gier bedeutet, dass der Markt überhitzt ist und Euphorie weit verbreitet ist. Historisch ein Warnsignal. Langfristige Bitcoiner waren in solchen Phasen tendenziell vorsichtig.',
+      fgGreed: 'Gier baut sich auf. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Gier bedeutet, dass die Begeisterung hoch ist und Preise unaufhaltsam wirken. Langfristige Bitcoiner haben in solchen Phasen historisch begonnen, neue Käufe zu drosseln.',
+      fgExtremeGreed: 'Extreme Gier. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Gier bedeutet, dass der Markt überhitzt ist und Euphorie weit verbreitet ist. Historisch eher ein Zeichen für Geduld als für Eile. Langfristige Bitcoiner haben in solchen Phasen tendenziell neue Käufe verlangsamt.',
       fgError: 'Fear & Greed Daten konnten nicht geladen werden.',
       athDeep: (pct) => `Bitcoin liegt ${pct}% unter seinem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Je weiter Bitcoin von diesem Höchststand entfernt ist, desto größer der historische Abschlag. Solche tiefen Rücksetzer waren historisch die Phasen, in denen langfristige Bitcoiner am aktivsten gekauft haben.`,
       athMid: (pct) => `${pct}% unter dem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Eine deutliche Korrektur von diesem Höchststand. Langfristige Bitcoiner haben diesen Bereich oft als vernünftiges Einstiegsniveau gesehen.`,
-      athNear: 'Nahe am Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Langfristige Bitcoiner sind historisch vorsichtiger geworden, wenn Bitcoin so nah an seinem Höchststand ist.',
+      athNear: 'Nahe am Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Langfristige Bitcoiner haben historisch das Tempo neuer Käufe gedrosselt, wenn Bitcoin so nah an seinem Höchststand ist.',
       athError: 'ATH-Daten konnten nicht geladen werden.',
       maBelow: (pct) => `Bitcoin liegt ${pct}% unter seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Der Handel unter dieser Linie war historisch eines der stärksten Kaufsignale in Bitcoins Geschichte.`,
       maNeutral: 'Bitcoin handelt nahe seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Das gilt als neutrale Zone: weder besonders teuer noch günstig auf historischer Basis.',
@@ -3644,7 +3648,7 @@
         color = 'var(--amber)';
         desc = translations[currentLang].fgGreed;
       } else {
-        color = 'var(--red)';
+        color = 'var(--orange)';
         desc = translations[currentLang].fgExtremeGreed;
       }
 
@@ -3686,7 +3690,10 @@
         color = 'var(--amber)';
         desc = translations[currentLang].athMid(absPct);
       } else {
-        color = 'var(--red)';
+        // This branch includes a brand-new ATH (dropPct >= 0) — the same
+        // moment triggerATHCelebration() below fires the celebration banner.
+        // Red here directly contradicted that celebration.
+        color = 'var(--orange)';
         desc = translations[currentLang].athNear;
       }
 
@@ -3759,7 +3766,7 @@
         color = 'var(--amber)';
         desc = translations[currentLang].maNeutral;
       } else {
-        color = 'var(--red)';
+        color = 'var(--orange)';
         desc = translations[currentLang].maAbove(diffPct.toFixed(1));
       }
 
@@ -3846,10 +3853,10 @@
       const cautionPool = hotPump ? t.signalCautionHot : t.signalCaution;
       const cautionHeadline = cautionPool[dayIndex % cautionPool.length];
       text.textContent = cautionHeadline;
-      shareSignal.style.color = 'var(--red)';
+      shareSignal.style.color = 'var(--orange)';
       shareSignal.textContent = '● ' + cautionHeadline;
       expertTag.textContent = t.expertTagCaution;
-      expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(248,113,113,0.3); background:var(--red-dim); color:var(--red); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
+      expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(247,147,26,0.3); background:var(--orange-dim); color:var(--orange); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextCaution[dayIndex % t.expertTextCaution.length];
       if (expertLead) expertLead.textContent = t.expertLeadCaution;
     }
@@ -3890,7 +3897,7 @@
     const scoreFill = document.getElementById('instrument-score-fill');
     if (scoreFill) {
       scoreFill.style.width = Math.max(4, Math.min(100, ((score + 5) / 10) * 100)) + '%';
-      scoreFill.style.background = score >= 3 ? 'var(--green)' : score >= -1 ? 'var(--amber)' : 'var(--red)';
+      scoreFill.style.background = score >= 3 ? 'var(--green)' : score >= -1 ? 'var(--amber)' : 'var(--orange)';
     }
   }
 
@@ -3913,7 +3920,7 @@
     if (fgValue !== null) {
       const v = document.getElementById('hero-fg-value');
       const s = document.getElementById('hero-fg-state');
-      const color = fgValue < 25 ? 'var(--green)' : fgValue < 75 ? 'var(--amber)' : 'var(--red)';
+      const color = fgValue < 25 ? 'var(--green)' : fgValue < 75 ? 'var(--amber)' : 'var(--orange)';
       if (v) { v.textContent = fgValue; v.style.color = color; }
       if (s) {
         const raw = window._fgLabel || '';
@@ -3925,14 +3932,14 @@
       const diffPct = (currentPrice - maPrice) / maPrice * 100;
       const v = document.getElementById('hero-ma-value');
       const s = document.getElementById('hero-ma-state');
-      const color = diffPct < -10 ? 'var(--green)' : diffPct < 10 ? 'var(--amber)' : 'var(--red)';
+      const color = diffPct < -10 ? 'var(--green)' : diffPct < 10 ? 'var(--amber)' : 'var(--orange)';
       if (v) { v.textContent = (diffPct >= 0 ? '+' : '−') + Math.abs(diffPct).toFixed(1) + '%'; v.style.color = color; }
       if (s) { s.textContent = diffPct >= 0 ? t.heroAbove : t.heroBelow; s.style.color = color; }
     }
     if (athDropPct !== null) {
       const v = document.getElementById('hero-ath-value');
       const s = document.getElementById('hero-ath-state');
-      const color = athDropPct < -50 ? 'var(--green)' : athDropPct < -25 ? 'var(--amber)' : 'var(--red)';
+      const color = athDropPct < -50 ? 'var(--green)' : athDropPct < -25 ? 'var(--amber)' : 'var(--orange)';
       if (v) { v.textContent = athDropPct.toFixed(1) + '%'; v.style.color = color; }
       if (s) { s.textContent = athDropPct < 0 ? t.heroDiscount : ''; s.style.color = color; }
     }
@@ -4810,10 +4817,10 @@
         const tsEl    = document.getElementById('instrument-timestamp');
         const dot     = document.getElementById('instrument-dot');
         if (scoreEl) scoreEl.textContent = (score >= 0 ? '+' : '') + score;
-        if (sigLbl)  sigLbl.textContent  = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'CAUTION';
+        if (sigLbl)  sigLbl.textContent  = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'PATIENCE';
         const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
         if (tsEl) tsEl.textContent = 'LAST UPDATE ' + t;
-        const col = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--red)';
+        const col = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--orange)';
         if (dot) { dot.style.background = col; dot.style.boxShadow = '0 0 8px ' + col; }
       } catch(e) {}
     };
@@ -5123,7 +5130,7 @@
     const STATES = {
       accumulate: { count: 100, speed: 0.25, drift: 0.015, color: '74,222,128',  gather: true,  spread: 0.3 },
       hold:       { count: 80,  speed: 0.4,  drift: 0.008, color: '251,191,36',  gather: false, spread: 0.5 },
-      caution:    { count: 120, speed: 0.9,  drift: 0.03,  color: '248,113,113', gather: false, spread: 0.9 },
+      caution:    { count: 120, speed: 0.6,  drift: 0.018, color: '247,147,26',  gather: false, spread: 0.75 },
     };
 
     function resize() {
