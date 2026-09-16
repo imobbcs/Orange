@@ -140,7 +140,7 @@ async function fetchSignal() {
   let signal, emoji;
   if (score >= 3)       { signal = 'ACCUMULATE'; emoji = '🟢'; }
   else if (score >= -1) { signal = 'HOLD';       emoji = '🟡'; }
-  else                  { signal = 'CAUTION';     emoji = '🔴'; }
+  else                  { signal = 'PATIENCE';   emoji = '🟠'; }
 
   console.log(`Signal: ${signal} (score ${score})`);
   return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice) };
