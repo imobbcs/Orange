@@ -5,6 +5,7 @@ import { Resend } from 'resend';
 import { alertEmail } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroAlertBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
+import { readerCount, READER_GOAL } from '../../lib/subscribers';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -14,10 +15,6 @@ const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 const MOVE_THRESHOLD = 0.03;              // 3% — compared against the 24h change
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
 
-// Manually-updated for now (per Imo — live query comes later). Bump this
-// every so often; keep in sync with the same constant in weekly-digest.ts.
-const SUBSCRIBER_COUNT = 612;
-const SUBSCRIBER_GOAL  = 1000;
 
 async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
   const res = await fetch(`${BASE}/api/price`, { signal: AbortSignal.timeout(8000) });
@@ -52,7 +49,9 @@ async function logAlert(price: number, refPrice: number, movePct: number, direct
   );
 }
 
-async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; signal: 'accumulate' | 'hold' | 'caution' }> {
+type Readings = { fgValue: number; fgClass: string | null; maPct: number; athPct: number | null; signal: 'accumulate' | 'hold' | 'caution' };
+
+async function fetchSignalData(): Promise<Readings> {
   const [fgRes, histRes, priceRes, athRes] = await Promise.all([
     fetch(`${BASE}/api/fear-greed`,                        { signal: AbortSignal.timeout(8000) }),
     fetch(`${BASE}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(8000) }),
@@ -66,9 +65,10 @@ async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; sign
 
   const prices  = (history.prices as [number, number][]).map(p => p[1]);
   const fgValue = fg.value as number;
-  const { maPct, state: signal } = signalFromApis(price.eur, prices, ath.ath_eur as number, fgValue, fg.value_classification);
+  const fgClass = (fg.value_classification as string) ?? null;
+  const { maPct, athPct, state: signal } = signalFromApis(price.eur, prices, ath.ath_eur as number, fgValue, fgClass);
 
-  return { fgValue, maPct, signal };
+  return { fgValue, fgClass, maPct, athPct, signal };
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -78,9 +78,7 @@ async function sendEmailAlerts(
   change24h: number,
   movePct: number,
   direction: 'up' | 'down',
-  fgValue: number,
-  maPct: number,
-  signal: 'accumulate' | 'hold' | 'caution',
+  r: Readings,
 ) {
   const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
     `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
@@ -89,13 +87,15 @@ async function sendEmailAlerts(
 
   // Market context (off unless MACRO_CONTEXT=test|on). Fetched once; null → emails unchanged.
   const macro = await getMacroForEmail();
+  const readers = await readerCount(pool);
 
   let sent = 0; let failed = 0;
   for (const { email, lang, unsubscribe_token } of rows) {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html } = alertEmail({
-      price, change24h, movePct, direction, signal, fgValue, maPct, unsubscribeUrl, replyTo: REPLY_TO, lang,
-      subscriberCount: SUBSCRIBER_COUNT, subscriberGoal: SUBSCRIBER_GOAL,
+      price, change24h, movePct, direction, signal: r.signal, fgValue: r.fgValue, fgClass: r.fgClass, maPct: r.maPct, athPct: r.athPct,
+      unsubscribeUrl, replyTo: REPLY_TO, lang,
+      subscriberCount: readers, subscriberGoal: READER_GOAL,
       marketBlock: macro && includeMacroFor(email) ? macroAlertBlock(macro, lang) : undefined,
     });
     const result = await resend.emails.send({
@@ -146,12 +146,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    let fgValue = 50; let maPct = 0; let signal: 'accumulate' | 'hold' | 'caution' = 'hold';
-    try { ({ fgValue, maPct, signal } = await fetchSignalData()); } catch (e: any) {
-      console.error('fetchSignalData failed, using defaults:', e.message);
+    // If the readings can't be fetched, don't invent them: skip this run and try again next time.
+    let readings: Readings;
+    try { readings = await fetchSignalData(); } catch (e: any) {
+      console.error('fetchSignalData failed, alert postponed:', e.message);
+      return res.status(200).json({ status: 'readings_unavailable' });
     }
 
-    await sendEmailAlerts(currentPrice, change24h, movePct, direction, fgValue, maPct, signal);
+    await sendEmailAlerts(currentPrice, change24h, movePct, direction, readings);
     // reference_price_eur is derived from the 24h change so the logged row stays self-consistent.
     const refPrice = currentPrice / (1 + movePct);
     await logAlert(currentPrice, refPrice, movePct, direction);

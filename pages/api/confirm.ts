@@ -7,16 +7,13 @@ import { Pool } from 'pg';
 import { Resend } from 'resend';
 import { welcomeEmail, type Lang } from '../../lib/email-templates';
 import { syncResendContact } from '../../lib/resend-contact';
+import { readerCount, READER_GOAL } from '../../lib/subscribers';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE   = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
-// Manually-updated for now (per Imo — live query comes later). Keep in sync
-// with the same constant in check-signal.ts and weekly-digest.ts.
-const SUBSCRIBER_COUNT = 612;
-const SUBSCRIBER_GOAL  = 1000;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { token } = req.query;
@@ -41,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html } = welcomeEmail(unsubscribeUrl, lang as Lang, {
       replyTo:         REPLY_TO,
-      subscriberCount: SUBSCRIBER_COUNT,
-      subscriberGoal:  SUBSCRIBER_GOAL,
+      subscriberCount: await readerCount(pool),
+      subscriberGoal:  READER_GOAL,
     });
     resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',

@@ -4862,7 +4862,10 @@
         if (data.ok) {
           msg.textContent = t.emailOk;
           msg.className   = 'email-msg ok';
+          if (window._showInboxPanel) window._showInboxPanel(input, email);
           input.value     = '';
+          btn.disabled    = false;
+          btn.textContent = t[resetKey];
         } else {
           throw new Error(data.error || 'unknown');
         }
@@ -6421,5 +6424,53 @@
 })();
 </script>
 <!-- ═══ FULL PAGE V2: SCRIPT (end) ═══ -->
+<!-- ═══ CHECK YOUR INBOX (start): after signup, the form turns into a clear next step ═══ -->
+<style>
+  .inbox-panel { border: 1px solid rgba(var(--temp-rgb),0.4); background: linear-gradient(180deg, rgba(var(--temp-rgb),0.08), transparent); padding: 22px 20px; text-align: left; }
+  .inbox-panel h3 { margin: 0 0 8px; font-family: var(--display); font-style: italic; font-weight: 400; font-size: 1.7rem; color: var(--temp); }
+  .inbox-panel p { margin: 0 0 14px; font-family: var(--display); font-size: 1.05rem; line-height: 1.55; color: var(--muted); }
+  .inbox-panel p b { color: var(--white); font-weight: 400; overflow-wrap: anywhere; }
+  .inbox-panel .ip-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .inbox-panel button { background: none; border: 1px solid rgba(237,232,222,0.25); color: var(--white); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 11px 14px; min-height: 44px; cursor: pointer; }
+  .inbox-panel button:hover:not(:disabled), .inbox-panel button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
+  .inbox-panel button:disabled { opacity: 0.45; cursor: default; }
+  .inbox-panel .ip-note { margin: 12px 0 0; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; color: #8A837A; }
+</style>
+<script>
+(function () {
+  var T = {
+    en: { title: 'Check your inbox.', body: 'We sent a confirmation link to <b>{e}</b>. Tap it and you are in. It can take a minute; if it is not there, look in spam or promotions.', change: 'Use a different address', resend: 'Send it again', resent: 'Sent again. Give it a minute.', fail: 'Could not send. Please try again.' },
+    de: { title: 'Schau in dein Postfach.', body: 'Wir haben einen Bestätigungslink an <b>{e}</b> geschickt. Ein Tap, und du bist dabei. Das kann eine Minute dauern; schau sonst im Spam- oder Werbe-Ordner nach.', change: 'Andere Adresse verwenden', resend: 'Nochmal senden', resent: 'Erneut gesendet. Gib ihm eine Minute.', fail: 'Senden hat nicht geklappt. Bitte nochmal versuchen.' },
+  };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  window._showInboxPanel = function (input, email) {
+    var wrap = input.closest('.email-form-wrap, .whatif-email-cta-row');
+    if (!wrap) return;
+    var t = T[currentLang] || T.en;
+    var old = wrap.querySelector('.inbox-panel'); if (old) old.remove();
+    var hidden = Array.prototype.filter.call(wrap.children, function (c) { return !c.classList.contains('inbox-panel'); });
+    hidden.forEach(function (c) { c.setAttribute('data-ip-hidden', ''); c.style.display = 'none'; });
+    var p = document.createElement('div'); p.className = 'inbox-panel'; p.setAttribute('role', 'status');
+    p.innerHTML = '<h3>' + t.title + '</h3><p>' + t.body.replace('{e}', esc(email)) + '</p><div class="ip-actions"><button type="button" class="ip-resend">' + t.resend + '</button><button type="button" class="ip-change">' + t.change + '</button></div><p class="ip-note" aria-live="polite"></p>';
+    wrap.appendChild(p);
+    try { if (typeof umami !== 'undefined') umami.track('signup-check-inbox'); } catch (e) {}
+    p.querySelector('.ip-change').addEventListener('click', function () {
+      p.remove(); hidden.forEach(function (c) { c.removeAttribute('data-ip-hidden'); c.style.display = ''; });
+      input.value = email; input.focus(); input.select();
+    });
+    var rb = p.querySelector('.ip-resend'), note = p.querySelector('.ip-note');
+    rb.addEventListener('click', function () {
+      rb.disabled = true;
+      fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, lang: currentLang }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { note.textContent = d.ok ? t.resent : t.fail; try { if (typeof umami !== 'undefined') umami.track('signup-resend'); } catch (e) {} })
+        .catch(function () { note.textContent = t.fail; })
+        .then(function () { setTimeout(function () { rb.disabled = false; }, 30000); });
+    });
+    p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+})();
+</script>
+<!-- ═══ CHECK YOUR INBOX (end) ═══ -->
 </body>
 </html>

@@ -3,7 +3,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
-import { digestEmail, type SignalState } from '../../lib/email-templates';
+import { digestEmail, calcHookForWeek, type SignalState, type CalcHook } from '../../lib/email-templates';
+import { computeDca } from '../../lib/dca';
+import { readerCount, READER_GOAL } from '../../lib/subscribers';
 import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
 
@@ -14,10 +16,21 @@ const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
 const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
-// Manually-updated for now (per Imo — live query comes later once traffic
-// growth makes it worth wiring up automatically). Bump this every so often.
-const SUBSCRIBER_COUNT = 612;
-const SUBSCRIBER_GOAL  = 1000;
+// The "What if?" card: a real result from the calculator's model (lib/dca.ts) on real
+// monthly history. Any failure → the card is left out; the digest never waits on it.
+async function fetchCalcHook(priceEur: number): Promise<CalcHook | null> {
+  try {
+    const r = await fetch(`${BASE}/api/btc-history-monthly`, { signal: AbortSignal.timeout(15000) });
+    if (!r.ok) return null;
+    const data = await r.json();
+    const { amount, startYear } = calcHookForWeek();
+    const d = computeDca(data.monthly || {}, amount, startYear, priceEur);
+    return d.months > 12 ? { amount, startYear, put: d.put, now: d.now } : null;
+  } catch (e: any) {
+    console.error('weekly-digest: calculator card skipped:', e?.message || e);
+    return null;
+  }
+}
 
 async function fetchSignalData() {
   const [priceRes, fgRes, athRes, histRes] = await Promise.all([
@@ -35,9 +48,10 @@ async function fetchSignalData() {
   const currentPrice = price.eur as number;
   const fgValue      = fg.value as number;
   const change24h    = price.eur_24h_change as number;
-  const { maPct, athPct, state } = signalFromApis(currentPrice, prices, ath.ath_eur as number, fgValue, fg.value_classification);
+  const fgClass      = (fg.value_classification as string) ?? null;
+  const { maPct, athPct, state } = signalFromApis(currentPrice, prices, ath.ath_eur as number, fgValue, fgClass);
   const signal: SignalState = state;
-  return { currentPrice, fgValue, maPct, athPct, change24h, signal };
+  return { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal };
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -67,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({ status: 'cooldown', hoursSinceLast: hoursSinceLast.toFixed(1) });
     }
 
-    const { currentPrice, fgValue, maPct, athPct, change24h, signal } = await fetchSignalData();
+    const { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal } = await fetchSignalData();
 
     // Previous week's values for the delta copy — read before we overwrite
     // with this week's row. undefined on the very first send (no prior row).
@@ -75,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const prevFgValue  = prevRow?.fg_value  != null ? Number(prevRow.fg_value)  : undefined;
     const prevMaPct    = prevRow?.ma_pct    != null ? Number(prevRow.ma_pct)    : undefined;
     const prevAthPct   = prevRow?.ath_pct   != null ? Number(prevRow.ath_pct)   : undefined;
+    const prevPrice    = prevRow?.price_eur != null ? Number(prevRow.price_eur) : undefined;
 
     // Guard insert — placed right before the send loop (same race-prevention
     // pattern as before), now carrying this week's values so next week's run
@@ -91,15 +106,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Market context (off unless MACRO_CONTEXT=test|on). Fetched once; null → emails unchanged.
     const macro = await getMacroForEmail();
+    const [readers, calc] = await Promise.all([readerCount(pool), fetchCalcHook(currentPrice)]);
 
     let sent = 0; let failed = 0;
     for (const { email, lang, unsubscribe_token } of rows) {
       const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
       const { subject, html } = digestEmail({
-        price: currentPrice, signal, fgValue, maPct, athPct, change24h,
+        price: currentPrice, signal, fgValue, fgClass, maPct, athPct, change24h,
         unsubscribeUrl, replyTo: REPLY_TO, lang,
-        prevFgValue, prevMaPct, prevAthPct,
-        subscriberCount: SUBSCRIBER_COUNT, subscriberGoal: SUBSCRIBER_GOAL,
+        prevFgValue, prevMaPct, prevAthPct, prevPrice, calc,
+        subscriberCount: readers, subscriberGoal: READER_GOAL,
         marketBlock: macro && includeMacroFor(email) ? macroDigestBlock(macro, lang) : undefined,
       });
       const result = await resend.emails.send({
