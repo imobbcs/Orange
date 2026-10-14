@@ -22,9 +22,9 @@ function signalColor(s: SignalState): string {
 
 function signalLabel(s: SignalState, lang: Lang): string {
   const map: Record<SignalState, Record<Lang, string>> = {
-    accumulate: { en: 'Buying zone',    de: 'Kaufzone'   },
-    hold:       { en: 'Watch and wait', de: 'Abwarten'   },
-    caution:    { en: 'Patience zone',     de: 'Geduldzone'         },
+    accumulate: { en: 'Cold', de: 'Kalt' },
+    hold:       { en: 'Mild', de: 'Mild' },
+    caution:    { en: 'Hot',  de: 'Heiß' },
   };
   return map[s][lang];
 }
@@ -118,16 +118,16 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
 function signalDigestHeadline(s: SignalState, lang: Lang): string {
   const map: Record<SignalState, Record<Lang, string>> = {
     accumulate: {
-      en: 'The data points to a <span style="font-style:italic;color:#F7931A;">buying zone</span> this week.',
-      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F7931A;">Kaufzone</span> hin.',
+      en: 'The Bitcoin market reads <span style="font-style:italic;color:#4ADE80;">cold</span> this week.',
+      de: 'Der Bitcoin-Markt ist diese Woche <span style="font-style:italic;color:#4ADE80;">kalt</span>.',
     },
     hold: {
-      en: 'The data points to a <span style="font-style:italic;color:#FBBF24;">watch and wait</span> zone this week.',
-      de: 'Die Daten deuten diese Woche auf <span style="font-style:italic;color:#FBBF24;">Abwarten</span> hin.',
+      en: 'The Bitcoin market reads <span style="font-style:italic;color:#FBBF24;">mild</span> this week.',
+      de: 'Der Bitcoin-Markt ist diese Woche <span style="font-style:italic;color:#FBBF24;">mild</span>.',
     },
     caution: {
-      en: 'The data points to a <span style="font-style:italic;color:#F7931A;">patience zone</span> this week.',
-      de: 'Die Daten deuten diese Woche auf eine <span style="font-style:italic;color:#F7931A;">Geduldzone</span> hin.',
+      en: 'The Bitcoin market reads <span style="font-style:italic;color:#F7931A;">hot</span> this week.',
+      de: 'Der Bitcoin-Markt ist diese Woche <span style="font-style:italic;color:#F7931A;">heiß</span>.',
     },
   };
   return map[s][lang];
@@ -627,12 +627,12 @@ export function alertEmail(opts: {
   const context = alertExplanation(signal, fgValue, maPct, lang);
 
   const subject = lang === 'de'
-    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}%. Signal jetzt: ${label}`
-    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}%. Signal now: ${label.toLowerCase()}`;
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}%. Markt heute: ${label}`
+    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}%. Market today: ${label}`;
 
   const preheader = lang === 'de'
-    ? `${headline}. Signal jetzt: ${label}.`
-    : `${headline}. Signal now: ${label.toLowerCase()}.`;
+    ? `${headline}. Markt heute: ${label}.`
+    : `${headline}. Market today: ${label}.`;
 
   const headerRight = lang === 'de' ? 'Signal-Alert' : 'Signal alert';
 
@@ -657,7 +657,7 @@ export function alertEmail(opts: {
       <tr><td style="padding:20px 24px;">
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
           <td width="34%" style="padding-right:16px;">
-            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Marktzone' : 'Market zone'}</p>
+            <p class="em2" style="margin:0 0 5px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Markt heute' : 'Market today'}</p>
             <p style="margin:0 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.03em;color:${color};">${label}</p>
             <p class="em2" style="margin:0;font-family:'Courier New',Courier,monospace;font-size:9px;color:rgba(237,232,222,0.55);">${signalBehaviour(signal, lang, change24h)}</p>
           </td>
@@ -719,17 +719,17 @@ export function digestEmail(opts: {
   const athSign = athPct  >= 0 ? '+' : '';
 
   const subjectMap: Record<SignalState, Record<Lang, string>> = {
-    accumulate: { en: 'Bitcoin is in the buying zone this week',  de: 'Bitcoin ist diese Woche in der Kaufzone' },
-    hold:       { en: 'Bitcoin this week: watch and wait',        de: 'Bitcoin diese Woche: Abwarten' },
-    caution:    { en: 'Bitcoin is in the patience zone this week', de: 'Bitcoin ist diese Woche in der Geduldzone' },
+    accumulate: { en: 'Bitcoin this week: Cold', de: 'Bitcoin diese Woche: Kalt' },
+    hold:       { en: 'Bitcoin this week: Mild', de: 'Bitcoin diese Woche: Mild' },
+    caution:    { en: 'Bitcoin this week: Hot',  de: 'Bitcoin diese Woche: Heiß' },
   };
   // Subject always carries the current F&G value (so it varies week to week
   // even on a flat "hold" streak), and shows the prior→current arrow once
   // history exists — that's the actual delta story, right in the inbox list.
   const baseSubject = subjectMap[signal][lang];
   const subject = prevFgValue != null && prevFgValue !== fgValue
-    ? `${baseSubject} (F&G ${prevFgValue}\u2192${fgValue})`
-    : `${baseSubject} (F&G ${fgValue})`;
+    ? `${baseSubject}. ${lang === 'de' ? 'Stimmung' : 'Mood'} ${prevFgValue}\u2192${fgValue}`
+    : `${baseSubject}. ${lang === 'de' ? 'Stimmung' : 'Mood'} ${fgValue}`;
 
   const preheaderMap: Record<SignalState, Record<Lang, string>> = {
     accumulate: { en: 'Markets are fearful. Here\'s where the three indicators stand.', de: 'Angst am Markt. So stehen die drei Indikatoren.' },
@@ -764,7 +764,7 @@ export function digestEmail(opts: {
     ? 'ich hoffe, deine Woche läuft gut. Hier ist, wo Bitcoin gerade steht: drei Indikatoren, kein Lärm, einfach das, was die Daten zeigen.'
     : 'Hope you\'re having a good week. Here\'s where Bitcoin stands right now: three indicators, no noise, just what the data shows.';
   const ctaLabel     = lang === 'de' ? 'Vollständiges Signal &#8594;' : 'Full signal breakdown &#8594;';
-  const signalLabel2 = lang === 'de' ? 'Marktzone' : 'Market zone';
+  const signalLabel2 = lang === 'de' ? 'Markt heute' : 'Market today';
   const maLabel      = lang === 'de' ? '200-Tage-Schnitt' : 'Long-term avg';
   const athLabel     = lang === 'de' ? 'Abstand ATH'      : 'From ATH';
   // Signal-specific "why this combination matters" line, replacing what used
@@ -773,8 +773,8 @@ export function digestEmail(opts: {
   // having them line up this way (rather than any one number alone) means.
   const insight: Record<SignalState, Record<Lang, string>> = {
     accumulate: {
-      en: 'Fear spikes on their own happen most weeks, nothing unusual there. What\'s different this week is that fear, the long-term trend, and distance from the highs are all leaning the same way at once, and that\'s what turns an ordinary dip into a real buying-zone reading.',
-      de: 'Ein kurzer Angst-Ausschlag allein kommt fast jede Woche vor. Ungewöhnlich ist, wenn Angst, der Abstand zum langfristigen Trend und der Abstand zum Hoch gleichzeitig in dieselbe Richtung zeigen. Genau dieses Zusammenspiel unterscheidet eine echte Kaufzone von einem gewöhnlichen Rücksetzer.',
+      en: 'Fear spikes on their own happen most weeks. This week fear and a price below its long-term trend show up together, which is what makes the market read cold. Long-term holders tend to see stretches like this as cheaper sats.',
+      de: 'Ein kurzer Angst-Ausschlag allein kommt fast jede Woche vor. Diese Woche treffen Angst und ein Preis unter dem langfristigen Trend zusammen, deshalb liest sich der Markt kalt. Langfristige Halter sehen solche Phasen meist als günstigere Sats.',
     },
     hold: {
       en: 'None of the three indicators is doing anything extreme right now, and that\'s the signal itself: a quiet reading across fear, trend, and drawdown usually means the market is between stories, not on the edge of one.',

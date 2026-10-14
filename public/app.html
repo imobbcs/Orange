@@ -42,7 +42,7 @@
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "featureList": [
-      "Composite Bitcoin market signal (Accumulate / Hold / Patience)",
+      "Composite Bitcoin market signal (Cold / Mild / Hot)",
       "Fear & Greed Index tracking",
       "200-day moving average analysis",
       "ATH distance indicator",
@@ -108,7 +108,7 @@
           "itemOffered": {
             "@type": "Service",
             "name": "Bitcoin Market Signal",
-            "description": "Free composite signal combining Fear & Greed Index, 200-day moving average, and ATH distance into a single Accumulate / Hold / Patience indicator."
+            "description": "Free composite signal combining Fear & Greed Index, 200-day moving average, and ATH distance into a single Cold / Mild / Hot reading of the Bitcoin market."
           }
         },
         {
@@ -2493,7 +2493,7 @@
       <div class="instrument-body">
         <!-- FEAR & GREED — primary, larger -->
         <div class="instrument-metric primary" id="fg-metric" style="color: var(--amber);">
-          <div class="instrument-metric-id">01 / Fear &amp; Greed Index</div>
+          <div class="instrument-metric-id" data-i18n="miMood">01 / Market mood · Fear &amp; Greed</div>
           <div class="instrument-value loading" id="fg-value">—</div>
           <div class="instrument-gauge">
             <svg viewBox="0 0 100 56" fill="none" style="width:100px;height:56px;max-width:100px;display:block;">
@@ -2513,7 +2513,7 @@
 
         <!-- VS 200-DAY MA -->
         <div class="instrument-metric" id="ma-metric" style="color: var(--green);">
-          <div class="instrument-metric-id">02 / vs. <span style="white-space:nowrap">200-Day</span> Avg</div>
+          <div class="instrument-metric-id" data-i18n="miTrend">02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg</div>
           <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ma-value">—</div>
             <span id="ma-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
@@ -2526,7 +2526,7 @@
 
         <!-- FROM ATH -->
         <div class="instrument-metric" id="ath-metric" style="color: var(--amber);">
-          <div class="instrument-metric-id">03 / From <span style="white-space:nowrap">All-Time</span> High</div>
+          <div class="instrument-metric-id" data-i18n="miPeak">03 / From the peak · <span style="white-space:nowrap">all-time</span> high</div>
           <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ath-value">—</div>
             <span id="ath-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
@@ -2683,7 +2683,7 @@
     <div class="chart-legend reveal" data-delay="2">
       <span class="chart-legend-item"><span class="chart-legend-swatch price"></span><span data-i18n="legendPrice">BTC price</span></span>
       <span class="chart-legend-item"><span class="chart-legend-swatch ma"></span><span data-i18n="legend200ma">200-Day MA</span></span>
-      <span class="chart-legend-item zone-item"><span class="chart-legend-swatch zone"></span><span data-i18n="legendZone">Below avg: historically accumulation</span></span>
+      <span class="chart-legend-item zone-item"><span class="chart-legend-swatch zone"></span><span data-i18n="legendZone">Below the long-term trend</span></span>
     </div>
   </div>
   <div class="chart-bleed reveal" data-delay="3">
@@ -2707,11 +2707,11 @@
 <!-- WHAT EXPERTS DO -->
 <section class="section expert-section" id="experts">
   <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">What Bitcoiners Do</p>
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">How long-term holders see it</p>
     <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
     <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;position:relative;overflow:hidden;">
       <canvas id="expert-field" aria-hidden="true"></canvas>
-      <span class="expert-signal-tag" id="expert-tag">Current signal: Accumulation zone</span>
+      <span class="expert-signal-tag" id="expert-tag">Today</span>
       <p class="expert-lead" id="expert-lead">Bitcoiners tend to treat deep fear as a signal, not a warning.</p>
       <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory, as it is now, Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
       <p class="expert-meta" id="expert-date" data-i18n="expertDate">Updated today · Based on current market conditions</p>
@@ -3070,50 +3070,54 @@
       // visitors don't see the identical line every time. The "Hot"/"Dump"
       // pools kick in when the 24h move is sharp, so the headline doesn't
       // read as flat or passive on a day the price is actually moving hard.
+      stateName: {"accumulate": "Cold", "hold": "Mild", "caution": "Hot"},
+      miMood: "01 / Market mood · Fear &amp; Greed",
+      miTrend: '02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg',
+      miPeak: '03 / From the peak · <span style="white-space:nowrap">all-time</span> high',
       signalAccumulate: [
-        'Most Bitcoiners are buying',
-        'Fear is high right now. Most Bitcoiners read that as a buying signal, not a reason to wait.',
-        'While others panic, most Bitcoiners are adding to their stack',
-        'This is what a buying window has historically looked like',
-        'Most Bitcoiners are treating this dip as an opportunity, not a warning',
-        'Sentiment is weak, and that is usually when long-term buyers pay attention',
-        'Most Bitcoiners see this as a good time to keep buying, not sit out',
+        "Fear is high and prices sit below their long-term trend.",
+        "Prices are low compared with recent history. Long-term holders tend to see this as cheaper sats.",
+        "Sentiment is weak and Bitcoin is out of the headlines.",
+        "A quiet, fearful market. Long-term holders tend to keep stacking through days like this.",
+        "Fear is in the air. For long-term holders, the same money now buys more sats.",
+        "Prices are well below the peak. Long-term holders tend to see this as a sale, not a warning.",
+        "Few people want Bitcoin right now. Long-term holders tend to keep their regular plan.",
       ],
       signalAccumulateDump: [
-        'Bitcoin just dropped hard. Most long-term Bitcoiners read this as an entry point.',
-        'Red candles everywhere, and most Bitcoiners are buying into it instead of running from it',
-        'This kind of drop feels uncomfortable. Historically, that discomfort has been the point.',
-        'Panic is spreading, and most Bitcoiners are treating it as opportunity',
-        'Sharp red day. Most long-term holders are adding right here.',
-        'Prices are down sharply, and that is exactly when the long-term crowd tends to lean in',
-        'A drop like this scares off short-term traders. Long-term Bitcoiners usually stay put, or add.',
+        "Bitcoin dropped hard today. Long-term holders tend to see this as cheaper sats, not a reason to sell.",
+        "A sharp red day. Uncomfortable, and historically part of the ride.",
+        "Panic is spreading. Long-term holders tend to stay calm and keep their regular plan.",
+        "Prices fell fast. For long-term holders, the same money now buys more sats.",
+        "A drop like this scares off short-term traders. Long-term holders usually stay put.",
+        "Big drop, high fear. The kind of day long-term holders plan for.",
+        "Red everywhere. Long-term holders tend to see days like this as a sale.",
       ],
       signalHold: [
-        'Most are watching and waiting',
-        'No clear edge either way. Most Bitcoiners are holding steady.',
-        'Most Bitcoiners are sticking to their plan instead of reacting',
-        'Conditions are mixed, so most are staying the course',
-        'Nothing decisive here. Most Bitcoiners are just holding.',
-        'The signal is not pointing strongly in either direction, so most stay put',
-        'Quiet week for the data. Most Bitcoiners are not changing anything.',
+        "Nothing unusual. Most long-term holders keep their regular plan.",
+        "A calm market with no strong pull either way.",
+        "Mixed readings. Long-term holders tend to stick to their plan.",
+        "Neither fear nor greed is running the market right now.",
+        "An ordinary day for Bitcoin. Ordinary days are where regular plans do their work.",
+        "The data is calm. Most long-term holders are not changing anything.",
+        "Quiet conditions. Long-term holders tend to keep stacking on schedule.",
       ],
       signalCaution: [
-        'Many Bitcoiners are being patient',
-        'Conditions favour patience over new buys right now',
-        'Most Bitcoiners are pausing new buys here',
-        'The data leans toward patience rather than urgency right now',
-        'Most Bitcoiners are holding off on adding more',
-        'Greed is elevated, and most Bitcoiners are treating that as a reason to slow down',
-        'Prices are extended, so most Bitcoiners are being more selective about new buys',
+        "Greed is high and prices are stretched above their trend.",
+        "A hot market. Long-term holders tend to enjoy it and keep their regular plan.",
+        "Prices are close to the peak. Exciting times for long-term holders.",
+        "Enthusiasm is everywhere. Long-term holders tend to stay calm and keep their plan.",
+        "Bitcoin is running hot. A good moment to look back at how far it has come.",
+        "Greed is elevated. Long-term holders tend to keep their regular plan, up or down.",
+        "Prices are well above the long-term trend. Days like this are why people hold.",
       ],
       signalCautionHot: [
-        'Bitcoin is surging. If you held through the quiet stretches, this is the part that pays off.',
-        'Big green candles today. Nothing wrong with enjoying it, the data just is not calling this a moment to add extra.',
-        'This is what holding looks like when it works. No need to chase it from here though.',
-        'A move like this is the reward for not selling on the way down.',
-        'Green day. The signal just is not flagging it as an add-more moment, that is all.',
-        'Prices are ripping higher, exactly the kind of day that makes patience through the dumps worth it.',
-        'Enjoy the move. Fear & Greed just is not treating it as a moment to buy more.',
+        "Bitcoin is surging. If you held through the quiet stretches, this is the part that pays off.",
+        "Big green candles today. Long-term holders tend to enjoy it and keep their plan.",
+        "This is what holding looks like when it works.",
+        "A move like this is the reward for not selling on the way down.",
+        "Green day. A day to celebrate for long-term holders.",
+        "Prices are ripping higher, the kind of day that makes holding through the dips worth it.",
+        "Enjoy the move. Long-term holders tend to keep their regular plan, up or down.",
       ],
       signalUpdatedPrefix: 'Updated at',
       statusLive: 'Receiving signal',
@@ -3136,32 +3140,32 @@
       legendBtc: 'Bitcoin Price',
       legend200ma: '200-Day Moving Average',
       // Expert section
-      expertsLabel: 'What Bitcoiners Do',
+      expertsLabel: "How long-term holders see it",
       expertsTitle: "What tends to happen<br>in moments like this.",
       expertDate: 'Updated today · Based on current market conditions',
-      expertTagAccumulate: 'Current signal: Buying zone',
-      expertTagHold: 'Current signal: Watch and wait',
-      expertTagCaution: 'Current signal: Patience zone',
+      expertTagAccumulate: "Today: Cold",
+      expertTagHold: "Today: Mild",
+      expertTagCaution: "Today: Hot",
       expertTextAccumulate: [
-        "When Fear & Greed falls into fear territory, Bitcoiners tend to treat it as a signal rather than a warning. The deepest fear periods have historically aligned with local price bottoms. Many who DCA choose to increase their regular amount during these windows. The logic: if your conviction hasn't changed, a lower price is simply a better entry point.",
-        "Extreme fear has a pattern in Bitcoin's history: it marks the moments most people want nothing to do with it. Those who kept buying through those periods didn't need perfect timing. They just needed to not stop. The data tends to reward the ones who treat fear as noise rather than instruction.",
-        "Conditions like these (fear elevated, price depressed) are exactly what long-term Bitcoin buyers prepare for in advance. A bottom is never guaranteed, and waiting for certainty just means waiting forever. DCA is designed to make this decision automatic rather than emotional.",
-        "The market is showing fear. For most Bitcoiners, that's not a reason to pause. It's the reason they set up regular buys in the first place. History doesn't repeat exactly, but the pattern of fear preceding recovery has appeared often enough to be worth taking seriously.",
-        "When sentiment is this low, Bitcoin tends to be out of the news, out of dinner conversations, and out of favour. That's historically been the accumulation window. Nobody knows if the bottom is actually here, but assets bought during widespread pessimism have tended to outperform those bought during enthusiasm.",
+        "When the Fear & Greed Index falls into fear, long-term holders tend to treat it as background noise rather than a warning. The deepest fear has historically come close to local price bottoms. For someone who buys a fixed amount on a schedule, a lower price simply means more sats for the same money.",
+        "Extreme fear has a pattern in Bitcoin's history: it marks the moments most people want nothing to do with it. Those who kept their regular plan through those periods didn't need perfect timing. They just didn't stop.",
+        "Conditions like these (fear high, price below its trend) are what long-term holders prepare for in advance. A bottom is never guaranteed, and nobody can call it. A regular plan makes days like this automatic rather than emotional.",
+        "The market is showing fear. For many long-term holders, this is the reason they set up regular buys in the first place. History doesn't repeat exactly, but fear followed by recovery has happened often enough to be worth knowing about.",
+        "When sentiment is this low, Bitcoin tends to be out of the news and out of dinner conversations. Historically, these quiet, unloved stretches have looked very different in hindsight. Nobody knows if this is the bottom.",
       ],
       expertTextHold: [
-        "When signals are mixed, most Bitcoiners simply stay the course. DCA is designed for exactly these moments, when it's not obvious whether to buy more or wait. The most common behaviour in neutral zones is consistency: keep your regular schedule, avoid reacting to noise, and let the next clear signal inform your next move.",
-        "Neutral conditions are where discipline gets tested most. There's no obvious prompt to act, no fear to lean into, no greed to step back from. The Bitcoiners who tend to do best in these phases are the ones who already decided what they'd do before the signal became unclear.",
-        "Mixed signals aren't a problem to solve. They're just the market's way of saying nothing definitive is happening yet. The right response is usually to do nothing differently. Your DCA schedule exists precisely so you don't have to make new decisions every time the picture isn't clear.",
-        "In neutral zones, the biggest risk isn't inaction. It's overreaction. The urge to do something meaningful often peaks when conditions are ambiguous. Most experienced Bitcoiners treat these periods as maintenance: keep the schedule, tune out the commentary, wait for clarity.",
-        "The signal isn't pointing strongly in either direction right now. That's not unusual. Bitcoin spends meaningful time in these transitional states. The most consistent long-term buyers don't change their behaviour here. They keep buying, or they keep holding, based on a plan they made before today.",
+        "When readings are mixed, most long-term holders simply keep their regular plan. That's what a regular plan is for: it removes the question of whether to do more or less today.",
+        "Calm conditions are where discipline gets tested. There's no fear or greed to react to. Long-term holders who do best in these phases usually decided what they'd do long before today.",
+        "Mixed readings aren't a problem to solve. They're the market's way of saying nothing definitive is happening. A regular plan exists so nobody has to make new decisions every time the picture is unclear.",
+        "In calm phases, the biggest risk isn't doing nothing. It's overreacting. Most experienced long-term holders treat these periods as routine: keep the schedule, tune out the commentary.",
+        "The signal isn't pointing strongly either way right now. That's normal. Bitcoin spends a lot of time in these in-between states, and long-term holders tend not to change anything here.",
       ],
       expertTextCaution: [
-        "When greed is elevated and Bitcoin is trading well above its 200-day average, many Bitcoiners shift into a more cautious stance. This doesn't typically mean selling. Timing exits is just as hard as timing entries. But it often means pausing additional buys, reviewing position size, and being mentally prepared for a pullback. \"Be fearful when others are greedy\" is a cliché for a reason.",
-        "Elevated greed and an extended price are the conditions where Bitcoin tends to attract the most new attention, and where experienced holders get quieter. A crash isn't certain. It's just that the risk/reward of adding more at these levels has historically been less favourable than adding during fear.",
-        "When Bitcoin is this far above its long-term average, the data suggests patience over urgency. Pullbacks from extended conditions are normal and often sharp. The Bitcoiners who navigate this best are usually the ones who added during fear and are now simply holding, not chasing the move.",
-        "High greed readings have preceded corrections often enough in Bitcoin's history to be worth respecting. This doesn't mean the top is in. No one knows that. It means the asymmetry that makes accumulation zones compelling doesn't exist here in the same way. Caution isn't pessimism; it's proportionality.",
-        "Near all-time highs with sentiment running hot is when Bitcoin feels most obvious to buy, and historically, that's been the highest-risk time to do so. The most durable Bitcoin positions were built during the periods that felt least comfortable. Right now doesn't feel uncomfortable. That's worth noticing.",
+        "When greed is high and Bitcoin trades well above its 200-day average, the market is in one of its exciting phases. Long-term holders tend to enjoy it without changing their plan. Selling to time the top is as hard as timing the bottom.",
+        "Hot markets bring the most new attention to Bitcoin. Pullbacks from stretched levels are normal and can be sharp, and long-term holders tend to expect them without reacting to them.",
+        "A new high, or close to one, is a moment to celebrate. It's the payoff for holding through the quiet and fearful stretches.",
+        "High greed readings have come before corrections often in Bitcoin's history. That doesn't mean the top is in; nobody knows that. Long-term holders tend to treat the run-up and any pullback as part of the same long ride.",
+        "Near all-time highs, Bitcoin is the talk of the town. Long-term holders tend to use the moment to look at the bigger picture: years, not weeks.",
       ],
       // What If
       whatifLabel: 'What If?',
@@ -3225,25 +3229,25 @@
       partnerTrezorBtn: 'Get a Trezor →',
       // ── Redesign additions ──
       heroWhy: "Here's why",
-      heroStripFg: 'Fear & Greed',
-      heroStripMa: 'vs 200-Day Avg',
-      heroStripAth: 'From All-Time High',
+      heroStripFg: "Market mood",
+      heroStripMa: "Long-term trend",
+      heroStripAth: "From the peak",
       heroBelow: 'below',
       heroAbove: 'above',
-      heroDiscount: 'discount',
+      heroDiscount: "below peak",
       fgLabels: null,
       nowLabel: 'Now',
       notAdvice: 'Not financial advice',
       horizonLabelPrice: '12-month price',
       horizonLabelMa: '┄ 200-day average',
       legendPrice: 'BTC price',
-      legendZone: 'Below avg: historically accumulation',
-      chipSupports: 'Points toward buying',
-      chipNeutral: 'Neutral',
-      chipCaution: 'Suggests patience',
-      expertLeadAccumulate: 'Bitcoiners tend to treat deep fear as a signal, not a warning.',
-      expertLeadHold: 'Steady conditions favour steady plans.',
-      expertLeadCaution: 'High greed isn\'t a problem to fix. It\'s the signal\'s cue to pace new buys.',
+      legendZone: "Below the long-term trend",
+      chipSupports: "Cold side",
+      chipNeutral: "Mild",
+      chipCaution: "Hot side",
+      expertLeadAccumulate: "Long-term holders tend to see deep fear as cheaper sats, not a warning.",
+      expertLeadHold: "Steady conditions favour steady plans.",
+      expertLeadCaution: "High greed is a moment to enjoy, not a problem to fix.",
       statMultiplier: (x) => `${x}× your money`,
       partnerStep1: 'Step 01: Buy',
       partnerStep2: 'Step 02: Store',
@@ -3257,19 +3261,19 @@
       loading: 'Loading…',
       priceLoading: 'Loading...',
       // Signal card descriptions (dynamic)
-      fgExtremeFear: 'Extreme Fear. The Fear & Greed Index measures how emotional the market is right now. Extreme fear means most people are panicking or staying away. Historically, these moments have aligned with Bitcoin price bottoms. Long-term Bitcoiners have often treated this as an opportunity.',
-      fgFear: 'Fear in the market. The Fear & Greed Index measures how emotional the market is right now. Fear means uncertainty is high and many people are pulling back. Long-term Bitcoiners have often used periods like this to accumulate.',
+      fgExtremeFear: "Extreme fear. The Fear & Greed Index measures how emotional the market is right now. Extreme fear means most people are panicking or staying away. Historically, these moments have come close to price bottoms, and long-term holders tend to see them as cheaper sats.",
+      fgFear: "Fear in the market. The Fear & Greed Index measures how emotional the market is right now. Fear means uncertainty is high and many people are pulling back. Long-term holders tend to keep their regular plan through periods like this.",
       fgNeutral: 'Neutral market sentiment. The Fear & Greed Index measures how emotional the market is right now. Neutral means it is neither particularly fearful nor greedy.',
-      fgGreed: 'Greed is building. The Fear & Greed Index measures how emotional the market is right now. Greed means enthusiasm is high and prices often feel like they can only go up. Long-term Bitcoiners have historically started pacing new buys in these periods.',
-      fgExtremeGreed: 'Extreme Greed. The Fear & Greed Index measures how emotional the market is right now. Extreme greed means the market is running hot and euphoria is widespread. Historically a cue for patience over urgency. Long-term Bitcoiners have tended to pace new buys in periods like this.',
+      fgGreed: "Greed is building. The Fear & Greed Index measures how emotional the market is right now. Greed means enthusiasm is high and prices feel like they can only go up. Long-term holders tend to enjoy these periods without changing their plan.",
+      fgExtremeGreed: "Extreme greed. The Fear & Greed Index measures how emotional the market is right now. Extreme greed means the market is running hot and euphoria is widespread. Pullbacks often follow, and long-term holders tend to expect them calmly.",
       fgError: 'Could not load Fear & Greed data.',
-      athDeep: (pct) => `Bitcoin is ${pct}% below its all-time high, the highest price it has ever reached. The further Bitcoin is from that peak, the larger the historical discount. Deep drawdowns like this have historically been when long-term Bitcoiners accumulated most aggressively.`,
-      athMid: (pct) => `${pct}% below its all-time high, the highest price Bitcoin has ever reached. A meaningful correction from that peak. Long-term Bitcoiners have often seen this range as reasonable entry territory.`,
-      athNear: 'Near all-time high territory, close to the highest price Bitcoin has ever reached. Long-term Bitcoiners have historically paced new buys when Bitcoin is this close to its peak.',
+      athDeep: (pct) => `Bitcoin is ${pct}% below its all-time high, the highest price it has ever reached. Deep drawdowns like this have happened in every Bitcoin cycle so far, and long-term holders tend to see them as cheaper sats.`,
+      athMid: (pct) => `${pct}% below its all-time high, the highest price Bitcoin has ever reached. A meaningful correction from that peak, and a normal part of how Bitcoin moves.`,
+      athNear: "Near its all-time high, close to the highest price Bitcoin has ever reached. Exciting territory, and a reminder of how far Bitcoin has come.",
       athError: 'Could not load ATH data.',
-      maBelow: (pct) => `Bitcoin is ${pct}% below its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. Trading below this line has historically been one of the strongest buy signals in Bitcoin's history.`,
+      maBelow: (pct) => `Bitcoin is ${pct}% below its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. Stretches below this line have historically been quiet and unloved, and long-term holders tend to see them as cheaper sats.`,
       maNeutral: 'Bitcoin is trading close to its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. This is considered a neutral zone: neither particularly expensive nor cheap on a historical basis.',
-      maAbove: (pct) => `Bitcoin is ${pct}% above its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. Extended periods above this line have often preceded corrections historically.`,
+      maAbove: (pct) => `Bitcoin is ${pct}% above its 200-day moving average, the average price over the past 200 days, widely used as a gauge of the long-term trend. Long stretches above this line are typical of bull phases, and pullbacks along the way are normal.`,
       maError: 'Could not load moving average data.',
       // FAQ
       faqLabel: 'FAQ',
@@ -3317,50 +3321,54 @@
       scrollHint: '↓ Nach unten scrollen',
       visitorCounter: 'Bitcoiner waren hier.',
       // Signal states
+      stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
+      miMood: "01 / Marktstimmung · Fear &amp; Greed",
+      miTrend: '02 / Langfristiger Trend · vs. <span style="white-space:nowrap">200-Tage</span>-Schnitt',
+      miPeak: '03 / Vom Hoch · <span style="white-space:nowrap">Allzeit</span>hoch',
       signalAccumulate: [
-        'Die meisten Bitcoiner kaufen gerade',
-        'Die Angst ist gerade groß. Für die meisten Bitcoiner ist genau das ein Kaufsignal, kein Grund zu warten.',
-        'Während andere in Panik geraten, bauen die meisten Bitcoiner ihren Bestand weiter aus',
-        'Genau so hat ein gutes Kauffenster historisch oft ausgesehen',
-        'Die meisten Bitcoiner sehen diesen Rücksetzer als Chance, nicht als Warnung',
-        'Die Stimmung ist schwach, und genau dann werden langfristige Käufer aufmerksam',
-        'Für die meisten Bitcoiner ist das ein guter Moment zum Weiterkaufen, kein Grund auszusetzen',
+        "Die Angst ist hoch, und die Preise liegen unter ihrem langfristigen Trend.",
+        "Die Preise sind niedrig im Vergleich zur jüngsten Vergangenheit. Langfristige Halter sehen das meist als günstigere Sats.",
+        "Die Stimmung ist schwach, und Bitcoin ist aus den Schlagzeilen verschwunden.",
+        "Ein ruhiger, ängstlicher Markt. Langfristige Halter stacken an solchen Tagen meist einfach weiter.",
+        "Angst liegt in der Luft. Für langfristige Halter gibt es für dasselbe Geld jetzt mehr Sats.",
+        "Die Preise liegen deutlich unter dem Hoch. Langfristige Halter sehen das meist als Rabatt, nicht als Warnung.",
+        "Kaum jemand will gerade Bitcoin. Langfristige Halter bleiben meist bei ihrem regulären Plan.",
       ],
       signalAccumulateDump: [
-        'Bitcoin ist gerade stark gefallen. Für viele langfristige Bitcoiner ist das ein Einstiegspunkt.',
-        'Überall rote Kerzen, und die meisten Bitcoiner kaufen jetzt zu, statt wegzulaufen',
-        'Ein Rücksetzer wie dieser fühlt sich unangenehm an. Historisch war genau das der Punkt.',
-        'Die Panik breitet sich aus, und die meisten Bitcoiner sehen darin eine Chance',
-        'Deutlich roter Tag. Die meisten langfristigen Halter kaufen genau jetzt zu.',
-        'Die Kurse fallen stark, und genau dann steigt bei langfristigen Haltern oft das Interesse',
-        'Ein Rückgang wie dieser schreckt kurzfristige Trader ab. Langfristige Bitcoiner bleiben meist dabei, oder kaufen nach.',
+        "Bitcoin ist heute stark gefallen. Langfristige Halter sehen das meist als günstigere Sats, nicht als Grund zu verkaufen.",
+        "Ein deutlich roter Tag. Unangenehm, und historisch Teil der Reise.",
+        "Die Panik breitet sich aus. Langfristige Halter bleiben meist ruhig und bei ihrem Plan.",
+        "Die Preise sind schnell gefallen. Für langfristige Halter gibt es für dasselbe Geld jetzt mehr Sats.",
+        "Ein Rückgang wie dieser schreckt kurzfristige Trader ab. Langfristige Halter bleiben meist dabei.",
+        "Starker Rückgang, hohe Angst. Genau die Art Tag, auf die sich langfristige Halter vorbereiten.",
+        "Überall Rot. Langfristige Halter sehen solche Tage meist als Rabatt.",
       ],
       signalHold: [
-        'Die meisten beobachten und warten ab',
-        'Kein klarer Vorteil in beide Richtungen. Die meisten Bitcoiner bleiben ruhig.',
-        'Die meisten Bitcoiner halten sich an ihren Plan, statt zu reagieren',
-        'Die Lage ist gemischt, also bleiben die meisten bei ihrem Kurs',
-        'Nichts Eindeutiges gerade. Die meisten halten einfach.',
-        'Das Signal zeigt gerade in keine klare Richtung, also bleiben die meisten wie sie sind',
-        'Ruhige Woche für die Daten. Die meisten Bitcoiner ändern nichts.',
+        "Nichts Ungewöhnliches. Die meisten langfristigen Halter bleiben bei ihrem Plan.",
+        "Ein ruhiger Markt ohne starken Zug in eine Richtung.",
+        "Gemischte Werte. Langfristige Halter bleiben meist bei ihrem Plan.",
+        "Weder Angst noch Gier bestimmen gerade den Markt.",
+        "Ein gewöhnlicher Tag für Bitcoin. An gewöhnlichen Tagen arbeiten regelmäßige Pläne am besten.",
+        "Die Daten sind ruhig. Die meisten langfristigen Halter ändern nichts.",
+        "Ruhige Bedingungen. Langfristige Halter stacken meist einfach nach Plan weiter.",
       ],
       signalCaution: [
-        'Viele Bitcoiner sind gerade geduldig',
-        'Die Lage spricht gerade eher für Geduld als für neue Käufe',
-        'Die meisten Bitcoiner pausieren gerade neue Käufe',
-        'Die Daten sprechen gerade eher für Geduld als für Eile',
-        'Die meisten Bitcoiner warten gerade mit weiteren Käufen',
-        'Die Gier ist erhöht, und die meisten Bitcoiner nehmen das als Grund, kürzerzutreten',
-        'Die Kurse sind stark gestiegen, also werden die meisten Bitcoiner bei neuen Käufen wählerischer',
+        "Die Gier ist hoch, und die Preise liegen deutlich über ihrem Trend.",
+        "Ein heißer Markt. Langfristige Halter genießen das meist und bleiben bei ihrem Plan.",
+        "Die Preise sind nah am Hoch. Spannende Zeiten für langfristige Halter.",
+        "Überall Begeisterung. Langfristige Halter bleiben meist ruhig und bei ihrem Plan.",
+        "Bitcoin läuft heiß. Ein guter Moment, um zu sehen, wie weit Bitcoin gekommen ist.",
+        "Die Gier ist erhöht. Langfristige Halter bleiben meist bei ihrem Plan, egal ob es rauf oder runter geht.",
+        "Die Preise liegen deutlich über dem langfristigen Trend. Für solche Tage hält man.",
       ],
       signalCautionHot: [
-        'Bitcoin schießt nach oben. Wenn du die ruhigen Phasen durchgehalten hast, ist das hier der Teil, der sich auszahlt.',
-        'Viele grüne Kerzen heute. Genieß es ruhig, die Daten markieren es nur nicht als Moment zum Nachkaufen.',
-        'So sieht Durchhalten aus, wenn es sich auszahlt. Nachjagen muss man von hier aus trotzdem nicht.',
-        'So eine Bewegung ist die Belohnung dafür, beim Rückgang nicht verkauft zu haben.',
-        'Grüner Tag. Das Signal markiert ihn nur nicht als Moment zum Nachkaufen, mehr nicht.',
-        'Die Kurse schießen nach oben, genau der Tag, der Geduld durch die Rücksetzer wert macht.',
-        'Genieß die Bewegung. Fear & Greed behandelt sie nur nicht als Moment zum Nachkaufen.',
+        "Bitcoin schießt nach oben. Wenn du die ruhigen Phasen durchgehalten hast, ist das hier der Teil, der sich auszahlt.",
+        "Viele grüne Kerzen heute. Langfristige Halter genießen das meist und bleiben bei ihrem Plan.",
+        "So sieht Halten aus, wenn es sich auszahlt.",
+        "So eine Bewegung ist die Belohnung dafür, beim Rückgang nicht verkauft zu haben.",
+        "Grüner Tag. Ein Tag zum Feiern für langfristige Halter.",
+        "Die Kurse schießen nach oben, genau der Tag, für den sich das Halten durch die Rücksetzer lohnt.",
+        "Genieß die Bewegung. Langfristige Halter bleiben meist bei ihrem Plan, egal ob es rauf oder runter geht.",
       ],
       signalUpdatedPrefix: 'Aktualisiert um',
       statusLive: 'Signal empfangen',
@@ -3383,32 +3391,32 @@
       legendBtc: 'Bitcoin-Kurs',
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
-      expertsLabel: 'Was Bitcoiner tun',
+      expertsLabel: "So sehen es langfristige Halter",
       expertsTitle: 'Was in Momenten wie diesem<br>typischerweise passiert.',
       expertDate: 'Heute aktualisiert · Basierend auf aktuellen Marktbedingungen',
-      expertTagAccumulate: 'Aktuelles Signal: Kaufzone',
-      expertTagHold: 'Aktuelles Signal: Abwarten',
-      expertTagCaution: 'Aktuelles Signal: Geduldzone',
+      expertTagAccumulate: "Heute: Kalt",
+      expertTagHold: "Heute: Mild",
+      expertTagCaution: "Heute: Heiß",
       expertTextAccumulate: [
-        'Fällt der Fear & Greed Index in den Angstbereich, werten Bitcoiner das eher als Signal denn als Warnung. Die tiefsten Angstphasen haben historisch mit lokalen Kurstiefs zusammengepasst. Viele, die per DCA kaufen, erhöhen in diesen Phasen ihren regelmäßigen Betrag. Die Logik: Wenn sich an deiner Überzeugung nichts geändert hat, ist ein niedrigerer Preis schlicht ein besserer Einstieg.',
-        'Extreme Angst hat in der Geschichte von Bitcoin ein Muster: Sie markiert die Momente, in denen die meisten Menschen nichts damit zu tun haben wollen. Wer in diesen Phasen weiter kaufte, brauchte kein perfektes Timing. Er musste nur nicht aufhören. Die Daten belohnen tendenziell die, die Angst als Rauschen behandeln, nicht als Anweisung.',
-        'Bedingungen wie diese (hohe Angst, gedrückter Preis) sind genau das, worauf sich langfristige Bitcoin-Käufer im Voraus vorbereiten. Ein Tief ist nie garantiert, und auf Gewissheit zu warten heißt meistens, für immer zu warten. DCA macht diese Entscheidung automatisch statt emotional.',
-        'Der Markt zeigt Angst. Für die meisten Bitcoiner ist das kein Grund zu pausieren. Es ist der Grund, warum sie überhaupt regelmäßige Käufe eingerichtet haben. Die Geschichte wiederholt sich nicht exakt, aber das Muster von Angst vor Erholung ist oft genug aufgetreten, um ernst genommen zu werden.',
-        'Wenn die Stimmung so gedrückt ist, ist Bitcoin oft aus den Nachrichten, aus den Gesprächen und aus dem Rampenlicht verschwunden. Das war historisch gesehen das Akkumulationsfenster. Niemand weiß, ob der Tiefpunkt wirklich erreicht ist, aber Positionen, die in Zeiten weit verbreiteten Pessimismus gekauft wurden, haben tendenziell besser abgeschnitten als jene aus Zeiten der Euphorie.',
+        "Fällt der Fear & Greed Index in den Angstbereich, behandeln langfristige Halter das meist als Hintergrundrauschen, nicht als Warnung. Die tiefste Angst lag historisch nah an lokalen Kurstiefs. Wer regelmäßig einen festen Betrag kauft, bekommt bei niedrigerem Preis einfach mehr Sats für dasselbe Geld.",
+        "Extreme Angst hat in der Geschichte von Bitcoin ein Muster: Sie markiert die Momente, in denen die meisten nichts damit zu tun haben wollen. Wer in diesen Phasen bei seinem Plan blieb, brauchte kein perfektes Timing. Er hat einfach nicht aufgehört.",
+        "Bedingungen wie diese (hohe Angst, Preis unter dem Trend) sind genau das, worauf sich langfristige Halter im Voraus vorbereiten. Ein Tief ist nie garantiert, und niemand kann es vorhersagen. Ein regelmäßiger Plan macht solche Tage automatisch statt emotional.",
+        "Der Markt zeigt Angst. Für viele langfristige Halter ist genau das der Grund, warum sie überhaupt regelmäßige Käufe eingerichtet haben. Die Geschichte wiederholt sich nicht exakt, aber Angst gefolgt von Erholung kam oft genug vor, um es zu kennen.",
+        "Wenn die Stimmung so gedrückt ist, ist Bitcoin meist aus den Nachrichten und aus den Gesprächen verschwunden. Historisch sahen diese ruhigen, ungeliebten Phasen im Rückblick ganz anders aus. Niemand weiß, ob das der Tiefpunkt ist.",
       ],
       expertTextHold: [
-        'Bei gemischten Signalen bleiben die meisten Bitcoiner einfach ihrem Plan treu. DCA ist genau für solche Momente gemacht, wenn es nicht eindeutig ist, ob man mehr kaufen oder abwarten soll. Das häufigste Verhalten in neutralen Zonen: den regelmäßigen Rhythmus beibehalten, nicht auf Lärm reagieren und auf das nächste klare Signal warten.',
-        'Neutrale Bedingungen sind der härteste Test für Disziplin. Es gibt keinen offensichtlichen Anlass zu handeln, keine Angst, in die man sich lehnen könnte, keine Gier, von der man Abstand nehmen müsste. Die Bitcoiner, die in diesen Phasen am besten abschneiden, haben bereits entschieden, was sie tun würden, bevor das Signal unklar wurde.',
-        'Gemischte Signale sind kein Problem, das gelöst werden muss. Sie sind einfach die Art des Marktes zu sagen, dass noch nichts Definitives passiert. Die richtige Reaktion ist meistens, nichts anders zu machen. Dein DCA-Plan existiert genau deshalb, damit du keine neuen Entscheidungen treffen musst, wenn das Bild unklar ist.',
-        'In neutralen Zonen ist das größte Risiko nicht Untätigkeit. Es ist Überreaktion. Der Drang, etwas Bedeutsames zu tun, ist oft am stärksten, wenn die Bedingungen unklar sind. Die meisten erfahrenen Bitcoiner behandeln diese Phasen als Routine: Plan beibehalten, Kommentare ausblenden, auf Klarheit warten.',
-        'Das Signal zeigt gerade nicht stark in eine Richtung. Das ist nicht ungewöhnlich. Bitcoin verbringt erhebliche Zeit in diesen Übergangszuständen. Die beständigsten langfristigen Käufer ändern ihr Verhalten hier nicht. Sie kaufen weiter oder halten weiter, auf der Basis eines Plans, den sie vor heute gemacht haben.',
+        "Bei gemischten Werten bleiben die meisten langfristigen Halter einfach bei ihrem Plan. Genau dafür ist ein regelmäßiger Plan da: Er nimmt die Frage ab, ob man heute mehr oder weniger tun sollte.",
+        "Ruhige Bedingungen sind der eigentliche Test für Disziplin. Es gibt keine Angst und keine Gier, auf die man reagieren könnte. Langfristige Halter, die in diesen Phasen gut fahren, haben meist lange vorher entschieden, was sie tun.",
+        "Gemischte Werte sind kein Problem, das gelöst werden muss. Sie sind die Art des Marktes zu sagen, dass gerade nichts Eindeutiges passiert. Ein regelmäßiger Plan existiert, damit niemand bei jedem unklaren Bild neu entscheiden muss.",
+        "In ruhigen Phasen ist das größte Risiko nicht, nichts zu tun. Es ist Überreaktion. Die meisten erfahrenen langfristigen Halter behandeln diese Phasen als Routine: Plan beibehalten, Kommentare ausblenden.",
+        "Das Signal zeigt gerade in keine klare Richtung. Das ist normal. Bitcoin verbringt viel Zeit in diesen Zwischenzuständen, und langfristige Halter ändern hier meist nichts.",
       ],
       expertTextCaution: [
-        'Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, werden viele Bitcoiner vorsichtiger. Das bedeutet meistens nicht verkaufen. Ausstiege zu timen ist genauso schwer wie Einstiege. Aber oft heißt es: Käufe pausieren, Positionsgröße überdenken und sich mental auf einen Rücksetzer vorbereiten. „Sei ängstlich, wenn andere gierig sind" ist ein Klischee, aber mit Grund.',
-        'Erhöhte Gier und ein ausgedehnter Preis sind die Bedingungen, unter denen Bitcoin die meiste neue Aufmerksamkeit anzieht, und unter denen erfahrene Halter stiller werden. Ein Crash ist nicht sicher. Aber das Chance-Risiko-Verhältnis war bei diesen Niveaus historisch weniger günstig als beim Kaufen in Angstphasen.',
-        'Wenn Bitcoin so weit über seinem langfristigen Durchschnitt liegt, deuten die Daten auf Geduld statt Dringlichkeit hin. Korrekturen aus ausgedehnten Bedingungen sind normal und oft scharf. Die Bitcoiner, die das am besten navigieren, haben meist in Angstphasen akkumuliert und halten jetzt einfach, statt der Bewegung hinterherzujagen.',
-        'Hohe Gier-Werte sind in Bitcoins Geschichte oft genug Korrekturen vorangegangen, um respektiert zu werden. Das bedeutet nicht, dass das Hoch erreicht ist. Das weiß niemand. Es bedeutet, dass die Asymmetrie, die Akkumulationszonen attraktiv macht, hier nicht in gleichem Maße existiert. Vorsicht ist kein Pessimismus; es ist Verhältnismäßigkeit.',
-        'Nahe Allzeithochs mit heißer Stimmung fühlt sich Bitcoin am selbstverständlichsten zum Kaufen an, und historisch war das die risikoreichste Zeit. Die dauerhaftesten Bitcoin-Positionen wurden in Phasen aufgebaut, die sich am wenigsten angenehm anfühlten. Gerade fühlt es sich nicht unangenehm an. Das ist es wert, bemerkt zu werden.',
+        "Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, ist der Markt in einer seiner spannenden Phasen. Langfristige Halter genießen das meist, ohne ihren Plan zu ändern. Das Hoch zum Verkaufen zu timen ist genauso schwer wie das Tief zum Kaufen.",
+        "Heiße Märkte bringen Bitcoin die meiste neue Aufmerksamkeit. Rücksetzer von gestreckten Niveaus sind normal und können heftig sein, und langfristige Halter rechnen meist damit, ohne darauf zu reagieren.",
+        "Ein neues Hoch, oder nah dran, ist ein Moment zum Feiern. Es ist der Lohn dafür, durch die ruhigen und ängstlichen Phasen gehalten zu haben.",
+        "Hohe Gier-Werte kamen in Bitcoins Geschichte oft vor Korrekturen. Das heißt nicht, dass das Hoch erreicht ist; das weiß niemand. Langfristige Halter sehen den Anstieg und jeden Rücksetzer meist als Teil derselben langen Reise.",
+        "Nahe am Allzeithoch ist Bitcoin in aller Munde. Langfristige Halter nutzen den Moment meist, um auf das große Bild zu schauen: Jahre, nicht Wochen.",
       ],
       // What If
       whatifLabel: 'Was wäre wenn?',
@@ -3472,25 +3480,25 @@
       partnerTrezorBtn: 'Trezor holen →',
       // ── Redesign additions ──
       heroWhy: 'Darum',
-      heroStripFg: 'Fear & Greed',
-      heroStripMa: 'vs. 200-Tage-Schnitt',
-      heroStripAth: 'Vom Allzeithoch',
+      heroStripFg: "Marktstimmung",
+      heroStripMa: "Langfristiger Trend",
+      heroStripAth: "Vom Hoch",
       heroBelow: 'darunter',
       heroAbove: 'darüber',
-      heroDiscount: 'Rabatt',
+      heroDiscount: "unter Hoch",
       fgLabels: { 'Extreme Fear': 'Extreme Angst', 'Fear': 'Angst', 'Neutral': 'Neutral', 'Greed': 'Gier', 'Extreme Greed': 'Extreme Gier' },
       nowLabel: 'Jetzt',
       notAdvice: 'Keine Anlageberatung',
       horizonLabelPrice: '12-Monats-Kurs',
       horizonLabelMa: '┄ 200-Tage-Durchschnitt',
       legendPrice: 'BTC-Kurs',
-      legendZone: 'Unter dem Schnitt: historisch Akkumulation',
-      chipSupports: 'Spricht für Kaufen',
-      chipNeutral: 'Neutral',
-      chipCaution: 'Spricht für Geduld',
-      expertLeadAccumulate: 'Bitcoiner sehen tiefe Angst als Signal, nicht als Warnung.',
-      expertLeadHold: 'Stabile Bedingungen sprechen für stabile Pläne.',
-      expertLeadCaution: 'Hohe Gier ist kein Alarmsignal, sondern das Zeichen des Signals, kürzerzutreten.',
+      legendZone: "Unter dem langfristigen Trend",
+      chipSupports: "Kalte Seite",
+      chipNeutral: "Mild",
+      chipCaution: "Heiße Seite",
+      expertLeadAccumulate: "Langfristige Halter sehen tiefe Angst meist als günstigere Sats, nicht als Warnung.",
+      expertLeadHold: "Stabile Bedingungen sprechen für stabile Pläne.",
+      expertLeadCaution: "Hohe Gier ist ein Moment zum Genießen, kein Problem, das gelöst werden muss.",
       statMultiplier: (x) => `${x}× dein Geld`,
       partnerStep1: 'Schritt 01: Kaufen',
       partnerStep2: 'Schritt 02: Verwahren',
@@ -3504,19 +3512,19 @@
       loading: 'Lädt…',
       priceLoading: 'Lädt...',
       // Signal card descriptions (dynamic)
-      fgExtremeFear: 'Extreme Angst. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Angst bedeutet, dass die meisten Menschen in Panik sind oder sich fernhalten. Historisch haben sich solche Momente mit Bitcoin-Kurstiefs gedeckt, langfristige Bitcoiner haben das oft als Einstiegschance gesehen.',
-      fgFear: 'Angst im Markt. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Angst bedeutet, dass die Unsicherheit hoch ist und viele sich zurückziehen. Langfristige Bitcoiner haben solche Phasen oft genutzt, um zu kaufen.',
+      fgExtremeFear: "Extreme Angst. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Angst bedeutet, dass die meisten in Panik sind oder sich fernhalten. Historisch lagen solche Momente nah an Kurstiefs, und langfristige Halter sehen sie meist als günstigere Sats.",
+      fgFear: "Angst im Markt. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Angst bedeutet, dass die Unsicherheit hoch ist und viele sich zurückziehen. Langfristige Halter bleiben in solchen Phasen meist bei ihrem Plan.",
       fgNeutral: 'Neutrale Marktstimmung. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Neutral bedeutet weder besonders ängstlich noch gierig.',
-      fgGreed: 'Gier baut sich auf. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Gier bedeutet, dass die Begeisterung hoch ist und Preise unaufhaltsam wirken. Langfristige Bitcoiner haben in solchen Phasen historisch begonnen, neue Käufe zu drosseln.',
-      fgExtremeGreed: 'Extreme Gier. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Gier bedeutet, dass der Markt überhitzt ist und Euphorie weit verbreitet ist. Historisch eher ein Zeichen für Geduld als für Eile. Langfristige Bitcoiner haben in solchen Phasen tendenziell neue Käufe verlangsamt.',
+      fgGreed: "Gier baut sich auf. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Gier bedeutet, dass die Begeisterung hoch ist und Preise unaufhaltsam wirken. Langfristige Halter genießen solche Phasen meist, ohne ihren Plan zu ändern.",
+      fgExtremeGreed: "Extreme Gier. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Gier bedeutet, dass der Markt überhitzt ist und Euphorie weit verbreitet ist. Rücksetzer folgen oft, und langfristige Halter rechnen meist gelassen damit.",
       fgError: 'Fear & Greed Daten konnten nicht geladen werden.',
-      athDeep: (pct) => `Bitcoin liegt ${pct}% unter seinem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Je weiter Bitcoin von diesem Höchststand entfernt ist, desto größer der historische Abschlag. Solche tiefen Rücksetzer waren historisch die Phasen, in denen langfristige Bitcoiner am aktivsten gekauft haben.`,
-      athMid: (pct) => `${pct}% unter dem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Eine deutliche Korrektur von diesem Höchststand. Langfristige Bitcoiner haben diesen Bereich oft als vernünftiges Einstiegsniveau gesehen.`,
-      athNear: 'Nahe am Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Langfristige Bitcoiner haben historisch das Tempo neuer Käufe gedrosselt, wenn Bitcoin so nah an seinem Höchststand ist.',
+      athDeep: (pct) => `Bitcoin liegt ${pct}% unter seinem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Solche tiefen Rücksetzer gab es bisher in jedem Bitcoin-Zyklus, und langfristige Halter sehen sie meist als günstigere Sats.`,
+      athMid: (pct) => `${pct}% unter dem Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Eine deutliche Korrektur von diesem Hoch, und ein normaler Teil davon, wie Bitcoin sich bewegt.`,
+      athNear: "Nahe am Allzeithoch, dem höchsten Preis, den Bitcoin je erreicht hat. Spannendes Terrain, und eine Erinnerung daran, wie weit Bitcoin gekommen ist.",
       athError: 'ATH-Daten konnten nicht geladen werden.',
-      maBelow: (pct) => `Bitcoin liegt ${pct}% unter seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Der Handel unter dieser Linie war historisch eines der stärksten Kaufsignale in Bitcoins Geschichte.`,
+      maBelow: (pct) => `Bitcoin liegt ${pct}% unter seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Phasen unter dieser Linie waren historisch ruhig und ungeliebt, und langfristige Halter sehen sie meist als günstigere Sats.`,
       maNeutral: 'Bitcoin handelt nahe seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Das gilt als neutrale Zone: weder besonders teuer noch günstig auf historischer Basis.',
-      maAbove: (pct) => `Bitcoin liegt ${pct}% über seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Längere Phasen über dieser Linie sind historisch oft Korrekturen vorangegangen.`,
+      maAbove: (pct) => `Bitcoin liegt ${pct}% über seinem 200-Tage-Durchschnitt, dem Durchschnittspreis der letzten 200 Tage, der als Maßstab für den langfristigen Trend gilt. Längere Phasen über dieser Linie sind typisch für Bullenphasen, und Rücksetzer auf dem Weg sind normal.`,
       maError: 'Gleitender Durchschnitt konnte nicht geladen werden.',
       // FAQ
       faqLabel: 'FAQ',
@@ -3690,7 +3698,7 @@
       const sign = change >= 0 ? '+' : '';
       const prevPrice = currentPrice / (1 + change / 100);
       const absDiff = Math.abs(currentPrice - prevPrice);
-      changeEl.textContent = `${sign}${change.toFixed(2)}% · ${sign}${sym}${formatPrice(absDiff)} today`;
+      changeEl.textContent = `${sign}${change.toFixed(2)}% · ${sign}${sym}${formatPrice(absDiff)} ${currentLang === 'de' ? 'heute' : 'today'}`;
       changeEl.className = `change ${change >= 0 ? 'up' : 'down'}`;
       document.getElementById('share-price').textContent = sym + formatPrice(currentPrice);
       // Update "last updated" timestamp
@@ -3884,7 +3892,9 @@
     const maScore  = diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2;
     const athScore = athDropPct < -50 ? 1 : athDropPct < -25 ? 0 : -1;
     const score = fgScore + maScore + athScore;
-    // Range −5 to +5. Thresholds: ≥3 Accumulate, −1 to 2 Hold, ≤−2 Caution
+    // Range −5 to +5. Thresholds: ≥3 Cold (accumulate), −1 to 2 Mild (hold), ≤−2 Hot (caution)
+    window._signalScore = score;
+    window._signalState = score >= 3 ? 'accumulate' : score >= -1 ? 'hold' : 'caution';
 
     const dayIndex = Math.floor(Date.now() / 86400000);
 
@@ -3916,9 +3926,10 @@
       window._cinematicSignal = 'accumulate';
       const accumulatePool = hardDump ? t.signalAccumulateDump : t.signalAccumulate;
       const accumulateHeadline = accumulatePool[dayIndex % accumulatePool.length];
-      text.textContent = accumulateHeadline;
+      window._signalHeadline = accumulateHeadline;
+      text.textContent = t.stateName.accumulate + '. ' + accumulateHeadline;
       shareSignal.style.color = 'var(--green)';
-      shareSignal.textContent = '● ' + accumulateHeadline;
+      shareSignal.textContent = '● ' + t.stateName.accumulate + '. ' + accumulateHeadline;
       expertTag.textContent = t.expertTagAccumulate;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextAccumulate[dayIndex % t.expertTextAccumulate.length];
@@ -3929,9 +3940,10 @@
       if (window._setExpertFieldState) window._setExpertFieldState('hold');
       window._cinematicSignal = 'hold';
       const holdHeadline = t.signalHold[dayIndex % t.signalHold.length];
-      text.textContent = holdHeadline;
+      window._signalHeadline = holdHeadline;
+      text.textContent = t.stateName.hold + '. ' + holdHeadline;
       shareSignal.style.color = 'var(--amber)';
-      shareSignal.textContent = '● ' + holdHeadline;
+      shareSignal.textContent = '● ' + t.stateName.hold + '. ' + holdHeadline;
       expertTag.textContent = t.expertTagHold;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextHold[dayIndex % t.expertTextHold.length];
@@ -3943,9 +3955,10 @@
       window._cinematicSignal = 'caution';
       const cautionPool = hotPump ? t.signalCautionHot : t.signalCaution;
       const cautionHeadline = cautionPool[dayIndex % cautionPool.length];
-      text.textContent = cautionHeadline;
+      window._signalHeadline = cautionHeadline;
+      text.textContent = t.stateName.caution + '. ' + cautionHeadline;
       shareSignal.style.color = 'var(--orange)';
-      shareSignal.textContent = '● ' + cautionHeadline;
+      shareSignal.textContent = '● ' + t.stateName.caution + '. ' + cautionHeadline;
       expertTag.textContent = t.expertTagCaution;
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(247,147,26,0.3); background:var(--orange-dim); color:var(--orange); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextCaution[dayIndex % t.expertTextCaution.length];
@@ -3976,9 +3989,9 @@
       if (!el) return;
       el.classList.add('show');
       el.classList.remove('good', 'neutral', 'bad');
-      if (s > 0) { el.classList.add('good'); el.textContent = '▲ ' + t.chipSupports; }
-      else if (s === 0) { el.classList.add('neutral'); el.textContent = '— ' + t.chipNeutral; }
-      else { el.classList.add('bad'); el.textContent = '▼ ' + t.chipCaution; }
+      if (s > 0) { el.classList.add('good'); el.textContent = '↓ ' + t.chipSupports; }
+      else if (s === 0) { el.classList.add('neutral'); el.textContent = '· ' + t.chipNeutral; }
+      else { el.classList.add('bad'); el.textContent = '↑ ' + t.chipCaution; }
     };
     setVerdict('fg-verdict', fgScore);
     setVerdict('ma-verdict', maScore);
@@ -3998,9 +4011,10 @@
     // with the rotated, momentum-aware pick. This just needs a safe default.
     const pill = document.getElementById('signal-pill');
     const text = document.getElementById('signal-text');
-    if (pill.classList.contains('accumulate')) text.textContent = translations[currentLang].signalAccumulate[0];
-    else if (pill.classList.contains('hold')) text.textContent = translations[currentLang].signalHold[0];
-    else text.textContent = translations[currentLang].signalCaution[0];
+    const tt = translations[currentLang];
+    if (pill.classList.contains('accumulate')) text.textContent = tt.stateName.accumulate + '. ' + tt.signalAccumulate[0];
+    else if (pill.classList.contains('hold')) text.textContent = tt.stateName.hold + '. ' + tt.signalHold[0];
+    else if (pill.classList.contains('caution')) text.textContent = tt.stateName.caution + '. ' + tt.signalCaution[0];
   }
 
   // ── HERO STRIP + HORIZON (redesign) ──
@@ -4405,19 +4419,23 @@
     const label = document.getElementById('whatif-selected-label').textContent;
     const val = document.getElementById('whatif-btc-value').textContent;
     const text = currentLang === 'de'
-      ? `${label}: hätte ich das Geld seit 2015 wöchentlich in Bitcoin investiert, wäre es heute ${val} wert. 👀 whentobuybtc.xyz`
-      : `${label}: if that money had gone into Bitcoin weekly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
+      ? `${label}: hätte ich das Geld seit 2015 monatlich in Bitcoin investiert, wäre es heute ${val} wert. 👀 whentobuybtc.xyz`
+      : `${label}: if that money had gone into Bitcoin monthly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
     window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
   // ── SHARE ──
   function _shareText(short) {
-    const sig   = document.getElementById('signal-text').textContent;
     const price = document.getElementById('share-price').textContent;
+    const tt    = translations[currentLang];
+    const name  = window._signalState ? tt.stateName[window._signalState] : '';
+    const line  = window._signalHeadline || '';
     if (currentLang === 'de') {
-      return short ? `Bitcoin steht gerade bei ${price}, ${sig}. 👉 whentobuybtc.xyz` : `Bitcoin steht gerade bei ${price}, ${sig}. Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`;
+      const head = name ? `Bitcoin steht bei ${price}. Markt heute: ${name}. ${line}` : `Bitcoin steht bei ${price}.`;
+      return short ? `${head} 👉 whentobuybtc.xyz` : `${head} Hier kannst du es im Blick behalten 👉 whentobuybtc.xyz`;
     }
-    return short ? `Bitcoin is at ${price} right now, ${sig}. 👉 whentobuybtc.xyz` : `Bitcoin is at ${price} right now, ${sig}. You can keep track here 👉 whentobuybtc.xyz`;
+    const head = name ? `Bitcoin is at ${price}. Market today: ${name}. ${line}` : `Bitcoin is at ${price}.`;
+    return short ? `${head} 👉 whentobuybtc.xyz` : `${head} You can keep track here 👉 whentobuybtc.xyz`;
   }
   function shareWhatsApp() { window.open('https://wa.me/?text=' + encodeURIComponent(_shareText(false)), '_blank'); }
   function shareSignal()   { window.open('https://signal.me/#p/?message=' + encodeURIComponent(_shareText(false)), '_blank'); }
@@ -4900,18 +4918,18 @@
         if (typeof fgValue === 'undefined' || fgValue === null) return;
         if (typeof maPrice === 'undefined' || maPrice === null) return;
         if (typeof currentPrice === 'undefined' || currentPrice === null) return;
-        const diffPct = (currentPrice - maPrice) / maPrice * 100;
-        const score = (fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2) +
-                      (diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2);
+        if (typeof window._signalScore !== 'number') return;
+        const score = window._signalScore;
+        const state = window._signalState;
         const scoreEl = document.getElementById('instrument-score');
         const sigLbl  = document.getElementById('instrument-signal-label');
         const tsEl    = document.getElementById('instrument-timestamp');
         const dot     = document.getElementById('instrument-dot');
         if (scoreEl) scoreEl.textContent = (score >= 0 ? '+' : '') + score;
-        if (sigLbl)  sigLbl.textContent  = score >= 2 ? 'ACCUMULATE' : score >= 0 ? 'HOLD' : 'PATIENCE';
+        if (sigLbl)  sigLbl.textContent  = translations[currentLang].stateName[state].toUpperCase();
         const t = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
         if (tsEl) tsEl.textContent = 'LAST UPDATE ' + t;
-        const col = score >= 2 ? 'var(--green)' : score >= 0 ? 'var(--amber)' : 'var(--orange)';
+        const col = state === 'accumulate' ? 'var(--green)' : state === 'hold' ? 'var(--amber)' : 'var(--orange)';
         if (dot) { dot.style.background = col; dot.style.boxShadow = '0 0 8px ' + col; }
       } catch(e) {}
     };

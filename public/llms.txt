@@ -1,5 +1,5 @@
 # When to Buy BTC
-> Free Bitcoin market signal for long-term holders. Combines the Fear & Greed Index, 200-day moving average, and ATH distance into a single Accumulate / Hold / Caution signal. No trading advice. No noise.
+> Free Bitcoin market signal for long-term holders. Combines the Fear & Greed Index, 200-day moving average, and ATH distance into a single Cold / Mild / Hot reading of the Bitcoin market, like a weather report. It describes the market; it never tells anyone to buy or sell. No noise.
 
 ## About
 - Tool: https://whentobuybtc.xyz/

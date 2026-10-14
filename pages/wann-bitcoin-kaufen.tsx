@@ -115,9 +115,9 @@ function formatPrice(n: number): string {
 
 function SignalBadge({ signal }: { signal: string }) {
   const map: Record<string, { label: string; color: string; bg: string; border: string }> = {
-    accumulate: { label: 'Akkumulieren', color: '#4ADE80', bg: 'rgba(74,222,128,0.07)', border: 'rgba(74,222,128,0.25)' },
-    hold:       { label: 'Halten',       color: '#FBBF24', bg: 'rgba(251,191,36,0.07)', border: 'rgba(251,191,36,0.25)' },
-    caution:    { label: 'Vorsicht',     color: '#F87171', bg: 'rgba(248,113,113,0.07)', border: 'rgba(248,113,113,0.25)' },
+    accumulate: { label: 'Kalt',  color: '#4ADE80', bg: 'rgba(74,222,128,0.07)', border: 'rgba(74,222,128,0.25)' },
+    hold:       { label: 'Mild',  color: '#FBBF24', bg: 'rgba(251,191,36,0.07)', border: 'rgba(251,191,36,0.25)' },
+    caution:    { label: 'Heiß',  color: '#F7931A', bg: 'rgba(247,147,26,0.07)', border: 'rgba(247,147,26,0.25)' },
     unknown:    { label: 'Lädt…',        color: '#4A4540', bg: 'transparent',            border: 'rgba(74,69,64,0.3)' },
   };
   const s = map[signal] || map.unknown;
@@ -277,7 +277,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
   const signalColors: Record<string, string> = {
     accumulate: '#4ADE80',
     hold: '#FBBF24',
-    caution: '#F87171',
+    caution: '#F7931A',
     unknown: '#4A4540',
   };
   const signalColor = signalColors[data.signal] || signalColors.unknown;
@@ -286,9 +286,9 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
   const athColor = data.athPercent !== null ? (data.athPercent <= -30 ? '#4ADE80' : data.athPercent <= -10 ? '#FBBF24' : '#F87171') : '#4A4540';
 
   const fgDesc = data.fearGreed !== null
-    ? (data.fearGreed <= 25 ? 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten. Sie waren in der Vergangenheit oft genau die, die langfristige Bitcoiner abgewartet haben.'
+    ? (data.fearGreed <= 25 ? 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten. Langfristige Halter sehen sie meist als günstigere Sats.'
       : data.fearGreed <= 45 ? 'Viele sind unsicher und halten sich zurück. Der Markt ist nervös, weder panisch noch entspannt.'
-      : data.fearGreed >= 75 ? 'Im Moment kaufen sehr viele, aus Angst, etwas zu verpassen. Solche Phasen enden oft mit einem Rückgang.'
+      : data.fearGreed >= 75 ? 'Im Moment kaufen sehr viele, aus Angst, etwas zu verpassen. Rücksetzer folgen oft, und langfristige Halter rechnen gelassen damit.'
       : 'Weder Panik noch Euphorie. Der Markt bewegt sich gerade ohne großen Druck in eine Richtung.')
     : 'Wird geladen.';
 
@@ -306,15 +306,15 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
     : 'Wird geladen.';
 
   const signalHeadline: Record<string, string> = {
-    accumulate: 'Der Markt zeigt gerade Schwäche. Das Signal steht auf Akkumulieren.',
-    hold: 'Der Markt ist ruhig. Das Signal steht auf Halten.',
-    caution: 'Der Markt läuft heiß. Das Signal steht auf Vorsicht.',
+    accumulate: 'Der Markt ist kalt: Die Angst ist hoch, die Preise liegen unter ihrem Trend.',
+    hold: 'Der Markt ist mild: nichts Ungewöhnliches.',
+    caution: 'Der Markt ist heiß: Die Gier ist hoch, die Preise liegen deutlich über ihrem Trend.',
     unknown: 'Das Signal wird berechnet.',
   };
   const signalExplain: Record<string, string> = {
-    accumulate: 'Alle drei Indikatoren zeigen gleichzeitig Schwäche: Angst im Markt, Preis unter dem Durchschnitt, weit vom Höchststand entfernt. Das bedeutet nicht, dass der Preis morgen steigt, aber historisch waren das die Phasen, in denen langfristige Bitcoin-Käufer günstig eingestiegen sind.',
-    hold: 'Die Indikatoren zeigen kein klares Bild in eine Richtung. Weder besonders günstige noch besonders riskante Bedingungen. Eine neutrale Phase.',
-    caution: 'Viele kaufen gerade, der Preis liegt weit über dem Durchschnitt und nahe am Höchststand. In der Vergangenheit folgten auf solche Phasen oft starke Rückgänge. Das heißt nicht, dass es so sein muss. Aber es ist ein Zeichen, vorsichtig zu sein.',
+    accumulate: 'Angst im Markt und ein Preis unter dem langfristigen Trend treffen zusammen. Das bedeutet nicht, dass der Preis morgen steigt. Langfristige Halter sehen solche Phasen meist als günstigere Sats und bleiben bei ihrem regelmäßigen Plan.',
+    hold: 'Die Indikatoren zeigen kein klares Bild in eine Richtung. Weder besonders günstige noch besonders heiße Bedingungen. Die meisten langfristigen Halter bleiben einfach bei ihrem Plan.',
+    caution: 'Die Begeisterung ist groß, der Preis liegt weit über dem Durchschnitt und nahe am Hoch. Rücksetzer aus solchen Phasen sind normal. Langfristige Halter genießen solche Phasen meist und bleiben bei ihrem Plan.',
     unknown: '',
   };
 
@@ -909,7 +909,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <p className="wbc-metric-desc">{athDesc}</p>
             </div>
             <div className="wbc-instrument-footer">
-              <span>Signal: <span style={{ color: signalColor, marginLeft: '0.35rem' }}>{data.signal === 'accumulate' ? 'Akkumulieren' : data.signal === 'hold' ? 'Halten' : data.signal === 'caution' ? 'Vorsicht' : '—'}</span></span>
+              <span>Signal: <span style={{ color: signalColor, marginLeft: '0.35rem' }}>{data.signal === 'accumulate' ? 'Kalt' : data.signal === 'hold' ? 'Mild' : data.signal === 'caution' ? 'Heiß' : '—'}</span></span>
               <span>Aktualisiert: {updatedStr}</span>
             </div>
           </div>
@@ -1092,8 +1092,8 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <p className="wbc-faq-a">Nur so viel, wie du bereit bist zu verlieren, ohne dass es dein Leben beeinflusst. Das klingt dramatisch, ist aber die ehrlichste Antwort. Bitcoin kann stark fallen. Wer das weiß und entsprechend plant, schläft ruhiger und trifft klarere Entscheidungen.</p>
             </div>
             <div className="wbc-faq-item">
-              <p className="wbc-faq-q">Was bedeutet „Akkumulieren"?</p>
-              <p className="wbc-faq-a">Nach und nach kaufen, über einen längeren Zeitraum, nicht alles auf einmal. Das Signal „Akkumulieren" bedeutet, dass alle drei Indikatoren gleichzeitig Schwäche zeigen. Solche Phasen waren seltener als neutrale Marktphasen und sind bisher nie dauerhaft geblieben. Kein Versprechen, kein Rat.</p>
+              <p className="wbc-faq-q">Was bedeuten Kalt, Mild und Heiß?</p>
+              <p className="wbc-faq-a">Das Signal beschreibt den Markt wie ein Wetterbericht. Kalt: Die Angst ist hoch und die Preise liegen unter ihrem Trend. Mild: nichts Ungewöhnliches. Heiß: Die Gier ist hoch und die Preise liegen deutlich über ihrem Trend. Es sagt nicht, ob du kaufen oder verkaufen sollst. Langfristige Halter kaufen meist regelmäßig, bei jedem Wetter. Kein Versprechen, kein Rat.</p>
             </div>
             <div className="wbc-faq-item">
               <p className="wbc-faq-q">Bitcoin kaufen oder nicht: Wie entscheide ich das?</p>
