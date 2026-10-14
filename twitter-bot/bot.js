@@ -138,9 +138,9 @@ async function fetchSignal() {
   const score    = fgScore + maScore + athScore;
 
   let signal, emoji;
-  if (score >= 3)       { signal = 'ACCUMULATE'; emoji = '🟢'; }
-  else if (score >= -1) { signal = 'HOLD';       emoji = '🟡'; }
-  else                  { signal = 'PATIENCE';   emoji = '🟠'; }
+  if (score >= 3)       { signal = 'Cold'; emoji = '❄️'; }
+  else if (score >= -1) { signal = 'Mild'; emoji = '🌤️'; }
+  else                  { signal = 'Hot';  emoji = '🔥'; }
 
   console.log(`Signal: ${signal} (score ${score})`);
   return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice) };
@@ -163,7 +163,7 @@ async function postSignal() {
   const text =
 `$BTC price signal - ${today}
 
-${s.emoji} ${s.signal}
+${s.emoji} Market today: ${s.signal}
 
 Bitcoin price: €${price}
 Fear & Greed: ${s.fearGreed} (${s.fgLabel})
