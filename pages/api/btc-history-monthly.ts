@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { monthlyAverages } from '../../lib/dca';
 
-const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours, matches old Cache-Control intent
-let cache: { monthly: Record<string, number>; timestamp: number } | null = null;
+const CACHE_TTL = 12 * 60 * 60 * 1000; // monthly averages barely move; refresh twice a day
+type Series = Record<string, number>;
+let cache: { eur: Series; usd: Series | null; timestamp: number } | null = null;
 
+// EUR monthly averages, used only when CoinGecko is unreachable. 2015-01..2024-09 are
+// approximations; 2024-10 onwards are CoinGecko averages.
 const FALLBACK: Record<string, number> = {
   '2015-01':240,'2015-02':218,'2015-03':262,'2015-04':218,'2015-05':215,'2015-06':225,
   '2015-07':268,'2015-08':263,'2015-09':211,'2015-10':267,'2015-11':313,'2015-12':384,
@@ -23,77 +27,43 @@ const FALLBACK: Record<string, number> = {
   '2023-01':17500,'2023-02':20500,'2023-03':23000,'2023-04':24500,'2023-05':23500,'2023-06':22000,
   '2023-07':25500,'2023-08':24000,'2023-09':23500,'2023-10':24000,'2023-11':30000,'2023-12':37000,
   '2024-01':37000,'2024-02':43000,'2024-03':56000,'2024-04':54000,'2024-05':55000,'2024-06':55000,
-  '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
-  '2025-01':85000,'2025-02':77000,'2025-03':75000,'2025-04':74000,'2025-05':82000,'2025-06':84000,
-  '2025-07':88000,'2025-08':91000,'2025-09':86000,'2025-10':82000,'2025-11':78000,'2025-12':81000,
-  '2026-01':82000,'2026-02':72000,'2026-03':61000,
+  '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':62982,'2024-11':80772,'2024-12':93897,
+  '2025-01':96332,'2025-02':92116,'2025-03':78816,'2025-04':76541,'2025-05':91588,'2025-06':91680,
+  '2025-07':98486,'2025-08':98716,'2025-09':96281,'2025-10':98076,'2025-11':83776,'2025-12':75973,
+  '2026-01':77371,'2026-02':58481,'2026-03':60053,'2026-04':62769,'2026-05':66842,'2026-06':55201,
+  '2026-07':55810,'2026-08':59502,'2026-09':69736,
 };
 
-function toYYYYMM(ts: number): string {
-  const d = new Date(ts);
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-}
-
-async function fetchFromCoinGecko(): Promise<Record<string, number>> {
+// Full daily history from CoinGecko, averaged per calendar month (lib/dca.ts). Every month
+// from 2015 comes from real data; the table above is only for when CoinGecko is down.
+async function fetchSeries(currency: 'eur' | 'usd'): Promise<Series> {
   const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_pro_api_key=${process.env.COINGECKO_API_KEY}` : '';
-  const url = `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=730&interval=daily${cgKey}`;
+  const url = `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=${currency}&days=max&interval=daily${cgKey}`;
   const res = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'whentobuybtc.xyz/1.0' },
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(15000),
   });
-  if (!res.ok) throw new Error(`CoinGecko ${res.status}`);
+  if (!res.ok) throw new Error(`CoinGecko ${currency} ${res.status}`);
   const data = await res.json();
-  const byMonth: Record<string, number[]> = {};
-  for (const [ts, price] of data.prices as [number, number][]) {
-    const key = toYYYYMM(ts);
-    if (!byMonth[key]) byMonth[key] = [];
-    byMonth[key].push(price);
-  }
-  const monthly: Record<string, number> = {};
-  for (const [key, prices] of Object.entries(byMonth)) {
-    monthly[key] = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-  }
-  return monthly;
+  const series = monthlyAverages(data.prices as [number, number][]);
+  if (Object.keys(series).length < 100) throw new Error(`CoinGecko ${currency}: too few months`);
+  return series;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=3600');
 
-  // Serve from in-memory cache if fresh — this is the fix; previously every
-  // request hit CoinGecko's daily endpoint regardless of the header
   if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
-    return res.status(200).json({
-      monthly: cache.monthly,
-      count: Object.keys(cache.monthly).length,
-      source: 'coingecko-cached',
-    });
+    return res.status(200).json({ monthly: cache.eur, monthlyUsd: cache.usd, count: Object.keys(cache.eur).length, source: 'coingecko-cached' });
   }
 
-  const monthly: Record<string, number> = { ...FALLBACK };
-  try {
-    const recent = await fetchFromCoinGecko();
-    Object.assign(monthly, recent);
-    cache = { monthly, timestamp: Date.now() };
-    return res.status(200).json({
-      monthly,
-      count: Object.keys(monthly).length,
-      source: 'coingecko',
-    });
-  } catch (err) {
-    console.error('btc-history-monthly: CoinGecko fetch failed, using fallback only', err);
-    // Serve stale cache over hardcoded fallback if we have one
-    if (cache) {
-      return res.status(200).json({
-        monthly: cache.monthly,
-        count: Object.keys(cache.monthly).length,
-        source: 'coingecko-stale',
-      });
-    }
-    return res.status(200).json({
-      monthly,
-      count: Object.keys(monthly).length,
-      source: 'fallback',
-    });
+  const [eur, usd] = await Promise.allSettled([fetchSeries('eur'), fetchSeries('usd')]);
+  if (eur.status === 'fulfilled') {
+    cache = { eur: eur.value, usd: usd.status === 'fulfilled' ? usd.value : null, timestamp: Date.now() };
+    return res.status(200).json({ monthly: cache.eur, monthlyUsd: cache.usd, count: Object.keys(cache.eur).length, source: 'coingecko' });
   }
+  console.error('btc-history-monthly: CoinGecko failed, serving', cache ? 'stale cache' : 'fallback', (eur as PromiseRejectedResult).reason);
+  if (cache) return res.status(200).json({ monthly: cache.eur, monthlyUsd: cache.usd, count: Object.keys(cache.eur).length, source: 'coingecko-stale' });
+  return res.status(200).json({ monthly: FALLBACK, monthlyUsd: null, count: Object.keys(FALLBACK).length, source: 'fallback' });
 }

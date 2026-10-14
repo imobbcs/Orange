@@ -2537,6 +2537,50 @@
     .chart-annotation-price { color: var(--temp) !important; }
     .chart-legend-item.zone-item { color: rgba(142,201,255,0.75); }
     .push-title em { color: var(--temp); transition: color 1s; }
+    /* ── Calculator v3 ── */
+    .fp-calc-in > *, .fp-calc > * { min-width: 0; }
+    .fp-tip[hidden] { display: none; }
+    @media (min-width: 769px) { .fp-result { display: flex; flex-direction: column; justify-content: center; } }
+    .fp-amt-wrap { display: flex; align-items: baseline; justify-content: center; gap: 2px; cursor: text; border-bottom: 1px dashed rgba(237,232,222,0.25); padding: 0 6px 4px; margin: 0 auto; max-width: 100%; }
+    .fp-amt-wrap:focus-within { border-bottom-color: var(--temp); }
+    .fp-cur { font-family: var(--title); font-size: 1.6rem; color: var(--fp-quiet); }
+    .fp-amt-in { background: none; border: 0; outline: none; color: var(--white); font-family: var(--title); font-size: 2.8rem; line-height: 1.05; width: 4.2ch; min-width: 2ch; text-align: center; padding: 0; font-variant-numeric: tabular-nums; caret-color: var(--temp); }
+    .fp-stepper { grid-template-columns: 48px minmax(0,1fr) 48px; gap: 8px; }
+    .fp-stepper button:hover:not(:disabled), .fp-stepper button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
+    .fp-habit { text-align: center; margin-top: 8px; }
+    .fp-presets { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 14px -20px 0; padding: 2px 20px 4px; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+    .fp-presets::-webkit-scrollbar { display: none; }
+    .fp-presets button { flex: 0 0 auto; scroll-snap-align: start; background: none; border: 1px solid var(--fp-line); padding: 9px 12px; min-height: 40px; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted); cursor: pointer; white-space: nowrap; }
+    .fp-presets button[aria-pressed="true"] { border-color: var(--temp); color: var(--temp); }
+    .fp-year-head { display: flex; justify-content: space-between; align-items: baseline; }
+    .fp-year-head b { font-family: var(--title); font-weight: 400; font-size: 1.6rem; color: var(--white); font-variant-numeric: tabular-nums; }
+    .fp-year { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 6px 0 0; cursor: pointer; --p: 0%; }
+    .fp-year::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--temp) var(--p), rgba(237,232,222,0.15) var(--p)); }
+    .fp-year::-moz-range-track { height: 3px; border-radius: 2px; background: rgba(237,232,222,0.15); }
+    .fp-year::-moz-range-progress { height: 3px; background: var(--temp); }
+    .fp-year::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9.5px; border-radius: 50%; background: var(--temp); box-shadow: 0 0 0 5px rgba(var(--temp-rgb),0.18), 0 0 14px rgba(var(--temp-rgb),0.6); border: 0; }
+    .fp-year::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--temp); border: 0; box-shadow: 0 0 0 5px rgba(var(--temp-rgb),0.18); }
+    .fp-year:focus-visible { outline: none; } .fp-year:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 7px rgba(var(--temp-rgb),0.35); }
+    .fp-year-ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--fp-quiet); margin-top: 2px; }
+    .fp-growth { border-top: 1px solid var(--fp-line); padding: 20px 20px 22px; grid-column: 1 / -1; }
+    .fp-growth-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .fp-growth-head .fp-mini-l { margin: 0; }
+    .fp-legend { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fp-quiet); }
+    .fp-legend span { margin-right: 8px; }
+    .fp-lg-worth, .fp-lg-put { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--temp); vertical-align: middle; margin-right: 5px; }
+    .fp-lg-put { border-top: 1.5px dashed rgba(237,232,222,0.6); }
+    .fp-chart-wrap { position: relative; height: 210px; margin-top: 12px; touch-action: pan-y; }
+    .fp-chart-wrap canvas { display: block; cursor: crosshair; }
+    .fp-tip { position: absolute; top: 0; pointer-events: none; background: rgba(9,8,10,0.92); border: 1px solid var(--fp-line); padding: 8px 10px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; color: var(--white); white-space: nowrap; display: grid; gap: 3px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    .fp-tip b { font-weight: 400; color: var(--fp-quiet); text-transform: uppercase; letter-spacing: 0.12em; }
+    .fp-tip em { font-style: normal; } .fp-tip em.up { color: var(--temp); } .fp-tip em.down { color: var(--temp-cold); }
+    .fp-chart-hint { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; color: var(--fp-quiet); margin: 8px 0 0; line-height: 1.6; }
+    .fp-growth .fp-honest { margin-top: 16px; }
+    @media (min-width: 769px) {
+      .fp-chart-wrap { height: 280px; }
+      .fp-growth { border-top: 1px solid var(--fp-line); padding: 24px 28px 26px; }
+      .fp-presets { flex-wrap: wrap; overflow: visible; margin: 14px 0 0; padding: 0; }
+    }
     /* ── Quick wins (design pass) ── */
     .temp-hero #price-change { margin-top: 1.1rem; }
     .hero-share { color: #A39B90; }
@@ -2856,20 +2900,31 @@
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
-<!-- WHAT IF CALCULATOR (v2: start year + honest worst drop) -->
+<!-- WHAT IF CALCULATOR (v3: own amount, any start year, growth chart, honest drop) -->
 <section class="section whatif-section" id="whatif">
   <div class="section-inner">
     <p class="section-label" data-i18n="fpCalcLabel">What if?</p>
     <h2 class="section-title" data-i18n="fpCalcTitle">What a small habit<br>would have done.</h2>
-    <p class="section-sub" data-i18n="fpCalcSub">Pick a habit and a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.</p>
+    <p class="section-sub" data-i18n="fpCalcSub">Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.</p>
     <div class="fp-calc">
       <div class="fp-calc-in">
-        <div class="fp-stepper">
-          <button type="button" id="fp-minus" aria-label="Smaller habit" data-umami-event="whatif-step">−</button>
-          <div><div class="fp-amt" id="fp-amt">€50</div><div class="fp-habit" id="fp-habit"></div></div>
-          <button type="button" id="fp-plus" aria-label="Bigger habit" data-umami-event="whatif-step">+</button>
+        <div>
+          <div class="fp-mini-l" id="fp-amt-label" data-i18n="fpEveryMonth">Every month</div>
+          <div class="fp-stepper">
+            <button type="button" id="fp-minus" aria-label="Smaller amount" data-umami-event="whatif-step">−</button>
+            <label class="fp-amt-wrap" for="fp-amt-in">
+              <span class="fp-cur" id="fp-cur">€</span><input id="fp-amt-in" class="fp-amt-in" type="text" inputmode="numeric" autocomplete="off" maxlength="6" value="50" aria-describedby="fp-amt-label fp-habit">
+            </label>
+            <button type="button" id="fp-plus" aria-label="Bigger amount" data-umami-event="whatif-step">+</button>
+          </div>
+          <div class="fp-habit" id="fp-habit"></div>
+          <div class="fp-presets" id="fp-presets" role="group" aria-label="Habits"></div>
         </div>
-        <div><div class="fp-mini-l" data-i18n="fpStartIn">Starting in</div><div class="fp-years" id="fp-years" role="group" aria-label="Start year"></div></div>
+        <div>
+          <div class="fp-year-head"><span class="fp-mini-l" data-i18n="fpStartIn">Starting in</span><b id="fp-year-val">2015</b></div>
+          <input type="range" id="fp-year" class="fp-year" min="2015" max="2025" step="1" value="2015" aria-label="Start year">
+          <div class="fp-year-ticks" aria-hidden="true"><span>2015</span><span>2018</span><span>2021</span><span>2025</span></div>
+        </div>
       </div>
       <div class="fp-result" aria-live="polite">
         <p class="fp-pre" id="fp-pre"></p>
@@ -2880,8 +2935,19 @@
           <div><span data-i18n="fpMultiple">Multiple</span><b id="fp-x">…</b></div>
           <div><span data-i18n="fpMonths">Months</span><b id="fp-m">…</b></div>
         </div>
+      </div>
+      <div class="fp-growth">
+        <div class="fp-growth-head">
+          <span class="fp-mini-l" data-i18n="fpGrowthTitle">Month by month</span>
+          <span class="fp-legend"><i class="fp-lg-worth"></i><span data-i18n="fpWorth">Worth</span><i class="fp-lg-put"></i><span data-i18n="fpPutIn">Put in</span></span>
+        </div>
+        <div class="fp-chart-wrap" id="fp-chart-wrap">
+          <canvas id="fp-chart" role="img" aria-label="Chart of what the savings were worth each month compared with what had been put in"></canvas>
+          <div class="fp-tip" id="fp-tip" hidden></div>
+        </div>
+        <p class="fp-chart-hint" data-i18n="fpChartHint">Touch or hover the chart to see any month.</p>
         <p class="fp-honest" id="fp-honest"></p>
-        <p class="fp-fine" data-i18n="fpFine">Based on monthly average prices in euro and today's price. Not financial advice; this is for perspective.</p>
+        <p class="fp-fine" id="fp-fine" data-i18n="fpFine">Based on monthly average prices and today's price. Not financial advice; this is for perspective.</p>
         <div class="fp-share">
           <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp"><span data-i18n="fpShareOn">Share on</span> WhatsApp</button>
           <button type="button" id="fp-share-x" data-umami-event="share-whatif-x"><span data-i18n="fpShareOn">Share on</span> X</button>
@@ -2890,7 +2956,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- WHAT IF CALCULATOR (legacy, hidden: old script still writes here) -->
 <section class="section whatif-section" id="whatif-legacy" hidden>
@@ -3366,12 +3431,16 @@
       fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is within 20% of its all-time high.' },
       fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
       fpCalcLabel: 'What if?', fpCalcTitle: 'What a small habit<br>would have done.',
-      fpCalcSub: 'Pick a habit and a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
+      fpCalcSub: 'Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
+      fpEveryMonth: 'Every month', fpOwnAmount: 'your own amount', fpGrowthTitle: 'Month by month', fpWorth: 'Worth', fpChartHint: 'Touch or hover the chart to see any month. Blue shading: worth less than what went in.',
+      fpRecBy: 'It was back above that high by {c}.', fpRecNow: 'It is back above that high today.', fpRecNot: 'It has not got back to that high yet.',
+      fpUnder: 'For {n} of the {m} months it was worth less than what had gone in.', fpUnderOne: 'For 1 of the {m} months it was worth less than what had gone in.',
+      fpShareOwn: '{amt} a month into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       fpStartIn: 'Starting in', fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',
-      fpFine: "Based on monthly average prices in euro and today's price. Not financial advice; this is for perspective.",
+      fpFine: "Bought every month at that month's average price, valued at today's price. Fees and taxes not included. Not financial advice; this is for perspective.",
       fpPre: '{amt} a month since {y} would be worth', fpPerMonth: '/ month',
       fpHonestNone: 'The honest part: it moved around a lot along the way, but never fell far from a high.',
-      fpHonest: 'The honest part: along the way it fell by up to {d} from a high ({a} to {b}). Long-term holders kept going anyway.',
+      fpHonest: 'The honest part: at its worst, the pot was down {d} from its high ({a} to {b}).',
       fpShare: '{h}: {amt} a month into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       fpSunday: 'Sunday', fpMailMood: 'Mood {v}', fpMailLine: 'This week in one minute:',
       fpMailL1: 'Market mood: {v}', fpMailL2: '{v} vs. 200-day average', fpMailL3: '{v} from the all-time high',
@@ -3640,12 +3709,16 @@
       fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs liegt weniger als 20 % unter dem Allzeithoch.' },
       fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.', holdCalm: 'Kein Wert ist im Extrem, also liest sich der Markt mild.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
       fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was eine kleine Gewohnheit<br>bewirkt hätte.',
-      fpCalcSub: 'Wähle eine Gewohnheit und ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
+      fpCalcSub: 'Wähle eine Gewohnheit oder tippe deinen eigenen Betrag, dann ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
+      fpEveryMonth: 'Jeden Monat', fpOwnAmount: 'dein eigener Betrag', fpGrowthTitle: 'Monat für Monat', fpWorth: 'Wert', fpChartHint: 'Tippe oder fahre über die Grafik, um jeden Monat zu sehen. Blau markiert: weniger wert als eingezahlt.',
+      fpRecBy: 'Bis {c} lag er wieder über diesem Hoch.', fpRecNow: 'Heute liegt er wieder über diesem Hoch.', fpRecNot: 'Dieses Hoch hat er noch nicht wieder erreicht.',
+      fpUnder: 'In {n} von {m} Monaten war er weniger wert als das, was eingezahlt war.', fpUnderOne: 'In 1 von {m} Monaten war er weniger wert als das, was eingezahlt war.',
+      fpShareOwn: '{amt} im Monat in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       fpStartIn: 'Start im Jahr', fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',
-      fpFine: 'Basierend auf monatlichen Durchschnittskursen in Euro und dem heutigen Kurs. Keine Finanzberatung, nur zur Einordnung.',
+      fpFine: 'Jeden Monat zum Durchschnittskurs des Monats gekauft, bewertet zum heutigen Kurs. Ohne Gebühren und Steuern. Keine Finanzberatung, nur zur Einordnung.',
       fpPre: '{amt} im Monat seit {y} wären heute', fpPerMonth: '/ Monat',
       fpHonestNone: 'Der ehrliche Teil: Es ging unterwegs viel auf und ab, aber nie weit unter ein Hoch.',
-      fpHonest: 'Der ehrliche Teil: Unterwegs ging es um bis zu {d} vom Hoch nach unten ({a} bis {b}). Langfrist-Halter haben trotzdem weitergemacht.',
+      fpHonest: 'Der ehrliche Teil: Im schlimmsten Moment lag der Topf {d} unter seinem Hoch ({a} bis {b}).',
       fpShare: '{h}: {amt} im Monat in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       fpSunday: 'Sonntag', fpMailMood: 'Stimmung {v}', fpMailLine: 'Die Woche in einer Minute:',
       fpMailL1: 'Marktstimmung: {v}', fpMailL2: '{v} zum 200-Tage-Durchschnitt', fpMailL3: '{v} vom Allzeithoch',
@@ -4674,10 +4747,11 @@
     '2023-01':17500,'2023-02':20500,'2023-03':23000,'2023-04':24500,'2023-05':23500,'2023-06':22000,
     '2023-07':25500,'2023-08':24000,'2023-09':23500,'2023-10':24000,'2023-11':30000,'2023-12':37000,
     '2024-01':37000,'2024-02':43000,'2024-03':56000,'2024-04':54000,'2024-05':55000,'2024-06':55000,
-    '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
-    '2025-01':85000,'2025-02':77000,'2025-03':75000,'2025-04':74000,'2025-05':82000,'2025-06':84000,
-    '2025-07':88000,'2025-08':91000,'2025-09':86000,'2025-10':82000,'2025-11':78000,'2025-12':81000,
-    '2026-01':82000,'2026-02':72000,'2026-03':61000,
+    '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':62982,'2024-11':80772,'2024-12':93897,
+    '2025-01':96332,'2025-02':92116,'2025-03':78816,'2025-04':76541,'2025-05':91588,'2025-06':91680,
+    '2025-07':98486,'2025-08':98716,'2025-09':96281,'2025-10':98076,'2025-11':83776,'2025-12':75973,
+    '2026-01':77371,'2026-02':58481,'2026-03':60053,'2026-04':62769,'2026-05':66842,'2026-06':55201,
+    '2026-07':55810,'2026-08':59502,'2026-09':69736,
   };
 
   // Loaded at init, updated from API
@@ -4690,6 +4764,7 @@
       const data = await res.json();
       if (data.monthly && Object.keys(data.monthly).length > 100) {
         BTC_MONTHLY_EUR = { ...BTC_MONTHLY_FALLBACK, ...data.monthly };
+        window.BTC_MONTHLY_USD = data.monthlyUsd && Object.keys(data.monthlyUsd).length > 100 ? data.monthlyUsd : null;
         if (window._whatifStepperRefresh) window._whatifStepperRefresh();
       }
     } catch (e) {
@@ -6085,77 +6160,264 @@
     calc.render();
   };
 
-  /* ── Calculator v2: habit × start year, with the worst drop shown ── */
+  /* DCA MODEL (start) — keep in sync with lib/dca.ts (tests/dca.test.ts checks it). */
+  function wtbDca(monthly, amount, startYear, priceNow) {
+    var keys = Object.keys(monthly).filter(function (k) { return +k.slice(0, 4) >= startYear && monthly[k] > 0; }).sort();
+    var btc = 0, put = 0, peak = 0, peakM = '', underwater = 0, worst = null, worstPeak = 0, series = [];
+    keys.forEach(function (k) {
+      btc += amount / monthly[k];
+      put += amount;
+      var value = btc * monthly[k];
+      series.push({ m: k, put: put, value: value });
+      if (value < put) underwater++;
+      if (worst && !worst.recovered && value >= worstPeak) worst.recovered = k;
+      if (value > peak) { peak = value; peakM = k; }
+      var dd = (value - peak) / peak;
+      if (dd < (worst ? worst.pct : 0)) {
+        if (!worst || worst.from !== peakM) worstPeak = peak;
+        worst = { pct: dd, from: peakM, to: k, recovered: null };
+      }
+    });
+    var now = btc * priceNow;
+    if (worst && !worst.recovered && now >= worstPeak) worst.recovered = 'now';
+    if (series.length) series.push({ m: 'now', put: put, value: now });
+    return { months: keys.length, put: put, btc: btc, now: now, multiple: put ? now / put : 0, worst: worst, underwater: underwater, series: series };
+  }
+  /* DCA MODEL (end) */
+
+  /* ── Calculator v3: own amount × any start year, month-by-month chart, honest drop ── */
   var calc = (function () {
     var HABITS = [
       { key: 'netflix', m: 15, en: 'Netflix', de: 'Netflix' },
-      { key: 'gym', m: 30, en: 'The gym you never use', de: 'Das Fitnessstudio, das du nie besuchst' },
-      { key: 'coffee', m: 50, en: 'Coffee on the go', de: 'Kaffee unterwegs' },
-      { key: 'lunch', m: 60, en: 'Grabbing lunch', de: 'Mittagessen to go' },
-      { key: 'takeaway', m: 70, en: 'Takeaways', de: 'Bestellungen nach Hause' },
-      { key: 'drinks', m: 80, en: 'Drinks after work', de: 'Drinks nach der Arbeit' },
-      { key: 'uber', m: 90, en: 'A few Ubers', de: 'Ein paar Uber-Fahrten' },
-      { key: 'fashion', m: 100, en: "Clothes you didn't need", de: 'Klamotten, die du nicht brauchtest' },
-      { key: 'dining', m: 120, en: 'Dinner out', de: 'Essen gehen' },
-      { key: 'nights', m: 150, en: 'A proper night out', de: 'Ein richtiger Abend aus' }
+      { key: 'gym', m: 30, en: 'The gym you never use', de: 'Das Fitnessstudio, das du nie besuchst', sen: 'Gym', sde: 'Fitnessstudio' },
+      { key: 'coffee', m: 50, en: 'Coffee on the go', de: 'Kaffee unterwegs', sen: 'Coffee', sde: 'Kaffee' },
+      { key: 'lunch', m: 60, en: 'Grabbing lunch', de: 'Mittagessen to go', sen: 'Lunch', sde: 'Mittagessen' },
+      { key: 'takeaway', m: 70, en: 'Takeaways', de: 'Bestellungen nach Hause', sen: 'Takeaways', sde: 'Lieferdienst' },
+      { key: 'drinks', m: 80, en: 'Drinks after work', de: 'Drinks nach der Arbeit', sen: 'Drinks', sde: 'Drinks' },
+      { key: 'uber', m: 90, en: 'A few Ubers', de: 'Ein paar Uber-Fahrten', sen: 'Ubers', sde: 'Uber' },
+      { key: 'fashion', m: 100, en: "Clothes you didn't need", de: 'Klamotten, die du nicht brauchtest', sen: 'Clothes', sde: 'Klamotten' },
+      { key: 'dining', m: 120, en: 'Dinner out', de: 'Essen gehen', sen: 'Dinner out', sde: 'Essen gehen' },
+      { key: 'nights', m: 150, en: 'A proper night out', de: 'Ein richtiger Abend aus', sen: 'Night out', sde: 'Abend aus' }
     ];
-    var YEARS = [2015, 2017, 2019, 2021, 2023];
-    var hi = 2, year = 2015, last = null;
-    if (!el('fp-amt')) return { render: function () {} };
-    var yearsEl = el('fp-years');
-    yearsEl.innerHTML = YEARS.map(function (y) { return '<button type="button" data-y="' + y + '" aria-pressed="false" data-umami-event="whatif-year" data-umami-event-year="' + y + '">' + y + '</button>'; }).join('');
-    yearsEl.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { year = +b.dataset.y; render(); } });
-    function step(d) { var n = Math.max(0, Math.min(HABITS.length - 1, hi + d)); if (n !== hi) { hi = n; render(); } }
-    el('fp-minus').addEventListener('click', function () { step(-1); });
-    el('fp-plus').addEventListener('click', function () { step(1); });
+    var STEPS = HABITS.map(function (h) { return h.m; }).concat([200, 250, 300, 400, 500, 750, 1000]);
+    var MAX = 99999, FIRST = 2015;
+    var amount = 50, year = FIRST, last = null, hover = -1, tracked = {};
+    if (!el('fp-amt-in')) return { render: function () {} };
+    var input = el('fp-amt-in'), slider = el('fp-year'), presetsEl = el('fp-presets');
+    var lastYear = new Date().getFullYear() - 1;
+    slider.max = String(lastYear);
+    var ticks = document.querySelector('.fp-year-ticks');
+    if (ticks) ticks.innerHTML = [FIRST, Math.round((FIRST + lastYear) / 2), lastYear].map(function (y) { return '<span>' + y + '</span>'; }).join('');
 
     function usd() { return currentCurrency !== 'EUR'; }
-    function money(eur) { var v = usd() ? eur * eurUsdRate : eur; return (usd() ? '$' : '€') + Math.round(v).toLocaleString(numLocale()); }
-    function amtLabel(m) { return (usd() ? '$' : '€') + (usd() ? Math.round(m * eurUsdRate) : m); }
-    function compute() {
-      var data = (typeof BTC_MONTHLY_EUR !== 'undefined' && BTC_MONTHLY_EUR) || {};
-      var amount = HABITS[hi].m;
-      var months = Object.keys(data).filter(function (k) { return +k.slice(0, 4) >= year && data[k] > 0; }).sort();
-      var btc = 0, put = 0, peak = 0, worst = 0, wFrom = '', wTo = '', peakM = '';
-      months.forEach(function (k) {
-        btc += amount / data[k]; put += amount;
-        var v = btc * data[k];
-        if (v > peak) { peak = v; peakM = k; }
-        var dd = (v - peak) / peak;
-        if (dd < worst) { worst = dd; wFrom = peakM; wTo = k; }
-      });
-      var priceEur = currentPrice ? (usd() ? currentPrice / eurUsdRate : currentPrice) : 0;
-      return { amount: amount, months: months.length, put: put, now: btc * priceEur, worst: worst, wFrom: wFrom, wTo: wTo };
+    function sym() { return usd() ? '$' : '€'; }
+    function money(v) { return sym() + Math.round(v).toLocaleString(numLocale()); }
+    function compact(v) {
+      var a = Math.abs(v);
+      if (a >= 1e6) return sym() + (v / 1e6).toLocaleString(numLocale(), { maximumFractionDigits: 1 }) + 'M';
+      if (a >= 1e3) return sym() + Math.round(v / 1e3).toLocaleString(numLocale()) + 'k';
+      return sym() + Math.round(v);
     }
-    function mon(k) { return new Date(k + '-15').toLocaleDateString(numLocale(), { month: 'short', year: 'numeric' }); }
-    function render() {
-      var t = T(), h = HABITS[hi], name = currentLang === 'de' ? h.de : h.en;
-      el('fp-amt').innerHTML = amtLabel(h.m) + '<small> ' + t.fpPerMonth + '</small>';
-      el('fp-habit').textContent = '≈ ' + name.toLowerCase();
-      el('fp-minus').disabled = hi === 0; el('fp-plus').disabled = hi === HABITS.length - 1;
-      yearsEl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.y === year)); });
-      el('fp-pre').textContent = fill(t.fpPre, { amt: amtLabel(h.m), y: year });
+    function mon(k) { return new Date(k + '-15T12:00:00Z').toLocaleDateString(numLocale(), { month: 'short', year: 'numeric', timeZone: 'UTC' }); }
+    function habit() { for (var i = 0; i < HABITS.length; i++) if (HABITS[i].m === amount) return HABITS[i]; return null; }
+    function track(name, data) { try { if (typeof umami !== 'undefined') umami.track(name, data); } catch (e) {} }
+    function series() {
+      /* Dollar visitors get real dollar history; if it is missing, euro history at today's rate */
+      if (usd()) {
+        if (window.BTC_MONTHLY_USD) return window.BTC_MONTHLY_USD;
+        var eur = typeof BTC_MONTHLY_EUR !== 'undefined' ? BTC_MONTHLY_EUR : {}, out = {};
+        Object.keys(eur).forEach(function (k) { out[k] = eur[k] * eurUsdRate; });
+        return out;
+      }
+      return typeof BTC_MONTHLY_EUR !== 'undefined' ? BTC_MONTHLY_EUR : {};
+    }
+
+    /* Presets */
+    function drawPresets() {
+      var de = currentLang === 'de';
+      presetsEl.innerHTML = HABITS.map(function (h, i) {
+        var name = de ? (h.sde || h.de) : (h.sen || h.en);
+        return '<button type="button" data-i="' + i + '" aria-pressed="' + (h.m === amount) + '">' + name + '</button>';
+      }).join('');
+    }
+    presetsEl.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      amount = HABITS[+b.dataset.i].m; input.value = String(amount);
+      track('whatif-preset', { habit: HABITS[+b.dataset.i].key }); render(true);
+    });
+    function step(d) {
+      var next = d > 0 ? STEPS.filter(function (s) { return s > amount; })[0] : STEPS.filter(function (s) { return s < amount; }).pop();
+      if (next == null) return;
+      amount = next; input.value = String(amount); render(true);
+    }
+    el('fp-minus').addEventListener('click', function () { step(-1); });
+    el('fp-plus').addEventListener('click', function () { step(1); });
+    var t1 = null;
+    input.addEventListener('input', function () {
+      var v = input.value.replace(/[^0-9]/g, '');
+      if (v !== input.value) input.value = v;
+      var n = parseInt(v, 10);
+      if (n > 0) { amount = Math.min(MAX, n); render(false); }
+      clearTimeout(t1); t1 = setTimeout(function () { if (n > 0) track('whatif-amount', { amount: amount }); }, 1200);
+    });
+    input.addEventListener('blur', function () { if (!(parseInt(input.value, 10) > 0)) input.value = String(amount); });
+    input.addEventListener('focus', function () { input.select(); });
+    slider.addEventListener('input', function () { year = +slider.value; render(false); });
+    slider.addEventListener('change', function () { track('whatif-year', { year: year }); });
+
+    /* Chart */
+    var cv = el('fp-chart'), wrap = el('fp-chart-wrap'), tip = el('fp-tip');
+    var geo = null;
+    function css(name, fb) { return (getComputedStyle(document.documentElement).getPropertyValue(name) || fb).trim() || fb; }
+    function draw() {
+      if (!cv || !last) return;
+      var r = last.r, pts = r.series; if (pts.length < 2) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), W = wrap.clientWidth, H = wrap.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+      var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      var pad = { l: 4, r: 54, t: 14, b: 24 }, cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+      var max = 0; pts.forEach(function (p) { max = Math.max(max, p.value, p.put); }); max *= 1.08 || 1;
+      var X = function (i) { return pad.l + i / (pts.length - 1) * cw; };
+      var Y = function (v) { return pad.t + ch - v / max * ch; };
+      geo = { X: X, Y: Y, pts: pts, pad: pad, W: W, H: H };
+      var TR = css('--temp-rgb', '242,196,107');
+      /* grid + y labels */
+      ctx.font = '10px ' + css('--mono', 'monospace'); ctx.fillStyle = 'rgba(237,232,222,0.45)'; ctx.textAlign = 'left';
+      [0.5, 1].forEach(function (f) {
+        var y = Y(max / 1.08 * f); ctx.strokeStyle = 'rgba(237,232,222,0.06)'; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+        ctx.fillText(compact(max / 1.08 * f), W - pad.r + 8, y + 3);
+      });
+      /* x labels: January of every n-th year */
+      var years = []; pts.forEach(function (p, i) { if (p.m.slice(5) === '01') years.push(i); });
+      var every = Math.ceil(years.length / Math.max(2, Math.floor(cw / 70)));
+      ctx.textAlign = 'center';
+      years.forEach(function (i, n) {
+        if (n % every) return;
+        var x = X(i); ctx.textAlign = x < pad.l + 16 ? 'left' : 'center';
+        ctx.fillText(pts[i].m.slice(0, 4), x < pad.l + 16 ? pad.l : x, H - 6);
+      });
+      /* where the pot was worth less than what went in: cold wash between the lines */
+      ctx.fillStyle = 'rgba(142,201,255,0.16)';
+      for (var i = 0; i < pts.length - 1; i++) {
+        if (pts[i].value < pts[i].put || pts[i + 1].value < pts[i + 1].put) {
+          ctx.beginPath(); ctx.moveTo(X(i), Y(pts[i].put)); ctx.lineTo(X(i + 1), Y(pts[i + 1].put));
+          ctx.lineTo(X(i + 1), Y(Math.min(pts[i + 1].value, pts[i + 1].put))); ctx.lineTo(X(i), Y(Math.min(pts[i].value, pts[i].put))); ctx.closePath(); ctx.fill();
+        }
+      }
+      /* worth: area + line in the temperature colour */
+      var g = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
+      g.addColorStop(0, 'rgba(' + TR + ',0.28)'); g.addColorStop(1, 'rgba(' + TR + ',0)');
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0));
+      pts.forEach(function (p, i) { ctx.lineTo(X(i), Y(p.value)); });
+      ctx.lineTo(X(pts.length - 1), Y(0)); ctx.closePath(); ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); pts.forEach(function (p, i) { i ? ctx.lineTo(X(i), Y(p.value)) : ctx.moveTo(X(i), Y(p.value)); });
+      ctx.strokeStyle = 'rgba(' + TR + ',1)'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+      /* put in: dashed */
+      ctx.beginPath(); pts.forEach(function (p, i) { i ? ctx.lineTo(X(i), Y(p.put)) : ctx.moveTo(X(i), Y(p.put)); });
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = 'rgba(237,232,222,0.55)'; ctx.lineWidth = 1.25; ctx.stroke(); ctx.setLineDash([]);
+      /* worst drop: from the high to the low */
+      var w = r.worst;
+      if (w && w.pct <= -0.05) {
+        var fi = pts.findIndex(function (p) { return p.m === w.from; }), ti = pts.findIndex(function (p) { return p.m === w.to; });
+        if (fi >= 0 && ti >= 0) {
+          ctx.strokeStyle = 'rgba(142,201,255,0.9)'; ctx.fillStyle = '#8EC9FF'; ctx.lineWidth = 1;
+          [fi, ti].forEach(function (k) { ctx.beginPath(); ctx.arc(X(k), Y(pts[k].value), 3.5, 0, Math.PI * 2); ctx.fill(); });
+          var lx = Math.min(Math.max(X(ti), pad.l + 24), W - pad.r - 24), ly = Math.min(Y(pts[ti].value) + 18, pad.t + ch - 4);
+          ctx.textAlign = 'center'; ctx.font = '600 11px ' + css('--mono', 'monospace');
+          ctx.fillText(Math.round(w.pct * 100) + '%', lx, ly);
+        }
+      }
+      /* today */
+      var li = pts.length - 1;
+      ctx.beginPath(); ctx.arc(X(li), Y(pts[li].value), 4.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(' + TR + ',1)';
+      ctx.shadowColor = 'rgba(' + TR + ',0.8)'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
+      /* scrub */
+      if (hover >= 0 && hover < pts.length) {
+        var hx = X(hover);
+        ctx.strokeStyle = 'rgba(237,232,222,0.35)'; ctx.beginPath(); ctx.moveTo(hx, pad.t); ctx.lineTo(hx, pad.t + ch); ctx.stroke();
+        ctx.fillStyle = 'rgba(' + TR + ',1)'; ctx.beginPath(); ctx.arc(hx, Y(pts[hover].value), 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#EDE8DE'; ctx.beginPath(); ctx.arc(hx, Y(pts[hover].put), 3, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    function showTip() {
+      if (!geo || hover < 0) { tip.hidden = true; return; }
+      var p = geo.pts[hover], t = T();
+      var label = p.m === 'now' ? t.fpToday : mon(p.m);
+      var diff = p.value - p.put;
+      tip.innerHTML = '<b>' + label + '</b><span><i class="fp-lg-worth"></i>' + t.fpWorth + ' ' + money(p.value) + '</span><span><i class="fp-lg-put"></i>' + t.fpPutIn + ' ' + money(p.put) + '</span>' +
+        '<em class="' + (diff >= 0 ? 'up' : 'down') + '">' + (diff >= 0 ? '+' : '−') + money(Math.abs(diff)) + '</em>';
+      tip.hidden = false;
+      var x = geo.X(hover), tw = tip.offsetWidth;
+      tip.style.left = Math.max(0, Math.min(geo.W - tw, x - tw / 2)) + 'px';
+    }
+    function onMove(e) {
+      if (!geo) return;
+      var rect = cv.getBoundingClientRect(), x = e.clientX - rect.left;
+      var i = Math.round((x - geo.pad.l) / (geo.W - geo.pad.l - geo.pad.r) * (geo.pts.length - 1));
+      hover = Math.max(0, Math.min(geo.pts.length - 1, i));
+      draw(); showTip();
+      if (!tracked.scrub) { tracked.scrub = 1; track('whatif-chart', {}); }
+    }
+    function onLeave() { hover = -1; draw(); tip.hidden = true; }
+    if (cv) {
+      cv.addEventListener('pointermove', onMove);
+      cv.addEventListener('pointerdown', onMove);
+      cv.addEventListener('pointerleave', onLeave);
+      window.addEventListener('resize', function () { draw(); }, { passive: true });
+    }
+
+    /* Render */
+    var raf = 0, shown = 0;
+    function roll(to) {
+      var from = shown, t0 = performance.now(), reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      cancelAnimationFrame(raf);
+      if (reduce || !isFinite(from)) { shown = to; el('fp-big').textContent = money(to); return; }
+      (function tick(now) {
+        var k = Math.min(1, (now - t0) / 450), e = 1 - Math.pow(1 - k, 3);
+        shown = from + (to - from) * e; el('fp-big').textContent = money(shown);
+        if (k < 1) raf = requestAnimationFrame(tick);
+      })(t0);
+    }
+    function render(animate) {
+      var t = T(), h = habit(), de = currentLang === 'de';
+      el('fp-cur').textContent = sym();
+      el('fp-habit').textContent = h ? '≈ ' + (de ? h.de : h.en).toLowerCase() : t.fpOwnAmount;
+      presetsEl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(HABITS[+b.dataset.i].m === amount)); });
+      el('fp-minus').disabled = amount <= STEPS[0]; el('fp-plus').disabled = amount >= STEPS[STEPS.length - 1];
+      el('fp-year-val').textContent = year;
+      slider.value = String(year);
+      slider.style.setProperty('--p', ((year - FIRST) / (lastYear - FIRST) * 100) + '%');
+      el('fp-pre').textContent = fill(t.fpPre, { amt: sym() + amount.toLocaleString(numLocale()), y: year });
       if (!currentPrice) return;
-      var r = compute(); last = { r: r, name: name };
-      el('fp-big').textContent = money(r.now);
+      var r = wtbDca(series(), amount, year, currentPrice);
+      if (!r.months) return;
+      last = { r: r, name: h ? (de ? h.de : h.en) : null };
+      if (animate) roll(r.now); else { cancelAnimationFrame(raf); shown = r.now; el('fp-big').textContent = money(r.now); }
       el('fp-in').textContent = money(r.put);
-      el('fp-x').textContent = r.put ? (r.now / r.put).toLocaleString(numLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + '×' : '…';
+      el('fp-x').textContent = r.multiple.toLocaleString(numLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + '×';
       el('fp-m').textContent = r.months;
-      el('fp-honest').textContent = r.worst < -0.05
-        ? fill(t.fpHonest, { d: Math.round(-r.worst * 100) + '%', a: mon(r.wFrom), b: mon(r.wTo) })
-        : t.fpHonestNone;
+      var w = r.worst, txt;
+      if (w && w.pct <= -0.05) {
+        var rec = w.recovered === 'now' ? t.fpRecNow : w.recovered ? fill(t.fpRecBy, { c: mon(w.recovered) }) : t.fpRecNot;
+        txt = fill(t.fpHonest, { d: Math.round(-w.pct * 100) + '%', a: mon(w.from), b: mon(w.to) }) + ' ' + rec;
+      } else txt = t.fpHonestNone;
+      if (r.underwater > 0) txt += ' ' + fill(r.underwater === 1 ? t.fpUnderOne : t.fpUnder, { n: r.underwater, m: r.months });
+      el('fp-honest').textContent = txt;
+      hover = -1; tip.hidden = true; draw();
     }
     function shareText() {
       if (!last) return 'whentobuybtc.xyz';
-      return fill(T().fpShare, { h: last.name, amt: amtLabel(HABITS[hi].m), y: year, v: el('fp-big').textContent, i: el('fp-in').textContent });
+      var o = { h: last.name, amt: sym() + amount.toLocaleString(numLocale()), y: year, v: money(last.r.now), i: money(last.r.put) };
+      return fill(last.name ? T().fpShare : T().fpShareOwn, o);
     }
     el('fp-share-wa').addEventListener('click', function () { window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank'); });
     el('fp-share-x').addEventListener('click', function () { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText()), '_blank'); });
-    render();
-    /* Re-render when the monthly table arrives (fetchMonthlyPrices calls this) or currency/lang/price change */
+    drawPresets(); render(false);
+    /* Re-render when the monthly tables arrive (fetchMonthlyPrices calls this) or currency/lang/price change */
     var prev = window._whatifStepperRefresh;
-    window._whatifStepperRefresh = function () { if (prev) prev(); render(); };
-    return { render: render };
+    window._whatifStepperRefresh = function () { if (prev) prev(); drawPresets(); render(false); };
+    if ('MutationObserver' in window) new MutationObserver(function () { drawPresets(); render(false); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    return { render: function () { render(false); } };
   })();
 
   if (window._signalState) window._renderWhy();
