@@ -1,10 +1,12 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import { computeSignal as signalModel, fgBand, fgScore, maScore, athScore } from '../lib/signal';
 
 interface SignalData {
   fearGreed: number | null;
   fearGreedLabel: string;
+  fearGreedClass: string | null;
   maPercent: number | null;
   maPrice: number | null;
   currentPrice: number | null;
@@ -14,37 +16,18 @@ interface SignalData {
   updatedAt: string;
 }
 
-function computeSignal(fg: number | null, ma: number | null, ath: number | null): { signal: 'accumulate' | 'hold' | 'caution' | 'unknown'; score: number } {
+// Same model as the main site and the emails (lib/signal.ts): one temperature everywhere.
+function computeSignal(fg: number | null, fgClass: string | null, ma: number | null, ath: number | null): { signal: 'accumulate' | 'hold' | 'caution' | 'unknown'; score: number } {
   if (fg === null || ma === null || ath === null) return { signal: 'unknown', score: 0 };
-
-  let score = 0;
-
-  // Fear & Greed (0–100): lower = more fear = better to accumulate
-  if (fg <= 25) score += 2;
-  else if (fg <= 45) score += 1;
-  else if (fg >= 75) score -= 1;
-
-  // vs 200-day MA: negative = below MA = historically good entry
-  if (ma <= -10) score += 2;
-  else if (ma <= 0) score += 1;
-  else if (ma >= 50) score -= 1;
-
-  // ATH distance: further = more room
-  if (ath <= -40) score += 2;
-  else if (ath <= -20) score += 1;
-  else if (ath >= -5) score -= 1;
-
-  if (score >= 3) return { signal: 'accumulate', score };
-  if (score <= 0) return { signal: 'caution', score };
-  return { signal: 'hold', score };
+  const r = signalModel({ fgValue: fg, fgClass, maPct: ma, athPct: ath });
+  return { signal: r.state, score: r.score };
 }
 
-function getFearGreedLabel(value: number): string {
-  if (value <= 25) return 'Extreme Angst';
-  if (value <= 45) return 'Angst';
-  if (value <= 55) return 'Neutral';
-  if (value <= 75) return 'Gier';
-  return 'Extreme Gier';
+const FG_LABEL_DE: Record<string, string> = {
+  'extreme-fear': 'Extreme Angst', 'fear': 'Angst', 'neutral': 'Neutral', 'greed': 'Gier', 'extreme-greed': 'Extreme Gier',
+};
+function getFearGreedLabel(value: number, cls?: string | null): string {
+  return FG_LABEL_DE[fgBand(value, cls)];
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -55,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const data: SignalData = {
     fearGreed: null,
     fearGreedLabel: '',
+    fearGreedClass: null,
     maPercent: null,
     maPrice: null,
     currentPrice: null,
@@ -64,6 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     updatedAt: new Date().toISOString(),
   };
 
+  let fgClass: string | null = null;
   try {
     const [fgRes, priceRes, athRes, histRes] = await Promise.allSettled([
       fetch(`${base}/api/fear-greed`),
@@ -75,7 +60,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     if (fgRes.status === 'fulfilled' && fgRes.value.ok) {
       const fg = await fgRes.value.json();
       data.fearGreed = fg.value ?? null;
-      data.fearGreedLabel = data.fearGreed !== null ? getFearGreedLabel(data.fearGreed) : '';
+      fgClass = fg.value_classification ?? null;
+      data.fearGreedClass = fgClass;
+      data.fearGreedLabel = data.fearGreed !== null ? getFearGreedLabel(data.fearGreed, fgClass) : '';
     }
 
     if (priceRes.status === 'fulfilled' && priceRes.value.ok) {
@@ -101,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   } catch (_) {}
 
-  const { signal, score } = computeSignal(data.fearGreed, data.maPercent, data.athPercent);
+  const { signal, score } = computeSignal(data.fearGreed, fgClass, data.maPercent, data.athPercent);
   data.signal = signal;
   data.score = score;
 
@@ -281,27 +268,33 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
     unknown: '#4A4540',
   };
   const signalColor = signalColors[data.signal] || signalColors.unknown;
-  const fgColor = data.fearGreed !== null ? (data.fearGreed <= 45 ? '#4ADE80' : data.fearGreed >= 65 ? '#F87171' : '#FBBF24') : '#4A4540';
-  const maColor = data.maPercent !== null ? (data.maPercent <= 0 ? '#4ADE80' : data.maPercent <= 30 ? '#FBBF24' : '#F87171') : '#4A4540';
-  const athColor = data.athPercent !== null ? (data.athPercent <= -30 ? '#4ADE80' : data.athPercent <= -10 ? '#FBBF24' : '#F87171') : '#4A4540';
+  // Colours and wording use the same bands as the score (lib/signal.ts): kalt, neutral, heiß.
+  const leanColor = (n: number) => (n > 0 ? '#8EC9FF' : n < 0 ? '#F7931A' : '#F2C46B');
+  const fgB = data.fearGreed !== null ? fgBand(data.fearGreed, data.fearGreedClass) : null;
+  const fgColor = data.fearGreed !== null ? leanColor(fgScore(data.fearGreed, data.fearGreedClass)) : '#4A4540';
+  const maColor = data.maPercent !== null ? leanColor(maScore(data.maPercent)) : '#4A4540';
+  const athColor = data.athPercent !== null ? leanColor(athScore(data.athPercent)) : '#4A4540';
 
-  const fgDesc = data.fearGreed !== null
-    ? (data.fearGreed <= 25 ? 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten. Langfristige Halter sehen sie meist als günstigere Sats.'
-      : data.fearGreed <= 45 ? 'Viele sind unsicher und halten sich zurück. Der Markt ist nervös, weder panisch noch entspannt.'
-      : data.fearGreed >= 75 ? 'Im Moment kaufen sehr viele, aus Angst, etwas zu verpassen. Rücksetzer folgen oft, und langfristige Halter rechnen gelassen damit.'
-      : 'Weder Panik noch Euphorie. Der Markt bewegt sich gerade ohne großen Druck in eine Richtung.')
+  const fgDesc = fgB
+    ? ({
+        'extreme-fear': 'Fast alle verkaufen gerade oder trauen sich nicht zu kaufen. Solche Momente sind selten. Langfristige Halter sehen sie meist als günstigere Sats.',
+        'fear': 'Viele sind unsicher und halten sich zurück. Der Markt ist nervös, aber nicht in Panik.',
+        'neutral': 'Weder Angst noch Gier. Die Stimmung liegt genau in der Mitte.',
+        'greed': 'Die Stimmung ist gut, viele fühlen sich wohl mit Bitcoin. Langfristige Halter genießen solche Phasen, ohne ihren Plan zu ändern.',
+        'extreme-greed': 'Im Moment kaufen sehr viele, aus Angst, etwas zu verpassen. Rücksetzer folgen oft, und langfristige Halter rechnen gelassen damit.',
+      } as const)[fgB]
     : 'Wird geladen.';
 
   const maDesc = data.maPercent !== null
-    ? (data.maPercent <= -10 ? `Bitcoin kostet gerade ${Math.abs(data.maPercent).toFixed(0)}% weniger als sein 200-Tage-Durchschnitt. Das ist wie ein Produkt, das deutlich unter seinem üblichen Preis verkauft wird.`
-      : data.maPercent <= 10 ? `Bitcoin liegt nahe an seinem 200-Tage-Durchschnitt, das ist in etwa sein "normaler" Preis der letzten Monate.`
-      : `Bitcoin kostet gerade ${data.maPercent.toFixed(0)}% mehr als sein 200-Tage-Durchschnitt. Der Preis ist deutlich über dem, was in den letzten Monaten als normal galt.`)
+    ? (data.maPercent < -5 ? `Bitcoin kostet gerade ${Math.abs(data.maPercent).toFixed(0)} % weniger als sein 200-Tage-Durchschnitt. Das ist wie ein Produkt, das unter seinem üblichen Preis verkauft wird.`
+      : data.maPercent <= 5 ? `Bitcoin liegt nahe an seinem 200-Tage-Durchschnitt, das ist in etwa sein "normaler" Preis der letzten Monate.`
+      : `Bitcoin kostet gerade ${data.maPercent.toFixed(0)} % mehr als sein 200-Tage-Durchschnitt. Der Preis liegt über dem, was in den letzten Monaten als normal galt.`)
     : 'Wird geladen.';
 
   const athDesc = data.athPercent !== null
-    ? (data.athPercent <= -40 ? `Der bisherige Höchstpreis liegt ${Math.abs(data.athPercent).toFixed(0)}% über dem heutigen Preis. Historisch waren solche Abstände vom Höchststand selten und haben nicht lange angedauert.`
-      : data.athPercent <= -15 ? `Noch ${Math.abs(data.athPercent).toFixed(0)}% bis zum bisherigen Höchststand. Der Preis hat noch Luft nach oben, bevor er in unbekanntes Terrain kommt.`
-      : data.athPercent <= -5 ? `Bitcoin ist nur noch ${Math.abs(data.athPercent).toFixed(0)}% vom bisherigen Höchststand entfernt. Der Markt ist nah an historischen Hochs.`
+    ? (data.athPercent < -50 ? `Bitcoin liegt ${Math.abs(data.athPercent).toFixed(0)} % unter seinem bisherigen Höchststand. Solche tiefen Rücksetzer gab es bisher in jedem Bitcoin-Zyklus.`
+      : data.athPercent < -20 ? `Bitcoin liegt ${Math.abs(data.athPercent).toFixed(0)} % unter seinem bisherigen Höchststand. Eine deutliche Korrektur, und ein normaler Teil davon, wie Bitcoin sich bewegt.`
+      : data.athPercent < 0 ? `Bitcoin liegt nur ${Math.abs(data.athPercent).toFixed(0)} % unter seinem bisherigen Höchststand. Der Markt ist nah an historischen Hochs.`
       : 'Bitcoin hat seinen bisherigen Höchststand erreicht oder übertroffen. Neues Terrain.')
     : 'Wird geladen.';
 

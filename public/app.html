@@ -2537,6 +2537,30 @@
     .chart-annotation-price { color: var(--temp) !important; }
     .chart-legend-item.zone-item { color: rgba(142,201,255,0.75); }
     .push-title em { color: var(--temp); transition: color 1s; }
+    /* ── Quick wins (design pass) ── */
+    .temp-hero #price-change { margin-top: 1.1rem; }
+    .hero-share { color: #A39B90; }
+    .hero-share button { color: #CFC8BD; border-bottom-color: rgba(237,232,222,0.3); }
+    .faq-chevron { color: var(--temp); transition: transform 0.3s ease, color 1s; }
+    .faq-item:first-child { border-top-color: rgba(var(--temp-rgb),0.35); }
+    .fp-share { gap: 10px; flex-wrap: wrap; }
+    .fp-share button { border: 1px solid var(--fp-line); padding: 11px 16px; min-height: 44px; color: var(--white); transition: border-color 0.2s, color 0.2s; }
+    .fp-share button:hover, .fp-share button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
+    .push-meta { color: #8A837A; margin-top: 0.9rem; }
+    .fp-more { min-height: 44px; }
+    @media (min-width: 769px) {
+      .fp-calc-in { align-content: center; }
+      .push-inner { align-items: center; }
+    }
+    @media (max-width: 768px) {
+      .push-inner { gap: 2rem; }
+      .push-preview-col { width: 100%; }
+      .fp-mail { max-width: 100%; }
+      #alerts.section { padding-bottom: 3.5rem; }
+    }
+    .fp-wider { margin: 16px 0 0 !important; padding-top: 14px; border-top: 1px solid var(--fp-line); font-family: var(--display); font-style: italic; font-size: 0.98rem !important; line-height: 1.5; color: var(--muted); }
+    .fp-wider-l { font-family: var(--mono); font-style: normal; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); margin-right: 6px; }
+    .fp-wider-a { font-family: var(--mono); font-style: normal; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--temp); text-decoration: none; white-space: nowrap; }
     .chart-tf.active, .chart-tf:hover { color: var(--temp); border-color: rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.05); }
   </style>
   <!-- ═══ FULL PAGE V2: CSS (end) ═══ -->
@@ -2859,8 +2883,8 @@
         <p class="fp-honest" id="fp-honest"></p>
         <p class="fp-fine" data-i18n="fpFine">Based on monthly average prices in euro and today's price. Not financial advice; this is for perspective.</p>
         <div class="fp-share">
-          <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp">WhatsApp</button>
-          <button type="button" id="fp-share-x" data-umami-event="share-whatif-x">X</button>
+          <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp"><span data-i18n="fpShareOn">Share on</span> WhatsApp</button>
+          <button type="button" id="fp-share-x" data-umami-event="share-whatif-x"><span data-i18n="fpShareOn">Share on</span> X</button>
         </div>
       </div>
     </div>
@@ -3334,12 +3358,13 @@
       signalBreakdownLabel: 'Signal Breakdown',
       signalBreakdownTitle: 'Three readings.<br>One temperature.',
       signalBreakdownSub: "Each reading leans colder or warmer. Added up, they give today's temperature. No jargon, no advice.",
+      fpShareOn: 'Share on', fpWider: 'Wider market', fpWiderLink: 'See the markets ↓',
       fpWhy: 'Why {s}?', fpMore: 'More', fpLess: 'Less', fpTogether: 'Together',
       fpLeanCold: 'Leans cold', fpLeanMild: 'Neutral', fpLeanHot: 'Leans hot',
-      fpLineFg: { 2: 'People are scared. Prices often feel cheapest when the mood is worst.', 1: 'The mood is cautious, more worried than excited.', '-1': 'The mood is upbeat. People feel good about Bitcoin.', '-2': 'The mood is euphoric. Excitement runs high.' },
-      fpLineMa: { 2: 'The price sits well below its long-term average.', 1: 'The price sits a little below its long-term average.', '-1': 'The price sits above its long-term average.', '-2': 'The price sits far above its long-term average.' },
-      fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is close to its all-time high.' },
-      fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
+      fpLineFg: { 2: 'People are scared. Prices often feel cheapest when the mood is worst.', 1: 'The mood is cautious, more worried than excited.', 0: 'The mood is neutral, neither scared nor excited.', '-1': 'The mood is upbeat. People feel good about Bitcoin.', '-2': 'The mood is euphoric. Excitement runs high.' },
+      fpLineMa: { 2: 'The price sits well below its long-term average.', 1: 'The price sits below its long-term average.', 0: 'The price sits close to its long-term average.', '-1': 'The price sits above its long-term average.', '-2': 'The price sits far above its long-term average.' },
+      fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is within 20% of its all-time high.' },
+      fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
       fpCalcLabel: 'What if?', fpCalcTitle: 'What a small habit<br>would have done.',
       fpCalcSub: 'Pick a habit and a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
       fpStartIn: 'Starting in', fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',
@@ -3506,7 +3531,7 @@
       faqItems: [
         {
           q: 'What do Cold, Mild and Hot mean?',
-          a: `<p>They describe the market, not what anyone should do. Three readings go into it: the market mood (Fear &amp; Greed), the price against its 200-day average, and the distance from the all-time high. Each one leans colder or warmer, and together they give one temperature.</p><p><b>Cold</b> means fear, a price below its long-term trend and a big gap to the peak. <b>Hot</b> means excitement, a price well above its trend and close to the high. <b>Mild</b> is everything in between. Many long-term holders buy a little every month whatever the temperature: a cold market means more sats for the same money, a hot one means the savings already look good.</p>`
+          a: `<p>They describe the market, not what anyone should do. Three readings go into it, and each one leans cold, sits in the middle, or leans hot:</p><p><b>Market mood</b> (Fear &amp; Greed, 0 to 100): fear leans cold, extreme fear counts double. Neutral (roughly 47 to 54) counts as the middle. Greed leans hot, extreme greed counts double.<br><b>Price vs. its 200-day average:</b> more than 5% below leans cold (more than 10% below counts double). Within 5% either side is the middle. More than 5% above leans hot (more than 20% above counts double).<br><b>Distance from the all-time high:</b> more than 50% below leans cold, 20 to 50% below is the middle, closer than 20% leans hot.</p><p>Added up, the result runs from +5 to −5. <b>Cold</b> is +3 or more, <b>Hot</b> is −3 or less, <b>Mild</b> is everything in between. Many long-term holders buy a little every month whatever the temperature: a cold market means more sats for the same money, a hot one means the savings already look good.</p>`
         },
         {
           q: 'Who built this, and why should I trust it?',
@@ -3514,19 +3539,19 @@
         },
         {
           q: 'Why the Fear & Greed Index?',
-          a: `<p>The Fear & Greed Index measures aggregate market sentiment: how emotional, panicked, or euphoric the crowd is at any given moment. It draws on factors like price momentum, volatility, social media activity, and trading volume.</p><p>Its value isn't in predicting the future. It's in identifying when the market is behaving irrationally, specifically when fear is so widespread that it has historically created buying opportunities for long-term holders. The index runs from 0 (extreme fear) to 100 (extreme greed). Historically, the best times to accumulate Bitcoin have often coincided with fear readings below 30.</p>`
+          a: `<p>The Fear &amp; Greed Index measures the crowd's mood: how scared or excited the market is right now. It draws on factors like price momentum, volatility, social media activity and trading volume, and runs from 0 (extreme fear) to 100 (extreme greed).</p><p>It doesn't predict the price. It shows when emotions run high in either direction, and those moments have often come near turning points. This page uses the publisher's own labels (extreme fear, fear, neutral, greed, extreme greed), so the reading here always matches the label you see next to the number.</p>`
         },
         {
           q: 'Why the 200-day moving average, and not some other timeframe?',
-          a: `<p>The 200-day moving average (200DMA) is the average of Bitcoin's closing price over the past 200 trading days. It's one of the most widely watched long-term trend indicators in both traditional finance and crypto, which is part of why it matters. When enough participants use the same signal, it becomes self-reinforcing.</p><p>200 days is long enough to smooth out short-term noise while staying responsive to genuine trend shifts. Shorter windows (50-day, 100-day) react too quickly; annual averages can lag meaningful turning points.</p><p>One known limitation: because the average is rolling, a sharp price move that happened ~200 days ago will drop out of the calculation as time passes, which can cause the average to shift noticeably even if recent price action is flat. This tool uses it as one of three inputs, not as a standalone signal, precisely for this reason.</p>`
+          a: `<p>The 200-day moving average (200DMA) is the average of Bitcoin's daily price over the past 200 days (Bitcoin trades every day, weekends included). It's one of the most widely watched long-term trend indicators in both traditional finance and crypto, which is part of why it matters. When enough participants use the same signal, it becomes self-reinforcing.</p><p>200 days is long enough to smooth out short-term noise while staying responsive to genuine trend shifts. Shorter windows (50-day, 100-day) react too quickly; annual averages can lag meaningful turning points.</p><p>One known limitation: because the average is rolling, a sharp price move that happened ~200 days ago will drop out of the calculation as time passes, which can cause the average to shift noticeably even if recent price action is flat. This tool uses it as one of three inputs, not as a standalone signal, precisely for this reason.</p>`
         },
         {
           q: 'Why distance from all-time high?',
-          a: `<p>Bitcoin's distance from its all-time high (ATH) is a simple but powerful measure of historical discount. The further Bitcoin is from its peak price, the deeper the drawdown, and historically, the deeper the drawdown, the more attractive the risk/reward for long-term buyers.</p><p>It's not a prediction. Bitcoin has gone to zero after major drawdowns in the minds of many commentators, and recovered each time. This metric captures where we are in that cycle relative to peak euphoria, which tends to correlate with where sentiment is and where prices may head over a long horizon.</p>`
+          a: `<p>The distance from the all-time high (ATH) shows how far the price sits below the highest price Bitcoin has ever reached. Deep drawdowns of 50% or more have happened in every Bitcoin cycle so far, and so have new highs after them.</p><p>It's not a prediction. It places today in the cycle: far below the peak usually means sentiment is worn out, close to the peak usually means excitement is high.</p>`
         },
         {
           q: 'Where does the data come from?',
-          a: `<p>Fear & Greed Index: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a>. Bitcoin price and 200-day moving average: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a> and <a href="https://www.coinmarketcap.com" target="_blank" rel="noopener">CoinMarketCap</a>. All-time high: CoinGecko. Data is fetched live on page load.</p>`
+          a: `<p>Fear & Greed Index: <a href="https://coinmarketcap.com/charts/fear-and-greed-index/" target="_blank" rel="noopener">CoinMarketCap</a>, with <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a> as a backup. Bitcoin price, 200-day average and all-time high: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a>. Market context: FRED, the ECB and CoinGecko. The price refreshes every 5 minutes; the other readings update with it.</p>`
         },
         {
           q: 'Is this financial advice?',
@@ -3607,12 +3632,13 @@
       signalBreakdownLabel: 'Signal im Detail',
       signalBreakdownTitle: 'Drei Werte.<br>Eine Temperatur.',
       signalBreakdownSub: 'Jeder Wert zeigt eher Richtung kalt oder warm. Zusammen ergeben sie die Temperatur von heute. Kein Fachjargon, keine Empfehlung.',
+      fpShareOn: 'Teilen auf', fpWider: 'Marktumfeld', fpWiderLink: 'Zu den Märkten ↓',
       fpWhy: 'Warum {s}?', fpMore: 'Mehr', fpLess: 'Weniger', fpTogether: 'Zusammen',
       fpLeanCold: 'Eher kalt', fpLeanMild: 'Neutral', fpLeanHot: 'Eher heiß',
-      fpLineFg: { 2: 'Die Leute haben Angst. Am günstigsten fühlt es sich oft an, wenn die Stimmung am schlechtesten ist.', 1: 'Die Stimmung ist vorsichtig, eher besorgt als begeistert.', '-1': 'Die Stimmung ist gut. Die Leute fühlen sich wohl mit Bitcoin.', '-2': 'Die Stimmung ist euphorisch. Die Begeisterung ist groß.' },
-      fpLineMa: { 2: 'Der Kurs liegt deutlich unter seinem langfristigen Durchschnitt.', 1: 'Der Kurs liegt etwas unter seinem langfristigen Durchschnitt.', '-1': 'Der Kurs liegt über seinem langfristigen Durchschnitt.', '-2': 'Der Kurs liegt weit über seinem langfristigen Durchschnitt.' },
-      fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs ist nah am Allzeithoch.' },
-      fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
+      fpLineFg: { 2: 'Die Leute haben Angst. Am günstigsten fühlt es sich oft an, wenn die Stimmung am schlechtesten ist.', 1: 'Die Stimmung ist vorsichtig, eher besorgt als begeistert.', 0: 'Die Stimmung ist neutral, weder ängstlich noch begeistert.', '-1': 'Die Stimmung ist gut. Die Leute fühlen sich wohl mit Bitcoin.', '-2': 'Die Stimmung ist euphorisch. Die Begeisterung ist groß.' },
+      fpLineMa: { 2: 'Der Kurs liegt deutlich unter seinem langfristigen Durchschnitt.', 1: 'Der Kurs liegt unter seinem langfristigen Durchschnitt.', 0: 'Der Kurs liegt nah an seinem langfristigen Durchschnitt.', '-1': 'Der Kurs liegt über seinem langfristigen Durchschnitt.', '-2': 'Der Kurs liegt weit über seinem langfristigen Durchschnitt.' },
+      fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs liegt weniger als 20 % unter dem Allzeithoch.' },
+      fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.', holdCalm: 'Kein Wert ist im Extrem, also liest sich der Markt mild.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
       fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was eine kleine Gewohnheit<br>bewirkt hätte.',
       fpCalcSub: 'Wähle eine Gewohnheit und ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
       fpStartIn: 'Start im Jahr', fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',
@@ -3779,7 +3805,7 @@
       faqItems: [
         {
           q: 'Was bedeuten Kalt, Mild und Heiß?',
-          a: `<p>Sie beschreiben den Markt, nicht was jemand tun sollte. Drei Werte fließen ein: die Marktstimmung (Fear &amp; Greed), der Kurs im Vergleich zum 200-Tage-Durchschnitt und der Abstand zum Allzeithoch. Jeder Wert zeigt eher Richtung kalt oder warm, zusammen ergeben sie eine Temperatur.</p><p><b>Kalt</b> heißt Angst, ein Kurs unter dem langfristigen Trend und ein großer Abstand zum Hoch. <b>Heiß</b> heißt Euphorie, ein Kurs deutlich über dem Trend und nah am Hoch. <b>Mild</b> ist alles dazwischen. Viele Langfrist-Halter kaufen jeden Monat ein wenig, egal bei welcher Temperatur: Ein kalter Markt bringt mehr Sats fürs gleiche Geld, ein heißer zeigt, dass sich das Sparen gelohnt hat.</p>`
+          a: `<p>Sie beschreiben den Markt, nicht was jemand tun sollte. Drei Werte fließen ein, und jeder zeigt Richtung kalt, liegt in der Mitte oder zeigt Richtung heiß:</p><p><b>Marktstimmung</b> (Fear &amp; Greed, 0 bis 100): Angst zeigt Richtung kalt, extreme Angst zählt doppelt. Neutral (etwa 47 bis 54) ist die Mitte. Gier zeigt Richtung heiß, extreme Gier zählt doppelt.<br><b>Kurs zum 200-Tage-Durchschnitt:</b> mehr als 5 % darunter zeigt Richtung kalt (mehr als 10 % darunter zählt doppelt). Bis 5 % in beide Richtungen ist die Mitte. Mehr als 5 % darüber zeigt Richtung heiß (mehr als 20 % darüber zählt doppelt).<br><b>Abstand zum Allzeithoch:</b> mehr als 50 % darunter zeigt Richtung kalt, 20 bis 50 % darunter ist die Mitte, näher als 20 % zeigt Richtung heiß.</p><p>Zusammengezählt ergibt das einen Wert von +5 bis −5. <b>Kalt</b> ist +3 oder mehr, <b>Heiß</b> ist −3 oder weniger, <b>Mild</b> ist alles dazwischen. Viele Langfrist-Halter kaufen jeden Monat ein wenig, egal bei welcher Temperatur: Ein kalter Markt bringt mehr Sats fürs gleiche Geld, ein heißer zeigt, dass sich das Sparen gelohnt hat.</p>`
         },
         {
           q: 'Wer hat das gebaut, und warum sollte ich dem vertrauen?',
@@ -3787,19 +3813,19 @@
         },
         {
           q: 'Warum der Fear & Greed Index?',
-          a: `<p>Der Fear & Greed Index misst die allgemeine Marktstimmung: wie emotional, panisch oder euphorisch die Masse gerade ist. Er basiert auf Faktoren wie Preisdynamik, Volatilität, Social-Media-Aktivität und Handelsvolumen.</p><p>Sein Wert liegt nicht in der Zukunftsvorhersage. Er zeigt, wann der Markt irrational handelt, insbesondere, wenn Panik so weit verbreitet ist, dass historisch Kaufgelegenheiten für langfristige Halter entstanden sind. Der Index reicht von 0 (extreme Angst) bis 100 (extreme Gier). Historisch lagen die besten Akkumulationszeitpunkte oft bei Werten unter 30.</p>`
+          a: `<p>Der Fear &amp; Greed Index misst die Stimmung der Masse: wie ängstlich oder begeistert der Markt gerade ist. Er basiert auf Faktoren wie Preisdynamik, Volatilität, Social-Media-Aktivität und Handelsvolumen und reicht von 0 (extreme Angst) bis 100 (extreme Gier).</p><p>Er sagt den Preis nicht voraus. Er zeigt, wann die Emotionen in die eine oder andere Richtung hochkochen, und solche Momente lagen oft nah an Wendepunkten. Diese Seite nutzt die Einstufung des Anbieters selbst (extreme Angst, Angst, neutral, Gier, extreme Gier), damit die Einordnung hier immer zur Bezeichnung neben der Zahl passt.</p>`
         },
         {
           q: 'Warum der 200-Tage-Durchschnitt, und kein anderer Zeitraum?',
-          a: `<p>Der 200-Tage-Durchschnitt (200DMA) ist der Durchschnitt des Bitcoin-Schlusskurses über die letzten 200 Handelstage. Er ist einer der meistbeachteten Langzeittrend-Indikatoren sowohl in der traditionellen Finanzwelt als auch im Kryptobereich, was teilweise erklärt, warum er wichtig ist. Wenn genug Marktteilnehmer dasselbe Signal nutzen, verstärkt es sich selbst.</p><p>200 Tage sind lang genug, um kurzfristiges Rauschen zu glätten, ohne echte Trendwenden zu verschlafen. Kürzere Zeitfenster reagieren zu schnell; Jahresdurchschnitte können bedeutende Wendepunkte verpassen.</p><p>Eine bekannte Einschränkung: Da der Durchschnitt rollierend berechnet wird, fällt eine starke Preisbewegung von vor ~200 Tagen aus der Berechnung heraus, was den Durchschnitt merklich verschieben kann, auch wenn die jüngste Preisbewegung flach ist. Deshalb wird dieses Signal hier als eines von drei Inputs verwendet, nicht als alleiniger Indikator.</p>`
+          a: `<p>Der 200-Tage-Durchschnitt (200DMA) ist der Durchschnitt des Bitcoin-Tageskurses über die letzten 200 Tage (Bitcoin wird jeden Tag gehandelt, auch am Wochenende). Er ist einer der meistbeachteten Langzeittrend-Indikatoren sowohl in der traditionellen Finanzwelt als auch im Kryptobereich, was teilweise erklärt, warum er wichtig ist. Wenn genug Marktteilnehmer dasselbe Signal nutzen, verstärkt es sich selbst.</p><p>200 Tage sind lang genug, um kurzfristiges Rauschen zu glätten, ohne echte Trendwenden zu verschlafen. Kürzere Zeitfenster reagieren zu schnell; Jahresdurchschnitte können bedeutende Wendepunkte verpassen.</p><p>Eine bekannte Einschränkung: Da der Durchschnitt rollierend berechnet wird, fällt eine starke Preisbewegung von vor ~200 Tagen aus der Berechnung heraus, was den Durchschnitt merklich verschieben kann, auch wenn die jüngste Preisbewegung flach ist. Deshalb wird dieses Signal hier als eines von drei Inputs verwendet, nicht als alleiniger Indikator.</p>`
         },
         {
           q: 'Warum der Abstand vom Allzeithoch?',
-          a: `<p>Bitcoins Abstand vom Allzeithoch (ATH) ist ein einfaches, aber aussagekräftiges Maß für den historischen Abschlag. Je weiter Bitcoin von seinem Höchstpreis entfernt ist, desto tiefer der Drawdown, und historisch gesehen, desto attraktiver das Chancen-Risiko-Verhältnis für langfristige Käufer.</p><p>Es ist keine Prognose. Diese Kennzahl zeigt, wo wir uns im Zyklus relativ zur Euphoriephase befinden, was tendenziell mit der Stimmung und der langfristigen Preisentwicklung korreliert.</p>`
+          a: `<p>Der Abstand vom Allzeithoch (ATH) zeigt, wie weit der Kurs unter dem höchsten Preis liegt, den Bitcoin je erreicht hat. Rücksetzer von 50 % oder mehr gab es bisher in jedem Bitcoin-Zyklus, und danach jeweils auch neue Hochs.</p><p>Es ist keine Prognose. Es ordnet den heutigen Tag im Zyklus ein: weit unter dem Hoch heißt meist, die Stimmung ist ausgelaugt, nah am Hoch heißt meist, die Begeisterung ist groß.</p>`
         },
         {
           q: 'Woher kommen die Daten?',
-          a: `<p>Fear & Greed Index: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a>. Bitcoin-Preis und 200-Tage-Durchschnitt: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a> und <a href="https://www.coinmarketcap.com" target="_blank" rel="noopener">CoinMarketCap</a>. Allzeithoch: CoinGecko. Daten werden beim Seitenaufruf live abgerufen.</p>`
+          a: `<p>Fear & Greed Index: <a href="https://coinmarketcap.com/charts/fear-and-greed-index/" target="_blank" rel="noopener">CoinMarketCap</a>, mit <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">Alternative.me</a> als Reserve. Bitcoin-Preis, 200-Tage-Durchschnitt und Allzeithoch: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a>. Marktumfeld: FRED, EZB und CoinGecko. Der Preis wird alle 5 Minuten aktualisiert, die anderen Werte ziehen mit.</p>`
         },
         {
           q: 'Ist das eine Finanzberatung?',
@@ -3917,7 +3943,7 @@
   // ── CURRENCY DETECTION ──
   async function detectCurrency() {
     try {
-      const res = await fetch('https://ipapi.co/json/');
+      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(2500) });
       const data = await res.json();
       const eurCountries = ['AT','DE','FR','IT','ES','NL','BE','PT','FI','GR','IE','LU','SK','SI','EE','LV','LT','CY','MT'];
       currentCurrency = eurCountries.includes(data.country_code) ? 'EUR' : 'USD';
@@ -3958,6 +3984,7 @@
       document.getElementById('signal-updated').innerHTML = `<span style="color:var(--green)">●</span> LIVE · ${translations[currentLang].signalUpdatedPrefix} ${t} · ${translations[currentLang].notAdvice}`;
       updateHeroStrip();
       drawHeroHorizon();
+      refreshDerivedReadings();
     } catch (e) {
       document.getElementById('price-value').textContent = '—';
       const changeEl = document.getElementById('price-change');
@@ -3967,10 +3994,25 @@
     }
   }
 
+  // On every price refresh, recompute the distances to the ATH and the 200-day average so the
+  // readings and the temperature always describe the price shown in the hero.
+  function refreshDerivedReadings() {
+    if (currentPrice == null) return;
+    if (athPrice) {
+      athDropPct = (currentPrice - athPrice) / athPrice * 100;
+      const a = document.getElementById('ath-value'); if (a) a.textContent = athDropPct.toFixed(1) + '%';
+    }
+    if (maPrice) {
+      const d = (currentPrice - maPrice) / maPrice * 100;
+      const m = document.getElementById('ma-value'); if (m) m.textContent = (d >= 0 ? '+' : '') + d.toFixed(1) + '%';
+    }
+    if (fgValue !== null && maPrice !== null && athDropPct !== null) updateSignal();
+  }
+
   function numLocale() { return currentLang === 'de' ? 'de-DE' : 'en-GB'; }
 
   function formatPrice(p) {
-    if (p >= 10000) return Math.round(p).toLocaleString(numLocale());
+    if (p >= 1000) return Math.round(p).toLocaleString(numLocale());
     return p.toFixed(0);
   }
 
@@ -3987,20 +4029,10 @@
       document.getElementById('fg-bar').style.width = fgValue + '%';
       document.getElementById('share-fg').textContent = fgValue;
 
-      let color, desc;
-      if (fgValue < 25) {
-        color = 'var(--green)';
-        desc = translations[currentLang].fgExtremeFear;
-      } else if (fgValue < 50) {
-        color = 'var(--amber)';
-        desc = translations[currentLang].fgFear;
-      } else if (fgValue < 75) {
-        color = 'var(--amber)';
-        desc = translations[currentLang].fgGreed;
-      } else {
-        color = 'var(--orange)';
-        desc = translations[currentLang].fgExtremeGreed;
-      }
+      // Same bands as the score (SIGNAL MODEL), led by the publisher's own label
+      const band = wtbFgBand(fgValue, label);
+      const color = band === 'extreme-fear' ? 'var(--green)' : band === 'extreme-greed' ? 'var(--orange)' : 'var(--amber)';
+      const desc = translations[currentLang][{ 'extreme-fear': 'fgExtremeFear', 'fear': 'fgFear', 'neutral': 'fgNeutral', 'greed': 'fgGreed', 'extreme-greed': 'fgExtremeGreed' }[band]];
 
       document.getElementById('fg-value').style.color = color;
       document.getElementById('fg-bar').style.background = color;
@@ -4036,7 +4068,7 @@
       if (dropPct < -50) {
         color = 'var(--green)';
         desc = translations[currentLang].athDeep(absPct);
-      } else if (dropPct < -25) {
+      } else if (dropPct < -20) {
         color = 'var(--amber)';
         desc = translations[currentLang].athMid(absPct);
       } else {
@@ -4109,10 +4141,10 @@
       document.getElementById('ma-bar').style.width = fillPct + '%';
 
       let color, desc;
-      if (diffPct < -10) {
+      if (diffPct < -5) {
         color = 'var(--green)';
         desc = translations[currentLang].maBelow(Math.abs(diffPct).toFixed(1));
-      } else if (diffPct < 10) {
+      } else if (diffPct <= 5) {
         color = 'var(--amber)';
         desc = translations[currentLang].maNeutral;
       } else {
@@ -4134,19 +4166,36 @@
     }
   }
 
+  /* SIGNAL MODEL (start) — keep in sync with lib/signal.ts (tests/signal.test.ts checks it).
+     Each reading leans cold (+), neutral (0) or hot (−); every reading has a neutral middle.
+     Total −5…+5: Cold at +3 or more, Hot at −3 or less, Mild in between. */
+  function wtbFgBand(v, cls) {
+    var m = { 'extreme fear': 'extreme-fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme greed': 'extreme-greed' };
+    var k = cls ? m[String(cls).trim().toLowerCase()] : null;
+    if (k) return k;
+    return v < 25 ? 'extreme-fear' : v < 47 ? 'fear' : v < 55 ? 'neutral' : v < 76 ? 'greed' : 'extreme-greed';
+  }
+  function wtbSignal(fgValue, fgClass, maPct, athPct) {
+    var fg = { 'extreme-fear': 2, 'fear': 1, 'neutral': 0, 'greed': -1, 'extreme-greed': -2 }[wtbFgBand(fgValue, fgClass)];
+    var ma = maPct < -10 ? 2 : maPct < -5 ? 1 : maPct <= 5 ? 0 : maPct <= 20 ? -1 : -2;
+    var ath = athPct < -50 ? 1 : athPct < -20 ? 0 : -1;
+    var score = fg + ma + ath;
+    return { score: score, state: score >= 3 ? 'accumulate' : score <= -3 ? 'caution' : 'hold', parts: { fg: fg, ma: ma, ath: ath } };
+  }
+  /* SIGNAL MODEL (end) */
+
   // ── SIGNAL ENGINE ──
   function updateSignal() {
     if (fgValue === null || maPrice === null || currentPrice === null || athDropPct === null) return;
 
     const diffPct = (currentPrice - maPrice) / maPrice * 100;
-    const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
-    const maScore  = diffPct < -10 ? 2 : diffPct < 0 ? 1 : diffPct < 20 ? -1 : -2;
-    const athScore = athDropPct < -50 ? 1 : athDropPct < -25 ? 0 : -1;
-    const score = fgScore + maScore + athScore;
-    // Range −5 to +5. Thresholds: ≥3 Cold (accumulate), −1 to 2 Mild (hold), ≤−2 Hot (caution)
+    const sig = wtbSignal(fgValue, window._fgLabel, diffPct, athDropPct);
+    const fgScore = sig.parts.fg, maScore = sig.parts.ma, athScore = sig.parts.ath;
+    const score = sig.score;
     window._signalScore = score;
-    window._signalState = score >= 3 ? 'accumulate' : score >= -1 ? 'hold' : 'caution';
-    window._signalParts = { fg: fgScore, ma: maScore, ath: athScore };
+    window._signalState = sig.state;
+    window._signalParts = sig.parts;
+    window._signalReadings = { fg: fgValue, ma: diffPct, ath: athDropPct };
 
     const dayIndex = Math.floor(Date.now() / 86400000);
 
@@ -4171,7 +4220,7 @@
     const hotPump  = currentChange24h !== null && currentChange24h >= 5;
     const hardDump = currentChange24h !== null && currentChange24h <= -5;
 
-    if (score >= 3) {
+    if (sig.state === 'accumulate') {
       pill.classList.add('accumulate');
       if (navDot) { navDot.classList.add('accumulate', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('accumulate');
@@ -4186,7 +4235,7 @@
       expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
       expertText.textContent = t.expertTextAccumulate[dayIndex % t.expertTextAccumulate.length];
       if (expertLead) expertLead.textContent = t.expertLeadAccumulate;
-    } else if (score >= -1) {
+    } else if (sig.state === 'hold') {
       pill.classList.add('hold');
       if (navDot) { navDot.classList.add('hold', 'active'); }
       if (window._setExpertFieldState) window._setExpertFieldState('hold');
@@ -4256,7 +4305,7 @@
     const scoreFill = document.getElementById('instrument-score-fill');
     if (scoreFill) {
       scoreFill.style.width = Math.max(4, Math.min(100, ((score + 5) / 10) * 100)) + '%';
-      scoreFill.style.background = score >= 3 ? 'var(--green)' : score >= -1 ? 'var(--amber)' : 'var(--orange)';
+      scoreFill.style.background = sig.state === 'accumulate' ? 'var(--green)' : sig.state === 'hold' ? 'var(--amber)' : 'var(--orange)';
     }
   }
 
@@ -5071,7 +5120,10 @@
     // detectCurrency and fetchPrice run in parallel — price uses currentCurrency at resolution time
     // If currency detection finishes first, price displays in correct currency
     // If price finishes first, it uses default EUR (correct for most users anyway)
-    await Promise.all([detectCurrency(), fetchPrice()]);
+    // Currency first (capped at 2.5s): price, ATH and the 200-day average must all be in the
+    // same currency, or the distances between them are off by the exchange rate.
+    await detectCurrency();
+    await fetchPrice();
     // Monthly prices non-blocking — fallback table used instantly
     fetchMonthlyPrices();
     // Fear/Greed, ATH and MA can run in parallel after price is known
@@ -5444,7 +5496,7 @@
         const eased = easeOut(progress);
         const value = start + (end - start) * eased;
         el.textContent = isFloat
-          ? (value >= 0 ? '+' : '') + value.toFixed(0) + suffix
+          ? (value >= 0 ? '+' : '') + value.toFixed(1) + suffix
           : Math.round(value) + suffix;
         if (progress < 1) requestAnimationFrame(update);
       }
@@ -5751,6 +5803,9 @@
     $('mc-stamp').textContent = (closed ? t.closed + ' · ' : '') + (p.lastUsClose ? t.lastClose + ': ' + day(p.lastUsClose, t) : '');
 
     var c = p.context, l = lang();
+    // Shared with the Why section's "Wider market" line (context only, never part of the score)
+    window._macroContext = c && t.chips[c.key] ? { chip: t.chips[c.key], text: c[l] } : null;
+    if (window._renderWhy) window._renderWhy();
     if (c && t.chips[c.key]) {
       var kind = c.key.indexOf('with') === 0 ? 'with' : c.key.indexOf('btcOnly') === 0 ? 'only' : c.key.indexOf('against') === 0 ? 'against' : '';
       var up = /Up$/.test(c.key) ? ' up' : '';
@@ -5930,10 +5985,27 @@
 
   /* ── Why: build the card extras once ── */
   var CARDS = [
-    { id: 'fg-metric', desc: 'fg-desc', key: 'fg', lines: 'fpLineFg', pos: function (s) { return (2 - s) / 4; } },
-    { id: 'ma-metric', desc: 'ma-desc', key: 'ma', lines: 'fpLineMa', pos: function (s) { return (2 - s) / 4; } },
-    { id: 'ath-metric', desc: 'ath-desc', key: 'ath', lines: 'fpLineAth', pos: function (s) { return (1 - s) / 2; } }
+    { id: 'fg-metric', desc: 'fg-desc', key: 'fg', lines: 'fpLineFg', pos: function (v, s) {
+        // Zone follows the publisher's label (s); 50 sits dead centre of the neutral third.
+        var c = function (x) { return Math.max(0, Math.min(1, x)); };
+        if (v == null || isNaN(v)) return 0.5;
+        if (s > 0) return Math.min(0.32, c(v / 47) / 3);
+        if (s < 0) return Math.max(0.68, 2 / 3 + c((v - 55) / 45) / 3);
+        return 1 / 3 + c((v - 45) / 10) / 3;
+      } },
+    { id: 'ma-metric', desc: 'ma-desc', key: 'ma', lines: 'fpLineMa', pos: function (v) { return thirds(v, -30, -5, 5, 40); } },
+    { id: 'ath-metric', desc: 'ath-desc', key: 'ath', lines: 'fpLineAth', pos: function (v) { return thirds(v, -80, -50, -20, 0); } }
   ];
+  /* The dot sits on the real value. Each scale is split at the same band edges the score uses
+     (lib/signal.ts), so the dot is in the left third exactly when the reading leans cold,
+     in the middle third when it is neutral, and in the right third when it leans hot. */
+  function thirds(v, lo, a, b, hi) {
+    if (v == null || isNaN(v)) return 0.5;
+    var c = function (x) { return Math.max(0, Math.min(1, x)); };
+    if (v < a) return c((v - lo) / (a - lo)) / 3;
+    if (v <= b) return 1 / 3 + c((v - a) / (b - a)) / 3;
+    return 2 / 3 + c((v - b) / (hi - b)) / 3;
+  }
   var built = false;
   function build() {
     if (built) return; built = true;
@@ -5967,7 +6039,8 @@
     CARDS.forEach(function (c) {
       var sc = parts[c.key];
       var line = el(c.id + '-fpline'); if (line) line.textContent = (t[c.lines] || {})[sc] || '';
-      var dot = el(c.id + '-fpdot'); if (dot) dot.style.left = (c.pos(sc) * 100) + '%';
+      var rd = window._signalReadings || {};
+      var dot = el(c.id + '-fpdot'); if (dot) dot.style.left = (c.pos(rd[c.key], sc) * 100) + '%';
       var lc = el(c.id + '-fpcold'); if (lc) lc.textContent = t.stateName.accumulate;
       var lh = el(c.id + '-fphot'); if (lh) lh.textContent = t.stateName.caution;
       var ll = el(c.id + '-fplean'); if (ll) ll.textContent = lean(sc);
@@ -5976,12 +6049,26 @@
     });
     /* Together */
     el('fp-together-word').textContent = name + '.';
-    el('fp-together-text').textContent = (t.fpTogetherText || {})[st] || '';
+    var pv = [parts.fg, parts.ma, parts.ath];
+    var split = pv.some(function (x) { return x > 0; }) && pv.some(function (x) { return x < 0; });
+    var tkey = st === 'hold' && !split ? 'holdCalm' : st;
+    el('fp-together-text').textContent = (t.fpTogetherText || {})[tkey] || '';
     var score = Math.max(-5, Math.min(5, window._signalScore || 0));
     el('fp-together-dot').style.left = ((5 - score) / 10 * 100) + '%';
     [['fpt-cold', 'accumulate'], ['fpt-mild', 'hold'], ['fpt-hot', 'caution']].forEach(function (p) {
       var x = el(p[0]); if (x) { x.textContent = t.stateName[p[1]]; x.classList.toggle('on', p[1] === st); }
     });
+    /* Wider market: one line of context from the market strip; not part of the score */
+    var mc = window._macroContext, wide = el('fp-wider');
+    if (!wide && el('fp-together')) {
+      wide = document.createElement('p'); wide.id = 'fp-wider'; wide.className = 'fp-wider';
+      el('fp-together').appendChild(wide);
+    }
+    if (wide) {
+      wide.hidden = !mc;
+      if (mc) wide.innerHTML = '<span class="fp-wider-l">' + t.fpWider + '</span> ' + String(mc.text).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }) +
+        ' <a href="#context" class="fp-wider-a">' + t.fpWiderLink + '</a>';
+    }
     /* Mail preview */
     var sym = currentCurrency === 'EUR' ? '€' : '$';
     el('fp-mail-word').textContent = name + '.';
@@ -5989,7 +6076,7 @@
     el('fp-mail-line').textContent = t.fpMailLine;
     var txt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
     el('fp-mail-lines').innerHTML = '';
-    [fill(t.fpMailL1, { v: fgValue }), fill(t.fpMailL2, { v: txt('ma-value') }), fill(t.fpMailL3, { v: txt('ath-value') })].forEach(function (s) {
+    [fill(t.fpMailL1, { v: fgValue + (window._fgLabel ? ' · ' + ((t.fgLabels && t.fgLabels[window._fgLabel]) || window._fgLabel) : '') }), fill(t.fpMailL2, { v: txt('ma-value') }), fill(t.fpMailL3, { v: txt('ath-value') })].forEach(function (s) {
       var li = document.createElement('li'); li.textContent = s; el('fp-mail-lines').appendChild(li);
     });
     /* Chart follows the temperature */

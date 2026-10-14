@@ -4,6 +4,7 @@ import { Pool } from 'pg';
 import { Resend } from 'resend';
 import { alertEmail } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroAlertBlock } from '../../lib/macro/email';
+import { signalFromApis } from '../../lib/signal';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -64,16 +65,8 @@ async function fetchSignalData(): Promise<{ fgValue: number; maPct: number; sign
   const ath     = await athRes.json();
 
   const prices  = (history.prices as [number, number][]).map(p => p[1]);
-  const ma      = prices.slice(-200).reduce((a: number, b: number) => a + b, 0) / Math.min(prices.length, 200);
   const fgValue = fg.value as number;
-  const maPct   = ((price.eur - ma) / ma) * 100;
-  const athPct  = ((price.eur - (ath.ath_eur as number)) / (ath.ath_eur as number)) * 100;
-
-  const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
-  const maScore  = maPct   < -10 ? 2 : maPct   < 0  ? 1 : maPct   < 20 ? -1 : -2;
-  const athScore = athPct  < -50 ? 1 : athPct  < -25 ? 0 : -1;
-  const score    = fgScore + maScore + athScore;
-  const signal   = score >= 3 ? 'accumulate' as const : score <= -2 ? 'caution' as const : 'hold' as const;
+  const { maPct, state: signal } = signalFromApis(price.eur, prices, ath.ath_eur as number, fgValue, fg.value_classification);
 
   return { fgValue, maPct, signal };
 }
