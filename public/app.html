@@ -2582,13 +2582,13 @@
     <!-- LEFT: copy + form -->
     <div class="push-copy">
       <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
-      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">Never miss a <em>signal change.</em></h2>
-      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts, plus a weekly digest every Sunday.</p>
+      <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The Bitcoin weather, <em>every Sunday.</em></h2>
+      <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">One short email a week, plus a note when Bitcoin moves more than 3% in a day. Free, no account, unsubscribe in one click.</p>
 
       <div class="email-form-wrap reveal" data-delay="4">
         <div class="email-row">
           <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Notify me</button>
+          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Send me the weekly read</button>
         </div>
         <p class="email-msg" id="email-msg" aria-live="polite"></p>
         <p class="email-trust" id="email-trust" aria-live="polite">
@@ -2624,8 +2624,8 @@
                 <span class="em-sender">When to Buy BTC</span>
                 <span class="em-etime em-orange" data-i18n="mockupTimeNow">now</span>
               </div>
-              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 4.1% in 4 hours.</p>
-              <p class="em-preview" data-i18n="mockupEmailPreview">Hey there, the signal just changed: markets are fearful…</p>
+              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 5.2% today.</p>
+              <p class="em-preview" data-i18n="mockupEmailPreview">Market mood reads fear and the price is 4.2% below its 200-day average…</p>
             </div>
           </div>
 
@@ -2764,12 +2764,12 @@
           </div>
           <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice. This is for perspective.</p>
           <div class="whatif-email-cta">
-            <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">Want to know when the signal says it's time to act?</p>
+            <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">See how the market looks, every Sunday.</p>
             <div class="whatif-email-cta-right">
               <div class="whatif-email-cta-row">
                 <div class="email-row">
                   <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-                  <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Notify me →</button>
+                  <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Send me the weekly read →</button>
                 </div>
                 <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
               </div>
@@ -3195,26 +3195,26 @@
       shareX: 'Share on X',
       // Alerts
       alertsLabel: 'Alerts',
-      pushTitle: 'Never miss a<br><em>signal change.</em>',
-      pushSub: "Bitcoin moves fast. Enter your email and we'll notify you the moment the signal shifts, plus a weekly digest every Sunday.",
+      pushTitle: 'The Bitcoin weather,<br><em>every Sunday.</em>',
+      pushSub: 'One short email a week, plus a note when Bitcoin moves more than 3% in a day. Free, no account, unsubscribe in one click.',
       pushMeta: 'Free · No account needed · Unsubscribe anytime',
       emailPlaceholder: 'your@email.com',
-      emailSubmit: 'Notify me',
+      emailSubmit: 'Send me the weekly read',
       emailSending: 'Sending…',
       emailOk: 'Check your inbox to confirm.',
       emailErr: 'Something went wrong. Please try again.',
       emailInvalid: 'Please enter a valid email address.',
       // Calculator inline CTA
-      whatifCtaLabel: 'Want to know when the signal says it\'s time to act?',
-      whatifCtaBtn: 'Notify me →',
+      whatifCtaLabel: 'See how the market looks, every Sunday.',
+      whatifCtaBtn: 'Send me the weekly read →',
       multiplierLabel: 'your money back',
       emailConfirmed: 'You\'re confirmed. Alerts are on.',
       emailUnsubscribed: 'You\'ve been unsubscribed.',
       emailTrustPre: 'Join',
       emailTrustPost: 'others on the signal.',
       mockupTimeNow: 'now',
-      mockupEmailSubject: 'Bitcoin dropped 4.1% in 4 hours.',
-      mockupEmailPreview: 'Hey there, the signal just changed: markets are fearful…',
+      mockupEmailSubject: 'Bitcoin dropped 5.2% today.',
+      mockupEmailPreview: 'Market mood reads fear and the price is 4.2% below its 200-day average…',
       // Partner section
       partnerEyebrow: 'Ready to act on the signal?',
       partnerRelaiDesc: "Buy Bitcoin in minutes. No altcoins, no complexity. Just Bitcoin, straight to a wallet only you control.",
@@ -3442,25 +3442,25 @@
       shareX: 'Auf X teilen',
       // Alerts
       alertsLabel: 'Benachrichtigungen',
-      pushTitle: 'Verpasse keine<br><em>Signaländerung.</em>',
-      pushSub: 'Bitcoin bewegt sich schnell. Trag deine E-Mail ein und wir benachrichtigen dich sofort, wenn das Signal kippt, plus einen wöchentlichen Überblick jeden Sonntag.',
+      pushTitle: 'Das Bitcoin-Wetter,<br><em>jeden Sonntag.</em>',
+      pushSub: 'Eine kurze E-Mail pro Woche, plus ein Hinweis, wenn Bitcoin an einem Tag um mehr als 3 % steigt oder fällt. Kostenlos, ohne Konto, Abmeldung mit einem Klick.',
       pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit abmeldbar',
       emailPlaceholder: 'deine@email.com',
-      emailSubmit: 'Benachrichtigen',
+      emailSubmit: 'Wochenüberblick erhalten',
       emailSending: 'Wird gesendet…',
       emailOk: 'Bitte bestätige deine E-Mail.',
       emailErr: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
       emailInvalid: 'Bitte eine gültige E-Mail-Adresse eingeben.',
       emailConfirmed: 'Bestätigt. Du erhältst ab jetzt Alerts.',
       emailUnsubscribed: 'Du wurdest abgemeldet.',
-      emailTrustPre: '',
-      emailTrustPost: 'weitere erhalten den Bitcoin-Signal.',
+      emailTrustPre: 'Schon',
+      emailTrustPost: 'Leser sind dabei.',
       mockupTimeNow: 'jetzt',
-      mockupEmailSubject: 'Bitcoin fiel 4,1% in 4 Stunden.',
-      mockupEmailPreview: 'Hey, das Signal hat sich geändert: Märkte in Panik…',
+      mockupEmailSubject: 'Bitcoin fiel heute um 5,2 %.',
+      mockupEmailPreview: 'Die Marktstimmung zeigt Angst, der Preis liegt 4,2 % unter dem 200-Tage-Schnitt…',
       // Calculator inline CTA
-      whatifCtaLabel: 'Willst du wissen, wann das Signal zum Handeln aufruft?',
-      whatifCtaBtn: 'Benachrichtigen →',
+      whatifCtaLabel: 'So sieht der Markt aus, jeden Sonntag.',
+      whatifCtaBtn: 'Wochenüberblick erhalten →',
       multiplierLabel: 'dein Geld zurück',
       // Partner section
       partnerEyebrow: 'Bereit zu handeln?',

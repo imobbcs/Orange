@@ -39,8 +39,8 @@ function signalLabel(s: SignalState, lang: Lang): string {
 // to imply a course of action without stating it outright — this says the
 // same underlying thing (why the signal reads the way it does) as a checkable
 // fact about the three indicators instead of a claim about other people.
-// The 'caution' pool in particular no longer dampens a pump day: greed being
-// elevated isn't framed as a warning, just as "not the moment to add extra".
+// Voice: describe the market and how long-term holders tend to see it, third person.
+// Never buy/sell/wait advice. Both directions are good news for a long-term holder.
 function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string {
   const dayIndex = Math.floor(Date.now() / 86400000);
   const hotPump  = change24h !== undefined && change24h >= 5;
@@ -50,23 +50,23 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
     accumulate: {
       en: hardDump ? [
         'A drop this sharp is exactly the kind of day the signal is built for.',
-        'Fear spiking alongside a move this size is what a real buying-zone reading looks like.',
+        'Fear spiking alongside a move this size. Long-term holders tend to see days like this as cheaper sats.',
         'This is the setup the signal watches for: a sharp move down with fear to match.',
         'Fear, trend, and distance from the highs are all lining up hard right now.',
       ] : [
         'Fear is elevated and price is sitting below its long-term trend.',
-        'This is what the signal treats as a buying zone: fear up, price stretched below trend.',
+        'Fear up, price below its long-term trend. Long-term holders tend to see this as cheaper sats.',
         'Fear, trend, and distance from the highs are all leaning the same way.',
         'The setup the signal is built to catch: elevated fear, price below trend.',
       ],
       de: hardDump ? [
         'Ein so starker Rückgang ist genau das Muster, für das das Signal gebaut ist.',
-        'Ein Kursrutsch dieser Größe zusammen mit hoher Angst &#8202;&#8212;&#8202; das ist eine echte Kaufzonen-Lesung.',
+        'Ein Kursrutsch dieser Größe bei hoher Angst. Langfristige Halter sehen solche Tage meist als günstigere Sats.',
         'Genau dieses Muster beobachtet das Signal: starker Rückgang bei hoher Angst.',
         'Angst, Trend und Abstand vom Hoch zeigen gerade alle stark in dieselbe Richtung.',
       ] : [
         'Die Angst ist erhöht, der Preis liegt unter dem langfristigen Trend.',
-        'Das ist die Kaufzonen-Lesung: Angst hoch, Preis unter dem Trend.',
+        'Angst hoch, Preis unter dem langfristigen Trend. Langfristige Halter sehen das meist als günstigere Sats.',
         'Angst, Trend und Abstand vom Hoch zeigen alle in dieselbe Richtung.',
         'Das Muster, auf das das Signal reagiert: erhöhte Angst, Preis unter dem Trend.',
       ],
@@ -87,26 +87,26 @@ function signalBehaviour(s: SignalState, lang: Lang, change24h?: number): string
     },
     caution: {
       en: hotPump ? [
-        'Big green day. The signal just isn\'t flagging it as a moment to add extra.',
-        'Enjoy the move &#8202;&#8212;&#8202; greed is elevated, so the signal leans toward patience over chasing it.',
-        'This is what holding through the quiet stretches is for. No need to chase from here.',
-        'Nothing wrong with the move itself, greed is just elevated enough that the signal says pace it.',
+        'Big green day. Long-term holders tend to enjoy days like this and keep their regular plan.',
+        'Enjoy the move. Greed is elevated and price is stretched above its trend.',
+        'This is what holding through the quiet stretches is for.',
+        'A day to celebrate. Long-term holders tend to keep their regular plan through moves like this.',
       ] : [
         'Greed is elevated and price is running hot above its trend.',
         'Fear, trend, and distance from the highs are all reading hot at once.',
-        'This is the setup where the signal leans toward patience over urgency.',
-        'Greed up, price stretched above trend &#8202;&#8212;&#8202; the signal\'s cue to pace new buys.',
+        'A hot reading. Long-term holders tend to enjoy it and keep their regular plan.',
+        'Greed up, price stretched above trend. Long-term holders tend to keep their regular plan.',
       ],
       de: hotPump ? [
-        'Starker grüner Tag. Das Signal markiert ihn nur nicht als Moment zum Nachkaufen.',
-        'Genieß die Bewegung &#8202;&#8212;&#8202; die Gier ist erhöht, deshalb neigt das Signal zu Geduld statt Hinterherlaufen.',
-        'Dafür hält man durch die ruhigen Phasen. Nachjagen muss man von hier aus trotzdem nicht.',
-        'An der Bewegung ist nichts falsch, die Gier ist nur erhöht genug, dass das Signal zum Tempodrosseln rät.',
+        'Starker grüner Tag. Langfristige Halter genießen solche Tage meist und bleiben bei ihrem Plan.',
+        'Genieß die Bewegung. Die Gier ist erhöht, der Preis liegt deutlich über dem Trend.',
+        'Dafür hält man durch die ruhigen Phasen.',
+        'Ein Tag zum Feiern. Langfristige Halter bleiben bei solchen Bewegungen meist bei ihrem Plan.',
       ] : [
         'Die Gier ist erhöht, der Preis läuft heiß über dem Trend.',
         'Angst, Trend und Abstand vom Hoch lesen sich gerade alle heiß.',
-        'Genau hier neigt das Signal zu Geduld statt Eile.',
-        'Gier hoch, Preis weit über dem Trend &#8202;&#8212;&#8202; das Zeichen des Signals, neue Käufe zu drosseln.',
+        'Eine heiße Lesung. Langfristige Halter genießen das meist und bleiben bei ihrem Plan.',
+        'Gier hoch, Preis weit über dem Trend. Langfristige Halter bleiben meist bei ihrem regulären Plan.',
       ],
     },
   };
@@ -145,8 +145,8 @@ function cycleMarker(lang: Lang): { label: string; text: string } {
   const daysSince = Math.floor((Date.now() - LAST_HALVING) / 86400000);
   const label = lang === 'de' ? 'Halving-Zyklus' : 'Halving cycle';
   const text = lang === 'de'
-    ? `Tag <strong style="color:#F7931A;">${daysSince}</strong> in Zyklus 5 &#8202;&#8212;&#8202; ${daysSince} Tage seit dem letzten Halving.`
-    : `Day <strong style="color:#F7931A;">${daysSince}</strong> of cycle 5 &#8202;&#8212;&#8202; ${daysSince} days since the last halving.`;
+    ? `Tag <strong style="color:#F7931A;">${daysSince}</strong> in Zyklus 5: ${daysSince} Tage seit dem letzten Halving.`
+    : `Day <strong style="color:#F7931A;">${daysSince}</strong> of cycle 5: ${daysSince} days since the last halving.`;
   return { label, text };
 }
 
@@ -168,8 +168,8 @@ function weekChangeSummary(fgValue: number, prevFgValue: number | undefined, lan
   if (prevFgValue == null || prevFgValue === fgValue) return null;
   const trend = fgTrendWord(fgValue, prevFgValue, lang);
   return lang === 'de'
-    ? `Fear &amp; Greed ist seit letzter Woche von ${prevFgValue} auf ${fgValue} ${trend} &#8202;&#8212;&#8202; das ist die eigentliche Geschichte dieser Woche.`
-    : `Fear &amp; Greed has ${trend} since last week, from ${prevFgValue} to ${fgValue} &#8202;&#8212;&#8202; that's the real story this week.`;
+    ? `Fear &amp; Greed ist seit letzter Woche von ${prevFgValue} auf ${fgValue} ${trend}. Das ist die eigentliche Geschichte dieser Woche.`
+    : `Fear &amp; Greed has ${trend} since last week, from ${prevFgValue} to ${fgValue}. That's the real story this week.`;
 }
 
 // Small "was X" subtext rendered under a stat box when a prior value exists
@@ -199,12 +199,12 @@ function shell(opts: {
   const unsubLabel  = lang === 'de' ? 'Abmelden'              : 'Unsubscribe';
   const replyLine   = replyTo
     ? (lang === 'de'
-        ? 'Fragen? Antworte einfach auf diese Mail &#8202;&#8212;&#8202; ich lese sie persönlich.'
-        : 'Questions? Just hit reply &#8202;&#8212;&#8202; it&#39;s really me.')
+        ? 'Fragen? Antworte einfach auf diese Mail. Ich lese sie persönlich.'
+        : 'Questions? Just hit reply. It&#39;s really me.')
     : '';
   const disclaimer  = lang === 'de'
-    ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit &#8202;&#8212;&#8202; keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten. Bitte triff eigene, informierte Entscheidungen.'
-    : 'Not financial advice. When to Buy BTC provides market data only &#8202;&#8212;&#8202; not a recommendation to buy, sell, or hold any asset. Always do your own research.';
+    ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit, keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten. Bitte triff eigene, informierte Entscheidungen.'
+    : 'Not financial advice. When to Buy BTC provides market data only, not a recommendation to buy, sell, or hold any asset. Always do your own research.';
   const location    = lang === 'de' ? 'Wien, &#214;sterreich' : 'Vienna, Austria';
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -491,12 +491,12 @@ export function confirmationEmail(
     : 'Confirm your Bitcoin signal alerts';
 
   const preheader = lang === 'de'
-    ? 'Ein Tap zur Bestätigung, und du verpasst kein Signal mehr.'
-    : 'One tap to confirm, then you\'ll never miss a signal change.';
+    ? 'Ein Tap zur Bestätigung, dann kommt jeden Sonntag dein Wochenüberblick.'
+    : 'One tap to confirm, then your weekly read arrives every Sunday.';
 
   const footerReason = lang === 'de'
-    ? 'Du erhältst diese E-Mail, weil du dich auf whentobuybtc.xyz angemeldet hast. Dies ist eine einmalige Bestätigung &#8202;&#8212;&#8202; bis zur Bestätigung werden keine weiteren E-Mails versendet.'
-    : 'You\'re receiving this because you subscribed at whentobuybtc.xyz. This is a one-time confirmation &#8202;&#8212;&#8202; no further emails will be sent until you confirm.';
+    ? 'Du erhältst diese E-Mail, weil du dich auf whentobuybtc.xyz angemeldet hast. Dies ist eine einmalige Bestätigung. Bis zur Bestätigung werden keine weiteren E-Mails versendet.'
+    : 'You\'re receiving this because you subscribed at whentobuybtc.xyz. This is a one-time confirmation. No further emails will be sent until you confirm.';
 
   const signalTeaser = signal
     ? `<p class="em2" style="margin:0 0 24px;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.05em;color:rgba(237,232,222,0.55);">${lang === 'de' ? 'Gerade jetzt' : 'Right now'}: <span style="color:${signalColor(signal)};font-weight:700;">${signalLabel(signal, lang)}</span></p>`
@@ -510,10 +510,10 @@ export function confirmationEmail(
     ${rule}
     ${signalTeaser}
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
-      Ein Tap &#8202;&#8212;&#8202; und du erhältst Benachrichtigungen, sobald sich das Bitcoin-Signal ändert, sowie jeden Sonntag einen wöchentlichen Überblick.
+      Ein Tap, und du bekommst jeden Sonntag einen kurzen Wochenüberblick, plus einen Hinweis, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt.
     </p>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
-      Dies ist eine Sicherheitsbestätigung &#8202;&#8212;&#8202; wir möchten sicherstellen, dass du es wirklich bist. Deine Adresse wird niemals an Dritte weitergegeben, und du kannst dich jederzeit mit einem Klick abmelden.
+      Dies ist eine Sicherheitsbestätigung. Wir möchten sicherstellen, dass du es wirklich bist. Deine Adresse wird niemals an Dritte weitergegeben, und du kannst dich jederzeit mit einem Klick abmelden.
     </p>
     ${ctaButton(confirmUrl, 'E-Mail bestätigen', 240)}
     <p class="ed" style="margin:22px 0 0;font-family:'Courier New',Courier,monospace;font-size:10px;color:rgba(237,232,222,0.42);line-height:1.7;">
@@ -532,7 +532,7 @@ export function confirmationEmail(
     ${rule}
     ${signalTeaser}
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;font-style:italic;line-height:1.8;color:rgba(237,232,222,0.88);">
-      You&#39;re one tap away from receiving alerts the moment the Bitcoin signal changes &#8202;&#8212;&#8202; and a weekly digest every Sunday.
+      You&#39;re one tap away from a short weekly read every Sunday, plus a note when Bitcoin moves more than 3% in a day.
     </p>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">
       We sent this to make sure it's you. Your address will never be shared with third parties, and you can unsubscribe instantly at any time.
@@ -554,6 +554,41 @@ export function confirmationEmail(
 // ═══════════════════════════════════════════════════════════════════════════════
 // TEMPLATE 2: Signal alert
 // ═══════════════════════════════════════════════════════════════════════════════
+
+// ─── Alert explanation ────────────────────────────────────────────────────────
+// Built from the actual readings, never from the price direction alone, so it can't
+// claim the indicators agree when they don't. Agreement uses the same thresholds as
+// the score (Fear & Greed below 50 and price below its 200-day average both count
+// toward the low-price side). Third person, never advice.
+export function alertExplanation(signal: SignalState, fgValue: number, maPct: number, lang: Lang): string {
+  const below  = maPct < 0;
+  const absMa  = Math.abs(maPct).toFixed(1);
+  const moodEn = fgValue < 25 ? 'extreme fear' : fgValue < 47 ? 'fear' : fgValue < 55 ? 'neutral' : fgValue < 76 ? 'greed' : 'extreme greed';
+  const moodDe = fgValue < 25 ? 'extreme Angst' : fgValue < 47 ? 'Angst' : fgValue < 55 ? 'neutral' : fgValue < 76 ? 'Gier' : 'extreme Gier';
+  const readEn = `Market mood reads ${moodEn} (Fear &amp; Greed ${fgValue}) and the price is ${absMa}% ${below ? 'below' : 'above'} its 200-day average.`;
+  const readDe = `Die Marktstimmung zeigt ${moodDe} (Fear &amp; Greed ${fgValue}), und der Preis liegt ${absMa.replace('.', ',')}&nbsp;% ${below ? 'unter' : '\u00fcber'} seinem 200-Tage-Schnitt.`;
+  const disagree = (fgValue < 50) !== below;
+  const take: Record<string, { en: string; de: string }> = {
+    accumulate: {
+      en: 'Together with the distance from the peak, prices are low compared with recent history. Long-term holders tend to see days like this as cheaper sats.',
+      de: 'Zusammen mit dem Abstand vom Hoch sind die Preise niedrig im Vergleich zur j\u00fcngsten Vergangenheit. Langfristige Halter sehen solche Tage meist als g\u00fcnstigere Sats.',
+    },
+    caution: {
+      en: 'Together with the distance from the peak, prices are stretched. Long-term holders tend to enjoy days like this and keep their regular plan.',
+      de: 'Zusammen mit dem Abstand vom Hoch sind die Preise gestreckt. Langfristige Halter genie\u00dfen solche Tage meist und bleiben bei ihrem Plan.',
+    },
+    holdSplit: {
+      en: 'The two readings point different ways, so the signal stays in the middle. Most long-term holders simply keep their regular plan.',
+      de: 'Die beiden Werte zeigen in unterschiedliche Richtungen, deshalb bleibt das Signal in der Mitte. Die meisten langfristigen Halter bleiben einfach bei ihrem Plan.',
+    },
+    holdCalm: {
+      en: 'Neither reading is extreme, so the signal stays in the middle. Most long-term holders simply keep their regular plan.',
+      de: 'Keiner der Werte ist extrem, deshalb bleibt das Signal in der Mitte. Die meisten langfristigen Halter bleiben einfach bei ihrem Plan.',
+    },
+  };
+  const key = signal === 'hold' ? (disagree ? 'holdSplit' : 'holdCalm') : signal;
+  return lang === 'de' ? `${readDe} ${take[key].de}` : `${readEn} ${take[key].en}`;
+}
 
 export function alertEmail(opts: {
   price:            number;
@@ -583,27 +618,21 @@ export function alertEmail(opts: {
 
   const greeting = lang === 'de'
     ? isDown
-      ? `Bitcoin ist heute deutlich gefallen &#8202;&#8212;&#8202; ein Tag, auf den langfristige Bitcoiner vorbereitet sind.`
+      ? `Bitcoin ist heute deutlich gefallen. Ein Tag, auf den langfristige Bitcoiner vorbereitet sind.`
       : `Bitcoin steht heute deutlich im Plus. Wenn du die ruhigen Phasen durchgehalten hast, ist das hier der Teil, der sich auszahlt.`
     : isDown
-      ? `Bitcoin has dropped sharply today &#8202;&#8212;&#8202; the kind of day long-term Bitcoiners plan for in advance.`
+      ? `Bitcoin has dropped sharply today. The kind of day long-term Bitcoiners plan for in advance.`
       : `Bitcoin is up sharply today. If you've been holding through the quiet stretches, this is the part that makes it worth it.`;
 
-  const context = lang === 'de'
-    ? isDown
-      ? 'Fear &amp; Greed, der 200-Tage-Trend und der Abstand vom Hoch zeigen gerade alle in dieselbe Richtung. Das ist seltener als ein einzelner Angst-Ausschlag, und genau das macht daraus ein echtes Signal statt nur Rauschen.'
-      : 'Fear &amp; Greed, der 200-Tage-Trend und der Abstand vom Hoch lesen sich gerade alle heiß. Deshalb nennt das Signal das eine Geduldzone: an der Bewegung selbst ist nichts falsch, nur ist es nicht der Moment, um zusätzlich nachzukaufen.'
-    : isDown
-      ? 'Fear &amp; Greed, the 200-day trend, and distance from the highs are all pointing the same way right now. That\'s rarer than a fear spike on its own, which is what makes this a real signal instead of just noise.'
-      : 'Fear &amp; Greed, the 200-day trend, and distance from the highs are all reading hot together right now. That\'s why the signal calls this a patience zone: nothing wrong with the move itself, just not the moment to add extra.';
+  const context = alertExplanation(signal, fgValue, maPct, lang);
 
   const subject = lang === 'de'
-    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}% \u2014 Signal jetzt: ${label}`
-    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}% \u2014 signal now: ${label.toLowerCase()}`;
+    ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} ${pct}%. Signal jetzt: ${label}`
+    : `Bitcoin ${isDown ? 'dropped' : 'surged'} ${pct}%. Signal now: ${label.toLowerCase()}`;
 
   const preheader = lang === 'de'
-    ? `${headline} &#8202;&#8212;&#8202; Signal jetzt: ${label}.`
-    : `${headline} &#8202;&#8212;&#8202; signal now: ${label.toLowerCase()}.`;
+    ? `${headline}. Signal jetzt: ${label}.`
+    : `${headline}. Signal now: ${label.toLowerCase()}.`;
 
   const headerRight = lang === 'de' ? 'Signal-Alert' : 'Signal alert';
 
@@ -647,7 +676,7 @@ export function alertEmail(opts: {
     </table>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${context}</p>
     ${marketBlock ?? ''}${disclaimerBox(disclaimerText)}
-    ${ctaButton('https://whentobuybtc.xyz/?utm_source=email&utm_medium=alert&utm_campaign=cta#alerts', ctaLabel, 240)}
+    ${ctaButton('https://whentobuybtc.xyz/?utm_source=email&utm_medium=alert&utm_campaign=cta#signal', ctaLabel, 240)}
     ${forwardAskLine(lang, subscriberCount, subscriberGoal)}
   `;
 
@@ -725,8 +754,8 @@ export function digestEmail(opts: {
       de: 'Die Märkte sind weder ängstlich noch überhitzt. Wer einen Plan hat, hält ihn.',
     },
     caution: {
-      en: 'Greed is elevated across the board. That\'s not a warning on its own, it\'s just where the signal leans toward patience over urgency.',
-      de: 'Die Gier ist insgesamt erhöht. Das ist für sich genommen keine Warnung &#8202;&#8212;&#8202; das Signal neigt hier nur zu Geduld statt Eile.',
+      en: 'Greed is elevated across the board. Long-term holders tend to enjoy stretches like this and keep their regular plan.',
+      de: 'Die Gier ist insgesamt erhöht. Langfristige Halter genießen solche Phasen meist und bleiben bei ihrem Plan.',
     },
   };
 
@@ -769,9 +798,9 @@ export function digestEmail(opts: {
   // Falls back to nothing (not an error) on the first-ever send.
   const changeSummary = weekChangeSummary(fgValue, prevFgValue, lang);
 
-  // UTM-tagged CTA. Query string MUST come before the #alerts fragment, or the
+  // UTM-tagged CTA. Query string MUST come before the #signal fragment, or the
   // params get swallowed into the hash and Umami never sees them.
-  const ctaUrl = 'https://whentobuybtc.xyz/?utm_source=email&utm_medium=digest&utm_campaign=cta#alerts';
+  const ctaUrl = 'https://whentobuybtc.xyz/?utm_source=email&utm_medium=digest&utm_campaign=cta#signal';
 
   const body = `
     <p class="em" style="margin:0 0 20px;font-family:Georgia,'Times New Roman',Times,serif;font-size:15px;line-height:1.75;color:rgba(237,232,222,0.88);">${greetingLine}</p>
