@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Market Context Strip</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap">
+<style>
+  /* Layout: the site's own instrument-panel language; context sentence leads, six-tile market row, correlation footer.
+     Tokens copied 1:1 from public/app.html so this block can be lifted into production unchanged. */
+  :root {
+    --bg:       #09080A;
+    --bg2:      #0f0d10;
+    --bg3:      #161318;
+    --border:   rgba(247,147,26,0.08);
+    --border2:  rgba(247,147,26,0.18);
+    --orange:   #F7931A;
+    --orange-dim: rgba(247,147,26,0.07);
+    --white:    #EDE8DE;
+    --muted:    rgba(237,232,222,0.75);
+    --grey:     #8A837A; /* site uses #4A4540 at low opacity; lifted here for legible small labels */
+    --green:    #4ADE80;
+    --red:      #F87171;
+    --amber:    #FBBF24;
+    --display:  'Cormorant Garamond', Georgia, serif;
+    --mono:     'DM Mono', ui-monospace, Menlo, monospace;
+    --title:    'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--white);
+    font-family: var(--display);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 4rem;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+
+  /* ── Prototype controls (not part of production) ── */
+  .proto-bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: var(--bg); border-bottom: 1px dashed var(--border2);
+    padding-block: 0.9rem; margin-bottom: 3rem;
+    display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; justify-content: space-between;
+  }
+  .proto-tag { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); }
+  .proto-groups { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; }
+  .seg { display: flex; border: 1px solid var(--border2); }
+  .seg button {
+    font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: transparent; color: var(--muted); border: 0; padding: 0.5rem 0.8rem; cursor: pointer;
+  }
+  .seg button + button { border-left: 1px solid var(--border2); }
+  .seg button[aria-pressed="true"] { background: var(--orange-dim); color: var(--orange); }
+  .seg button:focus-visible { outline: 1px solid var(--orange); outline-offset: -1px; }
+
+  /* ── Section heading (site styles) ── */
+  .section-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--orange); margin: 0 0 1.25rem; }
+  .section-title { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 300; font-style: italic; line-height: 1.18; margin: 0 0 0.75rem; text-wrap: balance; }
+  .section-sub { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 54ch; margin: 0 0 2.5rem; }
+
+  /* ── Panel ── */
+  .panel { border: 1px solid rgba(247,147,26,0.15); background: rgba(247,147,26,0.02); position: relative; overflow: hidden; }
+  .panel::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent); }
+  .p-head { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid rgba(247,147,26,0.1); }
+  .p-head-left { display: flex; align-items: center; gap: 1rem; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .dot.closed { background: var(--grey); box-shadow: none; }
+  .mono-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .p-head .mono-label { color: var(--orange); opacity: 0.8; }
+  .p-head .stamp { color: var(--grey); letter-spacing: 0.14em; }
+
+  /* Context sentence: the one bold element */
+  .ctx { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem 1.5rem; align-items: baseline; padding: 2rem 2rem 1.8rem; border-bottom: 1px solid var(--border); }
+  .chip {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 0.35rem 0.6rem; border: 1px solid currentColor; white-space: nowrap; align-self: center;
+  }
+  .chip.with { color: var(--red); } .chip.with.up { color: var(--green); }
+  .chip.only { color: var(--orange); }
+  .chip.against { color: var(--amber); }
+  .chip.closed, .chip.quiet { color: var(--grey); }
+  .ctx-text { font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.3; margin: 0; text-wrap: balance; min-width: 0; }
+  .ctx-text .dollar { color: var(--muted); }
+  .ctx-none { color: var(--muted); }
+
+  /* Tiles */
+  .tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .tile { padding: 1.5rem 1.5rem 1.4rem; min-width: 0; position: relative; }
+  .tile + .tile { border-left: 1px solid var(--border); }
+  .tile.btc { background: var(--orange-dim); }
+  .tile.btc::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: var(--orange); opacity: 0.6; }
+  .t-name { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile.btc .t-name { color: var(--orange); }
+  .t-val { font-family: var(--title); font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 0.95; letter-spacing: 0.01em; margin-bottom: 0.7rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .t-val small { font-size: 0.55em; color: var(--muted); margin-left: 0.15em; }
+  .t-chg { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; font-family: var(--mono); font-size: 0.68rem; font-variant-numeric: tabular-nums; }
+  .t-chg span { white-space: nowrap; }
+  .t-chg em { font-style: normal; color: var(--grey); margin-right: 0.35em; font-size: 0.85em; letter-spacing: 0.08em; }
+  .up { color: var(--green); } .down { color: var(--red); } .flat { color: var(--muted); }
+  .t-date { margin-top: 0.6rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+  .t-missing .t-val { color: var(--grey); }
+
+  /* Footer */
+  .p-foot { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; align-items: center; padding: 1rem 2rem; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); }
+  .p-foot b { font-weight: 400; color: var(--white); }
+  .corr { display: flex; align-items: center; gap: 0.75rem; }
+  .corr-track { position: relative; width: 120px; height: 2px; background: rgba(255,255,255,0.08); }
+  .corr-track::after { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 8px; background: var(--grey); }
+  .corr-mark { position: absolute; top: -4px; width: 6px; height: 10px; background: var(--orange); transform: translateX(-50%); transition: left 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .sources { margin-left: auto; }
+
+  /* Email preview */
+  .email { margin-top: 4rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 2.5rem; align-items: start; }
+  .email-note h3 { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 1.6rem; margin: 0 0 0.75rem; }
+  .email-note p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin: 0 0 0.75rem; max-width: 46ch; }
+  .mail { border: 1px solid var(--border2); background: var(--bg2); padding: 1.5rem 1.6rem; font-family: var(--mono); font-size: 0.78rem; line-height: 1.7; color: var(--muted); min-width: 0; }
+  .mail .subj { color: var(--white); font-size: 0.85rem; margin-bottom: 1rem; }
+  .mail .line { border-left: 2px solid var(--orange); padding: 0.6rem 0.9rem; background: var(--orange-dim); color: var(--white); margin: 1rem 0; overflow-wrap: anywhere; }
+  .mail .line .why { display: block; color: var(--muted); margin-top: 0.25rem; }
+  .mail .new { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--orange); text-transform: uppercase; }
+
+  @media (max-width: 1100px) {
+    .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tile:nth-child(3n+1) { border-left: 0; }
+    .tile:nth-child(n+4) { border-top: 1px solid var(--border); }
+  }
+  @media (max-width: 640px) {
+    .p-head, .ctx, .p-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
+    .ctx { grid-template-columns: 1fr; }
+    .chip { justify-self: start; }
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tile { padding: 1.2rem 1.1rem; }
+    .tile:nth-child(n) { border-left: 0; border-top: 1px solid var(--border); }
+    .tile:nth-child(even) { border-left: 1px solid var(--border); }
+    .tile:nth-child(-n+2) { border-top: 0; }
+    .sources { margin-left: 0; }
+    .email { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .corr-mark { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="proto-bar">
+    <span class="proto-tag">Prototype · sample data · not live</span>
+    <div class="proto-groups">
+      <div class="seg" role="group" aria-label="Scenario">
+        <button id="sc-riskoff" data-sc="riskoff" aria-pressed="true">Risk-off day</button>
+        <button id="sc-btconly" data-sc="btconly" aria-pressed="false">Bitcoin-only</button>
+        <button id="sc-weekend" data-sc="weekend" aria-pressed="false">Weekend</button>
+        <button id="sc-partial" data-sc="partial" aria-pressed="false">Source down</button>
+      </div>
+      <div class="seg" role="group" aria-label="Language">
+        <button id="lang-en" data-lang="en" aria-pressed="true">EN</button>
+        <button id="lang-de" data-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label" id="t-label">Market Context</p>
+  <h2 class="section-title" id="t-title">Is it Bitcoin, or the whole market?</h2>
+  <p class="section-sub" id="t-sub">Bitcoin rarely moves alone. Here is what US stocks, the dollar, rates and gold did in the last session.</p>
+
+  <div class="panel">
+    <div class="p-head">
+      <div class="p-head-left"><div class="dot" id="dot"></div><span class="mono-label" id="t-panel">Market Context: Live</span></div>
+      <span class="mono-label stamp" id="stamp"></span>
+    </div>
+    <div class="ctx" id="ctx"></div>
+    <div class="tiles" id="tiles"></div>
+    <div class="p-foot">
+      <span class="corr" id="corr"></span>
+      <span id="eurusd"></span>
+      <span class="sources" id="t-sources">Data: FRED · ECB · CoinGecko</span>
+    </div>
+  </div>
+
+  <div class="email">
+    <div class="email-note">
+      <h3 id="t-email-h">Same context, in the alert email</h3>
+      <p id="t-email-p1">One extra line under the price move. It uses the same rules as the site, so the email and the page never disagree.</p>
+      <p id="t-email-p2">Ships in step 3 behind a switch that stays off until you've tested it on yourself.</p>
+    </div>
+    <div class="mail" aria-label="Email preview">
+      <div class="subj" id="mail-subj"></div>
+      <div id="mail-body1"></div>
+      <div class="line"><span class="new" id="t-new">New</span><br><span id="mail-line"></span><span class="why" id="mail-why"></span></div>
+      <div id="mail-body2"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCENARIOS = [{"name":"riskoff","nowLabel":"Tue 14 Oct, 15:00","payload":{"status":"open","lastUsClose":"2026-10-13","btc":{"price":104180,"change24h":-6.2,"change30d":-8.4},"markets":{"spx":{"value":6612.4,"date":"2026-10-13","change1d":-2.1,"change30d":-1.8},"ndx":{"value":22184.7,"date":"2026-10-13","change1d":-2.9,"change30d":-3.1},"us10y":{"value":4.21,"date":"2026-10-13","change1d":6,"change30d":18},"dxy":{"value":99.84,"date":"2026-10-13","change1d":0.52,"change30d":1.4},"gold":{"value":4012.5,"date":"2026-10-13","change1d":1.1,"change30d":6.2},"eurusd":{"value":1.1612,"date":"2026-10-13","change1d":-0.31,"change30d":-1.2}},"correlation30d":0.64,"context":{"key":"withMarketDown","en":"Broad risk-off. Bitcoin is falling together with US stocks.","de":"Breiter Risk-off. Bitcoin fällt gemeinsam mit US-Aktien.","dollar":{"en":"The US dollar is stronger.","de":"Der US-Dollar ist stärker."}}}},{"name":"btconly","nowLabel":"Tue 14 Oct, 15:00","payload":{"status":"open","lastUsClose":"2026-10-13","btc":{"price":104180,"change24h":4.8,"change30d":-8.4},"markets":{"spx":{"value":6731.2,"date":"2026-10-13","change1d":0.1,"change30d":0.4},"ndx":{"value":22790.3,"date":"2026-10-13","change1d":0.2,"change30d":0.9},"us10y":{"value":4.15,"date":"2026-10-13","change1d":-1,"change30d":12},"dxy":{"value":99.31,"date":"2026-10-13","change1d":-0.08,"change30d":0.6},"gold":{"value":3975,"date":"2026-10-13","change1d":0.2,"change30d":5.4},"eurusd":{"value":1.1655,"date":"2026-10-13","change1d":0.06,"change30d":-0.8}},"correlation30d":0.31,"context":{"key":"btcOnlyUp","en":"A Bitcoin-specific rise. US stocks were flat in the last session.","de":"Ein Bitcoin-spezifischer Anstieg. US-Aktien blieben in der letzten Sitzung stabil.","dollar":null}}},{"name":"weekend","nowLabel":"Sat 18 Oct, 11:00","payload":{"status":"weekend","lastUsClose":"2026-10-16","btc":{"price":104180,"change24h":-3.4,"change30d":-8.4},"markets":{"spx":{"value":6731.2,"date":"2026-10-16","change1d":0.4,"change30d":0.4},"ndx":{"value":22790.3,"date":"2026-10-16","change1d":0.6,"change30d":0.9},"us10y":{"value":4.15,"date":"2026-10-16","change1d":-2,"change30d":12},"dxy":{"value":99.31,"date":"2026-10-16","change1d":0.1,"change30d":0.6},"gold":{"value":3975,"date":"2026-10-17","change1d":0.2,"change30d":5.4},"eurusd":{"value":1.1655,"date":"2026-10-16","change1d":-0.1,"change30d":-0.8}},"correlation30d":0.52,"context":{"key":"weekend","en":"US markets are closed for the weekend. Bitcoin is trading on its own until Monday.","de":"Die US-Börsen sind am Wochenende geschlossen. Bitcoin handelt bis Montag für sich allein.","dollar":null}}},{"name":"partial","nowLabel":"Tue 14 Oct, 15:00","payload":{"status":"open","lastUsClose":"2026-10-13","btc":{"price":104180,"change24h":0.9,"change30d":-8.4},"markets":{"spx":null,"ndx":null,"us10y":null,"dxy":{"value":99.6,"date":"2026-10-13","change1d":0.05,"change30d":1.1},"gold":{"value":4001,"date":"2026-10-13","change1d":-0.3,"change30d":6},"eurusd":{"value":1.163,"date":"2026-10-13","change1d":0.02,"change30d":-1}},"correlation30d":null,"context":{"key":"quiet","en":"A calm day for Bitcoin. Nothing unusual against the wider market.","de":"Ein ruhiger Tag für Bitcoin. Nichts Auffälliges im Vergleich zum Gesamtmarkt.","dollar":null}}}];
+
+const T = {
+  en: {
+    label: 'Market Context', title: 'Is it Bitcoin, or the whole market?',
+    sub: 'Bitcoin rarely moves alone. Here is what US stocks, the dollar, rates and gold did in the last session.',
+    panel: 'Market Context: Live', lastClose: 'Last US close', closed: 'US markets closed',
+    names: { btc: 'Bitcoin · 24h', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US Dollar (DXY)', us10y: 'US 10Y Yield', gold: 'Gold · oz' },
+    d1: '1D', d24: '24H', d30: '30D', unavailable: 'Unavailable', retry: 'Source down, retrying',
+    chips: { weekend: 'Markets closed', holiday: 'Markets closed', quiet: 'Calm', btcOnlyDown: 'Bitcoin-specific', btcOnlyUp: 'Bitcoin-specific',
+      withMarketDown: 'With the market', withMarketUp: 'With the market', againstMarketDown: 'Against the market', againstMarketUp: 'Against the market' },
+    noCtx: 'Not enough market data right now to compare. Bitcoin figures above are live.',
+    corr: 'BTC ↔ Nasdaq 30D correlation', corrWords: ['weak', 'moderate', 'strong'], corrNA: 'n/a',
+    sources: 'Data: FRED · ECB · CoinGecko',
+    emailH: 'Same context, in the alert email',
+    emailP1: "One extra line under the price move. It uses the same rules as the site, so the email and the page never disagree.",
+    emailP2: "Ships in step 3 behind a switch that stays off until you've tested it on yourself.",
+    subj: (p) => `Bitcoin ${p > 0 ? 'up' : 'down'} ${Math.abs(p).toFixed(1)}% in 24h`,
+    body1: (p) => `Bitcoin is ${p > 0 ? 'up' : 'down'} ${Math.abs(p).toFixed(1)}% over the last 24 hours, now at $104,180.`,
+    body2: 'The signal is still Hold. Fear & Greed: 31. Price vs 200-day average: −4.2%.',
+    isNew: 'New', dateFmt: 'en-GB',
+  },
+  de: {
+    label: 'Marktumfeld', title: 'Ist es Bitcoin, oder der ganze Markt?',
+    sub: 'Bitcoin bewegt sich selten allein. Das haben US-Aktien, Dollar, Zinsen und Gold in der letzten Sitzung gemacht.',
+    panel: 'Marktumfeld: Live', lastClose: 'Letzter US-Schluss', closed: 'US-Börsen geschlossen',
+    names: { btc: 'Bitcoin · 24 Std', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US-Dollar (DXY)', us10y: 'US 10J Rendite', gold: 'Gold · Unze' },
+    d1: '1T', d24: '24S', d30: '30T', unavailable: 'Nicht verfügbar', retry: 'Quelle gestört',
+    chips: { weekend: 'Börsen zu', holiday: 'Börsen zu', quiet: 'Ruhig', btcOnlyDown: 'Bitcoin-spezifisch', btcOnlyUp: 'Bitcoin-spezifisch',
+      withMarketDown: 'Mit dem Markt', withMarketUp: 'Mit dem Markt', againstMarketDown: 'Gegen den Markt', againstMarketUp: 'Gegen den Markt' },
+    noCtx: 'Gerade zu wenige Marktdaten für einen Vergleich. Die Bitcoin-Werte oben sind live.',
+    corr: 'BTC ↔ Nasdaq 30T-Korrelation', corrWords: ['schwach', 'mittel', 'stark'], corrNA: 'k. A.',
+    sources: 'Daten: FRED · EZB · CoinGecko',
+    emailH: 'Derselbe Kontext in der Alert-E-Mail',
+    emailP1: 'Eine zusätzliche Zeile unter der Kursbewegung. Gleiche Regeln wie auf der Seite, damit E-Mail und Website nie auseinanderlaufen.',
+    emailP2: 'Kommt in Schritt 3 hinter einem Schalter, der aus bleibt, bis du ihn an dir selbst getestet hast.',
+    subj: (p) => `Bitcoin ${p > 0 ? '+' : '−'}${Math.abs(p).toFixed(1).replace('.', ',')} % in 24 Std`,
+    body1: (p) => `Bitcoin ist in den letzten 24 Stunden um ${Math.abs(p).toFixed(1).replace('.', ',')} % ${p > 0 ? 'gestiegen' : 'gefallen'} und steht bei 104.180 $.`,
+    body2: 'Das Signal steht weiter auf Halten. Fear & Greed: 31. Kurs vs. 200-Tage-Schnitt: −4,2 %.',
+    isNew: 'Neu', dateFmt: 'de-DE',
+  },
+};
+
+let sc = 'riskoff', lang = 'en';
+const $ = (id) => document.getElementById(id);
+
+function num(v, dp, l) { return v.toLocaleString(l === 'de' ? 'de-DE' : 'en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }); }
+function chg(v, unit, l) {
+  if (v === null || v === undefined) return '<span class="flat">—</span>';
+  const cls = Math.abs(v) < 0.05 ? 'flat' : v > 0 ? 'up' : 'down';
+  const sign = v > 0 ? '+' : v < 0 ? '−' : '';
+  const abs = Math.abs(v);
+  const txt = unit === 'bps' ? `${sign}${num(abs, 0, l)} bp` : `${sign}${num(abs, 2, l)}%`;
+  return `<span class="${cls}">${txt}</span>`;
+}
+function day(iso, l) {
+  const d = new Date(iso + 'T12:00:00Z');
+  return d.toLocaleDateString(T[l].dateFmt, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+}
+
+function render() {
+  const t = T[lang];
+  const { payload: p } = SCENARIOS.find((s) => s.name === sc);
+  ['label', 'title', 'sub', 'panel', 'sources'].forEach((k) => ($('t-' + k).textContent = t[k]));
+  $('t-email-h').textContent = t.emailH; $('t-email-p1').textContent = t.emailP1; $('t-email-p2').textContent = t.emailP2; $('t-new').textContent = t.isNew;
+  document.documentElement.lang = lang;
+
+  const closed = p.status !== 'open';
+  $('dot').className = 'dot' + (closed ? ' closed' : '');
+  $('stamp').textContent = (closed ? t.closed + ' · ' : '') + t.lastClose + ': ' + day(p.lastUsClose, lang);
+
+  // Context sentence
+  const c = p.context;
+  if (c) {
+    const dir = /Up$/.test(c.key) ? ' up' : '';
+    const kind = c.key.startsWith('with') ? 'with' : c.key.startsWith('btcOnly') ? 'only' : c.key.startsWith('against') ? 'against' : c.key === 'quiet' ? 'quiet' : 'closed';
+    $('ctx').innerHTML = `<span class="chip ${kind}${dir}">${t.chips[c.key]}</span><p class="ctx-text">${c[lang]}${c.dollar ? ' <span class="dollar">' + c.dollar[lang] + '</span>' : ''}</p>`;
+  } else {
+    $('ctx').innerHTML = `<span class="chip quiet">—</span><p class="ctx-text ctx-none">${t.noCtx}</p>`;
+  }
+
+  // Tiles
+  const m = p.markets;
+  const tiles = [
+    { k: 'btc', cls: 'btc', val: '$' + num(p.btc.price, 0, lang), a: [t.d24, chg(p.btc.change24h, 'pct', lang)], b: [t.d30, chg(p.btc.change30d, 'pct', lang)] },
+    ...[['spx', 0, ''], ['ndx', 0, ''], ['dxy', 2, ''], ['us10y', 2, '%'], ['gold', 0, '$']].map(([k, dp, u]) => {
+      const s = m[k];
+      if (!s) return { k, cls: 't-missing', val: '—', a: [t.d1, '<span class="flat">' + t.unavailable + '</span>'], b: null, date: t.retry };
+      const unit = k === 'us10y' ? 'bps' : 'pct';
+      const v = u === '$' ? '$' + num(s.value, dp, lang) : num(s.value, dp, lang) + (u ? '<small>' + u + '</small>' : '');
+      return { k, val: v, a: [t.d1, chg(s.change1d, unit, lang)], b: [t.d30, chg(s.change30d, unit, lang)], date: day(s.date, lang) };
+    }),
+  ];
+  $('tiles').innerHTML = tiles.map((x) => `
+    <div class="tile ${x.cls || ''}">
+      <div class="t-name">${t.names[x.k]}</div>
+      <div class="t-val">${x.val}</div>
+      <div class="t-chg"><span><em>${x.a[0]}</em>${x.a[1]}</span>${x.b ? `<span><em>${x.b[0]}</em>${x.b[1]}</span>` : ''}</div>
+      ${x.date ? `<div class="t-date">${x.date}</div>` : ''}
+    </div>`).join('');
+
+  // Footer: correlation + EUR/USD
+  const r = p.correlation30d;
+  if (r === null) {
+    $('corr').innerHTML = `${t.corr} <b>${t.corrNA}</b>`;
+  } else {
+    const w = t.corrWords[Math.abs(r) < 0.2 ? 0 : Math.abs(r) < 0.5 ? 1 : 2];
+    $('corr').innerHTML = `${t.corr} <span class="corr-track" aria-hidden="true"><span class="corr-mark" style="left:${(r + 1) * 50}%"></span></span><b>${num(r, 2, lang)}</b> ${w}`;
+  }
+  $('eurusd').innerHTML = m.eurusd ? `EUR/USD <b>${num(m.eurusd.value, 4, lang)}</b> ${chg(m.eurusd.change1d, 'pct', lang)}` : '';
+
+  // Email preview
+  const b24 = p.btc.change24h;
+  $('mail-subj').textContent = t.subj(b24);
+  $('mail-body1').textContent = t.body1(b24);
+  const parts = [];
+  if (m.ndx) parts.push(`Nasdaq ${chg(m.ndx.change1d, 'pct', lang).replace(/<[^>]+>/g, '')}`);
+  if (m.dxy) parts.push(`DXY ${chg(m.dxy.change1d, 'pct', lang).replace(/<[^>]+>/g, '')}`);
+  if (m.gold) parts.push(`Gold ${chg(m.gold.change1d, 'pct', lang).replace(/<[^>]+>/g, '')}`);
+  $('mail-line').textContent = `BTC ${chg(b24, 'pct', lang).replace(/<[^>]+>/g, '')} (24h) · ` + parts.join(' · ');
+  $('mail-why').textContent = c ? c[lang] + (c.dollar ? ' ' + c.dollar[lang] : '') : t.noCtx;
+  $('mail-body2').textContent = t.body2;
+}
+
+document.querySelectorAll('[data-sc]').forEach((b) => b.addEventListener('click', () => {
+  sc = b.dataset.sc;
+  document.querySelectorAll('[data-sc]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  render();
+}));
+document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
+  lang = b.dataset.lang;
+  document.querySelectorAll('[data-lang]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  render();
+}));
+render();
+</script>
+</body>
+</html>
