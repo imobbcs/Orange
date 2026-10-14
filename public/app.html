@@ -2276,6 +2276,71 @@
     .hero-content    { z-index: 15; }
 
 </style>
+  <!-- ═══ MARKET CONTEXT STRIP: CSS (start) ═══ -->
+  <style>
+    #context[hidden], #mc-rule[hidden] { display: none !important; }
+    .mc-panel { --mc-label: #8A837A; margin-top: 3rem; border: 1px solid rgba(247,147,26,0.15); background: rgba(247,147,26,0.02); position: relative; overflow: hidden; }
+    .mc-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent); }
+    .mc-head { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid rgba(247,147,26,0.1); }
+    .mc-head-left { display: flex; align-items: center; gap: 1rem; }
+    .mc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
+    .mc-dot.closed { background: var(--mc-label); box-shadow: none; }
+    .mc-head-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); opacity: 0.7; white-space: nowrap; }
+    .mc-stamp { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mc-label); }
+
+    .mc-ctx { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.6rem 1.5rem; align-items: center; padding: 2rem 2rem 1.8rem; border-bottom: 1px solid var(--border); }
+    .mc-chip { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.35rem 0.6rem; border: 1px solid currentColor; white-space: nowrap; color: var(--mc-label); }
+    .mc-chip.with { color: var(--red); } .mc-chip.with.up { color: var(--green); }
+    .mc-chip.only { color: var(--orange); }
+    .mc-chip.against { color: var(--amber); }
+    .mc-text { font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.3; margin: 0; color: var(--white); text-wrap: balance; }
+    .mc-text .mc-dollar { color: var(--muted); }
+
+    .mc-tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .mc-tile { padding: 1.5rem 1.5rem 1.4rem; min-width: 0; position: relative; }
+    .mc-tile + .mc-tile { border-left: 1px solid var(--border); }
+    .mc-tile.btc { background: var(--orange-dim); }
+    .mc-tile.btc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--orange); opacity: 0.6; }
+    .mc-name { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mc-label); margin-bottom: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mc-tile.btc .mc-name { color: var(--orange); }
+    .mc-val { font-family: var(--title); font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 0.95; letter-spacing: 0.01em; margin-bottom: 0.7rem; color: var(--white); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .mc-val small { font-size: 0.55em; color: var(--muted); margin-left: 0.15em; }
+    .mc-chg { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; font-family: var(--mono); font-size: 0.68rem; font-variant-numeric: tabular-nums; }
+    .mc-chg span { white-space: nowrap; }
+    .mc-chg em { font-style: normal; color: var(--mc-label); margin-right: 0.35em; font-size: 0.85em; letter-spacing: 0.08em; }
+    .mc-up { color: var(--green); } .mc-down { color: var(--red); } .mc-flat { color: var(--muted); }
+    .mc-date { margin-top: 0.6rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mc-label); }
+    .mc-tile.stale .mc-val, .mc-tile.stale .mc-chg, .mc-tile.missing .mc-val { opacity: 0.45; }
+    .mc-tile.stale .mc-date { color: var(--amber); }
+
+    .mc-foot { display: flex; flex-wrap: wrap; gap: 0.8rem 2.5rem; align-items: center; padding: 1rem 2rem; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mc-label); }
+    .mc-foot b { font-weight: 400; color: var(--white); }
+    .mc-corr { display: flex; align-items: center; gap: 0.75rem; }
+    .mc-corr-track { position: relative; width: 120px; height: 2px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+    .mc-corr-track::after { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 8px; background: var(--mc-label); }
+    .mc-corr-mark { position: absolute; top: -4px; width: 6px; height: 10px; background: var(--orange); transform: translateX(-50%); }
+    .mc-sources { margin-left: auto; text-align: right; }
+    .mc-fred { display: block; margin-top: 0.3rem; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: none; opacity: 0.8; }
+
+    @media (max-width: 1150px) {
+      .mc-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .mc-tile:nth-child(3n+1) { border-left: 0; }
+      .mc-tile:nth-child(n+4) { border-top: 1px solid var(--border); }
+    }
+    @media (max-width: 768px) {
+      .mc-head, .mc-ctx, .mc-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
+      .mc-ctx { grid-template-columns: 1fr; }
+      .mc-chip { justify-self: start; }
+      .mc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mc-tile { padding: 1.2rem 1.1rem; }
+      .mc-tile:nth-child(n) { border-left: 0; border-top: 1px solid var(--border); }
+      .mc-tile:nth-child(even) { border-left: 1px solid var(--border); }
+      .mc-tile:nth-child(-n+2) { border-top: 0; }
+      .mc-sources { margin-left: 0; text-align: left; }
+      .mc-corr { flex-wrap: wrap; row-gap: 0.5rem; }
+    }
+  </style>
+  <!-- ═══ MARKET CONTEXT STRIP: CSS (end) ═══ -->
 </head>
 <body>
 
@@ -2481,6 +2546,32 @@
     </div>
   </div>
 </section>
+
+<!-- ═══ MARKET CONTEXT STRIP: SECTION (start) · hidden until /api/macro answers ═══ -->
+<div class="ornament-rule" id="mc-rule" hidden><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
+
+<section class="section" id="context" hidden aria-labelledby="mc-title">
+  <div class="section-inner">
+    <p class="section-label" id="mc-label">Market Context</p>
+    <h2 class="section-title" id="mc-title">Is it Bitcoin,<br>or the whole market?</h2>
+    <p class="section-sub" id="mc-sub">Bitcoin rarely moves alone. This puts its last 24 hours next to US stocks, the dollar, rates and gold.</p>
+
+    <div class="mc-panel">
+      <div class="mc-head">
+        <div class="mc-head-left"><div class="mc-dot" id="mc-dot"></div><span class="mc-head-label" id="mc-panel-label">Market Context: Live</span></div>
+        <span class="mc-stamp" id="mc-stamp"></span>
+      </div>
+      <div class="mc-ctx" id="mc-ctx" aria-live="polite"></div>
+      <div class="mc-tiles" id="mc-tiles"></div>
+      <div class="mc-foot">
+        <span class="mc-corr" id="mc-corr"></span>
+        <span id="mc-eurusd"></span>
+        <span class="mc-sources"><span id="mc-sources-label">Data: FRED · ECB · CoinGecko</span><span class="mc-fred">This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ═══ MARKET CONTEXT STRIP: SECTION (end) ═══ -->
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
@@ -5310,5 +5401,137 @@
   <a href="#top">Back to top</a>
 </noscript>
 
+<!-- ═══ MARKET CONTEXT STRIP: SCRIPT (start) ═══
+     Self-contained: reads /api/macro, follows the page language via <html lang>,
+     touches no existing function or variable. If the API fails, the section stays hidden. -->
+<script>
+(function () {
+  var section = document.getElementById('context');
+  var rule = document.getElementById('mc-rule');
+  if (!section) return;
+
+  var S = {
+    en: {
+      label: 'Market Context', title: 'Is it Bitcoin,<br>or the whole market?',
+      sub: 'Bitcoin rarely moves alone. This puts its last 24 hours next to US stocks, the dollar, rates and gold.',
+      panel: 'Market Context: Live', lastClose: 'Last US close', closed: 'US markets closed',
+      names: { btc: 'Bitcoin · USD', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US Dollar (DXY)', us10y: 'US 10Y Yield', gold: 'Gold · oz' },
+      d1: '1D', d24: '24H', d30: '30D', unavailable: 'Unavailable', asOf: 'As of',
+      chips: { weekend: 'Markets closed', holiday: 'Markets closed', quiet: 'Routine', btcOnlyDown: 'Bitcoin-specific', btcOnlyUp: 'Bitcoin-specific',
+        withMarketDown: 'With the market', withMarketUp: 'With the market', againstMarketDown: 'Against the market', againstMarketUp: 'Against the market' },
+      noCtx: 'Not enough market data right now to compare. The Bitcoin figures are live.',
+      corr: 'BTC ↔ Nasdaq 30D correlation', corrWords: ['weak', 'moderate', 'strong'], corrNA: 'n/a',
+      sources: 'Data: FRED · ECB · CoinGecko', locale: 'en-GB', numLocale: 'en-US',
+    },
+    de: {
+      label: 'Marktumfeld', title: 'Ist es Bitcoin,<br>oder der ganze Markt?',
+      sub: 'Bitcoin bewegt sich selten allein. Hier stehen die letzten 24 Stunden neben US-Aktien, Dollar, Zinsen und Gold.',
+      panel: 'Marktumfeld: Live', lastClose: 'Letzter US-Schluss', closed: 'US-Börsen geschlossen',
+      names: { btc: 'Bitcoin · USD', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US-Dollar (DXY)', us10y: 'US 10J Rendite', gold: 'Gold · Unze' },
+      d1: '1T', d24: '24S', d30: '30T', unavailable: 'Nicht verfügbar', asOf: 'Stand',
+      chips: { weekend: 'Börsen zu', holiday: 'Börsen zu', quiet: 'Normal', btcOnlyDown: 'Bitcoin-spezifisch', btcOnlyUp: 'Bitcoin-spezifisch',
+        withMarketDown: 'Mit dem Markt', withMarketUp: 'Mit dem Markt', againstMarketDown: 'Gegen den Markt', againstMarketUp: 'Gegen den Markt' },
+      noCtx: 'Gerade zu wenige Marktdaten für einen Vergleich. Die Bitcoin-Werte sind live.',
+      corr: 'BTC ↔ Nasdaq 30T-Korrelation', corrWords: ['schwach', 'mittel', 'stark'], corrNA: 'k. A.',
+      sources: 'Daten: FRED · EZB · CoinGecko', locale: 'de-DE', numLocale: 'de-DE',
+    },
+  };
+
+  var data = null;
+  function $(id) { return document.getElementById(id); }
+  function lang() { return document.documentElement.lang === 'de' ? 'de' : 'en'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v, dp, t) { return Number(v).toLocaleString(t.numLocale, { minimumFractionDigits: dp, maximumFractionDigits: dp }); }
+  function chg(v, unit, t) {
+    if (v === null || v === undefined || !isFinite(v)) return '<span class="mc-flat">—</span>';
+    var cls = Math.abs(v) < 0.05 ? 'mc-flat' : v > 0 ? 'mc-up' : 'mc-down';
+    var sign = v > 0 ? '+' : v < 0 ? '−' : '';
+    var txt = unit === 'bps' ? sign + num(Math.abs(v), 0, t) + ' bp' : sign + num(Math.abs(v), 2, t) + '%';
+    return '<span class="' + cls + '">' + txt + '</span>';
+  }
+  function day(iso, t) {
+    var d = new Date(iso + 'T12:00:00Z');
+    return d.toLocaleDateString(t.locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+  }
+
+  function render() {
+    if (!data) return;
+    var t = S[lang()], p = data, m = p.markets || {};
+    $('mc-label').textContent = t.label;
+    $('mc-title').innerHTML = t.title;
+    $('mc-sub').textContent = t.sub;
+    $('mc-panel-label').textContent = t.panel;
+    $('mc-sources-label').textContent = t.sources;
+
+    var closed = p.status !== 'open';
+    $('mc-dot').className = 'mc-dot' + (closed ? ' closed' : '');
+    $('mc-stamp').textContent = (closed ? t.closed + ' · ' : '') + (p.lastUsClose ? t.lastClose + ': ' + day(p.lastUsClose, t) : '');
+
+    var c = p.context, l = lang();
+    if (c && t.chips[c.key]) {
+      var kind = c.key.indexOf('with') === 0 ? 'with' : c.key.indexOf('btcOnly') === 0 ? 'only' : c.key.indexOf('against') === 0 ? 'against' : '';
+      var up = /Up$/.test(c.key) ? ' up' : '';
+      $('mc-ctx').innerHTML = '<span class="mc-chip ' + kind + up + '">' + esc(t.chips[c.key]) + '</span><p class="mc-text">' + esc(c[l]) +
+        (c.dollar ? ' <span class="mc-dollar">' + esc(c.dollar[l]) + '</span>' : '') + '</p>';
+    } else {
+      $('mc-ctx').innerHTML = '<span class="mc-chip">—</span><p class="mc-text mc-dollar">' + esc(t.noCtx) + '</p>';
+    }
+
+    var tiles = [];
+    if (p.btc) {
+      tiles.push({ k: 'btc', cls: 'btc', val: '$' + num(p.btc.price, 0, t), a: [t.d24, chg(p.btc.change24h, 'pct', t)], b: [t.d30, chg(p.btc.change30d, 'pct', t)] });
+    }
+    [['spx', 0, ''], ['ndx', 0, ''], ['dxy', 2, ''], ['us10y', 2, '%'], ['gold', 0, '$']].forEach(function (x) {
+      var k = x[0], dp = x[1], u = x[2], s = m[k];
+      if (!s) { tiles.push({ k: k, cls: 'missing', val: '—', a: [t.d1, '<span class="mc-flat">' + t.unavailable + '</span>'] }); return; }
+      var unit = k === 'us10y' ? 'bps' : 'pct';
+      var v = u === '$' ? '$' + num(s.value, dp, t) : num(s.value, dp, t) + (u ? '<small>' + u + '</small>' : '');
+      tiles.push({ k: k, cls: s.stale ? 'stale' : '', val: v, a: [t.d1, chg(s.change1d, unit, t)], b: [t.d30, chg(s.change30d, unit, t)],
+        date: (s.stale ? t.asOf + ' ' : '') + day(s.date, t) });
+    });
+    $('mc-tiles').innerHTML = tiles.map(function (x) {
+      return '<div class="mc-tile ' + (x.cls || '') + '"><div class="mc-name">' + esc(t.names[x.k]) + '</div>' +
+        '<div class="mc-val">' + x.val + '</div>' +
+        '<div class="mc-chg"><span><em>' + x.a[0] + '</em>' + x.a[1] + '</span>' + (x.b ? '<span><em>' + x.b[0] + '</em>' + x.b[1] + '</span>' : '') + '</div>' +
+        (x.date ? '<div class="mc-date">' + esc(x.date) + '</div>' : '') + '</div>';
+    }).join('');
+
+    var r = p.correlation30d;
+    if (r === null || r === undefined) {
+      $('mc-corr').innerHTML = esc(t.corr) + ' <b>' + t.corrNA + '</b>';
+    } else {
+      var w = t.corrWords[Math.abs(r) < 0.2 ? 0 : Math.abs(r) < 0.5 ? 1 : 2];
+      $('mc-corr').innerHTML = esc(t.corr) + ' <span class="mc-corr-track" aria-hidden="true"><span class="mc-corr-mark" style="left:' +
+        ((Math.max(-1, Math.min(1, r)) + 1) * 50) + '%"></span></span><b>' + num(r, 2, t) + '</b> ' + w;
+    }
+    $('mc-eurusd').innerHTML = m.eurusd ? 'EUR/USD <b>' + num(m.eurusd.value, 4, t) + '</b> ' + chg(m.eurusd.change1d, 'pct', t) : '';
+  }
+
+  function load() {
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 10000) : null;
+    fetch('/api/macro', ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) {
+        if (!j || !j.markets || (!j.btc && !j.context)) throw new Error('empty');
+        data = j;
+        render();
+        section.hidden = false;
+        if (rule) rule.hidden = false;
+      })
+      .catch(function () { /* keep whatever is showing; section stays hidden on first failure */ })
+      .then(function () { if (timer) clearTimeout(timer); });
+  }
+
+  // Re-render when the page language switches (applyLang sets <html lang>).
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  }
+
+  load();
+  setInterval(load, 15 * 60 * 1000);
+})();
+</script>
+<!-- ═══ MARKET CONTEXT STRIP: SCRIPT (end) ═══ -->
 </body>
 </html>
