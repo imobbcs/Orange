@@ -9,6 +9,7 @@ export type Series = {
   value: number;
   date: string;
   change1d: number | null;  // % (or bps for yields)
+  change7d?: number | null; // % (or bps for yields), vs ~7 calendar days ago
   change30d: number | null; // % (or bps for yields)
   stale?: boolean;          // set by build: older than the last two US trading days
 };
@@ -45,6 +46,7 @@ export function summarise(raw: Obs[], mode: 'pct' | 'bps' = 'pct'): Series | nul
   if (obs.length === 0) return null;
   const last = obs[obs.length - 1];
   const prev = obs.length > 1 ? obs[obs.length - 2] : null;
+  const week = onOrBefore(obs, addDays(last.date, -7));
   const month = onOrBefore(obs, addDays(last.date, -30));
   const delta = (from: Obs | null) => {
     if (!from || from === last) return null;
@@ -52,7 +54,7 @@ export function summarise(raw: Obs[], mode: 'pct' | 'bps' = 'pct'): Series | nul
     if (from.value === 0) return null;
     return round(((last.value - from.value) / from.value) * 100, 2);
   };
-  return { value: last.value, date: last.date, change1d: delta(prev), change30d: delta(month) };
+  return { value: last.value, date: last.date, change1d: delta(prev), change7d: delta(week), change30d: delta(month) };
 }
 
 export function round(n: number, dp: number): number {

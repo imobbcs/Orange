@@ -568,8 +568,9 @@ export function alertEmail(opts: {
   lang:             Lang;
   subscriberCount?: number;
   subscriberGoal?:  number;
+  marketBlock?:     string; // optional market-context HTML (lib/macro/email.ts); omitted → output unchanged
 }): { subject: string; html: string; replyTo: string } {
-  const { price, movePct, direction, signal, fgValue, maPct, change24h, unsubscribeUrl, replyTo, lang, subscriberCount, subscriberGoal } = opts;
+  const { price, movePct, direction, signal, fgValue, maPct, change24h, unsubscribeUrl, replyTo, lang, subscriberCount, subscriberGoal, marketBlock } = opts;
   const pct    = Math.abs(movePct * 100).toFixed(1);
   const isDown = direction === 'down';
   const color  = signalColor(signal);
@@ -645,7 +646,7 @@ export function alertEmail(opts: {
       </td></tr>
     </table>
     <p class="em" style="margin:0 0 28px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${context}</p>
-    ${disclaimerBox(disclaimerText)}
+    ${marketBlock ?? ''}${disclaimerBox(disclaimerText)}
     ${ctaButton('https://whentobuybtc.xyz/?utm_source=email&utm_medium=alert&utm_campaign=cta#alerts', ctaLabel, 240)}
     ${forwardAskLine(lang, subscriberCount, subscriberGoal)}
   `;
@@ -672,10 +673,11 @@ export function digestEmail(opts: {
   prevAthPct?:      number;
   subscriberCount?: number;
   subscriberGoal?:  number;
+  marketBlock?:     string; // optional market-context HTML (lib/macro/email.ts); omitted → output unchanged
 }): { subject: string; html: string; replyTo: string } {
   const {
     price, signal, fgValue, maPct, athPct, change24h, unsubscribeUrl, replyTo, lang,
-    prevFgValue, prevMaPct, prevAthPct, subscriberGoal,
+    prevFgValue, prevMaPct, prevAthPct, subscriberGoal, marketBlock,
   } = opts;
   // Defaults to the real current count rather than hiding the progress line
   // and forward-ask narrative below when the caller doesn't pass a live
@@ -815,7 +817,7 @@ export function digestEmail(opts: {
       </td></tr>
     </table>
     <p class="em" style="margin:0 0 32px;font-family:Georgia,'Times New Roman',Times,serif;font-size:14px;line-height:1.85;color:rgba(237,232,222,0.78);">${contextText}</p>
-    ${disclaimerBox(disclaimerText2)}
+    ${marketBlock ?? ''}${disclaimerBox(disclaimerText2)}
     ${ctaButton(ctaUrl, ctaLabel, 240)}
     <div style="height:24px;line-height:24px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>
     ${spreadSection({

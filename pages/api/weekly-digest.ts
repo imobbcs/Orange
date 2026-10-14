@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
 import { digestEmail, type SignalState } from '../../lib/email-templates';
+import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
 
 const pool     = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend   = new Resend(process.env.RESEND_API_KEY);
@@ -93,6 +94,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
     if (rows.length === 0) return res.status(200).json({ status: 'no_subscribers' });
 
+    // Market context (off unless MACRO_CONTEXT=test|on). Fetched once; null → emails unchanged.
+    const macro = await getMacroForEmail();
+
     let sent = 0; let failed = 0;
     for (const { email, lang, unsubscribe_token } of rows) {
       const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
@@ -101,6 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         unsubscribeUrl, replyTo: REPLY_TO, lang,
         prevFgValue, prevMaPct, prevAthPct,
         subscriberCount: SUBSCRIBER_COUNT, subscriberGoal: SUBSCRIBER_GOAL,
+        marketBlock: macro && includeMacroFor(email) ? macroDigestBlock(macro, lang) : undefined,
       });
       const result = await resend.emails.send({
         from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
