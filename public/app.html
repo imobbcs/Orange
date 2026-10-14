@@ -2416,6 +2416,30 @@
     }
   </style>
   <!-- ═══ TEMPERATURE HERO: CSS (end) ═══ -->
+  <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (start) ═══ -->
+  <style>
+    #experts[hidden], #share[hidden] { display: none !important; }
+    /* The trend chart continues "Why": tighter join, no divider above it */
+    #chart.section { padding-top: 2.5rem; }
+    /* One signup in the flow: the section right after the calculator */
+    .whatif-email-cta { display: none !important; }
+    /* Compact share row in the hero */
+    .hero-share { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem 1.1rem; margin-top: 1.4rem;
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: #8A837A; opacity: 0; }
+    .temp-hero.temp-in .hero-share { opacity: 1; transition: opacity 0.6s ease 1.3s; }
+    .hero-share button { background: none; border: 0; border-bottom: 1px solid rgba(237,232,222,0.2); padding: 6px 0; font: inherit; letter-spacing: inherit; color: var(--muted); cursor: pointer; }
+    .hero-share button:hover, .hero-share button:focus-visible { color: var(--temp); border-bottom-color: var(--temp); outline: none; }
+    .hero-share-label { width: 100%; text-align: center; }
+    @media (min-width: 640px) { .hero-share-label { width: auto; } }
+    /* Market context: sentence first; tiles open on request on phones */
+    .mc-more { display: none; }
+    @media (max-width: 768px) {
+      .mc-more { display: block; width: 100%; background: none; border: 0; border-top: 1px solid var(--border); padding: 0.9rem 1.1rem; text-align: left;
+        font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); cursor: pointer; }
+      .mc-panel:not(.open) .mc-tiles, .mc-panel:not(.open) .mc-foot { display: none; }
+    }
+  </style>
+  <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (end) ═══ -->
 </head>
 <body>
 
@@ -2526,6 +2550,14 @@
       <a href="#signal" class="btn-primary" id="hero-why-btn" data-umami-event="hero-why">Why?</a>
     </div>
     <p class="hero-regular-line" data-i18n="heroWhyLine">When to buy Bitcoin? Most long-term holders say: <b>regularly</b>. This is what today looks like.</p>
+    <div class="hero-share">
+      <span class="hero-share-label" data-i18n="heroShareLabel">Share today's read</span>
+      <button type="button" onclick="shareWhatsApp()" data-umami-event="share-whatsapp">WhatsApp</button>
+      <button type="button" onclick="shareTwitter()" data-umami-event="share-x">X</button>
+      <button type="button" onclick="shareTelegram()" data-umami-event="share-telegram">Telegram</button>
+      <button type="button" onclick="shareSignal()" data-umami-event="share-signal">Signal</button>
+      <button type="button" onclick="copyLink(this)" data-umami-event="share-copy" data-i18n="shareCopy">Copy link</button>
+    </div>
 
     <p class="signal-updated" id="signal-updated" style="margin-top:1.5rem;"></p>
 
@@ -2627,6 +2659,41 @@
   </div>
 </section>
 
+<!-- PRICE CHART -->
+<section class="section chart-section" id="chart">
+  <div class="section-inner">
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="chartLabel">The long-term trend</p>
+    <div class="chart-header reveal" data-delay="2">
+      <h2 class="section-title" data-i18n="chartTitle">Price and its 200-day average</h2>
+      <div class="chart-timeframes">
+        <button class="chart-tf" onclick="loadChart('30',this)">1M</button>
+        <button class="chart-tf" onclick="loadChart('90',this)">3M</button>
+        <button class="chart-tf active" onclick="loadChart('365',this)">1Y</button>
+      </div>
+    </div>
+    <div class="chart-legend reveal" data-delay="2">
+      <span class="chart-legend-item"><span class="chart-legend-swatch price"></span><span data-i18n="legendPrice">BTC price</span></span>
+      <span class="chart-legend-item"><span class="chart-legend-swatch ma"></span><span data-i18n="legend200ma">200-Day MA</span></span>
+      <span class="chart-legend-item zone-item"><span class="chart-legend-swatch zone"></span><span data-i18n="legendZone">Below the long-term trend</span></span>
+    </div>
+  </div>
+  <div class="chart-bleed reveal" data-delay="3">
+    <div class="chart-skeleton" id="chart-skeleton">
+      <div class="chart-sk-line" style="top:35%;width:100%;"></div>
+      <div class="chart-sk-line" style="top:55%;width:85%;"></div>
+      <div class="chart-sk-line" style="top:70%;width:80%;"></div>
+      <div class="chart-sk-pulse"></div>
+    </div>
+    <div class="chart-annotation-ma" id="chart-annotation-ma">200D AVG</div>
+    <div class="chart-annotation-price" id="chart-annotation-price">BTC</div>
+    <canvas id="priceChart"></canvas>
+  </div>
+  <div class="section-inner">
+    <p class="chart-caption reveal reveal-fade" data-delay="4" data-i18n="chartSub">The orange line is Bitcoin's price. The white line is the 200-day average. When price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
+  </div>
+</section>
+
+
 <!-- ═══ MARKET CONTEXT STRIP: SECTION (start) · hidden until /api/macro answers ═══ -->
 <div class="ornament-rule" id="mc-rule" hidden><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
@@ -2642,6 +2709,7 @@
         <span class="mc-stamp" id="mc-stamp"></span>
       </div>
       <div class="mc-ctx" id="mc-ctx" aria-live="polite"></div>
+      <button class="mc-more" id="mc-more" type="button" aria-expanded="false" aria-controls="mc-tiles">Show the markets</button>
       <div class="mc-tiles" id="mc-tiles"></div>
       <div class="mc-foot">
         <span class="mc-corr" id="mc-corr"></span>
@@ -2652,6 +2720,69 @@
   </div>
 </section>
 <!-- ═══ MARKET CONTEXT STRIP: SECTION (end) ═══ -->
+
+<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
+
+<!-- WHAT IF CALCULATOR -->
+<section class="section whatif-section" id="whatif">
+  <div class="section-inner">
+    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="whatifLabel">What If?</p>
+    <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
+    <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit and see what it would look like if you had put that money into Bitcoin instead.</p>
+
+    <!-- HABIT STEPPER -->
+    <div class="whatif-stepper-wrap reveal" data-delay="4" id="habit-list">
+      <div class="whatif-stepper-top">
+        <div class="whatif-stepper-row">
+          <button class="whatif-step-btn" id="habit-prev" aria-label="Less" data-umami-event="whatif-step" data-umami-event-direction="prev">−</button>
+          <div class="whatif-stepper-center">
+            <div class="whatif-stepper-amount-mask">
+              <div class="whatif-stepper-amount" id="whatif-stepper-amount">€50</div>
+            </div>
+            <div class="whatif-stepper-per">/ month</div>
+            <div class="whatif-stepper-habit" id="whatif-stepper-habit">≈ coffee on the go</div>
+          </div>
+          <button class="whatif-step-btn" id="habit-next" aria-label="More" data-umami-event="whatif-step" data-umami-event-direction="next">+</button>
+        </div>
+        <div class="whatif-ticks" id="whatif-ticks">
+          <div class="whatif-tick-marker" id="whatif-tick-marker"></div>
+        </div>
+      </div>
+
+      <!-- RESULT — always visible, animates on first scroll-into-view, rolls on step -->
+      <div class="whatif-result-wrap revealed" id="whatif-result-wrap">
+        <div class="whatif-revelation">
+          <p class="whatif-revelation-label" id="whatif-selected-label">COFFEE ON THE GO</p>
+          <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
+          <div class="whatif-stepper-glow" id="whatif-stepper-glow"></div>
+          <div class="whatif-revelation-number" id="whatif-btc-value">—</div>
+          <p class="whatif-revelation-sub" data-i18n="whatifBigSub">today, instead of nothing</p>
+        </div>
+
+        <div class="whatif-evidence" id="whatif-evidence">
+          <div class="whatif-stats-grid">
+            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
+            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
+          </div>
+          <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice. This is for perspective.</p>
+          <div class="whatif-email-cta">
+            <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">See how the market looks, every Sunday.</p>
+            <div class="whatif-email-cta-right">
+              <div class="whatif-email-cta-row">
+                <div class="email-row">
+                  <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+                  <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Send me the weekly read →</button>
+                </div>
+                <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
+              </div>
+              <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
+            </div>
+          </div>
+        </div><!-- /whatif-evidence -->
+      </div><!-- /whatif-result-wrap -->
+    </div><!-- /whatif-stepper -->
+  </div>
+</section>
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
@@ -2746,46 +2877,10 @@
   </div>
 </section>
 
-<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
-<!-- PRICE CHART -->
-<section class="section chart-section" id="chart">
-  <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="chartLabel">Price Chart</p>
-    <div class="chart-header reveal" data-delay="2">
-      <h2 class="section-title" data-i18n="chartTitle">Price + 200-Day Average</h2>
-      <div class="chart-timeframes">
-        <button class="chart-tf" onclick="loadChart('30',this)">1M</button>
-        <button class="chart-tf" onclick="loadChart('90',this)">3M</button>
-        <button class="chart-tf active" onclick="loadChart('365',this)">1Y</button>
-      </div>
-    </div>
-    <div class="chart-legend reveal" data-delay="2">
-      <span class="chart-legend-item"><span class="chart-legend-swatch price"></span><span data-i18n="legendPrice">BTC price</span></span>
-      <span class="chart-legend-item"><span class="chart-legend-swatch ma"></span><span data-i18n="legend200ma">200-Day MA</span></span>
-      <span class="chart-legend-item zone-item"><span class="chart-legend-swatch zone"></span><span data-i18n="legendZone">Below the long-term trend</span></span>
-    </div>
-  </div>
-  <div class="chart-bleed reveal" data-delay="3">
-    <div class="chart-skeleton" id="chart-skeleton">
-      <div class="chart-sk-line" style="top:35%;width:100%;"></div>
-      <div class="chart-sk-line" style="top:55%;width:85%;"></div>
-      <div class="chart-sk-line" style="top:70%;width:80%;"></div>
-      <div class="chart-sk-pulse"></div>
-    </div>
-    <div class="chart-annotation-ma" id="chart-annotation-ma">200D AVG</div>
-    <div class="chart-annotation-price" id="chart-annotation-price">BTC</div>
-    <canvas id="priceChart"></canvas>
-  </div>
-  <div class="section-inner">
-    <p class="chart-caption reveal reveal-fade" data-delay="4" data-i18n="chartSub">The orange line is Bitcoin's price. The white line is the 200-day average. When price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
-  </div>
-</section>
-
-<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
-
+<!-- Kept in the DOM, hidden: updateSignal() and the share functions still write here (UX phase 5) -->
 <!-- WHAT EXPERTS DO -->
-<section class="section expert-section" id="experts">
+<section class="section expert-section" id="experts" hidden>
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">How long-term holders see it</p>
     <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
@@ -2799,75 +2894,8 @@
   </div>
 </section>
 
-<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
-
-<!-- WHAT IF CALCULATOR -->
-<section class="section whatif-section" id="whatif">
-  <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="whatifLabel">What If?</p>
-    <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
-    <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit and see what it would look like if you had put that money into Bitcoin instead.</p>
-
-    <!-- HABIT STEPPER -->
-    <div class="whatif-stepper-wrap reveal" data-delay="4" id="habit-list">
-      <div class="whatif-stepper-top">
-        <div class="whatif-stepper-row">
-          <button class="whatif-step-btn" id="habit-prev" aria-label="Less" data-umami-event="whatif-step" data-umami-event-direction="prev">−</button>
-          <div class="whatif-stepper-center">
-            <div class="whatif-stepper-amount-mask">
-              <div class="whatif-stepper-amount" id="whatif-stepper-amount">€50</div>
-            </div>
-            <div class="whatif-stepper-per">/ month</div>
-            <div class="whatif-stepper-habit" id="whatif-stepper-habit">≈ coffee on the go</div>
-          </div>
-          <button class="whatif-step-btn" id="habit-next" aria-label="More" data-umami-event="whatif-step" data-umami-event-direction="next">+</button>
-        </div>
-        <div class="whatif-ticks" id="whatif-ticks">
-          <div class="whatif-tick-marker" id="whatif-tick-marker"></div>
-        </div>
-      </div>
-
-      <!-- RESULT — always visible, animates on first scroll-into-view, rolls on step -->
-      <div class="whatif-result-wrap revealed" id="whatif-result-wrap">
-        <div class="whatif-revelation">
-          <p class="whatif-revelation-label" id="whatif-selected-label">COFFEE ON THE GO</p>
-          <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
-          <div class="whatif-stepper-glow" id="whatif-stepper-glow"></div>
-          <div class="whatif-revelation-number" id="whatif-btc-value">—</div>
-          <p class="whatif-revelation-sub" data-i18n="whatifBigSub">today, instead of nothing</p>
-        </div>
-
-        <div class="whatif-evidence" id="whatif-evidence">
-          <div class="whatif-stats-grid">
-            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
-            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
-          </div>
-          <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice. This is for perspective.</p>
-          <div class="whatif-email-cta">
-            <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">See how the market looks, every Sunday.</p>
-            <div class="whatif-email-cta-right">
-              <div class="whatif-email-cta-row">
-                <div class="email-row">
-                  <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-                  <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Send me the weekly read →</button>
-                </div>
-                <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
-              </div>
-              <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
-            </div>
-          </div>
-        </div><!-- /whatif-evidence -->
-      </div><!-- /whatif-result-wrap -->
-    </div><!-- /whatif-stepper -->
-  </div>
-</section>
-
-<!-- FOOTER -->
-
-<div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
-
 <!-- SHARE -->
-<section class="section share-section" id="share">
+<section class="section share-section" id="share" hidden>
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="shareLabel">Share the Signal</p>
     <h2 class="section-title reveal" data-delay="2" data-i18n="shareTitle">Send this to a friend<br>thinking about buying.</h2>
@@ -3152,6 +3180,7 @@
       // pools kick in when the 24h move is sharp, so the headline doesn't
       // read as flat or passive on a day the price is actually moving hard.
       stateName: {"accumulate": "Cold", "hold": "Mild", "caution": "Hot"},
+      heroShareLabel: "Share today's read",
       heroWhyLine: "When to buy Bitcoin? Most long-term holders say: <b>regularly</b>. This is what today looks like.",
       miMood: "01 / Market mood · Fear &amp; Greed",
       miTrend: '02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg',
@@ -3216,8 +3245,8 @@
       maLoading: 'Loading price data...',
       athLoading: 'Loading ATH data...',
       // Chart
-      chartLabel: 'Price Chart',
-      chartTitle: 'Price + 200-Day Average',
+      chartLabel: 'The long-term trend',
+      chartTitle: 'Price and its 200-day average',
       chartSub: "The orange line is Bitcoin's price. The white line is the 200-day average. When the price falls below it, Bitcoiners have historically treated it as an opportunity.",
       legendBtc: 'Bitcoin Price',
       legend200ma: '200-Day Moving Average',
@@ -3404,6 +3433,7 @@
       visitorCounter: 'Bitcoiner waren hier.',
       // Signal states
       stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
+      heroShareLabel: "Heutige Lage teilen",
       heroWhyLine: "Wann Bitcoin kaufen? Die meisten langfristigen Halter sagen: <b>regelmäßig</b>. So sieht der Markt heute aus.",
       miMood: "01 / Marktstimmung · Fear &amp; Greed",
       miTrend: '02 / Langfristiger Trend · vs. <span style="white-space:nowrap">200-Tage</span>-Schnitt',
@@ -3468,8 +3498,8 @@
       maLoading: 'Preisdaten laden...',
       athLoading: 'ATH-Daten laden...',
       // Chart
-      chartLabel: 'Kurschart',
-      chartTitle: 'Kurs + 200-Tage-Durchschnitt',
+      chartLabel: 'Der langfristige Trend',
+      chartTitle: 'Kurs und sein 200-Tage-Schnitt',
       chartSub: 'Die orangene Linie ist der Bitcoin-Kurs. Die weiße Linie ist der 200-Tage-Durchschnitt. Fällt der Kurs darunter, haben Bitcoiner das historisch als Kaufgelegenheit gesehen.',
       legendBtc: 'Bitcoin-Kurs',
       legend200ma: '200-Tage-Durchschnitt',
@@ -4530,8 +4560,9 @@
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText('https://whentobuybtc.xyz').then(() => {
       if (!btn) return;
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy Link'; }, 2000);
+      const before = btn.textContent;
+      btn.textContent = currentLang === 'de' ? 'Kopiert!' : 'Copied!';
+      setTimeout(() => { btn.textContent = before; }, 2000);
     }).catch(() => {});
   }
 
@@ -5526,7 +5557,7 @@
         withMarketDown: 'With the market', withMarketUp: 'With the market', againstMarketDown: 'Against the market', againstMarketUp: 'Against the market' },
       noCtx: 'Not enough market data right now to compare. The Bitcoin figures are live.',
       corr: 'BTC ↔ Nasdaq 30D correlation', corrWords: ['weak', 'moderate', 'strong'], corrNA: 'n/a',
-      sources: 'Data: FRED · ECB · CoinGecko', locale: 'en-GB', numLocale: 'en-US',
+      sources: 'Data: FRED · ECB · CoinGecko', locale: 'en-GB', numLocale: 'en-US', more: 'Show the markets', less: 'Hide the markets',
     },
     de: {
       label: 'Marktumfeld', title: 'Ist es Bitcoin,<br>oder der ganze Markt?',
@@ -5538,7 +5569,7 @@
         withMarketDown: 'Mit dem Markt', withMarketUp: 'Mit dem Markt', againstMarketDown: 'Gegen den Markt', againstMarketUp: 'Gegen den Markt' },
       noCtx: 'Gerade zu wenige Marktdaten für einen Vergleich. Die Bitcoin-Werte sind live.',
       corr: 'BTC ↔ Nasdaq 30T-Korrelation', corrWords: ['schwach', 'mittel', 'stark'], corrNA: 'k. A.',
-      sources: 'Daten: FRED · EZB · CoinGecko', locale: 'de-DE', numLocale: 'de-DE',
+      sources: 'Daten: FRED · EZB · CoinGecko', locale: 'de-DE', numLocale: 'de-DE', more: 'Märkte anzeigen', less: 'Märkte ausblenden',
     },
   };
 
@@ -5567,6 +5598,8 @@
     $('mc-sub').textContent = t.sub;
     $('mc-panel-label').textContent = t.panel;
     $('mc-sources-label').textContent = t.sources;
+    var open = section.querySelector('.mc-panel').classList.contains('open');
+    $('mc-more').textContent = open ? t.less : t.more;
 
     var closed = p.status !== 'open';
     $('mc-dot').className = 'mc-dot' + (closed ? ' closed' : '');
@@ -5627,6 +5660,13 @@
       .catch(function () { /* keep whatever is showing; section stays hidden on first failure */ })
       .then(function () { if (timer) clearTimeout(timer); });
   }
+
+  $('mc-more').addEventListener('click', function () {
+    var panel = section.querySelector('.mc-panel');
+    var open = panel.classList.toggle('open');
+    this.setAttribute('aria-expanded', String(open));
+    this.textContent = S[lang()][open ? 'less' : 'more'];
+  });
 
   // Re-render when the page language switches (applyLang sets <html lang>).
   if (typeof MutationObserver !== 'undefined') {
