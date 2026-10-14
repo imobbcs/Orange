@@ -5,6 +5,7 @@ import { Pool } from 'pg';
 import { Resend } from 'resend';
 import { digestEmail, type SignalState } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
+import { signalFromApis } from '../../lib/signal';
 
 const pool     = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend   = new Resend(process.env.RESEND_API_KEY);
@@ -31,17 +32,11 @@ async function fetchSignalData() {
     priceRes.json(), fgRes.json(), athRes.json(), histRes.json(),
   ]);
   const prices       = (history.prices as [number, number][]).map(p => p[1]);
-  const ma           = prices.slice(-200).reduce((a: number, b: number) => a + b, 0) / Math.min(prices.length, 200);
   const currentPrice = price.eur as number;
   const fgValue      = fg.value as number;
-  const maPct        = ((currentPrice - ma) / ma) * 100;
-  const athPct       = ((currentPrice - (ath.ath_eur as number)) / (ath.ath_eur as number)) * 100;
   const change24h    = price.eur_24h_change as number;
-  const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
-  const maScore  = maPct   < -10 ? 2 : maPct   < 0  ? 1 : maPct   < 20 ? -1 : -2;
-  const athScore = athPct  < -50 ? 1 : athPct  < -25 ? 0 : -1;
-  const score    = fgScore + maScore + athScore;
-  const signal: SignalState = score >= 3 ? 'accumulate' : score <= -2 ? 'caution' : 'hold';
+  const { maPct, athPct, state } = signalFromApis(currentPrice, prices, ath.ath_eur as number, fgValue, fg.value_classification);
+  const signal: SignalState = state;
   return { currentPrice, fgValue, maPct, athPct, change24h, signal };
 }
 

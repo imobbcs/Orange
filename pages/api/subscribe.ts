@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { Resend } from 'resend';
 import { confirmationEmail, type Lang, type SignalState } from '../../lib/email-templates';
 import { syncResendContact } from '../../lib/resend-contact';
+import { signalFromApis } from '../../lib/signal';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -35,17 +36,7 @@ async function fetchCurrentSignal(): Promise<SignalState | null> {
       fgRes.json(), histRes.json(), priceRes.json(), athRes.json(),
     ]);
     const prices  = (history.prices as [number, number][]).map(p => p[1]);
-    const ma      = prices.slice(-200).reduce((a: number, b: number) => a + b, 0) / Math.min(prices.length, 200);
-    const fgValue = fg.value as number;
-    const maPct   = ((price.eur - ma) / ma) * 100;
-    const athPct  = ((price.eur - (ath.ath_eur as number)) / (ath.ath_eur as number)) * 100;
-
-    const fgScore  = fgValue < 30 ? 2 : fgValue < 50 ? 1 : fgValue < 75 ? -1 : -2;
-    const maScore  = maPct   < -10 ? 2 : maPct   < 0  ? 1 : maPct   < 20 ? -1 : -2;
-    const athScore = athPct  < -50 ? 1 : athPct  < -25 ? 0 : -1;
-    const score    = fgScore + maScore + athScore;
-
-    return score >= 3 ? 'accumulate' : score <= -2 ? 'caution' : 'hold';
+    return signalFromApis(price.eur, prices, ath.ath_eur as number, fg.value as number, fg.value_classification).state;
   } catch (e: any) {
     console.error('fetchCurrentSignal failed, omitting confirmation teaser:', e.message);
     return null;

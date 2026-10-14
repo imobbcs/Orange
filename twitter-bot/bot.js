@@ -131,16 +131,13 @@ async function fetchSignal() {
   const fromATH = ((currentPrice - ath) / ath * 100).toFixed(1);
   console.log(`ATH: ${Math.round(ath)} EUR, from ATH: ${fromATH}%`);
 
-  // Composite signal — mirrors updateSignal() in app.html exactly
-  const fgScore  = fearGreed < 30 ? 2 : fearGreed < 50 ? 1 : fearGreed < 75 ? -1 : -2;
-  const maScore  = parseFloat(vsMA) < -10 ? 2 : parseFloat(vsMA) < 0 ? 1 : parseFloat(vsMA) < 20 ? -1 : -2;
-  const athScore = parseFloat(fromATH) < -50 ? 1 : parseFloat(fromATH) < -25 ? 0 : -1;
-  const score    = fgScore + maScore + athScore;
+  // Composite signal: same model as lib/signal.ts and app.html (see SIGNAL MODEL below)
+  const { score, state } = wtbSignal(fearGreed, fgLabel, parseFloat(vsMA), parseFloat(fromATH));
 
   let signal, emoji;
-  if (score >= 3)       { signal = 'Cold'; emoji = '❄️'; }
-  else if (score >= -1) { signal = 'Mild'; emoji = '🌤️'; }
-  else                  { signal = 'Hot';  emoji = '🔥'; }
+  if (state === 'accumulate') { signal = 'Cold'; emoji = '❄️'; }
+  else if (state === 'hold')  { signal = 'Mild'; emoji = '🌤️'; }
+  else                        { signal = 'Hot';  emoji = '🔥'; }
 
   console.log(`Signal: ${signal} (score ${score})`);
   return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice) };
@@ -237,3 +234,22 @@ async function postBullish() {
     process.exit(1);
   }
 })();
+
+/* SIGNAL MODEL (start) — keep in sync with lib/signal.ts (tests/signal.test.ts checks it).
+   Each reading leans cold (+), neutral (0) or hot (−); every reading has a neutral middle.
+   Total −5…+5: Cold at +3 or more, Hot at −3 or less, Mild in between. */
+function wtbFgBand(v, cls) {
+  var m = { 'extreme fear': 'extreme-fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme greed': 'extreme-greed' };
+  var k = cls ? m[String(cls).trim().toLowerCase()] : null;
+  if (k) return k;
+  return v < 25 ? 'extreme-fear' : v < 47 ? 'fear' : v < 55 ? 'neutral' : v < 76 ? 'greed' : 'extreme-greed';
+}
+function wtbSignal(fgValue, fgClass, maPct, athPct) {
+  var fg = { 'extreme-fear': 2, 'fear': 1, 'neutral': 0, 'greed': -1, 'extreme-greed': -2 }[wtbFgBand(fgValue, fgClass)];
+  var ma = maPct < -10 ? 2 : maPct < -5 ? 1 : maPct <= 5 ? 0 : maPct <= 20 ? -1 : -2;
+  var ath = athPct < -50 ? 1 : athPct < -20 ? 0 : -1;
+  var score = fg + ma + ath;
+  return { score: score, state: score >= 3 ? 'accumulate' : score <= -3 ? 'caution' : 'hold', parts: { fg: fg, ma: ma, ath: ath } };
+}
+/* SIGNAL MODEL (end) */
+

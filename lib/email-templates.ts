@@ -6,6 +6,8 @@
 export type Lang        = 'en' | 'de';
 export type SignalState = 'accumulate' | 'hold' | 'caution';
 
+import { fgBand, fgScore, maScore } from './signal';
+
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
 function eur(n: number): string {
@@ -557,17 +559,18 @@ export function confirmationEmail(
 
 // ─── Alert explanation ────────────────────────────────────────────────────────
 // Built from the actual readings, never from the price direction alone, so it can't
-// claim the indicators agree when they don't. Agreement uses the same thresholds as
-// the score (Fear & Greed below 50 and price below its 200-day average both count
-// toward the low-price side). Third person, never advice.
+// claim the indicators agree when they don't. Agreement uses the same bands as the
+// score (lib/signal.ts): the two readings disagree only when one leans cold and the
+// other leans hot. Third person, never advice.
 export function alertExplanation(signal: SignalState, fgValue: number, maPct: number, lang: Lang): string {
   const below  = maPct < 0;
   const absMa  = Math.abs(maPct).toFixed(1);
-  const moodEn = fgValue < 25 ? 'extreme fear' : fgValue < 47 ? 'fear' : fgValue < 55 ? 'neutral' : fgValue < 76 ? 'greed' : 'extreme greed';
-  const moodDe = fgValue < 25 ? 'extreme Angst' : fgValue < 47 ? 'Angst' : fgValue < 55 ? 'neutral' : fgValue < 76 ? 'Gier' : 'extreme Gier';
+  const band   = fgBand(fgValue);
+  const moodEn = ({ 'extreme-fear': 'extreme fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme-greed': 'extreme greed' } as const)[band];
+  const moodDe = ({ 'extreme-fear': 'extreme Angst', 'fear': 'Angst', 'neutral': 'neutral', 'greed': 'Gier', 'extreme-greed': 'extreme Gier' } as const)[band];
   const readEn = `Market mood reads ${moodEn} (Fear &amp; Greed ${fgValue}) and the price is ${absMa}% ${below ? 'below' : 'above'} its 200-day average.`;
   const readDe = `Die Marktstimmung zeigt ${moodDe} (Fear &amp; Greed ${fgValue}), und der Preis liegt ${absMa.replace('.', ',')}&nbsp;% ${below ? 'unter' : '\u00fcber'} seinem 200-Tage-Schnitt.`;
-  const disagree = (fgValue < 50) !== below;
+  const disagree = fgScore(fgValue) * maScore(maPct) < 0;
   const take: Record<string, { en: string; de: string }> = {
     accumulate: {
       en: 'Together with the distance from the peak, prices are low compared with recent history. Long-term holders tend to see days like this as cheaper sats.',

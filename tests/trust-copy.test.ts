@@ -16,7 +16,8 @@ test('alert explanation: built from readings, never claims agreement that is not
 });
 
 test('alert explanation: every state and both languages', () => {
-  assert.ok(alertExplanation('hold', 52, -3, 'en').includes('point different ways'));
+  assert.ok(alertExplanation('hold', 62, -8, 'en').includes('point different ways')); // greed vs. below trend
+  assert.ok(alertExplanation('hold', 52, -3, 'en').includes('Neither reading is extreme')); // neutral mood, at the average
   assert.ok(alertExplanation('hold', 40, -3, 'en').includes('Neither reading is extreme'));
   assert.ok(alertExplanation('accumulate', 18, -12, 'en').includes('cheaper sats'));
   assert.ok(alertExplanation('caution', 82, 25, 'en').includes('keep their regular plan'));
