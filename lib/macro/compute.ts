@@ -10,6 +10,7 @@ export type Series = {
   date: string;
   change1d: number | null;  // % (or bps for yields)
   change30d: number | null; // % (or bps for yields)
+  stale?: boolean;          // set by build: older than the last two US trading days
 };
 
 export type MarketStatus = 'open' | 'weekend' | 'holiday';
@@ -181,9 +182,19 @@ export function marketStatus(now: Date, lastEquityDate: string | null): MarketSt
   return 'open';
 }
 
+/**
+ * True when an observation is older than the two most recent weekdays before today (New York).
+ * Normal publication lag (yesterday's close, Friday's close on Mon/weekend) is not stale;
+ * a bond-market holiday plus FRED's one-day lag on yields is.
+ */
+export function isStale(date: string, now: Date): boolean {
+  const { date: today } = nyCalendar(now);
+  return date < prevWeekday(prevWeekday(today));
+}
+
 // ── Context sentence ─────────────────────────────────────────────────
 
-export const QUIET_BTC = 1.5;   // |BTC 24h| below this → calm day
+export const QUIET_BTC = 2.5;   // |BTC 24h| below this → calm day (routine moves stay unlabelled)
 export const FLAT_EQUITY = 0.5; // |Nasdaq session| below this → stocks flat
 export const DOLLAR_MOVE = 0.3; // |DXY 1d| at or above this → mention the dollar
 

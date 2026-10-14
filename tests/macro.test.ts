@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  summarise, dxyFromEcb, ecbToSeries, btcClosesByUsDate, returnCorrelation, marketStatus, contextFor,
+  summarise, dxyFromEcb, ecbToSeries, btcClosesByUsDate, returnCorrelation, marketStatus, contextFor, isStale,
 } from '../lib/macro/compute';
 import { parseFred, parseEcbCsv, cgPointsToObs } from '../lib/macro/sources';
 import { mergeWithPrevious, MacroResponse } from '../lib/macro/build';
@@ -140,6 +140,20 @@ test('marketStatus: Monday with Friday close is normal; stale close is holiday',
   assert.equal(marketStatus(new Date('2026-10-14T15:00:00Z'), '2026-10-09'), 'holiday');
 });
 
+// ── Staleness ────────────────────────────────────────────────────────
+test('isStale: normal lags are fresh, holiday + FRED lag is stale', () => {
+  const wed = new Date('2026-10-14T17:45:00Z');
+  assert.equal(isStale('2026-10-13', wed), false); // yesterday's close
+  assert.equal(isStale('2026-10-12', wed), false); // one extra day of lag
+  assert.equal(isStale('2026-10-09', wed), true);  // live 10Y case: Columbus Day + lag
+  const sat = new Date('2026-10-17T15:00:00Z');
+  assert.equal(isStale('2026-10-16', sat), false); // Friday close on a weekend
+  const mon = new Date('2026-10-19T14:00:00Z');
+  assert.equal(isStale('2026-10-16', mon), false); // Friday close on Monday
+  assert.equal(isStale('2026-10-15', mon), false);
+  assert.equal(isStale('2026-10-14', mon), true);
+});
+
 // ── Context rules ────────────────────────────────────────────────────
 const ctx = (btc24h: number | null, ndx1d: number | null, dxy1d: number | null = 0, status: any = 'open') =>
   contextFor({ btc24h, ndx1d, dxy1d, status });
@@ -151,14 +165,15 @@ test('context: classification grid', () => {
   assert.equal(ctx(4, -0.4)!.key, 'btcOnlyUp');
   assert.equal(ctx(-4, 1.2)!.key, 'againstMarketDown');
   assert.equal(ctx(4, -1.2)!.key, 'againstMarketUp');
-  assert.equal(ctx(0.8, -3)!.key, 'quiet');
+  assert.equal(ctx(1.7, -3)!.key, 'quiet'); // live 14 Oct case: -1.69% is a routine move
   assert.equal(ctx(-6, -3, 0, 'weekend')!.key, 'weekend');
   assert.equal(ctx(-6, null, 0, 'holiday')!.key, 'holiday');
 });
 
 test('context: boundaries', () => {
-  assert.equal(ctx(1.5, 2)!.key, 'withMarketUp'); // 1.5 is not quiet
-  assert.equal(ctx(-1.49, -2)!.key, 'quiet');
+  assert.equal(ctx(2.5, 2)!.key, 'withMarketUp'); // 2.5 is not quiet
+  assert.equal(ctx(-2.49, -2)!.key, 'quiet');
+  assert.equal(ctx(-1.69, -0.15)!.key, 'quiet'); // exact live reading on 14 Oct 2026
   assert.equal(ctx(-3, -0.5)!.key, 'withMarketDown'); // 0.5 is not flat
   assert.equal(ctx(-3, -0.49)!.key, 'btcOnlyDown');
 });

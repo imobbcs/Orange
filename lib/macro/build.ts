@@ -2,7 +2,7 @@
 
 import {
   Series, MarketStatus, Context,
-  summarise, ecbToSeries, btcClosesByUsDate, returnCorrelation, marketStatus, contextFor, round,
+  summarise, ecbToSeries, btcClosesByUsDate, returnCorrelation, marketStatus, contextFor, round, isStale,
 } from './compute';
 import { fetchFred, fetchEcb, fetchCgDaily, fetchBtcLive, cgPointsToObs } from './sources';
 
@@ -56,6 +56,8 @@ export async function buildMacro(now = new Date()): Promise<MacroResponse> {
   const eurusd = fx ? summarise(fx.eurusd) : null;
   const gold = goldDaily ? summarise(cgPointsToObs(goldDaily)) : null;
 
+  const mark = (x: Series | null): Series | null => (x ? { ...x, stale: isStale(x.date, now) } : null);
+
   const btcSummary = btcDaily ? summarise(cgPointsToObs(btcDaily)) : null;
   const btc = btcLive
     ? { price: btcLive.usd, change24h: round(btcLive.change24h, 2), change30d: btcSummary?.change30d ?? null }
@@ -77,7 +79,7 @@ export async function buildMacro(now = new Date()): Promise<MacroResponse> {
     status,
     lastUsClose,
     btc,
-    markets: { spx, ndx, us10y, dxy, gold, eurusd },
+    markets: { spx: mark(spx), ndx: mark(ndx), us10y: mark(us10y), dxy: mark(dxy), gold: mark(gold), eurusd: mark(eurusd) },
     correlation30d,
     context,
     sources,

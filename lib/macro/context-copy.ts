@@ -22,8 +22,8 @@ export const CONTEXT_COPY: Record<ContextKey, { en: string; de: string }> = {
     de: 'Die US-Börsen sind heute geschlossen. Bitcoin handelt bis zur nächsten Sitzung für sich allein.',
   },
   quiet: {
-    en: 'A calm day for Bitcoin. Nothing unusual against the wider market.',
-    de: 'Ein ruhiger Tag für Bitcoin. Nichts Auffälliges im Vergleich zum Gesamtmarkt.',
+    en: 'A routine day for Bitcoin. The move is within its normal daily range.',
+    de: 'Ein normaler Tag für Bitcoin. Die Bewegung liegt im üblichen Tagesbereich.',
   },
   btcOnlyDown: {
     en: 'A Bitcoin-specific drop. US stocks were flat in the last session.',
