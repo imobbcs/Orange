@@ -2440,6 +2440,107 @@
     }
   </style>
   <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (end) ═══ -->
+  <!-- ═══ FULL PAGE V2: CSS (start) ═══ -->
+  <style>
+    :root { --fp-bg2: #110F12; --fp-line: rgba(237,232,222,0.12); --fp-quiet: #8A837A; }
+    /* Section headers carry the temperature */
+    .section-label { color: var(--temp); transition: color 1s; }
+    .ornament-rule-center { color: rgba(var(--temp-rgb), 0.6); }
+
+    /* ── Mini cold-hot scale (shared) ── */
+    .fp-scale { position: relative; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--temp-cold), var(--temp-mild) 50%, var(--temp-hot)); }
+    .fp-scale.lg { height: 3px; }
+    .fp-scale::before, .fp-scale::after { content: ''; position: absolute; top: -4px; width: 1px; height: 10px; background: rgba(237,232,222,0.22); }
+    .fp-scale::before { left: 33.3%; } .fp-scale::after { left: 66.6%; }
+    .fp-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%,-50%); background: var(--temp);
+      box-shadow: 0 0 0 3px rgba(var(--temp-rgb),0.15), 0 0 10px rgba(var(--temp-rgb),0.7); transition: left 0.9s cubic-bezier(0.3,1.3,0.4,1), background 1s; }
+    .fp-scale.lg .fp-dot { width: 14px; height: 14px; box-shadow: 0 0 0 4px rgba(var(--temp-rgb),0.18), 0 0 18px rgba(var(--temp-rgb),0.85); }
+    .fp-scale-l { display: flex; justify-content: space-between; margin-top: 9px; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); }
+    .fp-scale-l b { font-weight: 400; color: var(--white); }
+    .fp-scale-l .on { color: var(--temp); }
+
+    /* ── WHY: the instrument panel becomes three reading cards ── */
+    .why-v2 .instrument-panel { border: 0; background: transparent; overflow: visible; margin-top: 2rem; }
+    .why-v2 .instrument-panel::before, .why-v2 .instrument-header, .why-v2 .instrument-footer,
+    .why-v2 .instrument-gauge, .why-v2 .instrument-bar-track, .why-v2 .metric-verdict { display: none !important; }
+    .why-v2 .instrument-body { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .why-v2 .instrument-metric, .why-v2 .instrument-metric.primary { background: var(--fp-bg2); border: 1px solid var(--fp-line); padding: 20px 20px 16px; display: block; color: var(--white) !important; }
+    .why-v2 .instrument-metric + .instrument-metric { border-left: 1px solid var(--fp-line); }
+    .why-v2 .instrument-metric::before { height: 2px; opacity: 1; background: linear-gradient(90deg, transparent, rgba(var(--temp-rgb),0.7), transparent); }
+    .why-v2 .instrument-metric-id { color: var(--fp-quiet); opacity: 1; margin-bottom: 10px; min-height: 0; font-size: 0.6rem; }
+    .why-v2 .instrument-value, .why-v2 .instrument-metric.primary .instrument-value { font-size: 3rem; line-height: 0.9; margin: 0; color: var(--white) !important; }
+    .why-v2 .instrument-metric > div[style] { display: flex !important; align-items: baseline; gap: 0.4rem; justify-content: flex-start !important; }
+    .why-v2 .instrument-sub { margin: 6px 0 0; opacity: 0.8; color: var(--fp-quiet); }
+    .why-v2 #ma-arrow, .why-v2 #ath-arrow { font-size: 1.4rem !important; color: var(--fp-quiet) !important; }
+    .fp-line { font-family: var(--display); font-style: italic; font-size: 1.05rem; line-height: 1.5; color: var(--white); margin: 10px 0 14px; }
+    .fp-more { background: none; border: 0; border-top: 1px solid var(--fp-line); padding: 12px 0 0; margin-top: 12px; width: 100%; text-align: left; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--temp); cursor: pointer; }
+    .why-v2 .instrument-desc { margin: 10px 0 0; font-size: 1rem; }
+    .why-v2 .instrument-desc.fp-collapsed { display: none; }
+    .fp-together { margin-top: 18px; border: 1px solid rgba(var(--temp-rgb),0.35); background: linear-gradient(180deg, rgba(var(--temp-rgb),0.07), transparent); padding: 22px 20px; }
+    .fp-together-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .fp-together-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fp-quiet); }
+    .fp-together-word { font-family: var(--display); font-style: italic; font-size: 2.2rem; color: var(--temp); transition: color 1s; }
+    .fp-together p { margin: 8px 0 18px; font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
+
+    /* ── Trend chart continues "Why" ── */
+    #chart .chart-wrap, #chart .chart-container { background: var(--fp-bg2); border: 1px solid var(--fp-line); }
+
+    /* ── Calculator ── */
+    .fp-calc { margin-top: 2rem; background: var(--fp-bg2); border: 1px solid var(--fp-line); }
+    .fp-calc-in { padding: 22px 20px; display: grid; gap: 20px; align-content: start; }
+    .fp-stepper { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; text-align: center; }
+    .fp-stepper button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--fp-line); background: none; color: var(--white); font-size: 1.4rem; cursor: pointer; }
+    .fp-stepper button:disabled { opacity: 0.3; cursor: default; }
+    .fp-amt { font-family: var(--title); font-size: 2.6rem; line-height: 1; color: var(--white); }
+    .fp-amt small { font-family: var(--mono); font-size: 0.7rem; color: var(--fp-quiet); margin-left: 4px; letter-spacing: 0.1em; }
+    .fp-habit { font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.05rem; margin-top: 4px; }
+    .fp-mini-l { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); margin-bottom: 8px; }
+    .fp-years { display: flex; gap: 6px; flex-wrap: wrap; }
+    .fp-years button { background: none; border: 1px solid var(--fp-line); padding: 9px 12px; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); cursor: pointer; }
+    .fp-years button[aria-pressed="true"] { border-color: var(--temp); color: var(--temp); }
+    .fp-result { border-top: 1px solid var(--fp-line); padding: 24px 20px; text-align: center; background: radial-gradient(70% 90% at 50% 0%, rgba(var(--temp-rgb),0.1), transparent 70%); }
+    .fp-pre { font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.05rem; margin: 0; }
+    .fp-big { font-family: var(--title); font-size: clamp(3rem, 14vw, 5.5rem); line-height: 1; color: var(--temp); margin: 8px 0 4px; font-variant-numeric: tabular-nums; transition: color 1s; overflow-wrap: anywhere; }
+    .fp-stats { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin-top: 16px; border-top: 1px solid var(--fp-line); }
+    .fp-stats div { padding: 12px 6px 0; min-width: 0; } .fp-stats div + div { border-left: 1px solid var(--fp-line); }
+    .fp-stats span { display: block; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fp-quiet); }
+    .fp-stats b { display: block; font-family: var(--title); font-weight: 400; font-size: 1.5rem; margin-top: 6px; color: var(--white); }
+    .fp-honest { margin: 18px 0 0; padding: 14px 16px; border-left: 2px solid var(--temp-cold); background: rgba(142,201,255,0.06); text-align: left; font-family: var(--display); font-style: italic; font-size: 1.02rem; line-height: 1.5; color: var(--white); }
+    .fp-fine { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; color: var(--fp-quiet); margin: 14px 0 0; text-align: left; line-height: 1.6; }
+    .fp-share { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
+    .fp-share button { background: none; border: 0; border-bottom: 1px solid var(--fp-line); padding: 6px 0; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
+    #whatif-legacy[hidden] { display: none !important; }
+
+    /* ── Weekly read: live email preview instead of the phone mock ── */
+    .fp-mail { background: #1C1917; border: 1px solid var(--fp-line); max-width: 380px; width: 100%; margin: 0 auto; box-shadow: 0 30px 60px rgba(0,0,0,0.5); text-align: left; }
+    .fp-mail-band { padding: 18px 18px 16px; background: radial-gradient(120% 140% at 50% 0%, rgba(var(--temp-rgb),0.28), transparent 70%); border-bottom: 1px solid var(--fp-line); }
+    .fp-mail-meta { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fp-quiet); display: flex; justify-content: space-between; }
+    .fp-mail-word { font-family: var(--display); font-style: italic; font-size: 3rem; line-height: 1; color: var(--temp); margin-top: 10px; transition: color 1s; }
+    .fp-mail-price { font-family: var(--title); font-size: 1.6rem; margin-top: 2px; color: var(--white); }
+    .fp-mail-body { padding: 14px 18px 18px; font-family: var(--display); font-size: 0.98rem; line-height: 1.5; color: var(--muted); font-style: italic; }
+    .fp-mail-lines { list-style: none; padding: 0; margin: 10px 0 0; font-family: var(--mono); font-style: normal; font-size: 0.7rem; color: var(--white); display: grid; gap: 6px; }
+    .fp-mail-lines li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--fp-line); padding-bottom: 6px; }
+    .push-preview-col { display: block !important; }
+    .push-section .email-submit, .push-section .push-submit { background: var(--temp) !important; border-color: var(--temp) !important; color: #09080A !important; transition: background 1s; }
+
+    @media (min-width: 769px) {
+      .why-v2 .instrument-body { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .fp-calc { display: grid; grid-template-columns: 1fr 1.2fr; }
+      .fp-result { border-top: 0; border-left: 1px solid var(--fp-line); }
+    }
+    @media (max-width: 768px) {
+      .push-preview-col { margin-top: 2rem; }
+    }
+      /* Chart legend follows the temperature */
+    .chart-legend-swatch.price { background: var(--temp); }
+    .chart-legend-swatch.zone { background: rgba(142,201,255,0.12); border-color: rgba(142,201,255,0.35); }
+    .chart-annotation-price { color: var(--temp) !important; }
+    .chart-legend-item.zone-item { color: rgba(142,201,255,0.75); }
+    .push-title em { color: var(--temp); transition: color 1s; }
+    .chart-tf.active, .chart-tf:hover { color: var(--temp); border-color: rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.05); }
+  </style>
+  <!-- ═══ FULL PAGE V2: CSS (end) ═══ -->
+
 </head>
 <body>
 
@@ -2586,11 +2687,11 @@
 </div>
 
 <!-- SIGNAL BREAKDOWN -->
-<section class="section" id="signal">
+<section class="section why-v2" id="signal">
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
-    <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three signals.<br>One clear picture.</h2>
-    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">No jargon. Just what the data shows right now, and what it's meant historically.</p>
+    <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three readings.<br>One temperature.</h2>
+    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">Each reading leans colder or warmer. Added up, they give today's temperature. No jargon, no advice.</p>
 
     <!-- INSTRUMENT PANEL -->
     <div class="instrument-panel reveal" data-delay="4" id="instrument-panel">
@@ -2656,6 +2757,14 @@
         <span class="instrument-footer-stat">UPDATED <span id="instrument-updated">—</span></span>
       </div>
     </div>
+    <!-- FULL PAGE V2: the three readings added up -->
+    <div class="fp-together" id="fp-together">
+      <div class="fp-together-top"><span class="fp-together-label" data-i18n="fpTogether">Together</span><span class="fp-together-word" id="fp-together-word"></span></div>
+      <p id="fp-together-text"></p>
+      <div class="fp-scale lg"><span class="fp-dot" id="fp-together-dot"></span></div>
+      <div class="fp-scale-l"><span id="fpt-cold">Cold</span><span id="fpt-mild">Mild</span><span id="fpt-hot">Hot</span></div>
+    </div>
+
   </div>
 </section>
 
@@ -2689,7 +2798,7 @@
     <canvas id="priceChart"></canvas>
   </div>
   <div class="section-inner">
-    <p class="chart-caption reveal reveal-fade" data-delay="4" data-i18n="chartSub">The orange line is Bitcoin's price. The white line is the 200-day average. When price falls below it, Bitcoiners have historically treated it as an opportunity.</p>
+    <p class="chart-caption reveal reveal-fade" data-delay="4" data-i18n="chartSub">The bright line is Bitcoin's price, the dashed line its 200-day average. When the price sits below the average, the market reads colder. Above it, warmer.</p>
   </div>
 </section>
 
@@ -2723,8 +2832,44 @@
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
-<!-- WHAT IF CALCULATOR -->
+<!-- WHAT IF CALCULATOR (v2: start year + honest worst drop) -->
 <section class="section whatif-section" id="whatif">
+  <div class="section-inner">
+    <p class="section-label" data-i18n="fpCalcLabel">What if?</p>
+    <h2 class="section-title" data-i18n="fpCalcTitle">What a small habit<br>would have done.</h2>
+    <p class="section-sub" data-i18n="fpCalcSub">Pick a habit and a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.</p>
+    <div class="fp-calc">
+      <div class="fp-calc-in">
+        <div class="fp-stepper">
+          <button type="button" id="fp-minus" aria-label="Smaller habit" data-umami-event="whatif-step">−</button>
+          <div><div class="fp-amt" id="fp-amt">€50</div><div class="fp-habit" id="fp-habit"></div></div>
+          <button type="button" id="fp-plus" aria-label="Bigger habit" data-umami-event="whatif-step">+</button>
+        </div>
+        <div><div class="fp-mini-l" data-i18n="fpStartIn">Starting in</div><div class="fp-years" id="fp-years" role="group" aria-label="Start year"></div></div>
+      </div>
+      <div class="fp-result" aria-live="polite">
+        <p class="fp-pre" id="fp-pre"></p>
+        <div class="fp-big" id="fp-big">…</div>
+        <p class="fp-pre" data-i18n="fpToday">today</p>
+        <div class="fp-stats">
+          <div><span data-i18n="fpPutIn">Put in</span><b id="fp-in">…</b></div>
+          <div><span data-i18n="fpMultiple">Multiple</span><b id="fp-x">…</b></div>
+          <div><span data-i18n="fpMonths">Months</span><b id="fp-m">…</b></div>
+        </div>
+        <p class="fp-honest" id="fp-honest"></p>
+        <p class="fp-fine" data-i18n="fpFine">Based on monthly average prices in euro and today's price. Not financial advice; this is for perspective.</p>
+        <div class="fp-share">
+          <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp">WhatsApp</button>
+          <button type="button" id="fp-share-x" data-umami-event="share-whatif-x">X</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- WHAT IF CALCULATOR (legacy, hidden: old script still writes here) -->
+<section class="section whatif-section" id="whatif-legacy" hidden>
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="whatifLabel">What If?</p>
     <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
@@ -2813,63 +2958,16 @@
     </div>
 
     <!-- RIGHT: email mockup (desktop only) -->
-    <div class="push-preview-col reveal reveal-fade" data-delay="4" aria-hidden="true">
-      <div class="em-phone">
-        <div class="em-notch"></div>
-        <div class="em-screen">
-          <div class="em-status">
-            <span class="em-time">09:41</span>
-            <div class="em-status-right">
-              <span class="em-signal">●●●</span>
-              <span class="em-battery">100%</span>
-            </div>
-          </div>
-          <p class="em-inbox-title">Inbox</p>
-
-          <!-- Highlighted email -->
-          <div class="em-email-item em-highlighted">
-            <div class="em-unread-dot"></div>
-            <img src="/Bitcoin.svg" width="36" height="36" alt="" class="em-avatar" />
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender">When to Buy BTC</span>
-                <span class="em-etime em-orange" data-i18n="mockupTimeNow">now</span>
-              </div>
-              <p class="em-subject" data-i18n="mockupEmailSubject">Bitcoin dropped 5.2% today.</p>
-              <p class="em-preview" data-i18n="mockupEmailPreview">Market mood reads fear and the price is 4.2% below its 200-day average…</p>
-            </div>
-          </div>
-
-          <div class="em-divider"></div>
-
-          <!-- Dimmed emails -->
-          <div class="em-email-item">
-            <div class="em-avatar em-avatar-dim">A</div>
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender em-sender-dim">Andreas K.</span>
-                <span class="em-etime">8:12</span>
-              </div>
-              <p class="em-subject em-subject-dim">Re: Q3 planning</p>
-              <p class="em-preview">Sounds good, let's sync on Friday…</p>
-            </div>
-          </div>
-
-          <div class="em-divider"></div>
-
-          <div class="em-email-item">
-            <div class="em-avatar em-avatar-dim">N</div>
-            <div class="em-email-content">
-              <div class="em-email-top">
-                <span class="em-sender em-sender-dim">Newsletter</span>
-                <span class="em-etime">Yesterday</span>
-              </div>
-              <p class="em-subject em-subject-dim">Your weekly roundup</p>
-              <p class="em-preview">Top stories this week…</p>
-            </div>
-          </div>
-
-          <div class="em-home-bar"></div>
+    <div class="push-preview-col" aria-label="Example of the weekly email">
+      <div class="fp-mail">
+        <div class="fp-mail-band">
+          <div class="fp-mail-meta"><span>When to Buy BTC</span><span data-i18n="fpSunday">Sunday</span></div>
+          <div class="fp-mail-word" id="fp-mail-word">Mild.</div>
+          <div class="fp-mail-price" id="fp-mail-price"></div>
+        </div>
+        <div class="fp-mail-body">
+          <span id="fp-mail-line"></span>
+          <ul class="fp-mail-lines" id="fp-mail-lines"></ul>
         </div>
       </div>
     </div>
@@ -3234,8 +3332,24 @@
       statusLive: 'Receiving signal',
       // Signal breakdown
       signalBreakdownLabel: 'Signal Breakdown',
-      signalBreakdownTitle: 'Three signals.<br>One clear picture.',
-      signalBreakdownSub: "No jargon. Just what the data shows right now, and what it's meant historically.",
+      signalBreakdownTitle: 'Three readings.<br>One temperature.',
+      signalBreakdownSub: "Each reading leans colder or warmer. Added up, they give today's temperature. No jargon, no advice.",
+      fpWhy: 'Why {s}?', fpMore: 'More', fpLess: 'Less', fpTogether: 'Together',
+      fpLeanCold: 'Leans cold', fpLeanMild: 'Neutral', fpLeanHot: 'Leans hot',
+      fpLineFg: { 2: 'People are scared. Prices often feel cheapest when the mood is worst.', 1: 'The mood is cautious, more worried than excited.', '-1': 'The mood is upbeat. People feel good about Bitcoin.', '-2': 'The mood is euphoric. Excitement runs high.' },
+      fpLineMa: { 2: 'The price sits well below its long-term average.', 1: 'The price sits a little below its long-term average.', '-1': 'The price sits above its long-term average.', '-2': 'The price sits far above its long-term average.' },
+      fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is close to its all-time high.' },
+      fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
+      fpCalcLabel: 'What if?', fpCalcTitle: 'What a small habit<br>would have done.',
+      fpCalcSub: 'Pick a habit and a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
+      fpStartIn: 'Starting in', fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',
+      fpFine: "Based on monthly average prices in euro and today's price. Not financial advice; this is for perspective.",
+      fpPre: '{amt} a month since {y} would be worth', fpPerMonth: '/ month',
+      fpHonestNone: 'The honest part: it moved around a lot along the way, but never fell far from a high.',
+      fpHonest: 'The honest part: along the way it fell by up to {d} from a high ({a} to {b}). Long-term holders kept going anyway.',
+      fpShare: '{h}: {amt} a month into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
+      fpSunday: 'Sunday', fpMailMood: 'Mood {v}', fpMailLine: 'This week in one minute:',
+      fpMailL1: 'Market mood: {v}', fpMailL2: '{v} vs. 200-day average', fpMailL3: '{v} from the all-time high',
       fgLabel: 'Fear & Greed Index',
       maLabel: 'vs. 200-Day Average',
       athLabel: 'From All-Time High',
@@ -3247,7 +3361,7 @@
       // Chart
       chartLabel: 'The long-term trend',
       chartTitle: 'Price and its 200-day average',
-      chartSub: "The orange line is Bitcoin's price. The white line is the 200-day average. When the price falls below it, Bitcoiners have historically treated it as an opportunity.",
+      chartSub: "The bright line is Bitcoin's price, the dashed line its 200-day average. When the price sits below the average, the market reads colder. Above it, warmer.",
       legendBtc: 'Bitcoin Price',
       legend200ma: '200-Day Moving Average',
       // Expert section
@@ -3391,8 +3505,12 @@
       faqTitle: 'How this works.<br><em>And why.</em>',
       faqItems: [
         {
+          q: 'What do Cold, Mild and Hot mean?',
+          a: `<p>They describe the market, not what anyone should do. Three readings go into it: the market mood (Fear &amp; Greed), the price against its 200-day average, and the distance from the all-time high. Each one leans colder or warmer, and together they give one temperature.</p><p><b>Cold</b> means fear, a price below its long-term trend and a big gap to the peak. <b>Hot</b> means excitement, a price well above its trend and close to the high. <b>Mild</b> is everything in between. Many long-term holders buy a little every month whatever the temperature: a cold market means more sats for the same money, a hot one means the savings already look good.</p>`
+        },
+        {
           q: 'Who built this, and why should I trust it?',
-          a: `<p>This tool was built by <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a>, a Bitcoiner since 2017. He scaled Bitpanda to over 1 million users and is currently Chief Growth Officer at Relai, a MiCA-licensed Bitcoin app.</p><p>This is a personal project. It exists because the information that helps new Bitcoin investors make calm, informed decisions is scattered across charts, indices, and data sources. This tool brings it together in one place. It is listed on <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a>, Jameson Lopp's curated directory of Bitcoin resources.</p>`
+          a: `<p>This tool was built by <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a>, a Bitcoiner since 2017. He scaled Bitpanda to over 1 million users.</p><p>This is a personal project. It exists because the information that helps new Bitcoin investors make calm, informed decisions is scattered across charts, indices, and data sources. This tool brings it together in one place. It is listed on <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a>, Jameson Lopp's curated directory of Bitcoin resources.</p>`
         },
         {
           q: 'Why the Fear & Greed Index?',
@@ -3487,8 +3605,24 @@
       statusLive: 'Signal empfangen',
       // Signal breakdown
       signalBreakdownLabel: 'Signal im Detail',
-      signalBreakdownTitle: 'Drei Signale.<br>Ein klares Bild.',
-      signalBreakdownSub: 'Kein Fachjargon. Nur was die Daten gerade zeigen, und was das historisch bedeutet hat.',
+      signalBreakdownTitle: 'Drei Werte.<br>Eine Temperatur.',
+      signalBreakdownSub: 'Jeder Wert zeigt eher Richtung kalt oder warm. Zusammen ergeben sie die Temperatur von heute. Kein Fachjargon, keine Empfehlung.',
+      fpWhy: 'Warum {s}?', fpMore: 'Mehr', fpLess: 'Weniger', fpTogether: 'Zusammen',
+      fpLeanCold: 'Eher kalt', fpLeanMild: 'Neutral', fpLeanHot: 'Eher heiß',
+      fpLineFg: { 2: 'Die Leute haben Angst. Am günstigsten fühlt es sich oft an, wenn die Stimmung am schlechtesten ist.', 1: 'Die Stimmung ist vorsichtig, eher besorgt als begeistert.', '-1': 'Die Stimmung ist gut. Die Leute fühlen sich wohl mit Bitcoin.', '-2': 'Die Stimmung ist euphorisch. Die Begeisterung ist groß.' },
+      fpLineMa: { 2: 'Der Kurs liegt deutlich unter seinem langfristigen Durchschnitt.', 1: 'Der Kurs liegt etwas unter seinem langfristigen Durchschnitt.', '-1': 'Der Kurs liegt über seinem langfristigen Durchschnitt.', '-2': 'Der Kurs liegt weit über seinem langfristigen Durchschnitt.' },
+      fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs ist nah am Allzeithoch.' },
+      fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
+      fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was eine kleine Gewohnheit<br>bewirkt hätte.',
+      fpCalcSub: 'Wähle eine Gewohnheit und ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
+      fpStartIn: 'Start im Jahr', fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',
+      fpFine: 'Basierend auf monatlichen Durchschnittskursen in Euro und dem heutigen Kurs. Keine Finanzberatung, nur zur Einordnung.',
+      fpPre: '{amt} im Monat seit {y} wären heute', fpPerMonth: '/ Monat',
+      fpHonestNone: 'Der ehrliche Teil: Es ging unterwegs viel auf und ab, aber nie weit unter ein Hoch.',
+      fpHonest: 'Der ehrliche Teil: Unterwegs ging es um bis zu {d} vom Hoch nach unten ({a} bis {b}). Langfrist-Halter haben trotzdem weitergemacht.',
+      fpShare: '{h}: {amt} im Monat in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
+      fpSunday: 'Sonntag', fpMailMood: 'Stimmung {v}', fpMailLine: 'Die Woche in einer Minute:',
+      fpMailL1: 'Marktstimmung: {v}', fpMailL2: '{v} zum 200-Tage-Durchschnitt', fpMailL3: '{v} vom Allzeithoch',
       fgLabel: 'Fear & Greed Index',
       maLabel: 'vs. 200-Tage-Durchschnitt',
       athLabel: 'Vom Allzeithoch',
@@ -3500,7 +3634,7 @@
       // Chart
       chartLabel: 'Der langfristige Trend',
       chartTitle: 'Kurs und sein 200-Tage-Schnitt',
-      chartSub: 'Die orangene Linie ist der Bitcoin-Kurs. Die weiße Linie ist der 200-Tage-Durchschnitt. Fällt der Kurs darunter, haben Bitcoiner das historisch als Kaufgelegenheit gesehen.',
+      chartSub: 'Die helle Linie ist der Bitcoin-Kurs, die gestrichelte sein 200-Tage-Durchschnitt. Liegt der Kurs darunter, liest sich der Markt kälter. Darüber wärmer.',
       legendBtc: 'Bitcoin-Kurs',
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
@@ -3644,8 +3778,12 @@
       faqTitle: 'Wie das funktioniert.<br><em>Und warum.</em>',
       faqItems: [
         {
+          q: 'Was bedeuten Kalt, Mild und Heiß?',
+          a: `<p>Sie beschreiben den Markt, nicht was jemand tun sollte. Drei Werte fließen ein: die Marktstimmung (Fear &amp; Greed), der Kurs im Vergleich zum 200-Tage-Durchschnitt und der Abstand zum Allzeithoch. Jeder Wert zeigt eher Richtung kalt oder warm, zusammen ergeben sie eine Temperatur.</p><p><b>Kalt</b> heißt Angst, ein Kurs unter dem langfristigen Trend und ein großer Abstand zum Hoch. <b>Heiß</b> heißt Euphorie, ein Kurs deutlich über dem Trend und nah am Hoch. <b>Mild</b> ist alles dazwischen. Viele Langfrist-Halter kaufen jeden Monat ein wenig, egal bei welcher Temperatur: Ein kalter Markt bringt mehr Sats fürs gleiche Geld, ein heißer zeigt, dass sich das Sparen gelohnt hat.</p>`
+        },
+        {
           q: 'Wer hat das gebaut, und warum sollte ich dem vertrauen?',
-          a: `<p>Dieses Tool wurde von <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a> entwickelt, Bitcoiner seit 2017. Er hat Bitpanda auf über 1 Million Nutzer skaliert und ist derzeit Chief Growth Officer bei Relai, einer MiCA-lizenzierten Bitcoin-App.</p><p>Dies ist ein persönliches Projekt. Es entstand, weil die Informationen, die neuen Bitcoin-Investoren helfen, ruhige und fundierte Entscheidungen zu treffen, über Charts, Indizes und Datenquellen verstreut sind. Dieses Tool bündelt sie an einem Ort. Es ist auf <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a> gelistet, dem kuratierten Bitcoin-Ressourcenverzeichnis von Jameson Lopp.</p>`
+          a: `<p>Dieses Tool wurde von <a href="https://imobabics.com/" target="_blank" rel="noopener">Imo Babics</a> entwickelt, Bitcoiner seit 2017. Er hat Bitpanda auf über 1 Million Nutzer skaliert.</p><p>Dies ist ein persönliches Projekt. Es entstand, weil die Informationen, die neuen Bitcoin-Investoren helfen, ruhige und fundierte Entscheidungen zu treffen, über Charts, Indizes und Datenquellen verstreut sind. Dieses Tool bündelt sie an einem Ort. Es ist auf <a href="https://lopp.net" target="_blank" rel="noopener">lopp.net</a> gelistet, dem kuratierten Bitcoin-Ressourcenverzeichnis von Jameson Lopp.</p>`
         },
         {
           q: 'Warum der Fear & Greed Index?',
@@ -4008,6 +4146,7 @@
     // Range −5 to +5. Thresholds: ≥3 Cold (accumulate), −1 to 2 Mild (hold), ≤−2 Hot (caution)
     window._signalScore = score;
     window._signalState = score >= 3 ? 'accumulate' : score >= -1 ? 'hold' : 'caution';
+    window._signalParts = { fg: fgScore, ma: maScore, ath: athScore };
 
     const dayIndex = Math.floor(Date.now() / 86400000);
 
@@ -4079,6 +4218,7 @@
     }
 
     if (window._renderTempHero) window._renderTempHero();
+    if (window._renderWhy) window._renderWhy();
 
     // Update gauge needle
     if (fgValue !== null) {
@@ -4329,13 +4469,17 @@
     const toX = i => pad.left + (i / (vals.length - 1)) * cw;
     const toY = v => pad.top + ch - ((v - min) / (max - min)) * ch;
     const sym = currentCurrency === 'EUR' ? '€' : '$';
+    // Price line follows the market temperature (Cold blue, Mild gold, Hot orange)
+    const TR = (getComputedStyle(document.documentElement).getPropertyValue('--temp-rgb') || '247,147,26').trim() || '247,147,26';
+    const tc = a => 'rgba(' + TR + ',' + a + ')';
+    window._chartTempRGB = TR;
 
     ctx.clearRect(0, 0, W, H);
 
     // Atmospheric glow — sweep across bottom
     const bgGlow = ctx.createLinearGradient(0, H * 0.5, 0, H);
-    bgGlow.addColorStop(0, 'rgba(247,147,26,0)');
-    bgGlow.addColorStop(1, 'rgba(247,147,26,0.03)');
+    bgGlow.addColorStop(0, tc(0));
+    bgGlow.addColorStop(1, tc(0.03));
     ctx.fillStyle = bgGlow;
     ctx.fillRect(0, 0, W, H);
 
@@ -4349,7 +4493,7 @@
 
     // Below-200-day accumulation zone — soft green wash where price < MA
     if (maPrice) {
-      ctx.fillStyle = 'rgba(74,222,128,0.04)';
+      ctx.fillStyle = 'rgba(142,201,255,0.07)';
       let zoneStart = null;
       for (let i = 0; i < vals.length; i++) {
         const below = vals[i] < maPrice;
@@ -4366,9 +4510,9 @@
 
     // Price area fill — rich orange gradient
     const areaGrad = ctx.createLinearGradient(0, pad.top, 0, H);
-    areaGrad.addColorStop(0,   'rgba(247,147,26,0.18)');
-    areaGrad.addColorStop(0.6, 'rgba(247,147,26,0.05)');
-    areaGrad.addColorStop(1,   'rgba(247,147,26,0)');
+    areaGrad.addColorStop(0,   tc(0.18));
+    areaGrad.addColorStop(0.6, tc(0.05));
+    areaGrad.addColorStop(1,   tc(0));
     ctx.beginPath();
     ctx.moveTo(toX(0), toY(vals[0]));
     vals.forEach((v, i) => ctx.lineTo(toX(i), toY(v)));
@@ -4395,10 +4539,10 @@
 
     // Price line — orange with glow
     ctx.save();
-    ctx.shadowColor = 'rgba(247,147,26,0.4)';
+    ctx.shadowColor = tc(0.4);
     ctx.shadowBlur = 8;
     ctx.beginPath();
-    ctx.strokeStyle = '#F7931A';
+    ctx.strokeStyle = tc(1);
     ctx.lineWidth = 2;
     ctx.lineJoin = 'round';
     ctx.lineCap  = 'round';
@@ -4410,11 +4554,11 @@
     const lastX = toX(vals.length - 1);
     const lastY = toY(vals[vals.length - 1]);
     ctx.save();
-    ctx.shadowColor = 'rgba(247,147,26,0.6)';
+    ctx.shadowColor = tc(0.6);
     ctx.shadowBlur = 12;
     ctx.beginPath();
     ctx.arc(lastX, lastY, 3.5, 0, Math.PI * 2);
-    ctx.fillStyle = '#F7931A';
+    ctx.fillStyle = tc(1);
     ctx.fill();
     ctx.restore();
 
@@ -4496,7 +4640,8 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.monthly && Object.keys(data.monthly).length > 100) {
-        BTC_MONTHLY_EUR = data.monthly;
+        BTC_MONTHLY_EUR = { ...BTC_MONTHLY_FALLBACK, ...data.monthly };
+        if (window._whatifStepperRefresh) window._whatifStepperRefresh();
       }
     } catch (e) {
       console.warn('Monthly prices API unavailable, using fallback table');
@@ -4526,8 +4671,8 @@
     const val = document.getElementById('whatif-btc-value').textContent;
     const invested = document.getElementById('whatif-invested').textContent;
     const text = currentLang === 'de'
-      ? `${label}: Hätte ich das Geld stattdessen seit 2015 wöchentlich in Bitcoin gesteckt, hätte ich heute ${val} (investiert: ${invested}). Berechne deins: whentobuybtc.xyz`
-      : `${label}: if I'd put that money into Bitcoin weekly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
+      ? `${label}: Hätte ich das Geld stattdessen seit 2015 monatlich in Bitcoin gesteckt, hätte ich heute ${val} (investiert: ${invested}). Berechne deins: whentobuybtc.xyz`
+      : `${label}: if I'd put that money into Bitcoin monthly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
   }
   function shareWhatIfTwitter() {
@@ -5773,5 +5918,162 @@
 })();
 </script>
 <!-- ═══ TEMPERATURE HERO: SCRIPT (end) ═══ -->
+<!-- ═══ FULL PAGE V2: SCRIPT (start) ═══
+     Why cards, Together box, mail preview and the v2 calculator. Reads what updateSignal() computed
+     (window._signalState/_signalScore/_signalParts) and BTC_MONTHLY_EUR; writes only to fp-* elements. -->
+<script>
+(function () {
+  function el(id) { return document.getElementById(id); }
+  function T() { return translations[currentLang] || translations.en; }
+  function fill(str, o) { return String(str).replace(/\{(\w+)\}/g, function (_, k) { return o[k] != null ? o[k] : ''; }); }
+  function lean(s) { var t = T(); return s > 0 ? t.fpLeanCold : s < 0 ? t.fpLeanHot : t.fpLeanMild; }
+
+  /* ── Why: build the card extras once ── */
+  var CARDS = [
+    { id: 'fg-metric', desc: 'fg-desc', key: 'fg', lines: 'fpLineFg', pos: function (s) { return (2 - s) / 4; } },
+    { id: 'ma-metric', desc: 'ma-desc', key: 'ma', lines: 'fpLineMa', pos: function (s) { return (2 - s) / 4; } },
+    { id: 'ath-metric', desc: 'ath-desc', key: 'ath', lines: 'fpLineAth', pos: function (s) { return (1 - s) / 2; } }
+  ];
+  var built = false;
+  function build() {
+    if (built) return; built = true;
+    CARDS.forEach(function (c) {
+      var card = el(c.id), desc = el(c.desc);
+      if (!card || !desc) return;
+      var line = document.createElement('p'); line.className = 'fp-line'; line.id = c.id + '-fpline';
+      var sc = document.createElement('div'); sc.className = 'fp-scale'; sc.innerHTML = '<span class="fp-dot" id="' + c.id + '-fpdot"></span>';
+      var lab = document.createElement('div'); lab.className = 'fp-scale-l'; lab.innerHTML = '<span id="' + c.id + '-fpcold"></span><b id="' + c.id + '-fplean"></b><span id="' + c.id + '-fphot"></span>';
+      card.insertBefore(line, desc); card.insertBefore(sc, desc); card.insertBefore(lab, desc);
+      desc.classList.add('fp-collapsed');
+      var more = document.createElement('button'); more.type = 'button'; more.className = 'fp-more'; more.id = c.id + '-fpmore';
+      more.setAttribute('aria-expanded', 'false'); more.setAttribute('aria-controls', c.desc);
+      more.addEventListener('click', function () {
+        var open = desc.classList.toggle('fp-collapsed') === false;
+        more.setAttribute('aria-expanded', String(open));
+        more.textContent = (open ? T().fpLess : T().fpMore) + (open ? ' ↑' : ' ↓');
+      });
+      desc.parentNode.insertBefore(more, desc.nextSibling);
+    });
+  }
+
+  var lastTemp = null;
+  window._renderWhy = function () {
+    var st = window._signalState, parts = window._signalParts;
+    if (!st || !parts || typeof translations === 'undefined') return;
+    build();
+    var t = T(), name = t.stateName[st];
+    var label = document.querySelector('#signal .section-label');
+    if (label) { label.removeAttribute('data-i18n'); label.textContent = fill(t.fpWhy, { s: name.toLowerCase() }); }
+    CARDS.forEach(function (c) {
+      var sc = parts[c.key];
+      var line = el(c.id + '-fpline'); if (line) line.textContent = (t[c.lines] || {})[sc] || '';
+      var dot = el(c.id + '-fpdot'); if (dot) dot.style.left = (c.pos(sc) * 100) + '%';
+      var lc = el(c.id + '-fpcold'); if (lc) lc.textContent = t.stateName.accumulate;
+      var lh = el(c.id + '-fphot'); if (lh) lh.textContent = t.stateName.caution;
+      var ll = el(c.id + '-fplean'); if (ll) ll.textContent = lean(sc);
+      var more = el(c.id + '-fpmore');
+      if (more) { var open = more.getAttribute('aria-expanded') === 'true'; more.textContent = (open ? t.fpLess : t.fpMore) + (open ? ' ↑' : ' ↓'); }
+    });
+    /* Together */
+    el('fp-together-word').textContent = name + '.';
+    el('fp-together-text').textContent = (t.fpTogetherText || {})[st] || '';
+    var score = Math.max(-5, Math.min(5, window._signalScore || 0));
+    el('fp-together-dot').style.left = ((5 - score) / 10 * 100) + '%';
+    [['fpt-cold', 'accumulate'], ['fpt-mild', 'hold'], ['fpt-hot', 'caution']].forEach(function (p) {
+      var x = el(p[0]); if (x) { x.textContent = t.stateName[p[1]]; x.classList.toggle('on', p[1] === st); }
+    });
+    /* Mail preview */
+    var sym = currentCurrency === 'EUR' ? '€' : '$';
+    el('fp-mail-word').textContent = name + '.';
+    el('fp-mail-price').textContent = currentPrice ? sym + formatPrice(currentPrice) : '';
+    el('fp-mail-line').textContent = t.fpMailLine;
+    var txt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
+    el('fp-mail-lines').innerHTML = '';
+    [fill(t.fpMailL1, { v: fgValue }), fill(t.fpMailL2, { v: txt('ma-value') }), fill(t.fpMailL3, { v: txt('ath-value') })].forEach(function (s) {
+      var li = document.createElement('li'); li.textContent = s; el('fp-mail-lines').appendChild(li);
+    });
+    /* Chart follows the temperature */
+    var temp = document.documentElement.getAttribute('data-temp');
+    if (temp !== lastTemp) { lastTemp = temp; if (typeof redrawChart === 'function') redrawChart(); }
+    calc.render();
+  };
+
+  /* ── Calculator v2: habit × start year, with the worst drop shown ── */
+  var calc = (function () {
+    var HABITS = [
+      { key: 'netflix', m: 15, en: 'Netflix', de: 'Netflix' },
+      { key: 'gym', m: 30, en: 'The gym you never use', de: 'Das Fitnessstudio, das du nie besuchst' },
+      { key: 'coffee', m: 50, en: 'Coffee on the go', de: 'Kaffee unterwegs' },
+      { key: 'lunch', m: 60, en: 'Grabbing lunch', de: 'Mittagessen to go' },
+      { key: 'takeaway', m: 70, en: 'Takeaways', de: 'Bestellungen nach Hause' },
+      { key: 'drinks', m: 80, en: 'Drinks after work', de: 'Drinks nach der Arbeit' },
+      { key: 'uber', m: 90, en: 'A few Ubers', de: 'Ein paar Uber-Fahrten' },
+      { key: 'fashion', m: 100, en: "Clothes you didn't need", de: 'Klamotten, die du nicht brauchtest' },
+      { key: 'dining', m: 120, en: 'Dinner out', de: 'Essen gehen' },
+      { key: 'nights', m: 150, en: 'A proper night out', de: 'Ein richtiger Abend aus' }
+    ];
+    var YEARS = [2015, 2017, 2019, 2021, 2023];
+    var hi = 2, year = 2015, last = null;
+    if (!el('fp-amt')) return { render: function () {} };
+    var yearsEl = el('fp-years');
+    yearsEl.innerHTML = YEARS.map(function (y) { return '<button type="button" data-y="' + y + '" aria-pressed="false" data-umami-event="whatif-year" data-umami-event-year="' + y + '">' + y + '</button>'; }).join('');
+    yearsEl.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { year = +b.dataset.y; render(); } });
+    function step(d) { var n = Math.max(0, Math.min(HABITS.length - 1, hi + d)); if (n !== hi) { hi = n; render(); } }
+    el('fp-minus').addEventListener('click', function () { step(-1); });
+    el('fp-plus').addEventListener('click', function () { step(1); });
+
+    function usd() { return currentCurrency !== 'EUR'; }
+    function money(eur) { var v = usd() ? eur * eurUsdRate : eur; return (usd() ? '$' : '€') + Math.round(v).toLocaleString(numLocale()); }
+    function amtLabel(m) { return (usd() ? '$' : '€') + (usd() ? Math.round(m * eurUsdRate) : m); }
+    function compute() {
+      var data = (typeof BTC_MONTHLY_EUR !== 'undefined' && BTC_MONTHLY_EUR) || {};
+      var amount = HABITS[hi].m;
+      var months = Object.keys(data).filter(function (k) { return +k.slice(0, 4) >= year && data[k] > 0; }).sort();
+      var btc = 0, put = 0, peak = 0, worst = 0, wFrom = '', wTo = '', peakM = '';
+      months.forEach(function (k) {
+        btc += amount / data[k]; put += amount;
+        var v = btc * data[k];
+        if (v > peak) { peak = v; peakM = k; }
+        var dd = (v - peak) / peak;
+        if (dd < worst) { worst = dd; wFrom = peakM; wTo = k; }
+      });
+      var priceEur = currentPrice ? (usd() ? currentPrice / eurUsdRate : currentPrice) : 0;
+      return { amount: amount, months: months.length, put: put, now: btc * priceEur, worst: worst, wFrom: wFrom, wTo: wTo };
+    }
+    function mon(k) { return new Date(k + '-15').toLocaleDateString(numLocale(), { month: 'short', year: 'numeric' }); }
+    function render() {
+      var t = T(), h = HABITS[hi], name = currentLang === 'de' ? h.de : h.en;
+      el('fp-amt').innerHTML = amtLabel(h.m) + '<small> ' + t.fpPerMonth + '</small>';
+      el('fp-habit').textContent = '≈ ' + name.toLowerCase();
+      el('fp-minus').disabled = hi === 0; el('fp-plus').disabled = hi === HABITS.length - 1;
+      yearsEl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.y === year)); });
+      el('fp-pre').textContent = fill(t.fpPre, { amt: amtLabel(h.m), y: year });
+      if (!currentPrice) return;
+      var r = compute(); last = { r: r, name: name };
+      el('fp-big').textContent = money(r.now);
+      el('fp-in').textContent = money(r.put);
+      el('fp-x').textContent = r.put ? (r.now / r.put).toLocaleString(numLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + '×' : '…';
+      el('fp-m').textContent = r.months;
+      el('fp-honest').textContent = r.worst < -0.05
+        ? fill(t.fpHonest, { d: Math.round(-r.worst * 100) + '%', a: mon(r.wFrom), b: mon(r.wTo) })
+        : t.fpHonestNone;
+    }
+    function shareText() {
+      if (!last) return 'whentobuybtc.xyz';
+      return fill(T().fpShare, { h: last.name, amt: amtLabel(HABITS[hi].m), y: year, v: el('fp-big').textContent, i: el('fp-in').textContent });
+    }
+    el('fp-share-wa').addEventListener('click', function () { window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank'); });
+    el('fp-share-x').addEventListener('click', function () { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText()), '_blank'); });
+    render();
+    /* Re-render when the monthly table arrives (fetchMonthlyPrices calls this) or currency/lang/price change */
+    var prev = window._whatifStepperRefresh;
+    window._whatifStepperRefresh = function () { if (prev) prev(); render(); };
+    return { render: render };
+  })();
+
+  if (window._signalState) window._renderWhy();
+})();
+</script>
+<!-- ═══ FULL PAGE V2: SCRIPT (end) ═══ -->
 </body>
 </html>

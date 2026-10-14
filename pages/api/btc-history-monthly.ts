@@ -24,7 +24,9 @@ const FALLBACK: Record<string, number> = {
   '2023-07':25500,'2023-08':24000,'2023-09':23500,'2023-10':24000,'2023-11':30000,'2023-12':37000,
   '2024-01':37000,'2024-02':43000,'2024-03':56000,'2024-04':54000,'2024-05':55000,'2024-06':55000,
   '2024-07':55000,'2024-08':51000,'2024-09':48000,'2024-10':54000,'2024-11':72000,'2024-12':85000,
-  '2025-01':85000,'2025-02':77000,'2025-03':75000,
+  '2025-01':85000,'2025-02':77000,'2025-03':75000,'2025-04':74000,'2025-05':82000,'2025-06':84000,
+  '2025-07':88000,'2025-08':91000,'2025-09':86000,'2025-10':82000,'2025-11':78000,'2025-12':81000,
+  '2026-01':82000,'2026-02':72000,'2026-03':61000,
 };
 
 function toYYYYMM(ts: number): string {
@@ -34,7 +36,7 @@ function toYYYYMM(ts: number): string {
 
 async function fetchFromCoinGecko(): Promise<Record<string, number>> {
   const cgKey = process.env.COINGECKO_API_KEY ? `&x_cg_pro_api_key=${process.env.COINGECKO_API_KEY}` : '';
-  const url = `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=365&interval=daily${cgKey}`;
+  const url = `https://pro-api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=730&interval=daily${cgKey}`;
   const res = await fetch(url, {
     headers: { 'Accept': 'application/json', 'User-Agent': 'whentobuybtc.xyz/1.0' },
     signal: AbortSignal.timeout(10000),
@@ -59,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader('Cache-Control', 'public, s-maxage=21600, stale-while-revalidate=3600');
 
   // Serve from in-memory cache if fresh — this is the fix; previously every
-  // request hit CoinGecko's 365-day daily endpoint regardless of the header
+  // request hit CoinGecko's daily endpoint regardless of the header
   if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
     return res.status(200).json({
       monthly: cache.monthly,
