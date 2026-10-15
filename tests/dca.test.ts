@@ -36,6 +36,14 @@ test('dca: worst drop and recovery', () => {
   assert.equal(r.worst!.recovered, '2021-04');      // Apr: (3.5 + 100/60) × 60 = 310, back above 300
 });
 
+test('dca weekly: one buy every 7 days from 1 January, priced at that month\'s average', () => {
+  // Jan 2020 has 5 buy dates (1, 8, 15, 22, 29), Feb 2020 has 4 (5, 12, 19, 26); stop on 29 Feb
+  const r = computeDca({ '2020-01': 100, '2020-02': 200 }, 10, 2020, 400, 'weekly', new Date(Date.UTC(2020, 1, 29)));
+  assert.equal(r.buys, 9);
+  assert.equal(r.put, 90);
+  assert.ok(Math.abs(r.btc - (5 * 10 / 100 + 4 * 10 / 200)) < 1e-12);
+});
+
 test('the inline copy in app.html matches lib/dca.ts', () => {
   const html = readFileSync('public/app.html', 'utf8');
   const m = html.match(/\/\* DCA MODEL \(start\)[\s\S]*?\*\/([\s\S]*?)\/\* DCA MODEL \(end\) \*\//);
@@ -43,6 +51,8 @@ test('the inline copy in app.html matches lib/dca.ts', () => {
   const wtbDca = new Function(m![1] + '; return wtbDca;')();
   const monthly: Record<string, number> = {}; let p = 250;
   for (let y = 2015; y <= 2026; y++) for (let mo = 1; mo <= 12; mo++) { p *= 1 + Math.sin(y * 7 + mo) * 0.2 + 0.03; monthly[`${y}-${String(mo).padStart(2, '0')}`] = Math.round(p); }
-  for (const amt of [1, 15, 50, 333, 5000]) for (const y of [2015, 2017, 2018, 2021, 2024, 2026]) for (const now of [1000, 60000, 90000])
-    assert.deepEqual(wtbDca(monthly, amt, y, now), JSON.parse(JSON.stringify(computeDca(monthly, amt, y, now))));
+  const today = new Date(Date.UTC(2026, 9, 15));
+  for (const f of ['monthly', 'weekly'] as const)
+    for (const amt of [1, 15, 50, 333, 5000]) for (const y of [2015, 2017, 2018, 2021, 2024, 2026]) for (const now of [1000, 60000, 90000])
+      assert.deepEqual(wtbDca(monthly, amt, y, now, f, today), JSON.parse(JSON.stringify(computeDca(monthly, amt, y, now, f, today))));
 });

@@ -2276,71 +2276,7 @@
     .hero-content    { z-index: 15; }
 
 </style>
-  <!-- ═══ MARKET CONTEXT STRIP: CSS (start) ═══ -->
-  <style>
-    #context[hidden], #mc-rule[hidden] { display: none !important; }
-    .mc-panel { --mc-label: #8A837A; margin-top: 3rem; border: 1px solid rgba(247,147,26,0.15); background: rgba(247,147,26,0.02); position: relative; overflow: hidden; }
-    .mc-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent); }
-    .mc-head { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid rgba(247,147,26,0.1); }
-    .mc-head-left { display: flex; align-items: center; gap: 1rem; }
-    .mc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
-    .mc-dot.closed { background: var(--mc-label); box-shadow: none; }
-    .mc-head-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); opacity: 0.7; white-space: nowrap; }
-    .mc-stamp { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mc-label); }
 
-    .mc-ctx { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.6rem 1.5rem; align-items: center; padding: 2rem 2rem 1.8rem; border-bottom: 1px solid var(--border); }
-    .mc-chip { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 0.35rem 0.6rem; border: 1px solid currentColor; white-space: nowrap; color: var(--mc-label); }
-    .mc-chip.with { color: var(--red); } .mc-chip.with.up { color: var(--green); }
-    .mc-chip.only { color: var(--orange); }
-    .mc-chip.against { color: var(--amber); }
-    .mc-text { font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.3; margin: 0; color: var(--white); text-wrap: balance; }
-    .mc-text .mc-dollar { color: var(--muted); }
-
-    .mc-tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    .mc-tile { padding: 1.5rem 1.5rem 1.4rem; min-width: 0; position: relative; }
-    .mc-tile + .mc-tile { border-left: 1px solid var(--border); }
-    .mc-tile.btc { background: var(--orange-dim); }
-    .mc-tile.btc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--orange); opacity: 0.6; }
-    .mc-name { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mc-label); margin-bottom: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .mc-tile.btc .mc-name { color: var(--orange); }
-    .mc-val { font-family: var(--title); font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 0.95; letter-spacing: 0.01em; margin-bottom: 0.7rem; color: var(--white); font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .mc-val small { font-size: 0.55em; color: var(--muted); margin-left: 0.15em; }
-    .mc-chg { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; font-family: var(--mono); font-size: 0.68rem; font-variant-numeric: tabular-nums; }
-    .mc-chg span { white-space: nowrap; }
-    .mc-chg em { font-style: normal; color: var(--mc-label); margin-right: 0.35em; font-size: 0.85em; letter-spacing: 0.08em; }
-    .mc-up { color: var(--green); } .mc-down { color: var(--red); } .mc-flat { color: var(--muted); }
-    .mc-date { margin-top: 0.6rem; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mc-label); }
-    .mc-tile.stale .mc-val, .mc-tile.stale .mc-chg, .mc-tile.missing .mc-val { opacity: 0.45; }
-    .mc-tile.stale .mc-date { color: var(--amber); }
-
-    .mc-foot { display: flex; flex-wrap: wrap; gap: 0.8rem 2.5rem; align-items: center; padding: 1rem 2rem; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mc-label); }
-    .mc-foot b { font-weight: 400; color: var(--white); }
-    .mc-corr { display: flex; align-items: center; gap: 0.75rem; }
-    .mc-corr-track { position: relative; width: 120px; height: 2px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
-    .mc-corr-track::after { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 8px; background: var(--mc-label); }
-    .mc-corr-mark { position: absolute; top: -4px; width: 6px; height: 10px; background: var(--orange); transform: translateX(-50%); }
-    .mc-sources { margin-left: auto; text-align: right; }
-    .mc-fred { display: block; margin-top: 0.3rem; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: none; opacity: 0.8; }
-
-    @media (max-width: 1150px) {
-      .mc-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .mc-tile:nth-child(3n+1) { border-left: 0; }
-      .mc-tile:nth-child(n+4) { border-top: 1px solid var(--border); }
-    }
-    @media (max-width: 768px) {
-      .mc-head, .mc-ctx, .mc-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
-      .mc-ctx { grid-template-columns: 1fr; }
-      .mc-chip { justify-self: start; }
-      .mc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .mc-tile { padding: 1.2rem 1.1rem; }
-      .mc-tile:nth-child(n) { border-left: 0; border-top: 1px solid var(--border); }
-      .mc-tile:nth-child(even) { border-left: 1px solid var(--border); }
-      .mc-tile:nth-child(-n+2) { border-top: 0; }
-      .mc-sources { margin-left: 0; text-align: left; }
-      .mc-corr { flex-wrap: wrap; row-gap: 0.5rem; }
-    }
-  </style>
-  <!-- ═══ MARKET CONTEXT STRIP: CSS (end) ═══ -->
   <!-- ═══ TEMPERATURE HERO: CSS (start) ═══ -->
   <style>
     :root { --temp: #F2C46B; --temp-rgb: 242,196,107; --temp-cold: #8EC9FF; --temp-mild: #F2C46B; --temp-hot: #F7931A; }
@@ -2609,6 +2545,94 @@
   </style>
   <!-- ═══ FULL PAGE V2: CSS (end) ═══ -->
 
+  <!-- ═══ SITE V3: CSS (start) ═══ -->
+  <style>
+    /* No particles: plain background, no star dots, no field canvases */
+    html { background-image: none !important; }
+    #expert-field, .hero-temp-canvas { display: none !important; }
+    .tc-accumulate { color: #8EC9FF; } .tc-hold { color: #F2C46B; } .tc-caution { color: #F7931A; }
+
+    /* Hero state word: rendered image (ice / plain / fire) when available, text otherwise */
+    .temp-hero .hero-state-img { display: block; height: clamp(6.5rem, 30vw, 13.5rem); width: auto; max-width: 100%; margin: 0.6rem auto -0.6rem; object-fit: contain;
+      mix-blend-mode: screen; opacity: 0; transform: scale(0.97); transition: opacity 0.9s ease 0.15s, transform 1.2s cubic-bezier(0.2,0.8,0.2,1) 0.15s; }
+    .temp-hero .hero-state-img[hidden] { display: none; }
+    .temp-hero.temp-in .hero-state-img { opacity: 1; transform: none; }
+    .temp-hero.has-state-img .hero-state { position: absolute !important; width: 1px; height: 1px; min-height: 0; margin: 0; overflow: hidden; clip-path: inset(50%) !important; white-space: nowrap; }
+
+    /* Wider market: numbers in one line, then what Bitcoin did */
+    .fp-wider .fp-wider-l { display: block; margin: 0 0 6px; }
+    .fp-together .wm-row { margin: 0 0 6px; font-family: var(--mono); font-style: normal; font-size: 0.74rem; letter-spacing: 0.02em; line-height: 1.8; color: var(--muted); }
+    .wm-i { white-space: nowrap; } .wm-n { color: var(--fp-quiet); } .wm-sep { color: var(--fp-quiet); }
+    .wm-row b, .wm-verdict b { font-weight: 400; }
+    b.up { color: #4ADE80; } b.down { color: #F87171; } b.flat { color: var(--muted); }
+    .fp-together .wm-verdict { margin: 0; font-family: var(--display); font-style: italic; font-size: 1.08rem; line-height: 1.5; color: var(--white); }
+
+    /* Calculator v4: three inputs, one answer */
+    .cx { margin-top: 2rem; background: var(--fp-bg2); border: 1px solid var(--fp-line); }
+    .cx-in { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 20px; border-bottom: 1px solid var(--fp-line); }
+    .cx-k { display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); margin-bottom: 8px; }
+    .cx-amt-row { display: flex; align-items: baseline; gap: 4px; border-bottom: 1px solid rgba(237,232,222,0.25); padding-bottom: 2px; cursor: text; }
+    .cx-amt-row:focus-within { border-color: var(--temp); }
+    .cx-cur { font-family: var(--title); font-size: 2rem; color: var(--fp-quiet); }
+    #cx-amt { background: none; border: 0; outline: none; color: var(--white); font-family: var(--title); font-size: 3rem; line-height: 1.05; width: 100%; min-width: 0; padding: 0; caret-color: var(--temp); font-variant-numeric: tabular-nums; }
+    .cx-seg { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--fp-line); }
+    .cx-seg button { background: none; border: 0; min-height: 48px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .cx-seg button[aria-checked="true"] { background: rgba(var(--temp-rgb), 0.14); color: var(--temp); box-shadow: inset 0 0 0 1px var(--temp); }
+    .cx-seg button:focus-visible, #cx-year:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--temp); }
+    .cx-sel { position: relative; display: block; }
+    .cx-sel::after { content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; border-right: 1.5px solid var(--fp-quiet); border-bottom: 1.5px solid var(--fp-quiet); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+    #cx-year { -webkit-appearance: none; appearance: none; width: 100%; min-height: 48px; background: transparent; border: 1px solid var(--fp-line); border-radius: 0; color: var(--white); font-family: var(--title); font-size: 1.5rem; letter-spacing: 0.04em; padding: 4px 40px 0 14px; cursor: pointer; }
+    #cx-year option { background: #1C1917; color: #EDE8DE; font-family: system-ui, sans-serif; font-size: 1rem; }
+    .cx-out { padding: 24px 20px 22px; text-align: center; background: radial-gradient(70% 60% at 50% 0%, rgba(var(--temp-rgb), 0.1), transparent 70%); }
+    .cx-pre { margin: 0; font-family: var(--display); font-style: italic; font-size: 1.12rem; color: var(--muted); }
+    .cx-big { font-family: var(--title); font-size: clamp(3.4rem, 15vw, 6.5rem); line-height: 1; color: var(--temp); margin: 8px 0 6px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; transition: color 1s; }
+    .cx-sub { margin: 0 0 18px; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em; color: var(--white); }
+    .cx-dot { color: var(--fp-quiet); margin: 0 6px; }
+    .cx-chart { position: relative; height: 200px; touch-action: pan-y; }
+    .cx-chart canvas { display: block; cursor: crosshair; }
+    .cx-tip { position: absolute; top: 0; pointer-events: none; background: rgba(9,8,10,0.92); border: 1px solid var(--fp-line); padding: 7px 10px; font-family: var(--mono); font-size: 0.62rem; color: var(--white); white-space: nowrap; display: grid; gap: 3px; text-align: left; }
+    .cx-tip[hidden] { display: none; }
+    .cx-tip b { font-weight: 400; color: var(--fp-quiet); text-transform: uppercase; letter-spacing: 0.12em; }
+    .cx-legend { display: flex; justify-content: center; gap: 18px; margin-top: 10px; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fp-quiet); }
+    .cx-l-worth, .cx-l-put { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--temp); vertical-align: middle; margin-right: 6px; }
+    .cx-l-put { border-top: 1.5px dashed rgba(237,232,222,0.6); }
+    .cx-fine { margin: 16px 0 0; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; line-height: 1.6; color: var(--fp-quiet); }
+    .cx-share { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .cx-share button { background: none; border: 1px solid var(--fp-line); padding: 11px 16px; min-height: 44px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--white); cursor: pointer; }
+    .cx-share button:hover, .cx-share button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
+    @media (min-width: 769px) {
+      .cx-in { grid-template-columns: 1.4fr 1fr 0.9fr; align-items: end; gap: 24px; padding: 24px 28px; }
+      .cx-out { padding: 30px 28px 26px; }
+      .cx-chart { height: 260px; }
+    }
+
+    /* Alerts: a real look at the Sunday email */
+    .mx { max-width: 400px; margin: 0 auto; border: 1px solid rgba(237,232,222,0.12); background: #141211; box-shadow: 0 40px 80px rgba(0,0,0,0.55); text-align: left; }
+    .mx-chrome { padding: 12px 16px; border-bottom: 1px solid rgba(237,232,222,0.08); background: #100E0D; }
+    .mx-dots { display: flex; gap: 6px; margin-bottom: 10px; } .mx-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(237,232,222,0.18); }
+    .mx-from { display: flex; justify-content: space-between; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: rgba(237,232,222,0.55); } .mx-from b { color: #EDE8DE; }
+    .mx-subj { margin-top: 4px; font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; color: #EDE8DE; }
+    .mx-body { position: relative; background: #1C1917; padding: 0 18px; max-height: 480px; overflow: hidden; }
+    .mx-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(237,232,222,0.08); font-family: Arial, Helvetica, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; color: #EDE8DE; }
+    .mx-head img { vertical-align: middle; margin-right: 6px; } .mx-head span:last-child { font-family: 'Courier New', monospace; font-weight: 400; color: rgba(237,232,222,0.55); text-transform: uppercase; }
+    .mx-band { margin: 16px 0 6px; padding: 16px 16px 14px; border: 1px solid rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.09); transition: border-color 1s, background 1s; }
+    .mx-eye { margin: 0; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
+    .mx-word { margin: 2px 0 0; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 40px; line-height: 1.1; }
+    .mx-sent { margin: 4px 0 12px; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 13px; line-height: 1.5; color: rgba(237,232,222,0.82); }
+    .mx-price { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-family: 'Courier New', monospace; font-size: 10px; color: rgba(237,232,222,0.55); }
+    #mx-price { font-family: Arial, Helvetica, sans-serif; font-size: 22px; color: #EDE8DE; } .mx-price b { font-weight: 700; }
+    .mx-scale { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; } .mx-scale i { height: 4px; opacity: 0.28; }
+    .mx-scale i[data-s="accumulate"] { background: #8EC9FF; } .mx-scale i[data-s="hold"] { background: #F2C46B; } .mx-scale i[data-s="caution"] { background: #F7931A; } .mx-scale i.on { opacity: 1; }
+    .mx-scale-l { display: flex; justify-content: space-between; margin-top: 6px; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.42); } .mx-scale-l .on { font-weight: 700; }
+    .mx-row { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid rgba(237,232,222,0.1); } .mx-row:first-child { border-top: 0; }
+    .mx-rl { margin: 0 0 3px; font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
+    .mx-rt { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 12px; line-height: 1.5; color: rgba(237,232,222,0.82); }
+    .mx-rv { text-align: right; white-space: nowrap; } .mx-rv b { display: block; font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 17px; color: #EDE8DE; }
+    .mx-rv span { font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .mx-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: linear-gradient(rgba(28,25,23,0), #1C1917); }
+    @media (min-width: 900px) { .mx { transform: perspective(1400px) rotateY(-5deg); } }
+  </style>
+  <!-- ═══ SITE V3: CSS (end) ═══ -->
 </head>
 <body>
 
@@ -2652,8 +2676,6 @@
     <span class="ath-banner-text">New All-Time High</span>
   </div>
 
-  <!-- Depth layers — parallax starfield -->
-  <canvas class="hero-temp-canvas" id="hero-temp-canvas" aria-hidden="true"></canvas>
   <!-- Ambient light -->
   <div class="hero-ambient"></div>
 
@@ -2669,6 +2691,7 @@
     </div>
     <!-- TEMPERATURE HERO: state word, sentence, cold-hot scale -->
     <p class="hero-state" id="hero-state" aria-live="polite"></p>
+    <img class="hero-state-img" id="hero-state-img" alt="" aria-hidden="true" hidden>
     <p class="hero-sentence" id="hero-sentence"></p>
     <div class="hero-scale" id="hero-scale" role="img" aria-label="">
       <div class="hero-scale-track"><span class="hero-scale-marker" id="hero-scale-marker"></span></div>
@@ -2870,84 +2893,45 @@
 </section>
 
 
-<!-- ═══ MARKET CONTEXT STRIP: SECTION (start) · hidden until /api/macro answers ═══ -->
-<div class="ornament-rule" id="mc-rule" hidden><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
-<section class="section" id="context" hidden aria-labelledby="mc-title">
-  <div class="section-inner">
-    <p class="section-label" id="mc-label">Market Context</p>
-    <h2 class="section-title" id="mc-title">Is it Bitcoin,<br>or the whole market?</h2>
-    <p class="section-sub" id="mc-sub">Bitcoin rarely moves alone. This puts its last 24 hours next to US stocks, the dollar, rates and gold.</p>
-
-    <div class="mc-panel">
-      <div class="mc-head">
-        <div class="mc-head-left"><div class="mc-dot" id="mc-dot"></div><span class="mc-head-label" id="mc-panel-label">Market Context: Live</span></div>
-        <span class="mc-stamp" id="mc-stamp"></span>
-      </div>
-      <div class="mc-ctx" id="mc-ctx" aria-live="polite"></div>
-      <button class="mc-more" id="mc-more" type="button" aria-expanded="false" aria-controls="mc-tiles">Show the markets</button>
-      <div class="mc-tiles" id="mc-tiles"></div>
-      <div class="mc-foot">
-        <span class="mc-corr" id="mc-corr"></span>
-        <span id="mc-eurusd"></span>
-        <span class="mc-sources"><span id="mc-sources-label">Data: FRED · ECB · CoinGecko</span><span class="mc-fred">This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.</span></span>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- ═══ MARKET CONTEXT STRIP: SECTION (end) ═══ -->
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
-<!-- WHAT IF CALCULATOR (v3: own amount, any start year, growth chart, honest drop) -->
+<!-- WHAT IF CALCULATOR (v4: amount, frequency, start year. Three moves, one answer) -->
 <section class="section whatif-section" id="whatif">
   <div class="section-inner">
     <p class="section-label" data-i18n="fpCalcLabel">What if?</p>
-    <h2 class="section-title" data-i18n="fpCalcTitle">What a small habit<br>would have done.</h2>
-    <p class="section-sub" data-i18n="fpCalcSub">Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.</p>
-    <div class="fp-calc">
-      <div class="fp-calc-in">
-        <div>
-          <div class="fp-mini-l" id="fp-amt-label" data-i18n="fpEveryMonth">Every month</div>
-          <div class="fp-stepper">
-            <button type="button" id="fp-minus" aria-label="Smaller amount" data-umami-event="whatif-step">−</button>
-            <label class="fp-amt-wrap" for="fp-amt-in">
-              <span class="fp-cur" id="fp-cur">€</span><input id="fp-amt-in" class="fp-amt-in" type="text" inputmode="numeric" autocomplete="off" maxlength="6" value="50" aria-describedby="fp-amt-label fp-habit">
-            </label>
-            <button type="button" id="fp-plus" aria-label="Bigger amount" data-umami-event="whatif-step">+</button>
+    <h2 class="section-title" data-i18n="fpCalcTitle">What if you had<br>started back then?</h2>
+    <p class="section-sub" data-i18n="fpCalcSub">Type an amount, pick how often and since when. See what it would be worth today.</p>
+    <div class="cx">
+      <div class="cx-in" role="group" aria-label="Savings plan">
+        <label class="cx-amt" for="cx-amt">
+          <span class="cx-k" data-i18n="cxAmount">Amount</span>
+          <span class="cx-amt-row"><span class="cx-cur">€</span><input id="cx-amt" type="text" inputmode="numeric" autocomplete="off" maxlength="6" value="50"></span>
+        </label>
+        <div class="cx-freq">
+          <span class="cx-k" data-i18n="cxEvery">Every</span>
+          <div class="cx-seg" role="radiogroup" aria-label="Frequency">
+            <button type="button" role="radio" aria-checked="true" data-f="monthly" data-i18n="cxMonth">Month</button>
+            <button type="button" role="radio" aria-checked="false" data-f="weekly" data-i18n="cxWeek">Week</button>
           </div>
-          <div class="fp-habit" id="fp-habit"></div>
-          <div class="fp-presets" id="fp-presets" role="group" aria-label="Habits"></div>
         </div>
-        <div>
-          <div class="fp-year-head"><span class="fp-mini-l" data-i18n="fpStartIn">Starting in</span><b id="fp-year-val">2015</b></div>
-          <input type="range" id="fp-year" class="fp-year" min="2015" max="2025" step="1" value="2015" aria-label="Start year">
-          <div class="fp-year-ticks" aria-hidden="true"><span>2015</span><span>2018</span><span>2021</span><span>2025</span></div>
-        </div>
+        <label class="cx-year" for="cx-year">
+          <span class="cx-k" data-i18n="cxSince">Since</span>
+          <span class="cx-sel"><select id="cx-year"></select></span>
+        </label>
       </div>
-      <div class="fp-result" aria-live="polite">
-        <p class="fp-pre" id="fp-pre"></p>
-        <div class="fp-big" id="fp-big">…</div>
-        <p class="fp-pre" data-i18n="fpToday">today</p>
-        <div class="fp-stats">
-          <div><span data-i18n="fpPutIn">Put in</span><b id="fp-in">…</b></div>
-          <div><span data-i18n="fpMultiple">Multiple</span><b id="fp-x">…</b></div>
-          <div><span data-i18n="fpMonths">Months</span><b id="fp-m">…</b></div>
+      <div class="cx-out" aria-live="polite">
+        <p class="cx-pre" id="cx-pre"></p>
+        <div class="cx-big" id="cx-big">…</div>
+        <p class="cx-sub"><span id="cx-btc">…</span> <span class="cx-dot">·</span> <span id="cx-put">…</span></p>
+        <div class="cx-chart" id="cx-chart-wrap">
+          <canvas id="cx-chart" role="img" aria-label="Chart: what the savings were worth over time compared with what was put in"></canvas>
+          <div class="cx-tip" id="cx-tip" hidden></div>
         </div>
-      </div>
-      <div class="fp-growth">
-        <div class="fp-growth-head">
-          <span class="fp-mini-l" data-i18n="fpGrowthTitle">Month by month</span>
-          <span class="fp-legend"><i class="fp-lg-worth"></i><span data-i18n="fpWorth">Worth</span><i class="fp-lg-put"></i><span data-i18n="fpPutIn">Put in</span></span>
-        </div>
-        <div class="fp-chart-wrap" id="fp-chart-wrap">
-          <canvas id="fp-chart" role="img" aria-label="Chart of what the savings were worth each month compared with what had been put in"></canvas>
-          <div class="fp-tip" id="fp-tip" hidden></div>
-        </div>
-        <p class="fp-chart-hint" data-i18n="fpChartHint">Touch or hover the chart to see any month.</p>
-        <p class="fp-honest" id="fp-honest"></p>
-        <p class="fp-fine" id="fp-fine" data-i18n="fpFine">Based on monthly average prices and today's price. Not financial advice; this is for perspective.</p>
-        <div class="fp-share">
+        <div class="cx-legend"><span><i class="cx-l-worth"></i><span data-i18n="cxWorth">Worth</span></span><span><i class="cx-l-put"></i><span data-i18n="cxPutIn">Put in</span></span></div>
+        <p class="cx-fine" data-i18n="cxFine">Bought at each month's average price, valued at today's price, in euro. Fees and taxes not included. Not financial advice.</p>
+        <div class="cx-share">
           <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp"><span data-i18n="fpShareOn">Share on</span> WhatsApp</button>
           <button type="button" id="fp-share-x" data-umami-event="share-whatif-x"><span data-i18n="fpShareOn">Share on</span> X</button>
         </div>
@@ -3046,16 +3030,25 @@
     </div>
 
     <!-- RIGHT: email mockup (desktop only) -->
-    <div class="push-preview-col" aria-label="Example of the weekly email">
-      <div class="fp-mail">
-        <div class="fp-mail-band">
-          <div class="fp-mail-meta"><span>When to Buy BTC</span><span data-i18n="fpSunday">Sunday</span></div>
-          <div class="fp-mail-word" id="fp-mail-word">Mild.</div>
-          <div class="fp-mail-price" id="fp-mail-price"></div>
+    <div class="push-preview-col" aria-label="Example of the Sunday email">
+      <div class="mx">
+        <div class="mx-chrome">
+          <span class="mx-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div class="mx-from"><b>When to Buy BTC</b><span id="mx-when"></span></div>
+          <div class="mx-subj" id="mx-subj">Bitcoin this week</div>
         </div>
-        <div class="fp-mail-body">
-          <span id="fp-mail-line"></span>
-          <ul class="fp-mail-lines" id="fp-mail-lines"></ul>
+        <div class="mx-body">
+          <div class="mx-head"><span><img src="/bitcoin-logo_48.png" width="16" height="16" alt="">WHEN TO BUY BTC</span><span data-i18n="fpSunday">Sunday</span></div>
+          <div class="mx-band">
+            <p class="mx-eye" id="mx-eye"></p>
+            <p class="mx-word" id="mx-word">Mild.</p>
+            <p class="mx-sent" id="mx-sent"></p>
+            <div class="mx-price"><span id="mx-price"></span><span id="mx-chg"></span></div>
+            <div class="mx-scale" aria-hidden="true"><i data-s="accumulate"></i><i data-s="hold"></i><i data-s="caution"></i></div>
+            <div class="mx-scale-l" id="mx-scale-l"></div>
+          </div>
+          <div class="mx-rows" id="mx-rows"></div>
+          <div class="mx-fade" aria-hidden="true"></div>
         </div>
       </div>
     </div>
@@ -3428,8 +3421,15 @@
       fpLineMa: { 2: 'The price sits well below its long-term average.', 1: 'The price sits below its long-term average.', 0: 'The price sits close to its long-term average.', '-1': 'The price sits above its long-term average.', '-2': 'The price sits far above its long-term average.' },
       fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is within 20% of its all-time high.' },
       fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
-      fpCalcLabel: 'What if?', fpCalcTitle: 'What a small habit<br>would have done.',
-      fpCalcSub: 'Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
+      fpCalcLabel: 'What if?', fpCalcTitle: 'What if you had<br>started back then?',
+      fpCalcSub: 'Type an amount, pick how often and since when. See what it would be worth today.',
+      cxAmount: 'Amount', cxEvery: 'Every', cxMonth: 'Month', cxWeek: 'Week', cxSince: 'Since', cxWorth: 'Worth', cxPutIn: 'Put in',
+      cxPerMonth: 'a month', cxPerWeek: 'a week', cxPre: '{amt} {per} since January {y} would be worth', cxPutLine: '{v} put in',
+      cxFine: "Bought at each month's average price, valued at today's price, in euro. Fees and taxes not included. Not financial advice.",
+      cxShare: '{amt} {per} into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
+      wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US 10-year yield' }, wmPts: 'pts',
+      wmBtc: 'Bitcoin {v} in 24 hours', wmWith: 'moving with the market.', wmAgainst: 'going its own way.', wmOwn: 'its own move, while markets were calm.', wmQuiet: 'a normal day, nothing unusual.', wmClosed: 'US markets are closed, so these are their last moves.',
+      fpCalcSubOld: 'Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
       fpEveryMonth: 'Every month', fpOwnAmount: 'your own amount', fpGrowthTitle: 'Month by month', fpWorth: 'Worth', fpChartHint: 'Touch or hover the chart to see any month. Blue shading: worth less than what went in.',
       fpRecBy: 'It was back above that high by {c}.', fpRecNow: 'It is back above that high today.', fpRecNot: 'It has not got back to that high yet.',
       fpUnder: 'For {n} of the {m} months it was worth less than what had gone in.', fpUnderOne: 'For 1 of the {m} months it was worth less than what had gone in.',
@@ -3705,8 +3705,15 @@
       fpLineMa: { 2: 'Der Kurs liegt deutlich unter seinem langfristigen Durchschnitt.', 1: 'Der Kurs liegt unter seinem langfristigen Durchschnitt.', 0: 'Der Kurs liegt nah an seinem langfristigen Durchschnitt.', '-1': 'Der Kurs liegt über seinem langfristigen Durchschnitt.', '-2': 'Der Kurs liegt weit über seinem langfristigen Durchschnitt.' },
       fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs liegt weniger als 20 % unter dem Allzeithoch.' },
       fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.', holdCalm: 'Kein Wert ist im Extrem, also liest sich der Markt mild.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
-      fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was eine kleine Gewohnheit<br>bewirkt hätte.',
-      fpCalcSub: 'Wähle eine Gewohnheit oder tippe deinen eigenen Betrag, dann ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
+      fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was wäre, wenn du<br>damals angefangen hättest?',
+      fpCalcSub: 'Tippe einen Betrag, wähle wie oft und seit wann. Sieh, was es heute wert wäre.',
+      cxAmount: 'Betrag', cxEvery: 'Wie oft', cxMonth: 'Monatlich', cxWeek: 'Wöchentlich', cxSince: 'Seit', cxWorth: 'Wert', cxPutIn: 'Eingezahlt',
+      cxPerMonth: 'im Monat', cxPerWeek: 'pro Woche', cxPre: '{amt} {per} seit Januar {y} wären heute so viel wert:', cxPutLine: '{v} eingezahlt',
+      cxFine: 'Gekauft zum Durchschnittskurs des jeweiligen Monats, bewertet zum heutigen Kurs, in Euro. Ohne Gebühren und Steuern. Keine Finanzberatung.',
+      cxShare: '{amt} {per} in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
+      wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US-Zins 10 Jahre' }, wmPts: 'Pkt.',
+      wmBtc: 'Bitcoin {v} in 24 Stunden', wmWith: 'bewegt sich mit dem Markt.', wmAgainst: 'geht gerade eigene Wege.', wmOwn: 'eine eigene Bewegung, die Märkte waren ruhig.', wmQuiet: 'ein normaler Tag, nichts Ungewöhnliches.', wmClosed: 'Die US-Börsen sind geschlossen, das sind ihre letzten Bewegungen.',
+      fpCalcSubOld: 'Wähle eine Gewohnheit oder tippe deinen eigenen Betrag, dann ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
       fpEveryMonth: 'Jeden Monat', fpOwnAmount: 'dein eigener Betrag', fpGrowthTitle: 'Monat für Monat', fpWorth: 'Wert', fpChartHint: 'Tippe oder fahre über die Grafik, um jeden Monat zu sehen. Blau markiert: weniger wert als eingezahlt.',
       fpRecBy: 'Bis {c} lag er wieder über diesem Hoch.', fpRecNow: 'Heute liegt er wieder über diesem Hoch.', fpRecNot: 'Dieses Hoch hat er noch nicht wieder erreicht.',
       fpUnder: 'In {n} von {m} Monaten war er weniger wert als das, was eingezahlt war.', fpUnderOne: 'In 1 von {m} Monaten war er weniger wert als das, was eingezahlt war.',
@@ -5809,150 +5816,18 @@
   <a href="#top">Back to top</a>
 </noscript>
 
-<!-- ═══ MARKET CONTEXT STRIP: SCRIPT (start) ═══
-     Self-contained: reads /api/macro, follows the page language via <html lang>,
-     touches no existing function or variable. If the API fails, the section stays hidden. -->
+<!-- ═══ WIDER MARKET DATA: fetches /api/macro for the one-line summary in the Together box ═══ -->
 <script>
 (function () {
-  var section = document.getElementById('context');
-  var rule = document.getElementById('mc-rule');
-  if (!section) return;
-
-  var S = {
-    en: {
-      label: 'Market Context', title: 'Is it Bitcoin,<br>or the whole market?',
-      sub: 'Bitcoin rarely moves alone. This puts its last 24 hours next to US stocks, the dollar, rates and gold.',
-      panel: 'Market Context: Live', lastClose: 'Last US close', closed: 'US markets closed',
-      names: { btc: 'Bitcoin · USD', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US Dollar (DXY)', us10y: 'US 10Y Yield', gold: 'Gold · oz' },
-      d1: '1D', d24: '24H', d30: '30D', unavailable: 'Unavailable', asOf: 'As of',
-      chips: { weekend: 'Markets closed', holiday: 'Markets closed', quiet: 'Routine', btcOnlyDown: 'Bitcoin-specific', btcOnlyUp: 'Bitcoin-specific',
-        withMarketDown: 'With the market', withMarketUp: 'With the market', againstMarketDown: 'Against the market', againstMarketUp: 'Against the market' },
-      noCtx: 'Not enough market data right now to compare. The Bitcoin figures are live.',
-      corr: 'BTC ↔ Nasdaq 30D correlation', corrWords: ['weak', 'moderate', 'strong'], corrNA: 'n/a',
-      sources: 'Data: FRED · ECB · CoinGecko', locale: 'en-GB', numLocale: 'en-US', more: 'Show the markets', less: 'Hide the markets',
-    },
-    de: {
-      label: 'Marktumfeld', title: 'Ist es Bitcoin,<br>oder der ganze Markt?',
-      sub: 'Bitcoin bewegt sich selten allein. Hier stehen die letzten 24 Stunden neben US-Aktien, Dollar, Zinsen und Gold.',
-      panel: 'Marktumfeld: Live', lastClose: 'Letzter US-Schluss', closed: 'US-Börsen geschlossen',
-      names: { btc: 'Bitcoin · USD', spx: 'S&P 500', ndx: 'Nasdaq', dxy: 'US-Dollar (DXY)', us10y: 'US 10J Rendite', gold: 'Gold · Unze' },
-      d1: '1T', d24: '24S', d30: '30T', unavailable: 'Nicht verfügbar', asOf: 'Stand',
-      chips: { weekend: 'Börsen zu', holiday: 'Börsen zu', quiet: 'Normal', btcOnlyDown: 'Bitcoin-spezifisch', btcOnlyUp: 'Bitcoin-spezifisch',
-        withMarketDown: 'Mit dem Markt', withMarketUp: 'Mit dem Markt', againstMarketDown: 'Gegen den Markt', againstMarketUp: 'Gegen den Markt' },
-      noCtx: 'Gerade zu wenige Marktdaten für einen Vergleich. Die Bitcoin-Werte sind live.',
-      corr: 'BTC ↔ Nasdaq 30T-Korrelation', corrWords: ['schwach', 'mittel', 'stark'], corrNA: 'k. A.',
-      sources: 'Daten: FRED · EZB · CoinGecko', locale: 'de-DE', numLocale: 'de-DE', more: 'Märkte anzeigen', less: 'Märkte ausblenden',
-    },
-  };
-
-  var data = null;
-  function $(id) { return document.getElementById(id); }
-  function lang() { return document.documentElement.lang === 'de' ? 'de' : 'en'; }
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function num(v, dp, t) { return Number(v).toLocaleString(t.numLocale, { minimumFractionDigits: dp, maximumFractionDigits: dp }); }
-  function chg(v, unit, t) {
-    if (v === null || v === undefined || !isFinite(v)) return '<span class="mc-flat">—</span>';
-    var cls = Math.abs(v) < 0.05 ? 'mc-flat' : v > 0 ? 'mc-up' : 'mc-down';
-    var sign = v > 0 ? '+' : v < 0 ? '−' : '';
-    var txt = unit === 'bps' ? sign + num(Math.abs(v), 0, t) + ' bp' : sign + num(Math.abs(v), 2, t) + '%';
-    return '<span class="' + cls + '">' + txt + '</span>';
-  }
-  function day(iso, t) {
-    var d = new Date(iso + 'T12:00:00Z');
-    return d.toLocaleDateString(t.locale, { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
-  }
-
-  function render() {
-    if (!data) return;
-    var t = S[lang()], p = data, m = p.markets || {};
-    $('mc-label').textContent = t.label;
-    $('mc-title').innerHTML = t.title;
-    $('mc-sub').textContent = t.sub;
-    $('mc-panel-label').textContent = t.panel;
-    $('mc-sources-label').textContent = t.sources;
-    var open = section.querySelector('.mc-panel').classList.contains('open');
-    $('mc-more').textContent = open ? t.less : t.more;
-
-    var closed = p.status !== 'open';
-    $('mc-dot').className = 'mc-dot' + (closed ? ' closed' : '');
-    $('mc-stamp').textContent = (closed ? t.closed + ' · ' : '') + (p.lastUsClose ? t.lastClose + ': ' + day(p.lastUsClose, t) : '');
-
-    var c = p.context, l = lang();
-    // Shared with the Why section's "Wider market" line (context only, never part of the score)
-    window._macroContext = c && t.chips[c.key] ? { chip: t.chips[c.key], text: c[l] } : null;
-    if (window._renderWhy) window._renderWhy();
-    if (c && t.chips[c.key]) {
-      var kind = c.key.indexOf('with') === 0 ? 'with' : c.key.indexOf('btcOnly') === 0 ? 'only' : c.key.indexOf('against') === 0 ? 'against' : '';
-      var up = /Up$/.test(c.key) ? ' up' : '';
-      $('mc-ctx').innerHTML = '<span class="mc-chip ' + kind + up + '">' + esc(t.chips[c.key]) + '</span><p class="mc-text">' + esc(c[l]) +
-        (c.dollar ? ' <span class="mc-dollar">' + esc(c.dollar[l]) + '</span>' : '') + '</p>';
-    } else {
-      $('mc-ctx').innerHTML = '<span class="mc-chip">—</span><p class="mc-text mc-dollar">' + esc(t.noCtx) + '</p>';
-    }
-
-    var tiles = [];
-    if (p.btc) {
-      tiles.push({ k: 'btc', cls: 'btc', val: '$' + num(p.btc.price, 0, t), a: [t.d24, chg(p.btc.change24h, 'pct', t)], b: [t.d30, chg(p.btc.change30d, 'pct', t)] });
-    }
-    [['spx', 0, ''], ['ndx', 0, ''], ['dxy', 2, ''], ['us10y', 2, '%'], ['gold', 0, '$']].forEach(function (x) {
-      var k = x[0], dp = x[1], u = x[2], s = m[k];
-      if (!s) { tiles.push({ k: k, cls: 'missing', val: '—', a: [t.d1, '<span class="mc-flat">' + t.unavailable + '</span>'] }); return; }
-      var unit = k === 'us10y' ? 'bps' : 'pct';
-      var v = u === '$' ? '$' + num(s.value, dp, t) : num(s.value, dp, t) + (u ? '<small>' + u + '</small>' : '');
-      tiles.push({ k: k, cls: s.stale ? 'stale' : '', val: v, a: [t.d1, chg(s.change1d, unit, t)], b: [t.d30, chg(s.change30d, unit, t)],
-        date: (s.stale ? t.asOf + ' ' : '') + day(s.date, t) });
-    });
-    $('mc-tiles').innerHTML = tiles.map(function (x) {
-      return '<div class="mc-tile ' + (x.cls || '') + '"><div class="mc-name">' + esc(t.names[x.k]) + '</div>' +
-        '<div class="mc-val">' + x.val + '</div>' +
-        '<div class="mc-chg"><span><em>' + x.a[0] + '</em>' + x.a[1] + '</span>' + (x.b ? '<span><em>' + x.b[0] + '</em>' + x.b[1] + '</span>' : '') + '</div>' +
-        (x.date ? '<div class="mc-date">' + esc(x.date) + '</div>' : '') + '</div>';
-    }).join('');
-
-    var r = p.correlation30d;
-    if (r === null || r === undefined) {
-      $('mc-corr').innerHTML = esc(t.corr) + ' <b>' + t.corrNA + '</b>';
-    } else {
-      var w = t.corrWords[Math.abs(r) < 0.2 ? 0 : Math.abs(r) < 0.5 ? 1 : 2];
-      $('mc-corr').innerHTML = esc(t.corr) + ' <span class="mc-corr-track" aria-hidden="true"><span class="mc-corr-mark" style="left:' +
-        ((Math.max(-1, Math.min(1, r)) + 1) * 50) + '%"></span></span><b>' + num(r, 2, t) + '</b> ' + w;
-    }
-    $('mc-eurusd').innerHTML = m.eurusd ? 'EUR/USD <b>' + num(m.eurusd.value, 4, t) + '</b> ' + chg(m.eurusd.change1d, 'pct', t) : '';
-  }
-
   function load() {
-    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 10000) : null;
-    fetch('/api/macro', ctrl ? { signal: ctrl.signal } : {})
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (j) {
-        if (!j || !j.markets || (!j.btc && !j.context)) throw new Error('empty');
-        data = j;
-        render();
-        section.hidden = false;
-        if (rule) rule.hidden = false;
-      })
-      .catch(function () { /* keep whatever is showing; section stays hidden on first failure */ })
-      .then(function () { if (timer) clearTimeout(timer); });
+    fetch('/api/macro').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (j && j.markets) { window._macro = j; if (window._renderWhy) window._renderWhy(); }
+    }).catch(function () {});
   }
-
-  $('mc-more').addEventListener('click', function () {
-    var panel = section.querySelector('.mc-panel');
-    var open = panel.classList.toggle('open');
-    this.setAttribute('aria-expanded', String(open));
-    this.textContent = S[lang()][open ? 'less' : 'more'];
-  });
-
-  // Re-render when the page language switches (applyLang sets <html lang>).
-  if (typeof MutationObserver !== 'undefined') {
-    new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  }
-
   load();
   setInterval(load, 15 * 60 * 1000);
 })();
 </script>
-<!-- ═══ MARKET CONTEXT STRIP: SCRIPT (end) ═══ -->
 <!-- ═══ TEMPERATURE HERO: SCRIPT (start) ═══
      Reads the state updateSignal() already computed (window._signalState/_signalScore/_signalHeadline).
      Sets <html data-temp>, the state word, sentence, cold-hot scale, button label, and runs the
@@ -5967,50 +5842,7 @@
   var introDone = false;
 
   /* Temperature field: cold = slow falling ice specks, mild = floating dust, hot = rising embers */
-  var field = (function () {
-    var c = el('hero-temp-canvas');
-    if (!c || !c.getContext) return { set: function () {} };
-    var ctx = c.getContext('2d');
-    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var W = 0, H = 0, ps = [], mode = 'mild', raf = 0, visible = true;
-    var colors = { cold: [142, 201, 255], mild: [242, 196, 107], hot: [247, 147, 26] };
-    function size() {
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function spawn(init) {
-      return { x: Math.random() * W, y: init ? Math.random() * H : (mode === 'hot' ? H + 10 : mode === 'cold' ? -10 : Math.random() * H),
-        r: mode === 'hot' ? 0.8 + Math.random() * 1.8 : mode === 'cold' ? 0.6 + Math.random() * 1.6 : 0.5 + Math.random() * 1.2,
-        vx: (Math.random() - 0.5) * (mode === 'mild' ? 0.12 : 0.25),
-        vy: mode === 'hot' ? -(0.25 + Math.random() * 0.6) : mode === 'cold' ? 0.15 + Math.random() * 0.35 : (Math.random() - 0.5) * 0.08,
-        a: 0.25 + Math.random() * 0.6, ph: Math.random() * Math.PI * 2 };
-    }
-    function count() { return Math.round(Math.min(140, Math.max(50, W * H / 9000))); }
-    function draw(time) {
-      ctx.clearRect(0, 0, W, H);
-      var col = colors[mode];
-      for (var i = 0; i < ps.length; i++) {
-        var p = ps[i];
-        if (!reduce) {
-          p.x += p.vx + (mode === 'cold' ? Math.sin(time / 1800 + p.ph) * 0.15 : 0);
-          p.y += p.vy;
-          if (p.y < -12 || p.y > H + 12 || p.x < -12 || p.x > W + 12) ps[i] = p = spawn(false);
-        }
-        var flick = mode === 'hot' ? 0.6 + 0.4 * Math.sin(time / 180 + p.ph) : 1;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (p.a * flick) + ')';
-        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0.8)'; ctx.shadowBlur = mode === 'mild' ? 4 : 10;
-        ctx.fill();
-      }
-    }
-    function loop(t) { draw(t); raf = visible && !reduce ? requestAnimationFrame(loop) : 0; }
-    function start() { if (!raf && !reduce) raf = requestAnimationFrame(loop); }
-    function set(m) { var changed = m !== mode || !ps.length; mode = m; if (changed) ps = Array.from({ length: count() }, function () { return spawn(true); }); if (reduce) draw(0); else start(); }
-    size();
-    window.addEventListener('resize', function () { size(); ps = Array.from({ length: count() }, function () { return spawn(true); }); if (reduce) draw(0); }, { passive: true });
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) start(); }).observe(hero);
-    return { set: set };
-  })();
+  var field = { set: function () {} }; /* particles removed */
 
   window._renderTempHero = function () {
     var st = window._signalState;
@@ -6019,6 +5851,15 @@
     var temp = TEMP[st], name = t.stateName[st];
     root.setAttribute('data-temp', temp);
     el('hero-state').textContent = name + '.';
+    /* Rendered word (ice / plain / fire) when the image exists; the text stays for screen readers */
+    var img = el('hero-state-img'), de = currentLang === 'de';
+    var file = '/states/' + ({ accumulate: de ? 'kalt' : 'cold', hold: 'mild', caution: de ? 'heiss' : 'hot' })[st] + '.webp';
+    if (img && img.getAttribute('data-src') !== file) {
+      img.setAttribute('data-src', file);
+      img.onload = function () { img.hidden = false; hero.classList.add('has-state-img'); };
+      img.onerror = function () { img.hidden = true; hero.classList.remove('has-state-img'); };
+      img.src = file;
+    }
     el('hero-sentence').textContent = window._signalHeadline || '';
     ['accumulate', 'hold', 'caution'].forEach(function (k, i) {
       var s = el(['hs-cold', 'hs-mild', 'hs-hot'][i]);
@@ -6133,27 +5974,59 @@
     [['fpt-cold', 'accumulate'], ['fpt-mild', 'hold'], ['fpt-hot', 'caution']].forEach(function (p) {
       var x = el(p[0]); if (x) { x.textContent = t.stateName[p[1]]; x.classList.toggle('on', p[1] === st); }
     });
-    /* Wider market: one line of context from the market strip; not part of the score */
-    var mc = window._macroContext, wide = el('fp-wider');
-    if (!wide && el('fp-together')) {
-      wide = document.createElement('p'); wide.id = 'fp-wider'; wide.className = 'fp-wider';
-      el('fp-together').appendChild(wide);
-    }
+    /* Wider market: the numbers in one line, then what Bitcoin did. Context only, never scored */
+    var M = window._macro, wide = el('fp-wider');
+    if (!wide && el('fp-together')) { wide = document.createElement('div'); wide.id = 'fp-wider'; wide.className = 'fp-wider'; el('fp-together').appendChild(wide); }
     if (wide) {
-      wide.hidden = !mc;
-      if (mc) wide.innerHTML = '<span class="fp-wider-l">' + t.fpWider + '</span> ' + String(mc.text).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }) +
-        ' <a href="#context" class="fp-wider-a">' + t.fpWiderLink + '</a>';
+      var mk = M && M.markets, ok = mk && ['spx', 'ndx', 'gold', 'us10y'].some(function (k) { return mk[k]; });
+      wide.hidden = !ok;
+      if (ok) {
+        var nf = function (v, dp) { return Math.abs(v).toLocaleString(numLocale(), { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
+        var sg = function (v) { return v > 0.004 ? '+' : v < -0.004 ? '−' : ''; };
+        var cls = function (v) { return v > 0.004 ? 'up' : v < -0.004 ? 'down' : 'flat'; };
+        var item = function (k) {
+          var x = mk[k]; if (!x || x.change1d == null) return '';
+          var v = k === 'us10y' ? x.change1d / 100 : x.change1d;
+          var val = k === 'us10y' ? sg(v) + nf(v, 2) + ' ' + t.wmPts : sg(v) + nf(v, 1) + '%';
+          return '<span class="wm-i"><span class="wm-n">' + t.wmNames[k] + '</span> <b class="' + cls(v) + '">' + val + '</b></span>';
+        };
+        var key = (M.context && M.context.key) || '';
+        var verdict = /^with/.test(key) ? t.wmWith : /^against/.test(key) ? t.wmAgainst : /^btcOnly/.test(key) ? t.wmOwn : key === 'quiet' ? t.wmQuiet : (key === 'weekend' || key === 'holiday') ? t.wmClosed : '';
+        var b24 = M.btc && M.btc.change24h != null ? M.btc.change24h : null;
+        var btcLine = b24 != null ? fill(t.wmBtc, { v: '<b class="' + cls(b24) + '">' + sg(b24) + nf(b24, 1) + '%</b>' }) + (verdict ? ': ' + verdict : '.') : verdict;
+        wide.innerHTML = '<span class="fp-wider-l">' + t.fpWider + '</span>' +
+          '<p class="wm-row">' + ['spx', 'ndx', 'gold', 'us10y'].map(item).filter(Boolean).join('<span class="wm-sep"> · </span>') + '</p>' +
+          (btcLine ? '<p class="wm-verdict">' + btcLine + '</p>' : '');
+      }
     }
-    /* Mail preview */
-    var sym = currentCurrency === 'EUR' ? '€' : '$';
-    el('fp-mail-word').textContent = name + '.';
-    el('fp-mail-price').textContent = currentPrice ? sym + formatPrice(currentPrice) : '';
-    el('fp-mail-line').textContent = t.fpMailLine;
-    var txt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
-    el('fp-mail-lines').innerHTML = '';
-    [fill(t.fpMailL1, { v: fgValue + (window._fgLabel ? ' · ' + ((t.fgLabels && t.fgLabels[window._fgLabel]) || window._fgLabel) : '') }), fill(t.fpMailL2, { v: txt('ma-value') }), fill(t.fpMailL3, { v: txt('ath-value') })].forEach(function (s) {
-      var li = document.createElement('li'); li.textContent = s; el('fp-mail-lines').appendChild(li);
-    });
+    /* Email preview: the top of this Sunday's email, with today's numbers */
+    if (el('mx-word')) {
+      var de2 = currentLang === 'de', loc2 = numLocale();
+      var sun = new Date(); sun.setDate(sun.getDate() + ((7 - sun.getDay()) % 7));
+      var sunTxt = sun.toLocaleDateString(loc2, { weekday: 'short', day: 'numeric', month: 'short' });
+      var emo = { accumulate: '❄️', hold: '🌤️', caution: '🔥' }[st];
+      el('mx-subj').textContent = emo + ' ' + (de2 ? 'Bitcoin diese Woche: ' : 'Bitcoin this week: ') + name + '. ' + (de2 ? 'Stimmung ' : 'Mood ') + fgValue;
+      el('mx-when').textContent = sunTxt;
+      el('mx-eye').textContent = (de2 ? 'Diese Woche · ' : 'This week · ') + sunTxt;
+      el('mx-word').textContent = name + '.';
+      el('mx-word').className = 'mx-word tc-' + st;
+      el('mx-sent').textContent = el('fp-together-text') ? el('fp-together-text').textContent : '';
+      el('mx-price').textContent = currentPrice ? (currentCurrency === 'EUR' ? '€' : '$') + formatPrice(currentPrice) : '';
+      var ch2 = currentChange24h;
+      el('mx-chg').innerHTML = ch2 == null ? '' : '<b class="' + (ch2 >= 0 ? 'up' : 'down') + '">' + (ch2 >= 0 ? '+' : '−') + Math.abs(ch2).toFixed(1) + '%</b> 24h';
+      document.querySelectorAll('.mx-scale i').forEach(function (n) { n.classList.toggle('on', n.getAttribute('data-s') === st); });
+      el('mx-scale-l').innerHTML = ['accumulate', 'hold', 'caution'].map(function (k) { return '<span' + (k === st ? ' class="on tc-' + k + '"' : '') + '>' + t.stateName[k] + '</span>'; }).join('');
+      var vtxt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
+      var rows = [
+        [de2 ? 'Marktstimmung' : 'Market mood', String(fgValue), parts.fg, (t.fpLineFg || {})[parts.fg]],
+        [de2 ? 'Langfristiger Trend' : 'Long-term trend', vtxt('ma-value'), parts.ma, (t.fpLineMa || {})[parts.ma]],
+        [de2 ? 'Vom Hoch' : 'From the peak', vtxt('ath-value'), parts.ath, (t.fpLineAth || {})[parts.ath]]
+      ];
+      el('mx-rows').innerHTML = rows.map(function (r) {
+        var ls = r[2] > 0 ? 'accumulate' : r[2] < 0 ? 'caution' : 'hold';
+        return '<div class="mx-row"><div><p class="mx-rl">' + r[0] + '</p><p class="mx-rt">' + (r[3] || '') + '</p></div><div class="mx-rv"><b>' + r[1] + '</b><span class="tc-' + ls + '">' + lean(r[2]) + '</span></div></div>';
+      }).join('');
+    }
     /* Chart follows the temperature */
     var temp = document.documentElement.getAttribute('data-temp');
     if (temp !== lastTemp) { lastTemp = temp; if (typeof redrawChart === 'function') redrawChart(); }
@@ -6161,12 +6034,25 @@
   };
 
   /* DCA MODEL (start) — keep in sync with lib/dca.ts (tests/dca.test.ts checks it). */
-  function wtbDca(monthly, amount, startYear, priceNow) {
+  function wtbDca(monthly, amount, startYear, priceNow, frequency, now) {
+    frequency = frequency || 'monthly'; now = now || new Date();
     var keys = Object.keys(monthly).filter(function (k) { return +k.slice(0, 4) >= startYear && monthly[k] > 0; }).sort();
-    var btc = 0, put = 0, peak = 0, peakM = '', underwater = 0, worst = null, worstPeak = 0, series = [];
-    keys.forEach(function (k) {
-      btc += amount / monthly[k];
-      put += amount;
+    var plan;
+    if (frequency === 'monthly') plan = keys.map(function (k) { return [k, 1]; });
+    else {
+      var count = {};
+      for (var t = Date.UTC(startYear, 0, 1); t <= now.getTime(); t += 7 * 86400000) {
+        var d = new Date(t), k = d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0');
+        if (monthly[k] > 0) count[k] = (count[k] || 0) + 1;
+      }
+      plan = keys.filter(function (k) { return count[k]; }).map(function (k) { return [k, count[k]]; });
+    }
+    var btc = 0, put = 0, buys = 0, peak = 0, peakM = '', underwater = 0, worst = null, worstPeak = 0, series = [];
+    plan.forEach(function (p) {
+      var k = p[0], n = p[1];
+      btc += n * amount / monthly[k];
+      put += n * amount;
+      buys += n;
       var value = btc * monthly[k];
       series.push({ m: k, put: put, value: value });
       if (value < put) underwater++;
@@ -6178,246 +6064,130 @@
         worst = { pct: dd, from: peakM, to: k, recovered: null };
       }
     });
-    var now = btc * priceNow;
-    if (worst && !worst.recovered && now >= worstPeak) worst.recovered = 'now';
-    if (series.length) series.push({ m: 'now', put: put, value: now });
-    return { months: keys.length, put: put, btc: btc, now: now, multiple: put ? now / put : 0, worst: worst, underwater: underwater, series: series };
+    var nowValue = btc * priceNow;
+    if (worst && !worst.recovered && nowValue >= worstPeak) worst.recovered = 'now';
+    if (series.length) series.push({ m: 'now', put: put, value: nowValue });
+    return { months: plan.length, buys: buys, put: put, btc: btc, now: nowValue, multiple: put ? nowValue / put : 0, worst: worst, underwater: underwater, series: series };
   }
   /* DCA MODEL (end) */
 
-  /* ── Calculator v3: own amount × any start year, month-by-month chart, honest drop ── */
+  /* ── Calculator v4: amount × frequency × start year → value today, in euro ── */
   var calc = (function () {
-    var HABITS = [
-      { key: 'netflix', m: 15, en: 'Netflix', de: 'Netflix' },
-      { key: 'gym', m: 30, en: 'The gym you never use', de: 'Das Fitnessstudio, das du nie besuchst', sen: 'Gym', sde: 'Fitnessstudio' },
-      { key: 'coffee', m: 50, en: 'Coffee on the go', de: 'Kaffee unterwegs', sen: 'Coffee', sde: 'Kaffee' },
-      { key: 'lunch', m: 60, en: 'Grabbing lunch', de: 'Mittagessen to go', sen: 'Lunch', sde: 'Mittagessen' },
-      { key: 'takeaway', m: 70, en: 'Takeaways', de: 'Bestellungen nach Hause', sen: 'Takeaways', sde: 'Lieferdienst' },
-      { key: 'drinks', m: 80, en: 'Drinks after work', de: 'Drinks nach der Arbeit', sen: 'Drinks', sde: 'Drinks' },
-      { key: 'uber', m: 90, en: 'A few Ubers', de: 'Ein paar Uber-Fahrten', sen: 'Ubers', sde: 'Uber' },
-      { key: 'fashion', m: 100, en: "Clothes you didn't need", de: 'Klamotten, die du nicht brauchtest', sen: 'Clothes', sde: 'Klamotten' },
-      { key: 'dining', m: 120, en: 'Dinner out', de: 'Essen gehen', sen: 'Dinner out', sde: 'Essen gehen' },
-      { key: 'nights', m: 150, en: 'A proper night out', de: 'Ein richtiger Abend aus', sen: 'Night out', sde: 'Abend aus' }
-    ];
-    var STEPS = HABITS.map(function (h) { return h.m; }).concat([200, 250, 300, 400, 500, 750, 1000]);
-    var MAX = 99999, FIRST = 2015;
-    var amount = 50, year = FIRST, last = null, hover = -1, tracked = {};
-    if (!el('fp-amt-in')) return { render: function () {} };
-    var input = el('fp-amt-in'), slider = el('fp-year'), presetsEl = el('fp-presets');
+    var FIRST = 2015, MAX = 99999;
+    var amount = 50, freq = 'monthly', year = FIRST, last = null, hover = -1, tracked = {};
+    var input = el('cx-amt'), sel = el('cx-year');
+    if (!input || !sel) return { render: function () {} };
     var lastYear = new Date().getFullYear() - 1;
-    slider.max = String(lastYear);
-    var ticks = document.querySelector('.fp-year-ticks');
-    if (ticks) ticks.innerHTML = [FIRST, Math.round((FIRST + lastYear) / 2), lastYear].map(function (y) { return '<span>' + y + '</span>'; }).join('');
+    for (var y = FIRST; y <= lastYear; y++) { var o = document.createElement('option'); o.value = y; o.textContent = y; sel.appendChild(o); }
+    sel.value = String(year);
 
-    function usd() { return currentCurrency !== 'EUR'; }
-    function sym() { return usd() ? '$' : '€'; }
-    function money(v) { return sym() + Math.round(v).toLocaleString(numLocale()); }
-    function compact(v) {
-      var a = Math.abs(v);
-      if (a >= 1e6) return sym() + (v / 1e6).toLocaleString(numLocale(), { maximumFractionDigits: 1 }) + 'M';
-      if (a >= 1e3) return sym() + Math.round(v / 1e3).toLocaleString(numLocale()) + 'k';
-      return sym() + Math.round(v);
-    }
-    function mon(k) { return new Date(k + '-15T12:00:00Z').toLocaleDateString(numLocale(), { month: 'short', year: 'numeric', timeZone: 'UTC' }); }
-    function habit() { for (var i = 0; i < HABITS.length; i++) if (HABITS[i].m === amount) return HABITS[i]; return null; }
-    function track(name, data) { try { if (typeof umami !== 'undefined') umami.track(name, data); } catch (e) {} }
-    function series() {
-      /* Dollar visitors get real dollar history; if it is missing, euro history at today's rate */
-      if (usd()) {
-        if (window.BTC_MONTHLY_USD) return window.BTC_MONTHLY_USD;
-        var eur = typeof BTC_MONTHLY_EUR !== 'undefined' ? BTC_MONTHLY_EUR : {}, out = {};
-        Object.keys(eur).forEach(function (k) { out[k] = eur[k] * eurUsdRate; });
-        return out;
-      }
-      return typeof BTC_MONTHLY_EUR !== 'undefined' ? BTC_MONTHLY_EUR : {};
-    }
+    function L() { return numLocale(); }
+    function eurFmt(v) { return '€' + Math.round(v).toLocaleString(L()); }
+    function compact(v) { return v >= 1e6 ? '€' + (v / 1e6).toLocaleString(L(), { maximumFractionDigits: 1 }) + 'M' : v >= 1e3 ? '€' + Math.round(v / 1e3).toLocaleString(L()) + 'k' : '€' + Math.round(v); }
+    function btcFmt(b) { return b.toLocaleString(L(), { minimumFractionDigits: b >= 10 ? 2 : 4, maximumFractionDigits: b >= 10 ? 2 : 4 }) + ' BTC'; }
+    function mon(k) { return new Date(k + '-15T12:00:00Z').toLocaleDateString(L(), { month: 'short', year: 'numeric', timeZone: 'UTC' }); }
+    function track(n, d) { try { if (typeof umami !== 'undefined') umami.track(n, d); } catch (e) {} }
+    function priceEur() { return currentPrice ? (currentCurrency === 'EUR' ? currentPrice : currentPrice / eurUsdRate) : 0; }
 
-    /* Presets */
-    function drawPresets() {
-      var de = currentLang === 'de';
-      presetsEl.innerHTML = HABITS.map(function (h, i) {
-        var name = de ? (h.sde || h.de) : (h.sen || h.en);
-        return '<button type="button" data-i="' + i + '" aria-pressed="' + (h.m === amount) + '">' + name + '</button>';
-      }).join('');
-    }
-    presetsEl.addEventListener('click', function (e) {
-      var b = e.target.closest('button'); if (!b) return;
-      amount = HABITS[+b.dataset.i].m; input.value = String(amount);
-      track('whatif-preset', { habit: HABITS[+b.dataset.i].key }); render(true);
-    });
-    function step(d) {
-      var next = d > 0 ? STEPS.filter(function (s) { return s > amount; })[0] : STEPS.filter(function (s) { return s < amount; }).pop();
-      if (next == null) return;
-      amount = next; input.value = String(amount); render(true);
-    }
-    el('fp-minus').addEventListener('click', function () { step(-1); });
-    el('fp-plus').addEventListener('click', function () { step(1); });
     var t1 = null;
     input.addEventListener('input', function () {
-      var v = input.value.replace(/[^0-9]/g, '');
-      if (v !== input.value) input.value = v;
-      var n = parseInt(v, 10);
-      if (n > 0) { amount = Math.min(MAX, n); render(false); }
-      clearTimeout(t1); t1 = setTimeout(function () { if (n > 0) track('whatif-amount', { amount: amount }); }, 1200);
+      var v = input.value.replace(/[^0-9]/g, ''); if (v !== input.value) input.value = v;
+      var n = parseInt(v, 10); if (n > 0) { amount = Math.min(MAX, n); render(); }
+      clearTimeout(t1); t1 = setTimeout(function () { if (n > 0) track('whatif-amount', { amount: amount, frequency: freq }); }, 1200);
     });
     input.addEventListener('blur', function () { if (!(parseInt(input.value, 10) > 0)) input.value = String(amount); });
     input.addEventListener('focus', function () { input.select(); });
-    slider.addEventListener('input', function () { year = +slider.value; render(false); });
-    slider.addEventListener('change', function () { track('whatif-year', { year: year }); });
+    document.querySelectorAll('.cx-seg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        freq = b.dataset.f;
+        document.querySelectorAll('.cx-seg button').forEach(function (x) { x.setAttribute('aria-checked', String(x === b)); });
+        track('whatif-frequency', { frequency: freq }); render();
+      });
+    });
+    sel.addEventListener('change', function () { year = +sel.value; track('whatif-year', { year: year }); render(); });
 
-    /* Chart */
-    var cv = el('fp-chart'), wrap = el('fp-chart-wrap'), tip = el('fp-tip');
-    var geo = null;
-    function css(name, fb) { return (getComputedStyle(document.documentElement).getPropertyValue(name) || fb).trim() || fb; }
+    /* Chart: worth (temperature colour) vs put in (dashed); touch or hover reads any month */
+    var cv = el('cx-chart'), wrap = el('cx-chart-wrap'), tip = el('cx-tip'), geo = null;
+    function css(n, fb) { return (getComputedStyle(document.documentElement).getPropertyValue(n) || fb).trim() || fb; }
     function draw() {
       if (!cv || !last) return;
-      var r = last.r, pts = r.series; if (pts.length < 2) return;
+      var pts = last.series; if (pts.length < 2) return;
       var dpr = Math.min(window.devicePixelRatio || 1, 2), W = wrap.clientWidth, H = wrap.clientHeight;
       cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + 'px'; cv.style.height = H + 'px';
       var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-      var pad = { l: 4, r: 54, t: 14, b: 24 }, cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
-      var max = 0; pts.forEach(function (p) { max = Math.max(max, p.value, p.put); }); max *= 1.08 || 1;
+      var pad = { l: 2, r: 48, t: 10, b: 22 }, cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+      var max = 0; pts.forEach(function (p) { max = Math.max(max, p.value, p.put); }); max = max * 1.08 || 1;
       var X = function (i) { return pad.l + i / (pts.length - 1) * cw; };
       var Y = function (v) { return pad.t + ch - v / max * ch; };
-      geo = { X: X, Y: Y, pts: pts, pad: pad, W: W, H: H };
-      var TR = css('--temp-rgb', '242,196,107');
-      /* grid + y labels */
-      ctx.font = '10px ' + css('--mono', 'monospace'); ctx.fillStyle = 'rgba(237,232,222,0.45)'; ctx.textAlign = 'left';
+      geo = { X: X, Y: Y, pts: pts, pad: pad, W: W };
+      var TR = css('--temp-rgb', '242,196,107'), MONO = css('--mono', 'monospace');
+      ctx.font = '10px ' + MONO; ctx.fillStyle = 'rgba(237,232,222,0.45)';
       [0.5, 1].forEach(function (f) {
-        var y = Y(max / 1.08 * f); ctx.strokeStyle = 'rgba(237,232,222,0.06)'; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
-        ctx.fillText(compact(max / 1.08 * f), W - pad.r + 8, y + 3);
+        var v = max / 1.08 * f, y = Y(v);
+        ctx.strokeStyle = 'rgba(237,232,222,0.06)'; ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+        ctx.textAlign = 'left'; ctx.fillText(compact(v), W - pad.r + 8, y + 3);
       });
-      /* x labels: January of every n-th year */
-      var years = []; pts.forEach(function (p, i) { if (p.m.slice(5) === '01') years.push(i); });
-      var every = Math.ceil(years.length / Math.max(2, Math.floor(cw / 70)));
-      ctx.textAlign = 'center';
-      years.forEach(function (i, n) {
-        if (n % every) return;
-        var x = X(i); ctx.textAlign = x < pad.l + 16 ? 'left' : 'center';
-        ctx.fillText(pts[i].m.slice(0, 4), x < pad.l + 16 ? pad.l : x, H - 6);
-      });
-      /* where the pot was worth less than what went in: cold wash between the lines */
-      ctx.fillStyle = 'rgba(142,201,255,0.16)';
-      for (var i = 0; i < pts.length - 1; i++) {
-        if (pts[i].value < pts[i].put || pts[i + 1].value < pts[i + 1].put) {
-          ctx.beginPath(); ctx.moveTo(X(i), Y(pts[i].put)); ctx.lineTo(X(i + 1), Y(pts[i + 1].put));
-          ctx.lineTo(X(i + 1), Y(Math.min(pts[i + 1].value, pts[i + 1].put))); ctx.lineTo(X(i), Y(Math.min(pts[i].value, pts[i].put))); ctx.closePath(); ctx.fill();
-        }
-      }
-      /* worth: area + line in the temperature colour */
-      var g = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch);
-      g.addColorStop(0, 'rgba(' + TR + ',0.28)'); g.addColorStop(1, 'rgba(' + TR + ',0)');
-      ctx.beginPath(); ctx.moveTo(X(0), Y(0));
-      pts.forEach(function (p, i) { ctx.lineTo(X(i), Y(p.value)); });
-      ctx.lineTo(X(pts.length - 1), Y(0)); ctx.closePath(); ctx.fillStyle = g; ctx.fill();
+      var yrs = []; pts.forEach(function (p, i) { if (p.m.slice(5) === '01') yrs.push(i); });
+      var every = Math.ceil(yrs.length / Math.max(2, Math.floor(cw / 64)));
+      yrs.forEach(function (i, n) { if (n % every) return; var x = X(i); ctx.textAlign = x < pad.l + 16 ? 'left' : 'center'; ctx.fillText(pts[i].m.slice(0, 4), x < pad.l + 16 ? pad.l : x, H - 5); });
+      var g = ctx.createLinearGradient(0, pad.t, 0, pad.t + ch); g.addColorStop(0, 'rgba(' + TR + ',0.26)'); g.addColorStop(1, 'rgba(' + TR + ',0)');
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0)); pts.forEach(function (p, i) { ctx.lineTo(X(i), Y(p.value)); }); ctx.lineTo(X(pts.length - 1), Y(0)); ctx.closePath(); ctx.fillStyle = g; ctx.fill();
       ctx.beginPath(); pts.forEach(function (p, i) { i ? ctx.lineTo(X(i), Y(p.value)) : ctx.moveTo(X(i), Y(p.value)); });
       ctx.strokeStyle = 'rgba(' + TR + ',1)'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
-      /* put in: dashed */
       ctx.beginPath(); pts.forEach(function (p, i) { i ? ctx.lineTo(X(i), Y(p.put)) : ctx.moveTo(X(i), Y(p.put)); });
       ctx.setLineDash([4, 4]); ctx.strokeStyle = 'rgba(237,232,222,0.55)'; ctx.lineWidth = 1.25; ctx.stroke(); ctx.setLineDash([]);
-      /* worst drop: from the high to the low */
-      var w = r.worst;
-      if (w && w.pct <= -0.05) {
-        var fi = pts.findIndex(function (p) { return p.m === w.from; }), ti = pts.findIndex(function (p) { return p.m === w.to; });
-        if (fi >= 0 && ti >= 0) {
-          ctx.strokeStyle = 'rgba(142,201,255,0.9)'; ctx.fillStyle = '#8EC9FF'; ctx.lineWidth = 1;
-          [fi, ti].forEach(function (k) { ctx.beginPath(); ctx.arc(X(k), Y(pts[k].value), 3.5, 0, Math.PI * 2); ctx.fill(); });
-          var lx = Math.min(Math.max(X(ti), pad.l + 24), W - pad.r - 24), ly = Math.min(Y(pts[ti].value) + 18, pad.t + ch - 4);
-          ctx.textAlign = 'center'; ctx.font = '600 11px ' + css('--mono', 'monospace');
-          ctx.fillText(Math.round(w.pct * 100) + '%', lx, ly);
-        }
-      }
-      /* today */
       var li = pts.length - 1;
-      ctx.beginPath(); ctx.arc(X(li), Y(pts[li].value), 4.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(' + TR + ',1)';
-      ctx.shadowColor = 'rgba(' + TR + ',0.8)'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
-      /* scrub */
+      ctx.beginPath(); ctx.arc(X(li), Y(pts[li].value), 4.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(' + TR + ',1)'; ctx.shadowColor = 'rgba(' + TR + ',0.8)'; ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0;
       if (hover >= 0 && hover < pts.length) {
         var hx = X(hover);
         ctx.strokeStyle = 'rgba(237,232,222,0.35)'; ctx.beginPath(); ctx.moveTo(hx, pad.t); ctx.lineTo(hx, pad.t + ch); ctx.stroke();
         ctx.fillStyle = 'rgba(' + TR + ',1)'; ctx.beginPath(); ctx.arc(hx, Y(pts[hover].value), 4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#EDE8DE'; ctx.beginPath(); ctx.arc(hx, Y(pts[hover].put), 3, 0, Math.PI * 2); ctx.fill();
       }
     }
     function showTip() {
       if (!geo || hover < 0) { tip.hidden = true; return; }
       var p = geo.pts[hover], t = T();
-      var label = p.m === 'now' ? t.fpToday : mon(p.m);
-      var diff = p.value - p.put;
-      tip.innerHTML = '<b>' + label + '</b><span><i class="fp-lg-worth"></i>' + t.fpWorth + ' ' + money(p.value) + '</span><span><i class="fp-lg-put"></i>' + t.fpPutIn + ' ' + money(p.put) + '</span>' +
-        '<em class="' + (diff >= 0 ? 'up' : 'down') + '">' + (diff >= 0 ? '+' : '−') + money(Math.abs(diff)) + '</em>';
+      tip.innerHTML = '<b>' + (p.m === 'now' ? t.fpToday : mon(p.m)) + '</b><span>' + t.cxWorth + ' ' + eurFmt(p.value) + '</span><span>' + t.cxPutIn + ' ' + eurFmt(p.put) + '</span>';
       tip.hidden = false;
-      var x = geo.X(hover), tw = tip.offsetWidth;
-      tip.style.left = Math.max(0, Math.min(geo.W - tw, x - tw / 2)) + 'px';
+      var x = geo.X(hover), tw = tip.offsetWidth; tip.style.left = Math.max(0, Math.min(geo.W - tw, x - tw / 2)) + 'px';
     }
     function onMove(e) {
       if (!geo) return;
-      var rect = cv.getBoundingClientRect(), x = e.clientX - rect.left;
-      var i = Math.round((x - geo.pad.l) / (geo.W - geo.pad.l - geo.pad.r) * (geo.pts.length - 1));
-      hover = Math.max(0, Math.min(geo.pts.length - 1, i));
+      var r = cv.getBoundingClientRect();
+      hover = Math.max(0, Math.min(geo.pts.length - 1, Math.round((e.clientX - r.left - geo.pad.l) / (geo.W - geo.pad.l - geo.pad.r) * (geo.pts.length - 1))));
       draw(); showTip();
       if (!tracked.scrub) { tracked.scrub = 1; track('whatif-chart', {}); }
     }
-    function onLeave() { hover = -1; draw(); tip.hidden = true; }
     if (cv) {
-      cv.addEventListener('pointermove', onMove);
-      cv.addEventListener('pointerdown', onMove);
-      cv.addEventListener('pointerleave', onLeave);
-      window.addEventListener('resize', function () { draw(); }, { passive: true });
+      cv.addEventListener('pointermove', onMove); cv.addEventListener('pointerdown', onMove);
+      cv.addEventListener('pointerleave', function () { hover = -1; draw(); tip.hidden = true; });
+      window.addEventListener('resize', draw, { passive: true });
     }
 
-    /* Render */
-    var raf = 0, shown = 0;
-    function roll(to) {
-      var from = shown, t0 = performance.now(), reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-      cancelAnimationFrame(raf);
-      if (reduce || !isFinite(from)) { shown = to; el('fp-big').textContent = money(to); return; }
-      (function tick(now) {
-        var k = Math.min(1, (now - t0) / 450), e = 1 - Math.pow(1 - k, 3);
-        shown = from + (to - from) * e; el('fp-big').textContent = money(shown);
-        if (k < 1) raf = requestAnimationFrame(tick);
-      })(t0);
-    }
-    function render(animate) {
-      var t = T(), h = habit(), de = currentLang === 'de';
-      el('fp-cur').textContent = sym();
-      el('fp-habit').textContent = h ? '≈ ' + (de ? h.de : h.en).toLowerCase() : t.fpOwnAmount;
-      presetsEl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(HABITS[+b.dataset.i].m === amount)); });
-      el('fp-minus').disabled = amount <= STEPS[0]; el('fp-plus').disabled = amount >= STEPS[STEPS.length - 1];
-      el('fp-year-val').textContent = year;
-      slider.value = String(year);
-      slider.style.setProperty('--p', ((year - FIRST) / (lastYear - FIRST) * 100) + '%');
-      el('fp-pre').textContent = fill(t.fpPre, { amt: sym() + amount.toLocaleString(numLocale()), y: year });
-      if (!currentPrice) return;
-      var r = wtbDca(series(), amount, year, currentPrice);
+    function render() {
+      var t = T(), per = freq === 'weekly' ? t.cxPerWeek : t.cxPerMonth;
+      el('cx-pre').textContent = fill(t.cxPre, { amt: '€' + amount.toLocaleString(L()), per: per, y: year });
+      var p = priceEur(); if (!p) return;
+      var r = wtbDca(typeof BTC_MONTHLY_EUR !== 'undefined' ? BTC_MONTHLY_EUR : {}, amount, year, p, freq);
       if (!r.months) return;
-      last = { r: r, name: h ? (de ? h.de : h.en) : null };
-      if (animate) roll(r.now); else { cancelAnimationFrame(raf); shown = r.now; el('fp-big').textContent = money(r.now); }
-      el('fp-in').textContent = money(r.put);
-      el('fp-x').textContent = r.multiple.toLocaleString(numLocale(), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + '×';
-      el('fp-m').textContent = r.months;
-      var w = r.worst, txt;
-      if (w && w.pct <= -0.05) {
-        var rec = w.recovered === 'now' ? t.fpRecNow : w.recovered ? fill(t.fpRecBy, { c: mon(w.recovered) }) : t.fpRecNot;
-        txt = fill(t.fpHonest, { d: Math.round(-w.pct * 100) + '%', a: mon(w.from), b: mon(w.to) }) + ' ' + rec;
-      } else txt = t.fpHonestNone;
-      if (r.underwater > 0) txt += ' ' + fill(r.underwater === 1 ? t.fpUnderOne : t.fpUnder, { n: r.underwater, m: r.months });
-      el('fp-honest').textContent = txt;
+      last = r;
+      el('cx-big').textContent = eurFmt(r.now);
+      el('cx-btc').textContent = btcFmt(r.btc);
+      el('cx-put').textContent = fill(t.cxPutLine, { v: eurFmt(r.put) });
       hover = -1; tip.hidden = true; draw();
     }
     function shareText() {
       if (!last) return 'whentobuybtc.xyz';
-      var o = { h: last.name, amt: sym() + amount.toLocaleString(numLocale()), y: year, v: money(last.r.now), i: money(last.r.put) };
-      return fill(last.name ? T().fpShare : T().fpShareOwn, o);
+      var t = T();
+      return fill(t.cxShare, { amt: '€' + amount.toLocaleString(L()), per: freq === 'weekly' ? t.cxPerWeek : t.cxPerMonth, y: year, v: eurFmt(last.now), i: eurFmt(last.put) });
     }
     el('fp-share-wa').addEventListener('click', function () { window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank'); });
     el('fp-share-x').addEventListener('click', function () { window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText()), '_blank'); });
-    drawPresets(); render(false);
-    /* Re-render when the monthly tables arrive (fetchMonthlyPrices calls this) or currency/lang/price change */
+    render();
     var prev = window._whatifStepperRefresh;
-    window._whatifStepperRefresh = function () { if (prev) prev(); drawPresets(); render(false); };
-    if ('MutationObserver' in window) new MutationObserver(function () { drawPresets(); render(false); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-    return { render: function () { render(false); } };
+    window._whatifStepperRefresh = function () { if (prev) prev(); render(); };
+    if ('MutationObserver' in window) new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    return { render: render };
   })();
 
   if (window._signalState) window._renderWhy();

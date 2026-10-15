@@ -22,21 +22,38 @@ export function monthlyAverages(prices: [number, number][], firstMonth = '2015-0
 }
 
 export interface DcaPoint { m: string; put: number; value: number }
+export type Frequency = 'monthly' | 'weekly';
+
 export interface DcaResult {
-  months: number; put: number; btc: number; now: number; multiple: number;
+  months: number; buys: number; put: number; btc: number; now: number; multiple: number;
   worst: { pct: number; from: string; to: string; recovered: string | null } | null;
   underwater: number; // months in which the pot was worth less than what had gone in
   series: DcaPoint[];
 }
 
-export function computeDca(monthly: Monthly, amount: number, startYear: number, priceNow: number): DcaResult {
+/** Buy dates: monthly = once per month that has a price; weekly = every 7 days from 1 Jan of the
+ *  start year up to `now`, each priced at its month's average (the history is monthly). */
+function buysPerMonth(monthly: Monthly, startYear: number, frequency: Frequency, now: Date): [string, number][] {
   const keys = Object.keys(monthly).filter(k => +k.slice(0, 4) >= startYear && monthly[k] > 0).sort();
-  let btc = 0, put = 0, peak = 0, peakM = '', underwater = 0;
+  if (frequency === 'monthly') return keys.map(k => [k, 1] as [string, number]);
+  const count: Record<string, number> = {};
+  for (let t = Date.UTC(startYear, 0, 1); t <= now.getTime(); t += 7 * 86400000) {
+    const d = new Date(t);
+    const k = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+    if (monthly[k] > 0) count[k] = (count[k] || 0) + 1;
+  }
+  return keys.filter(k => count[k]).map(k => [k, count[k]] as [string, number]);
+}
+
+export function computeDca(monthly: Monthly, amount: number, startYear: number, priceNow: number, frequency: Frequency = 'monthly', now: Date = new Date()): DcaResult {
+  const plan = buysPerMonth(monthly, startYear, frequency, now);
+  let btc = 0, put = 0, buys = 0, peak = 0, peakM = '', underwater = 0;
   let worst: DcaResult['worst'] = null, worstPeak = 0;
   const series: DcaPoint[] = [];
-  for (const k of keys) {
-    btc += amount / monthly[k];
-    put += amount;
+  for (const [k, n] of plan) {
+    btc += n * amount / monthly[k];
+    put += n * amount;
+    buys += n;
     const value = btc * monthly[k];
     series.push({ m: k, put, value });
     if (value < put) underwater++;
@@ -48,8 +65,8 @@ export function computeDca(monthly: Monthly, amount: number, startYear: number, 
       worst = { pct: dd, from: peakM, to: k, recovered: null };
     }
   }
-  const now = btc * priceNow;
-  if (worst && !worst.recovered && now >= worstPeak) worst.recovered = 'now';
-  if (series.length) series.push({ m: 'now', put, value: now });
-  return { months: keys.length, put, btc, now, multiple: put ? now / put : 0, worst, underwater, series };
+  const nowValue = btc * priceNow;
+  if (worst && !worst.recovered && nowValue >= worstPeak) worst.recovered = 'now';
+  if (series.length) series.push({ m: 'now', put, value: nowValue });
+  return { months: plan.length, buys, put, btc, now: nowValue, multiple: put ? nowValue / put : 0, worst, underwater, series };
 }
