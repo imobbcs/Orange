@@ -1,7 +1,7 @@
 // Shared shell for the indexable data pages. Server-rendered so every number, heading and
 // FAQ answer is in the HTML that search engines and AI crawlers read.
 import Head from 'next/head';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { SignalState } from '../lib/signal';
 
 const SITE = 'https://whentobuybtc.xyz';
@@ -40,6 +40,45 @@ export function Stat({ label, value, note, big }: { label: string; value: string
       <div className="sp-stat-value">{value}</div>
       {note ? <div className="sp-stat-note">{note}</div> : null}
     </div>
+  );
+}
+
+/** Signs up in place (same endpoint and double opt-in as the homepage), so search visitors don't have to change page. */
+function SignupForm({ lang, page }: { lang: Lang; page: string }) {
+  const de = lang === 'de';
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState<'idle' | 'sending' | 'ok' | 'invalid' | 'error'>('idle');
+  async function submit(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    const v = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { setState('invalid'); return; }
+    setState('sending');
+    try {
+      const r = await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: v, lang }) });
+      const d = await r.json().catch(() => ({}));
+      setState(d && d.ok ? 'ok' : 'error');
+    } catch { setState('error'); }
+  }
+  if (state === 'ok') {
+    return (
+      <div className="sp-ok" role="status">
+        <p className="sp-ok-title">{de ? 'Fast geschafft.' : 'Almost there.'}</p>
+        <p>{de ? `Wir haben eine Mail an ${email.trim()} geschickt. Tippe auf den Link darin, dann kommt das Bitcoin-Wetter jeden Sonntag.` : `We sent an email to ${email.trim()}. Tap the link in it and the Bitcoin weather arrives every Sunday.`}</p>
+        <p className="sp-ok-hint">{de ? 'Nichts da? Schau im Spam- oder Werbung-Ordner nach.' : 'Nothing there? Check your spam or Promotions folder.'}</p>
+      </div>
+    );
+  }
+  return (
+    <form className="sp-form" onSubmit={submit} noValidate>
+      <input className="sp-input" type="email" name="email" autoComplete="email" inputMode="email" enterKeyHint="send" aria-label="Email"
+        placeholder={de ? 'deine@email.de' : 'your@email.com'} value={email} onChange={(e) => { setEmail(e.target.value); if (state !== 'sending') setState('idle'); }} />
+      <button className="sp-btn" type="submit" disabled={state === 'sending'}
+        data-umami-event="email-subscribe" data-umami-event-form="data-page" data-umami-event-page={page}>
+        {state === 'sending' ? (de ? 'Wird gesendet…' : 'Sending…') : (de ? 'Kostenlos erhalten' : 'Get it free')}
+      </button>
+      {state === 'invalid' ? <p className="sp-msg" role="alert">{de ? 'Bitte eine gültige E-Mail-Adresse eingeben.' : 'Please enter a valid email address.'}</p> : null}
+      {state === 'error' ? <p className="sp-msg" role="alert">{de ? 'Das hat nicht geklappt. Bitte gleich nochmal versuchen.' : 'That didn\'t work. Please try again in a moment.'}</p> : null}
+    </form>
   );
 }
 
@@ -123,6 +162,7 @@ export default function SeoPage(p: Props) {
         <meta name="twitter:title" content={p.title} />
         <meta name="twitter:description" content={p.description} />
         <meta name="twitter:image" content={ogImage} />
+        <script defer src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       </Head>
@@ -149,11 +189,11 @@ export default function SeoPage(p: Props) {
         {p.children}
 
         <section className="sp-cta">
-          <p className="sp-cta-title">{de ? 'Das Signal jeden Sonntag per E-Mail.' : 'The signal in your inbox every Sunday.'}</p>
+          <p className="sp-cta-title">{de ? 'Das Bitcoin-Wetter, jeden Sonntag.' : 'The Bitcoin weather, every Sunday.'}</p>
           <p className="sp-cta-text">{de
             ? 'Kostenlos. Dazu eine kurze Notiz, wenn Bitcoin an einem Tag 3 % oder mehr bewegt. Keine Werbung, jederzeit abbestellbar.'
             : 'Free. Plus a short note when Bitcoin moves 3% or more in a day. No ads, unsubscribe anytime.'}</p>
-          <a className="sp-btn" href={de ? '/?lang=de#alerts' : '/#alerts'}>{de ? 'Kostenlos anmelden →' : 'Get the free alerts →'}</a>
+          <SignupForm lang={p.lang} page={p.pageKey} />
         </section>
 
         <section className="sp-faq">
@@ -236,6 +276,15 @@ a { color: var(--o); }
 .sp-cta { margin: 3rem 0 0; padding: 1.75rem 1.5rem; border:1px solid rgba(247,147,26,0.4); border-radius: 18px; background: rgba(247,147,26,0.05); text-align:center; }
 .sp-cta-title { font-family: var(--title); font-size: clamp(1.7rem, 7vw, 2.3rem); line-height:1; margin: 0 0 0.6rem; }
 .sp-cta-text { color: var(--g); margin: 0 0 1.25rem; }
+.sp-form { display:flex; flex-wrap:wrap; gap: 0.6rem; justify-content:center; max-width: 480px; margin: 0 auto; }
+.sp-input { flex: 1 1 220px; min-width: 0; min-height: 48px; padding: 0 1rem; border-radius: 999px; border: 1px solid rgba(237,232,222,0.25); background: var(--bg); color: var(--c); font-family: var(--mono); font-size: 16px; }
+.sp-input:focus { outline: none; border-color: var(--o); }
+.sp-form .sp-btn { flex: 0 0 auto; border: 0; cursor: pointer; }
+.sp-form .sp-btn:disabled { opacity: 0.6; cursor: default; }
+.sp-msg { flex-basis: 100%; margin: 0.2rem 0 0; font-family: var(--mono); font-size: 0.72rem; color: #F87171; }
+.sp-ok { text-align: center; }
+.sp-ok-title { font-family: var(--title); font-size: 1.8rem; line-height: 1; margin: 0 0 0.5rem; color: var(--o); }
+.sp-ok-hint { font-family: var(--mono); font-size: 0.7rem; color: var(--g); }
 .sp-btn { display:inline-flex; align-items:center; min-height: 48px; padding: 0 1.6rem; background: var(--o); color: var(--bg); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration:none; border-radius: 999px; }
 .sp-faq details { border-bottom: 1px solid var(--b); padding: 0.4rem 0; }
 .sp-faq summary { cursor:pointer; padding: 0.7rem 0; font-size: 1.2rem; list-style: none; display:flex; justify-content:space-between; gap: 1rem; }

@@ -1991,6 +1991,35 @@
     @media (min-width: 900px) { .mx { transform: perspective(1400px) rotateY(-5deg); } }
   </style>
   <!-- ═══ SITE V3: CSS (end) ═══ -->
+
+  <!-- ═══ EMAIL CAPTURE: hero, calculator, sticky bar (start) ═══ -->
+  <style>
+    .hero-capture { width: min(100%, 560px); margin: 1.5rem auto 0; text-align: center; }
+    .temp-hero .hero-capture { opacity: 0; }
+    .temp-hero.temp-in .hero-capture { opacity: 1; transition: opacity 0.6s ease 1.1s; }
+    .hero-capture-label, .cx-capture-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; line-height: 1.6; color: rgba(237,232,222,0.72); margin: 0 0 0.7rem; }
+    .hero-capture .email-row, .cx-capture .email-row, .sc-form .email-row { max-width: 100%; margin: 0 auto; }
+    .hero-capture .email-msg, .cx-capture .email-msg { text-align: center; }
+    .cx-capture { margin-top: 1.75rem; padding-top: 1.4rem; border-top: 1px solid var(--border2); text-align: center; }
+    .sticky-capture { display: none; }
+    .sc-pitch[hidden], .sc-form[hidden] { display: none !important; }
+    @media (max-width: 768px) {
+      .sticky-capture { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 250; box-sizing: border-box;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: #09080A;
+        border-top: 1px solid rgba(247,147,26,0.45); transform: translateY(110%); transition: transform 0.35s ease; }
+      .sticky-capture.show { transform: none; }
+      .sc-pitch { display: flex; align-items: center; gap: 10px; padding-right: 40px; }
+      .sc-form { padding-right: 40px; }
+      .sc-text { flex: 1; min-width: 0; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.04em; line-height: 1.4; color: var(--white); }
+      .sc-open { flex-shrink: 0; min-height: 44px; padding: 0 16px; border: 0; background: var(--orange); color: #09080A; font-family: var(--mono);
+        font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+      .sc-close { position: absolute; top: 6px; right: 4px; min-width: 44px; min-height: 44px; border: 0; background: none; color: rgba(237,232,222,0.6); font-size: 1.5rem; line-height: 1; cursor: pointer; }
+      .sc-form .email-msg { margin-bottom: 0; }
+      .sc-form .email-row, .sc-form .email-input { background: #09080A; }
+    }
+    @media (prefers-reduced-motion: reduce) { .sticky-capture { transition: none; } }
+  </style>
+  <!-- ═══ EMAIL CAPTURE (end) ═══ -->
 </head>
 <body>
 
@@ -2007,8 +2036,8 @@
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar" role="banner">
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64" style="display:inline-block;vertical-align:middle;flex-shrink:0;" aria-hidden="true"><g transform="translate(0.006,-0.003)"><path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/><path fill="#ffffff" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></g></svg>
-  <span class="announce-text" data-i18n="announceText">Get Bitcoin alerts in your inbox.</span>
-  <a href="#alerts" class="announce-link" data-i18n="announceLink" data-umami-event="announce-bar-click">Get alerts →</a>
+  <span class="announce-text" data-i18n="announceText">The Bitcoin weather, every Sunday.</span>
+  <a href="#alerts" class="announce-link" data-i18n="announceLink" data-umami-event="announce-bar-click">Get it free →</a>
 </div>
 
 <!-- NAV -->
@@ -2094,6 +2123,16 @@
       </div>
     </div>
 
+
+    <!-- EMAIL CAPTURE: hero (the moment people see today's reading) -->
+    <div class="hero-capture email-form-wrap">
+      <p class="hero-capture-label" data-i18n="captureHero">Get this reading every Sunday. One short email, free.</p>
+      <div class="email-row">
+          <input class="email-input" id="hero-email-input" type="email" autocomplete="email" inputmode="email" enterkeyhint="send" aria-label="Email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="hero-email-submit" type="button" onclick="subscribeEmail('hero-email-input', 'hero-email-submit', 'hero-email-msg', 'captureBtn')" data-umami-event="email-subscribe" data-umami-event-form="hero" data-i18n="captureBtn">Get it free</button>
+        </div>
+        <p class="email-msg" id="hero-email-msg" aria-live="polite"></p>
+    </div>
 
     <div class="hero-actions">
       <a href="#signal" class="btn-primary" id="hero-why-btn" data-umami-event="hero-why">Why?</a>
@@ -2292,6 +2331,15 @@
           <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp"><span data-i18n="fpShareOn">Share on</span> WhatsApp</button>
           <button type="button" id="fp-share-x" data-umami-event="share-whatif-x"><span data-i18n="fpShareOn">Share on</span> X</button>
         </div>
+        <!-- EMAIL CAPTURE: calculator (peak interest, right after the result) -->
+        <div class="cx-capture email-form-wrap">
+          <p class="cx-capture-label" data-i18n="captureCalc">Every Sunday: the Bitcoin weather, plus a fresh "what if". Free.</p>
+          <div class="email-row">
+          <input class="email-input" id="calc-email-input" type="email" autocomplete="email" inputmode="email" enterkeyhint="send" aria-label="Email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="calc-email-submit" type="button" onclick="subscribeEmail('calc-email-input', 'calc-email-submit', 'calc-email-msg', 'captureBtn')" data-umami-event="email-subscribe" data-umami-event-form="calculator" data-i18n="captureBtn">Get it free</button>
+        </div>
+        <p class="email-msg" id="calc-email-msg" aria-live="polite"></p>
+        </div>
       </div>
     </div>
   </div>
@@ -2313,8 +2361,8 @@
 
       <div class="email-form-wrap reveal" data-delay="4">
         <div class="email-row">
-          <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-i18n="emailSubmit">Send me the weekly read</button>
+          <input class="email-input" id="email-input" type="email" autocomplete="email" inputmode="email" enterkeyhint="send" aria-label="Email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="email-submit" onclick="submitEmail()" data-umami-event="email-subscribe" data-umami-event-form="alerts" data-i18n="emailSubmit">Send me the weekly read</button>
         </div>
         <p class="email-msg" id="email-msg" aria-live="polite"></p>
         <p class="email-trust" id="email-trust" aria-live="polite">
@@ -2373,6 +2421,22 @@
   </div>
 </section>
 </main>
+
+<!-- EMAIL CAPTURE: sticky bar on phones, after the hero; hides near the main form; dismissable -->
+<div class="sticky-capture" id="sticky-capture" aria-hidden="true">
+  <div class="sc-pitch" id="sc-pitch">
+    <span class="sc-text" data-i18n="captureSticky">The Bitcoin weather, every Sunday.</span>
+    <button type="button" class="sc-open" id="sc-open" data-umami-event="sticky-open" data-i18n="captureBtn">Get it free</button>
+  </div>
+  <button type="button" class="sc-close" id="sc-close" aria-label="Close">&times;</button>
+  <div class="sc-form email-form-wrap" id="sc-form" hidden>
+    <div class="email-row">
+          <input class="email-input" id="sticky-email-input" type="email" autocomplete="email" inputmode="email" enterkeyhint="send" aria-label="Email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
+          <button class="email-submit" id="sticky-email-submit" type="button" onclick="subscribeEmail('sticky-email-input', 'sticky-email-submit', 'sticky-email-msg', 'captureBtn')" data-umami-event="email-subscribe" data-umami-event-form="sticky" data-i18n="captureBtn">Get it free</button>
+        </div>
+        <p class="email-msg" id="sticky-email-msg" aria-live="polite"></p>
+  </div>
+</div>
 
 <footer>
   <p class="footer-quote">&ldquo;It might make sense just to get some in case it catches on.&rdquo;<cite>Satoshi Nakamoto</cite></p>
@@ -2614,8 +2678,12 @@
     en: {
       // Page meta (updated dynamically)
       pageTitle: 'When to Buy BTC - Bitcoin Signal for Long-Term Thinkers',
-      announceText: 'Get Bitcoin alerts in your inbox.',
-      announceLink: 'Get alerts →',
+      announceText: 'The Bitcoin weather, every Sunday.',
+      announceLink: 'Get it free →',
+      captureHero: 'Get this reading every Sunday. One short email, free.',
+      captureCalc: 'Every Sunday: the Bitcoin weather, plus a fresh "what if". Free.',
+      captureSticky: 'The Bitcoin weather, every Sunday.',
+      captureBtn: 'Get it free',
       metaDesc: 'A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice.',
       // Nav
       heroLabel: 'Bitcoin conditions today',
@@ -2792,8 +2860,12 @@
     de: {
       // Page meta
       pageTitle: 'When To Buy BTC - Signal für langfristige Anleger',
-      announceText: 'Bitcoin-Signal per E-Mail.',
-      announceLink: 'Jetzt anmelden →',
+      announceText: 'Das Bitcoin-Wetter, jeden Sonntag.',
+      announceLink: 'Kostenlos →',
+      captureHero: 'Diese Lage jeden Sonntag per E-Mail. Kurz und kostenlos.',
+      captureCalc: 'Jeden Sonntag: das Bitcoin-Wetter, dazu ein neues „Was wäre, wenn?“. Kostenlos.',
+      captureSticky: 'Das Bitcoin-Wetter, jeden Sonntag.',
+      captureBtn: 'Kostenlos erhalten',
       metaDesc: 'Ein kostenloses Bitcoin-Marktsignal für langfristige Anleger. Kombiniert Fear & Greed, 200-Tage-Durchschnitt und ATH-Abstand zu einem klaren Signal. Kein Rauschen. Keine Handelsempfehlung.',
       // Nav
       heroLabel: 'Bitcoin-Lage heute',
@@ -3875,6 +3947,7 @@
           msg.textContent = t.emailOk;
           msg.className   = 'email-msg ok';
           if (window._showInboxPanel) window._showInboxPanel(input, email);
+          document.dispatchEvent(new CustomEvent('wtb:subscribed', { detail: { form: inputId } }));
           input.value     = '';
           btn.disabled    = false;
           btn.textContent = t[resetKey];
@@ -4721,5 +4794,50 @@
 })();
 </script>
 <!-- ═══ CHECK YOUR INBOX (end) ═══ -->
+<!-- ═══ EMAIL CAPTURE: SCRIPT ═══
+     Enter submits every email field; the sticky bar shows on phones once the hero is mostly
+     scrolled past, hides near the main form, after a signup, or for 14 days once closed. -->
+<script>
+(function () {
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || !e.target || !e.target.classList || !e.target.classList.contains('email-input')) return;
+    var row = e.target.closest('.email-row'), btn = row && row.querySelector('.email-submit');
+    if (btn && !btn.disabled) { e.preventDefault(); btn.click(); }
+  });
+
+  var bar = document.getElementById('sticky-capture');
+  var hero = document.getElementById('top'), alerts = document.getElementById('alerts');
+  if (!bar || !hero || !alerts || !('IntersectionObserver' in window)) return;
+  var KEY = 'wtb_sticky_closed', closed = false, done = false, opened = false, pastHero = false, nearForm = false;
+  try { var at = +localStorage.getItem(KEY); closed = !!at && Date.now() - at < 14 * 864e5; } catch (e) {}
+  try { if (localStorage.getItem('wtb_subscribed')) done = true; } catch (e) {}
+
+  function update() {
+    var on = !closed && !done && (opened || (pastHero && !nearForm));
+    bar.classList.toggle('show', on);
+    bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+  }
+  new IntersectionObserver(function (es) { pastHero = es[0].intersectionRatio < 0.25; update(); }, { threshold: [0, 0.25, 0.5] }).observe(hero);
+  new IntersectionObserver(function (es) { nearForm = es[0].isIntersecting; update(); }, { rootMargin: '0px 0px 200px 0px' }).observe(alerts);
+
+  document.getElementById('sc-open').addEventListener('click', function () {
+    opened = true;
+    document.getElementById('sc-pitch').hidden = true;
+    document.getElementById('sc-form').hidden = false;
+    update();
+    var i = document.getElementById('sticky-email-input'); if (i) i.focus();
+  });
+  document.getElementById('sc-close').addEventListener('click', function () {
+    closed = true; update();
+    try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
+    try { if (typeof umami !== 'undefined') umami.track('sticky-close'); } catch (e) {}
+  });
+  document.addEventListener('wtb:subscribed', function (e) {
+    try { localStorage.setItem('wtb_subscribed', '1'); } catch (err) {}
+    // Leave the "check your inbox" note in the bar for a moment if the signup happened there
+    setTimeout(function () { done = true; update(); }, e.detail && e.detail.form === 'sticky-email-input' ? 8000 : 0);
+  });
+})();
+</script>
 </body>
 </html>
