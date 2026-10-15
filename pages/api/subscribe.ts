@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import crypto from 'crypto';
 import { Resend } from 'resend';
-import { confirmationEmail, type Lang, type SignalState } from '../../lib/email-templates';
+import { confirmationEmail, EMAIL_FROM, type Lang, type SignalState } from '../../lib/email-templates';
 import { syncResendContact } from '../../lib/resend-contact';
 import { signalFromApis } from '../../lib/signal';
 
@@ -90,16 +90,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const confirmUrl     = `${BASE}/api/confirm?token=${confirm_token}`;
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const signal = await fetchCurrentSignal();
-    const { subject, html } = confirmationEmail(confirmUrl, unsubscribeUrl, lang, {
+    const { subject, html, text } = confirmationEmail(confirmUrl, unsubscribeUrl, lang, {
       signal:  signal ?? undefined,
       replyTo: REPLY_TO,
     });
     const sent = await resend.emails.send({
-      from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
+      from:     EMAIL_FROM,
       to:       email.toLowerCase().trim(),
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       subject,
       html,
+      text,
     });
     // The SDK reports a failed send as { error }, it doesn't throw: don't tell the visitor to check their inbox.
     if (sent.error) throw new Error(`confirmation email failed: ${JSON.stringify(sent.error)}`);

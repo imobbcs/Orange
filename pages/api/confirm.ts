@@ -5,7 +5,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
-import { welcomeEmail, type Lang } from '../../lib/email-templates';
+import { welcomeEmail, EMAIL_FROM, type Lang, type WelcomeMarket } from '../../lib/email-templates';
+import { marketSnapshot } from '../../lib/market-ssr';
 import { syncResendContact } from '../../lib/resend-contact';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
 
@@ -36,19 +37,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Send welcome email in the background
     const { email, lang, unsubscribe_token } = result.rows[0];
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
-    const { subject, html } = welcomeEmail(unsubscribeUrl, lang as Lang, {
+    // Today's reading for the top of the welcome email; any failure → the email goes out without it
+    let market: WelcomeMarket | null = null;
+    try {
+      const m = await marketSnapshot(req, { history: true });
+      if (m.price && m.fg !== null && m.maPct !== null && m.athPct !== null) {
+        market = { price: m.price, change24h: m.change24h, fgValue: m.fg, fgClass: m.fgLabel, maPct: m.maPct, athPct: m.athPct };
+      }
+    } catch (e: any) { console.error('welcome email: market snapshot skipped:', e?.message || e); }
+    const { subject, html, text } = welcomeEmail(unsubscribeUrl, lang as Lang, {
+      market,
       replyTo:         REPLY_TO,
       subscriberCount: await readerCount(pool),
       subscriberGoal:  READER_GOAL,
     });
     resend.emails.send({
-      from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
+      from:     EMAIL_FROM,
       to:       email,
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       // One-click unsubscribe (RFC 8058): Gmail/Yahoo show their own Unsubscribe button
       headers:  { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
       subject,
       html,
+      text,
     }).then(r => { if (r.error) console.error('welcome email error:', JSON.stringify(r.error)); })
       .catch(err => console.error('welcome email error:', err.message));
     // Sync to Resend Contacts as confirmed (unsubscribed:false) — now

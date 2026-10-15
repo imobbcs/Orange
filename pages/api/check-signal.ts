@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
-import { alertEmail } from '../../lib/email-templates';
+import { alertEmail, EMAIL_FROM } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroAlertBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
@@ -94,20 +94,21 @@ async function sendEmailAlerts(
   let sent = 0; let failed = 0;
   for (const { email, lang, unsubscribe_token } of rows) {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
-    const { subject, html } = alertEmail({
+    const { subject, html, text } = alertEmail({
       price, change24h, movePct, direction, signal: r.signal, fgValue: r.fgValue, fgClass: r.fgClass, maPct: r.maPct, athPct: r.athPct,
       unsubscribeUrl, replyTo: REPLY_TO, lang,
       subscriberCount: readers, subscriberGoal: READER_GOAL,
       marketBlock: macro && includeMacroFor(email) ? macroAlertBlock(macro, lang) : undefined,
     });
     const result = await resend.emails.send({
-      from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
+      from:     EMAIL_FROM,
       to:       email,
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       // One-click unsubscribe (RFC 8058): Gmail/Yahoo show their own Unsubscribe button
       headers:  { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
       subject,
       html,
+      text,
     });
     if (result.error) {
       console.error(`sendEmailAlerts: failed for ${email}:`, JSON.stringify(result.error));

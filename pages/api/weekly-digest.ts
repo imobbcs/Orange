@@ -3,7 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
-import { digestEmail, calcHookForWeek, type SignalState, type CalcHook } from '../../lib/email-templates';
+import { digestEmail, calcHookForWeek, weekStats, EMAIL_FROM, type SignalState, type CalcHook } from '../../lib/email-templates';
 import { computeDca } from '../../lib/dca';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
 import { cronAuthorized } from '../../lib/cron-auth';
@@ -52,7 +52,8 @@ async function fetchSignalData() {
   const fgClass      = (fg.value_classification as string) ?? null;
   const { maPct, athPct, state } = signalFromApis(currentPrice, prices, ath.ath_eur as number, fgValue, fgClass);
   const signal: SignalState = state;
-  return { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal };
+  const week = weekStats(history.prices as [number, number][]);
+  return { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal, week };
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -80,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({ status: 'cooldown', hoursSinceLast: hoursSinceLast.toFixed(1) });
     }
 
-    const { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal } = await fetchSignalData();
+    const { currentPrice, fgValue, fgClass, maPct, athPct, change24h, signal, week } = await fetchSignalData();
 
     // Previous week's values for the delta copy — read before we overwrite
     // with this week's row. undefined on the very first send (no prior row).
@@ -110,21 +111,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let sent = 0; let failed = 0;
     for (const { email, lang, unsubscribe_token } of rows) {
       const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
-      const { subject, html } = digestEmail({
+      const { subject, html, text } = digestEmail({
         price: currentPrice, signal, fgValue, fgClass, maPct, athPct, change24h,
         unsubscribeUrl, replyTo: REPLY_TO, lang,
-        prevFgValue, prevMaPct, prevAthPct, prevPrice, calc,
+        prevFgValue, prevMaPct, prevAthPct, prevPrice, calc, week,
         subscriberCount: readers, subscriberGoal: READER_GOAL,
         marketBlock: macro && includeMacroFor(email) ? macroDigestBlock(macro, lang) : undefined,
       });
       const result = await resend.emails.send({
-        from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
+        from:     EMAIL_FROM,
         to:       email,
         ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       // One-click unsubscribe (RFC 8058): Gmail/Yahoo show their own Unsubscribe button
       headers:  { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
         subject,
         html,
+        text,
       });
       if (result.error) {
         console.error(`weekly-digest: failed for ${email}:`, JSON.stringify(result.error));
