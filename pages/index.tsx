@@ -1,7 +1,7 @@
 import { homeHtml } from '../lib/home-html';
 
-export const getServerSideProps = async ({ req, res }) => {
-  const { html, etag } = homeHtml();
+export const getServerSideProps = async ({ req, res, query }) => {
+  const { html, etag } = await homeHtml(req, query.lang === 'de' ? 'de' : 'en');
   const headers = {
     'Content-Type': 'text/html; charset=utf-8',
     // Live data is fetched client-side, so the shell can sit at the edge briefly

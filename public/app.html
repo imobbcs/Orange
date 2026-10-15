@@ -3085,6 +3085,17 @@
     try {
       const res = await fetch('/api/price');
       const data = await res.json();
+      applyPrice(data);
+    } catch (e) {
+      document.getElementById('price-value').textContent = '—';
+      const changeEl = document.getElementById('price-change');
+      changeEl.textContent = 'Data temporarily unavailable';
+      changeEl.className = 'change';
+      changeEl.style.color = 'var(--grey)';
+    }
+  }
+  // Renders an /api response; also fed the server snapshot (see SERVER SNAPSHOT below) so the hero paints at once
+  function applyPrice(data) {
       const sym = currentCurrency === 'EUR' ? '€' : '$';
       currentPrice = currentCurrency === 'EUR' ? data.eur : data.usd;
       const change = currentCurrency === 'EUR' ? data.eur_24h_change : data.usd_24h_change;
@@ -3096,11 +3107,13 @@
       }
       redrawChart(); // re-render chart with fresh stitch to live price
 
-      const pv = document.getElementById('price-value'); pv.textContent = formatPrice(currentPrice); pv.classList.remove('loading');
+      // Write only on change: rewriting the same text counts as a new paint and pushes LCP back
+      const pv = document.getElementById('price-value'); const pvText = formatPrice(currentPrice); if (pv.textContent !== pvText) pv.textContent = pvText; pv.classList.remove('loading');
       const changeEl = document.getElementById('price-change');
       const prevPrice = currentPrice / (1 + change / 100);
       const absDiff = Math.abs(currentPrice - prevPrice);
-      changeEl.textContent = `${fmtPct(change, 2)} · ${change < 0 ? '−' : '+'}${sym}${formatPrice(absDiff)} ${currentLang === 'de' ? 'heute' : 'today'}`;
+      const changeText = `${fmtPct(change, 2)} · ${change < 0 ? '−' : '+'}${sym}${formatPrice(absDiff)} ${currentLang === 'de' ? 'heute' : 'today'}`;
+      if (changeEl.textContent !== changeText) changeEl.textContent = changeText;
       changeEl.className = `change ${change >= 0 ? 'up' : 'down'}`;
       // Update "last updated" timestamp
       const now = new Date();
@@ -3109,13 +3122,6 @@
       updateHeroStrip();
       drawHeroHorizon();
       refreshDerivedReadings();
-    } catch (e) {
-      document.getElementById('price-value').textContent = '—';
-      const changeEl = document.getElementById('price-change');
-      changeEl.textContent = 'Data temporarily unavailable';
-      changeEl.className = 'change';
-      changeEl.style.color = 'var(--grey)';
-    }
   }
 
   // On every price refresh, recompute the distances to the ATH and the 200-day average so the
@@ -3153,6 +3159,13 @@
       const res = await fetch('/api/fear-greed');
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
+      applyFearGreed(data);
+    } catch (e) {
+      document.getElementById('fg-desc').textContent = translations[currentLang].fgError;
+    }
+  }
+  // Renders an /api response; also fed the server snapshot (see SERVER SNAPSHOT below) so the hero paints at once
+  function applyFearGreed(data) {
       fgValue = data.value;
       const label = data.value_classification;
 
@@ -3171,9 +3184,6 @@
       window._fgLabel = label;
       updateHeroStrip();
       updateSignal();
-    } catch (e) {
-      document.getElementById('fg-desc').textContent = translations[currentLang].fgError;
-    }
   }
 
   // ── ATH ──
@@ -3182,6 +3192,13 @@
       const res = await fetch('/api/ath');
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
+      applyATH(data);
+    } catch (e) {
+      document.getElementById('ath-desc').textContent = translations[currentLang].athError;
+    }
+  }
+  // Renders an /api response; also fed the server snapshot (see SERVER SNAPSHOT below) so the hero paints at once
+  function applyATH(data) {
       athPrice = currentCurrency === 'EUR' ? data.ath_eur : data.ath_usd;
       const sym = currentCurrency === 'EUR' ? '€' : '$';
 
@@ -3216,9 +3233,6 @@
       updateHeroStrip();
       updateSignal();
       if (dropPct >= 0) triggerATHCelebration();
-    } catch (e) {
-      document.getElementById('ath-desc').textContent = translations[currentLang].athError;
-    }
   }
 
   // ── ATH CELEBRATION ──
@@ -3255,9 +3269,18 @@
       const res = await fetch('/api/history?timeframe=1y&currency=' + (currentCurrency || 'EUR').toLowerCase());
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
-      const prices = data.prices.map(p => p[1]);
-      const last200 = prices.slice(-200);
-      maPrice = last200.reduce((a, b) => a + b, 0) / last200.length;
+      applyMA(data);
+    } catch (e) {
+      document.getElementById('ma-desc').textContent = translations[currentLang].maError;
+    }
+  }
+  // Renders an /api response; also fed the server snapshot (see SERVER SNAPSHOT below) so the hero paints at once
+  function applyMA(data) {
+      if (typeof data.ma === 'number') maPrice = data.ma; // server snapshot carries the average itself
+      else {
+        const last200 = data.prices.map(p => p[1]).slice(-200);
+        maPrice = last200.reduce((a, b) => a + b, 0) / last200.length;
+      }
 
       const diffPct = ((currentPrice - maPrice) / maPrice * 100);
       const sym = currentCurrency === 'EUR' ? '€' : '$';
@@ -3289,9 +3312,6 @@
       updateHeroStrip();
       drawHeroHorizon();
       updateSignal();
-    } catch (e) {
-      document.getElementById('ma-desc').textContent = translations[currentLang].maError;
-    }
   }
 
   /* SIGNAL MODEL (start) — keep in sync with lib/signal.ts (tests/signal.test.ts checks it).
@@ -3996,6 +4016,19 @@
     loadChart('365', defaultTab);
   }
 
+  // ── SERVER SNAPSHOT: pages/index.tsx puts today's numbers in window.__WTB_SNAPSHOT, so the hero
+  // renders straight away through the same apply* functions; init() below refreshes everything live.
+  (function seedFromServer() {
+    const s = window.__WTB_SNAPSHOT;
+    if (!s) return;
+    try {
+      applyPrice({ eur: s.price, usd: s.priceUsd, eur_24h_change: s.change24h, usd_24h_change: s.change24h });
+      applyMA({ ma: s.ma200 });
+      applyATH({ ath_eur: s.athEur, ath_usd: s.athEur });
+      applyFearGreed({ value: s.fg, value_classification: s.fgLabel });
+    } catch (e) { /* the live fetches below cover it */ }
+  })();
+
   init();
   setInterval(fetchPrice, 5 * 60 * 1000);
 
@@ -4292,8 +4325,9 @@
     var t = translations[currentLang] || translations.en;
     var temp = TEMP[st], name = t.stateName[st];
     root.setAttribute('data-temp', temp);
-    el('hero-state').textContent = name + '.';
-    el('hero-sentence').textContent = window._signalHeadline || '';
+    // Same-text writes count as new paints (LCP), so only write on change
+    if (el('hero-state').textContent !== name + '.') el('hero-state').textContent = name + '.';
+    if (el('hero-sentence').textContent !== (window._signalHeadline || '')) el('hero-sentence').textContent = window._signalHeadline || '';
     ['accumulate', 'hold', 'caution'].forEach(function (k, i) {
       var s = el(['hs-cold', 'hs-mild', 'hs-hot'][i]);
       if (s) { s.textContent = t.stateName[k]; s.classList.toggle('on', k === st); }
