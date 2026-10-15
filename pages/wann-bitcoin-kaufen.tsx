@@ -879,13 +879,13 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
               <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '0.54rem', letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'rgba(237,232,222,0.2)' }}>{updatedStr}</div>
             </div>
             <div className="wbc-metric">
-              <div className="wbc-metric-id">01 / Fear & Greed Index</div>
+              <div className="wbc-metric-id">01 / <a href="/bitcoin-angst-und-gier-index" style={{ color: 'inherit' }}>Fear & Greed Index</a></div>
               <div className="wbc-metric-value" style={{ color: fgColor }}>{data.fearGreed !== null ? data.fearGreed : '—'}</div>
               <div className="wbc-metric-sublabel">{data.fearGreedLabel || ''}</div>
               <p className="wbc-metric-desc">{fgDesc}</p>
             </div>
             <div className="wbc-metric">
-              <div className="wbc-metric-id">02 / vs. 200-Tage-Durchschnitt</div>
+              <div className="wbc-metric-id">02 / vs. <a href="/bitcoin-200-tage-linie" style={{ color: 'inherit' }}>200-Tage-Durchschnitt</a></div>
               <div className="wbc-metric-value" style={{ color: maColor }}>{data.maPercent !== null ? `${data.maPercent >= 0 ? '+' : ''}${data.maPercent.toFixed(0)}%` : '—'}</div>
               <div className="wbc-metric-sublabel">{data.maPrice !== null ? `200-Tage-Ø: €${formatPrice(data.maPrice)}` : ''}</div>
               <p className="wbc-metric-desc">{maDesc}</p>
@@ -1138,6 +1138,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
 
       <footer className="wbc-footer">
         <p><a href="/">When to Buy BTC</a> · <a href="https://imobabics.com" target="_blank" rel="noopener noreferrer">Imo Babics</a> · <a href="https://x.com/WhenToBuyBTC" target="_blank" rel="noopener noreferrer">Follow @WhenToBuyBTC</a> · <a href="mailto:WhenToBuyBTC@pm.me">Kontakt</a></p>
+        <p><a href="/bitcoin-angst-und-gier-index">Angst und Gier Index heute</a> · <a href="/bitcoin-200-tage-linie">Bitcoin 200-Tage-Linie</a> · <a href="/bitcoin-sparplan-rechner">Bitcoin Sparplan Rechner</a></p>
         <p>Kein Finanzrat. Nur Daten. Die Entscheidung liegt bei dir.</p>
       </footer>
 

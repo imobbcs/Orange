@@ -1,5 +1,5 @@
 const SITE = 'https://whentobuybtc.xyz';
-// Both pages show live market data, so they change every day.
+// All pages show live market data, so they change every day.
 const TODAY = new Date().toISOString().slice(0, 10);
 
 // ── Add future pages here: one object per URL. ──────────────────────────────
@@ -25,6 +25,72 @@ const pages = [
       { hreflang: 'de', href: `${SITE}/wann-bitcoin-kaufen` },
       { hreflang: 'en', href: `${SITE}/` },
       { hreflang: 'x-default', href: `${SITE}/` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-fear-and-greed-index`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-fear-and-greed-index` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-angst-und-gier-index` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-fear-and-greed-index` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-angst-und-gier-index`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-fear-and-greed-index` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-angst-und-gier-index` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-fear-and-greed-index` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-200-day-moving-average`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-200-day-moving-average` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-200-tage-linie` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-200-day-moving-average` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-200-tage-linie`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-200-day-moving-average` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-200-tage-linie` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-200-day-moving-average` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-dca-calculator`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-dca-calculator` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-sparplan-rechner` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-dca-calculator` },
+    ],
+  },
+  {
+    loc: `${SITE}/bitcoin-sparplan-rechner`,
+    lastmod: TODAY,
+    changefreq: 'daily',
+    priority: '0.8',
+    alternates: [
+      { hreflang: 'en', href: `${SITE}/bitcoin-dca-calculator` },
+      { hreflang: 'de', href: `${SITE}/bitcoin-sparplan-rechner` },
+      { hreflang: 'x-default', href: `${SITE}/bitcoin-dca-calculator` },
     ],
   },
 ];
