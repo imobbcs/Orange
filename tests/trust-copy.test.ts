@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'fs';
-import { alertExplanation, alertEmail, digestEmail, confirmationEmail } from '../lib/email-templates';
+import { alertExplanation, alertEmail, digestEmail, confirmationEmail, welcomeEmail } from '../lib/email-templates';
 
 test('alert explanation: built from readings, never claims agreement that is not there', () => {
   // Live 14 Oct case: fear (31) but price 16% ABOVE trend → the two disagree.
@@ -66,4 +66,19 @@ test('site: alerts copy matches what alerts do; no "4 hours" mock; no "time to a
   for (const bad of ['in 4 hours', 'in 4 Stunden', 'the moment the signal shifts', 'wenn das Signal kippt', "time to act", 'zum Handeln aufruft', 'Never miss a', 'Verpasse keine'])
     assert.ok(!html.includes(bad), 'still present: ' + bad);
   assert.ok(html.includes('more than 3% in a day') && html.includes('mehr als 3 %'));
+});
+
+test('emails v2: welcome has no advice, digest shows the calculator card and what changed', () => {
+  for (const lang of ['en', 'de'] as const) {
+    const w = welcomeEmail('#', lang, { replyTo: 'r@x' });
+    for (const r of [...DASHES, ...ADVICE, /tell you when to add/i, /when to add and how much/i, /wann du etwas mehr dazukaufen/i]) assert.ok(!r.test(w.subject + w.html), `welcome ${lang}: ${r}`);
+  }
+  const d = digestEmail({ price: 74595, signal: 'caution', fgValue: 81, maPct: 24.5, athPct: -3.2, change24h: 1, unsubscribeUrl: '#', replyTo: '', lang: 'en',
+    prevFgValue: 50, prevMaPct: -1.8, prevAthPct: -29.6, prevPrice: 72000, calc: { amount: 50, startYear: 2019, put: 4700, now: 20693 } });
+  assert.ok(d.html.includes('€20,693') && d.html.includes('€4,700') && d.html.includes('#whatif'));
+  assert.ok(d.html.includes('last Sunday it read <b>Mild</b>, now it reads <b>Hot</b>'));
+  assert.ok(d.html.includes('+3.6%'));                                   // week change vs last Sunday's price
+  assert.ok(d.html.includes('utm_medium=forward&utm_campaign=digest'));   // forwarded-to-you strip
+  const a = alertEmail({ price: 1, movePct: -0.05, direction: 'down', signal: 'hold', fgValue: 31, maPct: 1, change24h: -5, unsubscribeUrl: '#', replyTo: '', lang: 'en' });
+  assert.ok(!a.html.includes('/ 1,000 readers'));                          // no count → no counter line
 });
