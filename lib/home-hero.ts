@@ -123,7 +123,7 @@ export function renderHero(html: string, s: HeroSnapshot, lang: Lang, tr: { en: 
 
   // Numbers for the browser script (seedFromServer)
   // Without JavaScript the intro never runs; show the server-rendered hero as is
-  const noscript = '<noscript><style>.temp-hero .hero-state{clip-path:none}.temp-hero .hero-sentence,.temp-hero .hero-scale,.temp-hero .hero-strip,.temp-hero .hero-actions{opacity:1}</style></noscript>';
+  const noscript = '<noscript><style>.temp-hero .hero-state{clip-path:none}.temp-hero .hero-sentence,.temp-hero .hero-scale,.temp-hero .hero-strip,.temp-hero .hero-capture,.temp-hero .hero-actions{opacity:1}</style></noscript>';
   const seed = `${noscript}\n<script>window.__WTB_SNAPSHOT=${JSON.stringify(s).replace(/</g, '\\u003c')};</script>\n</head>`;
   return out.replace('</head>', seed);
 }
