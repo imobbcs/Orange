@@ -6,6 +6,7 @@ import { alertEmail } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroAlertBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
+import { cronAuthorized } from '../../lib/cron-auth';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -118,6 +119,8 @@ async function sendEmailAlerts(
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET' && req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  // Only the scheduler may run this: it can email every subscriber.
+  if (!cronAuthorized(req)) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     const { eur: currentPrice, change24h } = await getCurrentPrice();

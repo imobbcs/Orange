@@ -6,6 +6,7 @@ import { Resend } from 'resend';
 import { digestEmail, calcHookForWeek, type SignalState, type CalcHook } from '../../lib/email-templates';
 import { computeDca } from '../../lib/dca';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
+import { cronAuthorized } from '../../lib/cron-auth';
 import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
 
@@ -58,9 +59,7 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const auth = req.headers.authorization;
-  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`)
-    return res.status(401).json({ error: 'Unauthorized' });
+  if (!cronAuthorized(req)) return res.status(401).json({ error: 'Unauthorized' });
   try {
     // Idempotent — adds the delta-tracking columns the first time this runs
     // after deploy, no-ops on every run after that. Cheap enough to run every

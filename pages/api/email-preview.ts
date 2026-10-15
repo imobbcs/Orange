@@ -4,17 +4,10 @@
 // SAMPLE signal values. Sends nothing, writes nothing. Protected by CRON_SECRET.
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { timingSafeEqual } from 'crypto';
 import { alertEmail, digestEmail, welcomeEmail, confirmationEmail, type SignalState } from '../../lib/email-templates';
 import { getMacroForEmail, macroAlertBlock, macroDigestBlock, macroMode } from '../../lib/macro/email';
 
-function tokenOk(given: unknown): boolean {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || typeof given !== 'string') return false;
-  const a = Buffer.from(given);
-  const b = Buffer.from(secret);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
+import { secretMatches as tokenOk } from '../../lib/cron-auth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
