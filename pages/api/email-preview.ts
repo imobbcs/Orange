@@ -32,9 +32,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ...base, price: 74595, signal: state, fgValue: sample.fg, fgClass: sample.fgClass, maPct: sample.ma, athPct: sample.ath, change24h: -1.3,
         prevFgValue: 40, prevMaPct: -6, prevAthPct: -31, prevPrice: 72300,
         calc: { amount: 50, startYear: 2019, put: 4700, now: 20693 },
+        week: { high: 76400, low: 70100, bigDay: { pct: down ? -4.1 : 3.2, date: new Date(Date.now() - 3 * 86400000).toISOString() } },
         marketBlock: macro ? macroDigestBlock(macro, lang) : undefined,
       })
-    : type === 'welcome' ? welcomeEmail('#', lang, { replyTo: 'x' })
+    : type === 'welcome' ? welcomeEmail('#', lang, { replyTo: 'x', market: { price: 74595, change24h: -1.3, fgValue: sample.fg, fgClass: sample.fgClass, maPct: sample.ma, athPct: sample.ath } })
     : confirmationEmail('https://whentobuybtc.xyz/api/confirm?token=sample', '#', lang, { signal: state });
 
   const q = (t: string, l: string, d = '') => `?token=${encodeURIComponent(String(req.query.token))}&type=${t}&lang=${l}${d}`;

@@ -12,6 +12,10 @@ export type Lang        = 'en' | 'de';
 export type SignalState = 'accumulate' | 'hold' | 'caution';
 
 import { computeSignal, fgBand, fgScore, maScore } from './signal';
+import { htmlToText } from './email-text';
+
+/** Sender for every email. A person's name reads warmer than a brand and fits "I read every reply". */
+export const EMAIL_FROM = 'Imo from When to Buy BTC <alerts@whentobuybtc.xyz>';
 
 const SITE = 'https://whentobuybtc.xyz';
 
@@ -28,7 +32,7 @@ const MONO  = "font-family:'Courier New',Courier,monospace;";
 const SERIF = "font-family:Georgia,'Times New Roman',Times,serif;";
 const SANS  = 'font-family:Arial,Helvetica,sans-serif;';
 const INK   = '#EDE8DE';
-const MUTED = 'rgba(237,232,222,0.55)';
+const MUTED = 'rgba(237,232,222,0.62)';
 const SOFT  = 'rgba(237,232,222,0.82)';
 
 // ─── Formatting ───────────────────────────────────────────────────────────────
@@ -102,8 +106,8 @@ function shell(opts: {
     ? (lang === 'de' ? 'Fragen? Antworte einfach auf diese Mail. Ich lese sie persönlich.' : 'Questions? Just hit reply. It&#39;s really me.')
     : '';
   const disclaimer = lang === 'de'
-    ? 'Keine Anlageberatung. When to Buy BTC stellt ausschließlich Marktdaten bereit, keine Empfehlung zum Kauf, Verkauf oder Halten von Vermögenswerten.'
-    : 'Not financial advice. When to Buy BTC provides market data only, not a recommendation to buy, sell, or hold any asset.';
+    ? 'Marktdaten, keine Anlageberatung. Vergangene Lagen sagen nichts Sicheres über die Zukunft. When to Buy BTC empfiehlt nie, etwas zu kaufen, zu verkaufen oder zu halten.'
+    : 'Market data, not financial advice. Past conditions say nothing certain about the future. When to Buy BTC never recommends buying, selling or holding anything.';
   const tempCss = (Object.keys(TEMP) as SignalState[]).map(s =>
     `.tc-${s}{color:${TEMP[s].hex}!important}`).join('');
   const tempCssLight = (Object.keys(TEMP) as SignalState[]).map(s =>
@@ -125,8 +129,8 @@ function shell(opts: {
     .es{background-color:#1C1917!important}
     .et{color:#EDE8DE!important}
     .em{color:rgba(237,232,222,0.82)!important}
-    .em2{color:rgba(237,232,222,0.55)!important}
-    .ed{color:rgba(237,232,222,0.42)!important}
+    .em2{color:rgba(237,232,222,0.62)!important}
+    .ed{color:rgba(237,232,222,0.58)!important}
     .el{color:#F7931A!important}
     ${tempCss}
     @media (prefers-color-scheme:light){
@@ -167,17 +171,17 @@ ${top}
     <td class="eheader lb" style="padding:20px 32px;border-bottom:1px solid rgba(237,232,222,0.08);">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
         <td><a href="${SITE}/?utm_source=email&utm_medium=logo" style="text-decoration:none;"><img src="${SITE}/bitcoin-logo_48.png" width="22" height="22" alt="&#8383;" style="vertical-align:middle;display:inline-block;border:0;" /><span class="et" style="${SANS}font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${INK};padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></a></td>
-        ${headerRight ? `<td align="right"><span class="em2" style="${MONO}font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">${headerRight}</span></td>` : ''}
+        ${headerRight ? `<td align="right"><span class="em2" style="${MONO}font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">${headerRight}</span></td>` : ''}
       </tr></table>
     </td>
   </tr>
   <tr><td class="ebody" style="padding:32px 32px 12px;">${body}</td></tr>
   <tr>
     <td class="efooter lb" style="padding:22px 32px 26px;border-top:1px solid rgba(237,232,222,0.08);">
-      ${replyLine ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:10px;line-height:1.7;color:${MUTED};">${replyLine}</p>` : ''}
-      <p class="ed" style="margin:0 0 8px;${MONO}font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${footerReason}</p>
-      <p class="ed" style="margin:0 0 10px;${MONO}font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${disclaimer}</p>
-      <p class="ed" style="margin:0;${MONO}font-size:10px;line-height:1.9;color:rgba(237,232,222,0.42);">
+      ${replyLine ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;line-height:1.7;color:${MUTED};">${replyLine}</p>` : ''}
+      <p class="ed" style="margin:0 0 8px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason}</p>
+      <p class="ed" style="margin:0 0 10px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${disclaimer}</p>
+      <p class="ed" style="margin:0;${MONO}font-size:11px;line-height:1.9;color:rgba(237,232,222,0.58);">
         <a href="${unsubscribeUrl}" class="el" style="color:#F7931A;text-decoration:none;">${lang === 'de' ? 'Abmelden' : 'Unsubscribe'}</a>
         &nbsp;&#183;&nbsp; <a href="${SITE}" class="el" style="color:#F7931A;text-decoration:none;">whentobuybtc.xyz</a>
         &nbsp;&#183;&nbsp; <a href="https://x.com/WhenToBuyBTC" class="el" style="color:#F7931A;text-decoration:none;">@WhenToBuyBTC</a>
@@ -197,10 +201,10 @@ ${top}
 const spacer = (h: number) => `<div style="height:${h}px;line-height:${h}px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>`;
 
 function eyebrow(text: string, mb = 10): string {
-  return `<p class="em2" style="margin:0 0 ${mb}px;${MONO}font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};">${text}</p>`;
+  return `<p class="em2" style="margin:0 0 ${mb}px;${MONO}font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};">${text}</p>`;
 }
 function para(text: string, opts: { size?: number; italic?: boolean; mb?: number; cls?: string; color?: string } = {}): string {
-  const { size = 15, italic = false, mb = 18, cls = 'em', color = SOFT } = opts;
+  const { size = 16, italic = false, mb = 18, cls = 'em', color = SOFT } = opts;
   return `<p class="${cls}" style="margin:0 0 ${mb}px;${SERIF}font-size:${size}px;${italic ? 'font-style:italic;' : ''}line-height:1.7;color:${color};">${text}</p>`;
 }
 
@@ -234,9 +238,9 @@ const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing=
 function tempScale(state: SignalState, lang: Lang): string {
   const order: SignalState[] = ['accumulate', 'hold', 'caution'];
   const seg = order.map((s, i) => `<td width="33%" class="tb-${s}" style="height:4px;font-size:1px;line-height:4px;background-color:${TEMP[s].hex};${s === state ? '' : 'opacity:0.28;'}${i ? 'border-left:3px solid transparent;' : ''}">&nbsp;</td>`).join('');
-  const lab = order.map((s, i) => `<td width="33%" align="${i === 0 ? 'left' : i === 1 ? 'center' : 'right'}" style="padding-top:8px;${MONO}font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">${s === state
+  const lab = order.map((s, i) => `<td width="33%" align="${i === 0 ? 'left' : i === 1 ? 'center' : 'right'}" style="padding-top:8px;${MONO}font-size:11px;letter-spacing:0.16em;text-transform:uppercase;">${s === state
     ? `<b class="tc-${s}" style="color:${TEMP[s].hex};">${signalLabel(s, lang)}</b>`
-    : `<span class="ed" style="color:rgba(237,232,222,0.42);">${signalLabel(s, lang)}</span>`}</td>`).join('');
+    : `<span class="ed" style="color:rgba(237,232,222,0.58);">${signalLabel(s, lang)}</span>`}</td>`).join('');
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>${seg}</tr><tr>${lab}</tr></table>`;
 }
 
@@ -245,7 +249,7 @@ function tempHero(o: { state: SignalState; lang: Lang; eyebrow: string; sentence
   const c = TEMP[o.state];
   const chColor = o.change == null ? MUTED : o.change >= 0 ? '#4ADE80' : '#F87171';
   const change = o.change == null ? '' :
-    `<span style="${MONO}font-size:13px;font-weight:700;color:${chColor};">${pct(o.change, o.lang, 1)}</span> <span class="em2" style="${MONO}font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:${MUTED};">${o.changeLabel}</span>`;
+    `<span style="${MONO}font-size:13px;font-weight:700;color:${chColor};">${pct(o.change, o.lang, 1)}</span> <span class="em2" style="${MONO}font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${MUTED};">${o.changeLabel}</span>`;
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="card" style="background-color:rgba(${c.rgb},0.09);border:1px solid rgba(${c.rgb},0.35);">
     <tr><td class="hpad" style="padding:26px 26px 20px;">
       ${eyebrow(o.eyebrow, 6)}
@@ -290,13 +294,13 @@ function readings(o: { lang: Lang; fgValue: number; fgClass?: string | null; maP
     return `<tr><td class="lb" style="padding:16px 0;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
         <td valign="top" style="padding-right:14px;">
-          <p class="em2" style="margin:0 0 6px;${MONO}font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">${r.label}</p>
+          <p class="em2" style="margin:0 0 6px;${MONO}font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">${r.label}</p>
           <p class="em" style="margin:0;${SERIF}font-size:15px;line-height:1.55;color:${SOFT};">${r.line}</p>
         </td>
         <td valign="top" align="right" width="104" style="width:104px;">
           <p class="rv et" style="margin:0;${SANS}font-size:24px;line-height:1.1;color:${INK};white-space:nowrap;">${r.value}</p>
-          <p class="tc-${ls}" style="margin:5px 0 0;${MONO}font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:${TEMP[ls].hex};white-space:nowrap;">${LEAN[lang][ls]}</p>
-          ${r.prev ? `<p class="ed" style="margin:3px 0 0;${MONO}font-size:9px;color:rgba(237,232,222,0.42);white-space:nowrap;">${r.prev}</p>` : ''}
+          <p class="tc-${ls}" style="margin:5px 0 0;${MONO}font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${TEMP[ls].hex};white-space:nowrap;">${LEAN[lang][ls]}</p>
+          ${r.prev ? `<p class="ed" style="margin:3px 0 0;${MONO}font-size:11px;color:rgba(237,232,222,0.58);white-space:nowrap;">${r.prev}</p>` : ''}
         </td>
       </tr></table>
     </td></tr>`;
@@ -311,22 +315,9 @@ function forwardStrip(lang: Lang, medium: string): string {
     ? `Weitergeleitet bekommen? Das Bitcoin-Wetter jeden Sonntag, kostenlos. <a href="${url}" class="el" style="color:#F7931A;text-decoration:none;font-weight:700;">Abonnieren&nbsp;&#8594;</a>`
     : `Forwarded to you? Get the Bitcoin weather every Sunday, free. <a href="${url}" class="el" style="color:#F7931A;text-decoration:none;font-weight:700;">Subscribe&nbsp;&#8594;</a>`;
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="580" style="max-width:580px;width:100%;"><tr>
-    <td align="center" style="padding:0 12px 12px;"><p class="em2" style="margin:0;${MONO}font-size:10px;line-height:1.6;color:${MUTED};">${text}</p></td>
+    <td align="center" style="padding:0 12px 12px;"><p class="em2" style="margin:0;${MONO}font-size:11px;line-height:1.6;color:${MUTED};">${text}</p></td>
   </tr></table>`;
 }
-
-function disclaimerBox(text: string): string {
-  return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 26px;">
-    <tr><td style="border-left:2px solid rgba(237,232,222,0.18);padding:8px 14px;">
-      <p class="ed" style="margin:0;${MONO}font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">${text}</p>
-    </td></tr>
-  </table>`;
-}
-
-const DISCLAIMER: Record<Lang, string> = {
-  en: 'This is market data, not financial advice. Past conditions say nothing certain about the future. Always make your own decisions.',
-  de: 'Dies sind Marktdaten, keine Anlageberatung. Vergangene Lagen sagen nichts Sicheres über die Zukunft. Triff immer deine eigenen Entscheidungen.',
-};
 
 /** Counter line, only when we have a real number. */
 function counter(lang: Lang, count?: number, goal = 1000): string {
@@ -334,26 +325,41 @@ function counter(lang: Lang, count?: number, goal = 1000): string {
   return `${count.toLocaleString(loc(lang))} / ${goal.toLocaleString(loc(lang))} ${lang === 'de' ? 'Leser' : 'readers'}`;
 }
 
-/** Bottom of digest and alert: forward ask (primary) and share on X (secondary). */
-function spreadSection(o: { lang: Lang; shareText: string; subscriberCount?: number; subscriberGoal?: number }): string {
+/** Link for a shared reading: German readers' shares land on the German page; tagged per channel for Umami. */
+function shareUrl(lang: Lang, channel: string, campaign: string): string {
+  return `${SITE}/?${lang === 'de' ? 'lang=de&' : ''}utm_source=share&utm_medium=${channel}&utm_campaign=${campaign}`;
+}
+
+/** Bottom of digest and alert: forward ask (primary), then one-tap sharing where DACH readers actually talk. */
+function spreadSection(o: { lang: Lang; shareText: string; campaign: string; subscriberCount?: number; subscriberGoal?: number }): string {
   const { lang } = o;
   const c = counter(lang, o.subscriberCount, o.subscriberGoal);
   const lead = lang === 'de'
     ? `Das hier ist ein Ein-Personen-Projekt${o.subscriberCount ? ` mit ${o.subscriberCount.toLocaleString('de-DE')} Lesern, Ziel 1.000` : ''}. Wenn es dir hilft: Leite diese Mail an eine Person weiter, die Bitcoin spart. Danke dir.`
     : `This is a one-person project${o.subscriberCount ? ` with ${o.subscriberCount.toLocaleString('en-GB')} readers, aiming for 1,000` : ''}. If it helps you, forward this email to one person who stacks sats. Thank you.`;
+  const t = o.shareText;
+  const links: [string, string][] = [
+    ['WhatsApp', `https://wa.me/?text=${encodeURIComponent(t + ' ' + shareUrl(lang, 'whatsapp', o.campaign))}`],
+    ['Telegram', `https://t.me/share/url?url=${encodeURIComponent(shareUrl(lang, 'telegram', o.campaign))}&text=${encodeURIComponent(t)}`],
+    ['X', `https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(shareUrl(lang, 'x', o.campaign))}`],
+  ];
+  const pills = links.map(([name, href]) => `<td style="padding:0 8px 8px 0;"><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="lb" style="border:1px solid rgba(237,232,222,0.25);">
+      <a href="${href}" target="_blank" class="et" style="display:inline-block;padding:10px 16px;color:${INK};${SANS}font-size:12px;font-weight:700;letter-spacing:0.06em;text-decoration:none;">${name}</a>
+    </td></tr></table></td>`).join('');
   return `${rule}${spacer(24)}
     ${eyebrow(lang === 'de' ? 'Weitersagen' : 'Pass it on', 8)}
-    ${c ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:10px;letter-spacing:0.06em;color:${MUTED};">${c}</p>` : ''}
-    ${para(lead, { size: 14, mb: 16 })}
-    ${outlineButton('https://twitter.com/intent/tweet?text=' + encodeURIComponent(o.shareText), lang === 'de' ? 'Auf X teilen' : 'Share on X')}
-    ${spacer(24)}`;
+    ${c ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;letter-spacing:0.06em;color:${MUTED};">${c}</p>` : ''}
+    ${para(lead, { size: 15, mb: 14 })}
+    <p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;letter-spacing:0.06em;color:${MUTED};">${lang === 'de' ? 'Oder die heutige Lage mit einem Tipp teilen:' : 'Or share today&#39;s reading in one tap:'}</p>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>${pills}</tr></table>
+    ${spacer(16)}`;
 }
 
 function shareText(state: SignalState, lang: Lang, price: number, fgValue: number, fgClass?: string | null): string {
   const word = FG_WORD[lang][fgBand(fgValue, fgClass)];
   return lang === 'de'
-    ? `Bitcoin heute: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, Stimmung ${fgValue} (${word}). Das Bitcoin-Wetter jeden Sonntag, kostenlos: ${SITE}`
-    : `Bitcoin today: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, mood ${fgValue} (${word}). The Bitcoin weather every Sunday, free: ${SITE}`;
+    ? `Bitcoin heute: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, Stimmung ${fgValue} (${word}). Das Bitcoin-Wetter, kostenlos jeden Sonntag:`
+    : `Bitcoin today: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, mood ${fgValue} (${word}). The Bitcoin weather, free every Sunday:`;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -365,7 +371,7 @@ export function confirmationEmail(
   unsubscribeUrl: string,
   lang: Lang,
   opts?: { signal?: SignalState; replyTo?: string }
-): { subject: string; html: string } {
+): { subject: string; html: string; text: string } {
   const replyTo = opts?.replyTo ?? '';
   const state = opts?.signal ?? 'caution';
   const subject = lang === 'de' ? 'Ein Tap, und du bist dabei' : "One tap and you're in";
@@ -387,52 +393,20 @@ export function confirmationEmail(
     ${now}
     ${button(confirmUrl, lang === 'de' ? 'E-Mail bestätigen' : 'Confirm my email', state, 240)}
     ${spacer(22)}
-    <p class="ed" style="margin:0 0 14px;${MONO}font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">
+    <p class="ed" style="margin:0 0 14px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">
       ${lang === 'de' ? 'Button geht nicht? Diesen Link öffnen:' : 'Button not working? Open this link:'}<br />
       <a href="${confirmUrl}" class="el" style="color:#F7931A;word-break:break-all;text-decoration:none;">${confirmUrl}</a>
     </p>
-    <p class="ed" style="margin:0 0 18px;${MONO}font-size:10px;line-height:1.7;color:rgba(237,232,222,0.42);">
+    <p class="ed" style="margin:0 0 18px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">
       ${lang === 'de' ? 'Nicht angemeldet? Dann einfach ignorieren.' : 'Didn&#39;t sign up? Just ignore this.'}
     </p>`;
-  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo }) };
+  const html = shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo });
+  return { subject, html, text: htmlToText(html) };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Alert: Bitcoin moved more than 3% in 24 hours
 // ═══════════════════════════════════════════════════════════════════════════════
-
-// Built from the actual readings, never from the price direction alone, so it can't
-// claim the indicators agree when they don't (lib/signal.ts bands). Never advice.
-export function alertExplanation(signal: SignalState, fgValue: number, maPct: number, lang: Lang): string {
-  const below  = maPct < 0;
-  const absMa  = Math.abs(maPct).toFixed(1);
-  const band   = fgBand(fgValue);
-  const moodEn = ({ 'extreme-fear': 'extreme fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme-greed': 'extreme greed' } as const)[band];
-  const moodDe = ({ 'extreme-fear': 'extreme Angst', 'fear': 'Angst', 'neutral': 'neutral', 'greed': 'Gier', 'extreme-greed': 'extreme Gier' } as const)[band];
-  const readEn = `Market mood reads ${moodEn} (Fear &amp; Greed ${fgValue}) and the price is ${absMa}% ${below ? 'below' : 'above'} its 200-day average.`;
-  const readDe = `Die Marktstimmung zeigt ${moodDe} (Fear &amp; Greed ${fgValue}), und der Preis liegt ${absMa.replace('.', ',')}&nbsp;% ${below ? 'unter' : 'über'} seinem 200-Tage-Schnitt.`;
-  const disagree = fgScore(fgValue) * maScore(maPct) < 0;
-  const take: Record<string, { en: string; de: string }> = {
-    accumulate: {
-      en: 'Together with the distance from the peak, prices are low compared with recent history. Long-term holders tend to see days like this as cheaper sats.',
-      de: 'Zusammen mit dem Abstand vom Hoch sind die Preise niedrig im Vergleich zur jüngsten Vergangenheit. Langfristige Halter sehen solche Tage meist als günstigere Sats.',
-    },
-    caution: {
-      en: 'Together with the distance from the peak, prices are stretched. Long-term holders tend to enjoy days like this and keep their regular plan.',
-      de: 'Zusammen mit dem Abstand vom Hoch sind die Preise gestreckt. Langfristige Halter genießen solche Tage meist und bleiben bei ihrem Plan.',
-    },
-    holdSplit: {
-      en: 'The two readings point different ways, so the signal stays in the middle. Most long-term holders simply keep their regular plan.',
-      de: 'Die beiden Werte zeigen in unterschiedliche Richtungen, deshalb bleibt das Signal in der Mitte. Die meisten langfristigen Halter bleiben einfach bei ihrem Plan.',
-    },
-    holdCalm: {
-      en: 'Neither reading is extreme, so the signal stays in the middle. Most long-term holders simply keep their regular plan.',
-      de: 'Keiner der Werte ist extrem, deshalb bleibt das Signal in der Mitte. Die meisten langfristigen Halter bleiben einfach bei ihrem Plan.',
-    },
-  };
-  const key = signal === 'hold' ? (disagree ? 'holdSplit' : 'holdCalm') : signal;
-  return lang === 'de' ? `${readDe} ${take[key].de}` : `${readEn} ${take[key].en}`;
-}
 
 export function alertEmail(opts: {
   price:            number;
@@ -450,7 +424,7 @@ export function alertEmail(opts: {
   subscriberCount?: number;
   subscriberGoal?:  number;
   marketBlock?:     string; // optional market-context HTML (lib/macro/email.ts); omitted → no block
-}): { subject: string; html: string; replyTo: string } {
+}): { subject: string; html: string; text: string; replyTo: string } {
   const { price, signal, fgValue, fgClass, maPct, athPct, change24h, unsubscribeUrl, replyTo, lang, marketBlock } = opts;
   const isDown = opts.direction === 'down';
   const move = Math.abs(change24h).toLocaleString(loc(lang), { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + (lang === 'de' ? '&nbsp;%' : '%');
@@ -461,8 +435,8 @@ export function alertEmail(opts: {
     ? `${TEMP[signal].emoji} Bitcoin ${isDown ? 'fiel' : 'stieg'} heute um ${moveSubj}. Lage: ${label}`
     : `${TEMP[signal].emoji} Bitcoin ${isDown ? 'fell' : 'rose'} ${moveSubj} today. Conditions: ${label}`;
   const preheader = lang === 'de'
-    ? `Jetzt ${eur(price, lang)}. Was die drei Werte dazu sagen.`
-    : `Now ${eur(price, lang)}. What the three readings say about it.`;
+    ? `Jetzt ${eur(price, lang)}. Die Lage in 30 Sekunden.`
+    : `Now ${eur(price, lang)}. The full picture in 30 seconds.`;
   const headline = lang === 'de'
     ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} heute um ${move}.`
     : `Bitcoin ${isDown ? 'fell' : 'rose'} ${move} today.`;
@@ -470,8 +444,9 @@ export function alertEmail(opts: {
     ? (isDown ? 'Ein großer Tag nach unten. Für langfristige Halter heißt das vor allem: Sats kosten gerade weniger.' : 'Ein großer Tag nach oben. Das ist der Teil, für den man durch die ruhigen Phasen geht.')
     : (isDown ? 'A big day down. For long-term holders that mostly means sats cost less right now.' : 'A big day up. This is the part that makes holding through the quiet stretches worth it.');
   const parts = computeSignal({ fgValue, fgClass, maPct, athPct: athPct ?? -35 }).parts;
-  const cta = `${SITE}/?utm_source=email&utm_medium=alert&utm_campaign=cta#signal`;
+  const cta = `${SITE}/?${lang === 'de' ? 'lang=de&' : ''}utm_source=email&utm_medium=alert&utm_campaign=cta#signal`;
 
+  // Short by design: what happened, where that leaves the market, one button.
   const body = `
     ${eyebrow(lang === 'de' ? 'Große Bewegung' : 'Big move', 10)}
     <h1 class="ehl et" style="margin:0 0 10px;${SERIF}font-size:30px;font-weight:400;line-height:1.2;color:${INK};">${headline}</h1>
@@ -479,18 +454,17 @@ export function alertEmail(opts: {
     ${tempHero({ state: signal, lang, eyebrow: lang === 'de' ? 'Bitcoin-Lage jetzt' : 'Bitcoin conditions now', sentence: togetherLine(signal, parts, lang), price, change: change24h, changeLabel: '24h' })}
     ${spacer(8)}
     ${readings({ lang, fgValue, fgClass, maPct, athPct })}
-    ${spacer(10)}
-    ${para(alertExplanation(signal, fgValue, maPct, lang), { size: 14, mb: 26 })}
-    ${marketBlock ? marketBlock : ''}${disclaimerBox(DISCLAIMER[lang])}
+    ${spacer(18)}
+    ${marketBlock ? marketBlock : ''}
     ${button(cta, lang === 'de' ? 'Heutige Lage ansehen &#8594;' : 'See today&#39;s conditions &#8594;', signal)}
     ${spacer(28)}
-    ${spreadSection({ lang, shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
+    ${spreadSection({ lang, campaign: 'alert', shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
 
   const footerReason = lang === 'de'
     ? 'Du erhältst diese E-Mail, weil du das Bitcoin-Wetter auf whentobuybtc.xyz abonniert hast. Hinweise wie dieser kommen nur, wenn Bitcoin sich an einem Tag um mehr als 3&nbsp;% bewegt.'
     : 'You&#39;re getting this because you subscribed to the Bitcoin weather at whentobuybtc.xyz. Notes like this only come when Bitcoin moves more than 3% in a day.';
   const html = shell({ lang, preheader, headerRight: lang === 'de' ? 'Hinweis' : 'Alert', body, footerReason, unsubscribeUrl, replyTo, top: forwardStrip(lang, 'alert') });
-  return { subject, html, replyTo };
+  return { subject, html, text: htmlToText(html), replyTo };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -501,7 +475,7 @@ export interface CalcHook { amount: number; startYear: number; put: number; now:
 
 /** The "what if" card: a real result from the calculator's model, plus a way in. */
 function calcCard(h: CalcHook, lang: Lang): string {
-  const url = `${SITE}/?utm_source=email&utm_medium=digest&utm_campaign=calculator#whatif`;
+  const url = `${SITE}/${lang === 'de' ? 'bitcoin-sparplan-rechner' : 'bitcoin-dca-calculator'}?utm_source=email&utm_medium=digest&utm_campaign=calculator`;
   const x = (h.now / h.put).toLocaleString(loc(lang), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const line = lang === 'de'
     ? `${eur(h.amount, lang)} im Monat in Bitcoin seit Januar ${h.startYear}: ${eur(h.put, lang)} eingezahlt, heute <b class="et" style="color:${INK};font-weight:700;">${eur(h.now, lang)}</b> wert (${x}&times;).`
@@ -524,6 +498,56 @@ export function calcHookForWeek(d = new Date()): { amount: number; startYear: nu
 
 const LAST_HALVING = Date.UTC(2024, 3, 20); // 4th halving, block 840,000 (fixed date, never changes)
 
+/** The week's price path, from the daily closes the digest already loads. */
+export interface WeekStats { high: number; low: number; bigDay?: { pct: number; date: string } }
+
+/** Last 7 days from daily [timestamp, price] points: range and the biggest day-to-day move. */
+export function weekStats(points: [number, number][], now = Date.now()): WeekStats | null {
+  const pts = points.filter(([t, p]) => p > 0 && t >= now - 8 * 86400000).sort((a, b) => a[0] - b[0]);
+  if (pts.length < 5) return null;
+  const week = pts.filter(([t]) => t >= now - 7 * 86400000);
+  const prices = week.map(([, p]) => p);
+  let bigDay: WeekStats['bigDay'];
+  for (let i = 1; i < pts.length; i++) {
+    if (pts[i][0] < now - 7 * 86400000) continue;
+    const pct = (pts[i][1] - pts[i - 1][1]) / pts[i - 1][1] * 100;
+    if (!bigDay || Math.abs(pct) > Math.abs(bigDay.pct)) bigDay = { pct, date: new Date(pts[i][0]).toISOString() };
+  }
+  return { high: Math.max(...prices), low: Math.min(...prices), bigDay };
+}
+
+/** Two or three plain sentences on how the week went. Describes, never advises. */
+function weekLine(w: WeekStats, lang: Lang, weekChange: number | null, prevFg?: number, fg?: number): string {
+  const range = (w.high - w.low) / w.low * 100;
+  const de = lang === 'de';
+  const tone = range < 4 ? (de ? 'Eine ruhige Woche' : 'A quiet week') : range < 8 ? (de ? 'Eine normale Woche' : 'An ordinary week') : (de ? 'Eine bewegte Woche' : 'A choppy week');
+  const r = range.toLocaleString(loc(lang), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + (de ? '&nbsp;%' : '%');
+  let out = de
+    ? `${tone}. Bitcoin bewegte sich zwischen ${eur(w.low, lang)} und ${eur(w.high, lang)}, eine Spanne von ${r}`
+    : `${tone}. Bitcoin moved between ${eur(w.low, lang)} and ${eur(w.high, lang)}, a ${r} range`;
+  out += weekChange == null ? '.' : de
+    ? `, und schloss die Woche ${weekChange >= 0 ? 'mit einem Plus' : 'mit einem Minus'} von ${pct(Math.abs(weekChange), lang, 1, false)}.`
+    : `, and ended the week ${weekChange >= 0 ? 'up' : 'down'} ${pct(Math.abs(weekChange), lang, 1, false)}.`;
+  if (w.bigDay && Math.abs(w.bigDay.pct) >= 2) {
+    const day = new Date(w.bigDay.date).toLocaleDateString(loc(lang), { weekday: 'long', timeZone: 'Europe/Vienna' });
+    out += de
+      ? ` Der größte Tag war ${day} mit ${pct(w.bigDay.pct, lang)}.`
+      : ` The biggest day was ${day}, at ${pct(w.bigDay.pct, lang)}.`;
+  }
+  if (prevFg != null && fg != null && Math.abs(fg - prevFg) >= 5) {
+    out += de
+      ? ` Die Stimmung ${fg > prevFg ? 'stieg' : 'fiel'} von ${prevFg} auf ${fg}.`
+      : ` The mood ${fg > prevFg ? 'rose' : 'fell'} from ${prevFg} to ${fg}.`;
+  }
+  return out;
+}
+
+/** Personal close, so the emails read like they come from a person. */
+function signOff(lang: Lang, line: string): string {
+  return `<p class="em" style="margin:0 0 4px;${SERIF}font-size:16px;font-style:italic;line-height:1.6;color:${SOFT};">${line}</p>
+    <p class="et" style="margin:0 0 26px;${SERIF}font-size:16px;line-height:1.6;color:${INK};">Imo</p>`;
+}
+
 export function digestEmail(opts: {
   price:            number;
   signal:           SignalState;
@@ -542,9 +566,10 @@ export function digestEmail(opts: {
   subscriberCount?: number;
   subscriberGoal?:  number;
   calc?:            CalcHook | null;
+  week?:            WeekStats | null;
   marketBlock?:     string; // optional market-context HTML (lib/macro/email.ts); omitted → no block
   now?:             Date;
-}): { subject: string; html: string; replyTo: string } {
+}): { subject: string; html: string; text: string; replyTo: string } {
   const { price, signal, fgValue, fgClass, maPct, athPct, change24h, unsubscribeUrl, replyTo, lang,
     prevFgValue, prevMaPct, prevAthPct, prevPrice, marketBlock } = opts;
   const label = signalLabel(signal, lang);
@@ -579,7 +604,7 @@ export function digestEmail(opts: {
     ? `Tag ${daysSince.toLocaleString('de-DE')} seit dem letzten Halving (April 2024).`
     : `Day ${daysSince.toLocaleString('en-GB')} since the last halving (April 2024).`;
 
-  const cta = `${SITE}/?utm_source=email&utm_medium=digest&utm_campaign=cta#signal`;
+  const cta = `${SITE}/?${lang === 'de' ? 'lang=de&' : ''}utm_source=email&utm_medium=digest&utm_campaign=cta#signal`;
   const hello = lang === 'de'
     ? 'Hey, hier ist dein Bitcoin-Wetter für die Woche. Drei Werte, eine Temperatur, eine Minute Lesezeit.'
     : 'Hey, here&#39;s your Bitcoin weather for the week. Three readings, one temperature, one minute to read.';
@@ -588,42 +613,65 @@ export function digestEmail(opts: {
     ${para(hello, { mb: 22 })}
     ${tempHero({ state: signal, lang, eyebrow: (lang === 'de' ? 'Diese Woche &#183; ' : 'This week &#183; ') + sendDate(lang, opts.now), sentence: togetherLine(signal, parts, lang), price, change, changeLabel })}
     ${changed ? spacer(14) + `<p class="em2" style="margin:0;${MONO}font-size:11px;line-height:1.6;color:${MUTED};">${changed}</p>` : ''}
-    ${spacer(8)}
+    ${opts.week ? spacer(22) + eyebrow(lang === 'de' ? 'Die Woche' : 'The week', 8) + para(weekLine(opts.week, lang, weekChange, prevFgValue, fgValue), { mb: 6 }) : spacer(8)}
     ${readings({ lang, fgValue, fgClass, maPct, athPct, prev: { fg: prevFgValue, ma: prevMaPct, ath: prevAthPct } })}
     ${spacer(16)}
     ${opts.calc ? calcCard(opts.calc, lang) : ''}
-    ${marketBlock ? marketBlock : ''}${disclaimerBox(DISCLAIMER[lang])}
+    ${marketBlock ? marketBlock : ''}
     ${button(cta, lang === 'de' ? 'Ganze Lage ansehen &#8594;' : 'See the full picture &#8594;', signal)}
     ${spacer(14)}
-    <p class="ed" style="margin:0 0 26px;${MONO}font-size:10px;line-height:1.6;color:rgba(237,232,222,0.42);">${cycle}</p>
-    ${spreadSection({ lang, shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
+    <p class="ed" style="margin:0 0 26px;${MONO}font-size:11px;line-height:1.6;color:rgba(237,232,222,0.58);">${cycle}</p>
+    ${signOff(lang, lang === 'de' ? 'Bis nächsten Sonntag,' : 'See you next Sunday,')}
+    ${spreadSection({ lang, campaign: 'digest', shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
 
   const footerReason = lang === 'de'
     ? 'Du erhältst diesen Wochenüberblick, weil du das Bitcoin-Wetter auf whentobuybtc.xyz abonniert hast.'
     : 'You&#39;re getting this weekly read because you subscribed to the Bitcoin weather at whentobuybtc.xyz.';
   const html = shell({ lang, preheader, headerRight: lang === 'de' ? 'Sonntag' : 'Sunday', body, footerReason, unsubscribeUrl, replyTo, top: forwardStrip(lang, 'digest') });
-  return { subject, html, replyTo };
+  return { subject, html, text: htmlToText(html), replyTo };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Welcome: sent right after confirming
 // ═══════════════════════════════════════════════════════════════════════════════
 
+/** Today's numbers for the welcome email (optional: without them the email still works). */
+export interface WelcomeMarket { price: number; change24h: number | null; fgValue: number; fgClass?: string | null; maPct: number; athPct: number }
+
 export function welcomeEmail(
   unsubscribeUrl: string,
   lang: Lang,
-  opts?: { replyTo?: string; subscriberCount?: number; subscriberGoal?: number; signal?: SignalState }
-): { subject: string; html: string } {
+  opts?: { replyTo?: string; subscriberCount?: number; subscriberGoal?: number; signal?: SignalState; market?: WelcomeMarket | null }
+): { subject: string; html: string; text: string } {
   const replyTo = opts?.replyTo ?? '';
-  const state = opts?.signal ?? 'caution';
-  const subject = lang === 'de' ? 'Du bist dabei. So liest du das Bitcoin-Wetter' : "You're in. Here's how to read the Bitcoin weather";
-  const preheader = lang === 'de'
-    ? 'Was du bekommst, wann, und was Kalt, Mild und Heiß bedeuten.'
-    : 'What you get, when, and what Cold, Mild and Hot mean.';
-  const footerReason = lang === 'de'
+  const m = opts?.market ?? null;
+  const sig = m ? computeSignal({ fgValue: m.fgValue, fgClass: m.fgClass, maPct: m.maPct, athPct: m.athPct }) : null;
+  const state: SignalState = sig?.state ?? opts?.signal ?? 'hold';
+  const de = lang === 'de';
+  const subject = de ? 'Du bist dabei. Hier ist die Lage von heute' : "You're in. Here's today's reading";
+  const preheader = de
+    ? (m ? `Bitcoin gerade: ${signalLabel(state, lang)}, ${eur(m.price, lang)}. Und so liest du das Bitcoin-Wetter.` : 'Was du bekommst, wann, und was Kalt, Mild und Heiß bedeuten.')
+    : (m ? `Bitcoin right now: ${signalLabel(state, lang)}, ${eur(m.price, lang)}. And how to read the Bitcoin weather.` : 'What you get, when, and what Cold, Mild and Hot mean.');
+  const footerReason = de
     ? 'Du erhältst diese E-Mail, weil du deine Anmeldung auf whentobuybtc.xyz bestätigt hast.'
     : 'You&#39;re getting this because you confirmed your subscription at whentobuybtc.xyz.';
+  const utm = (c: string) => `utm_source=email&utm_medium=welcome&utm_campaign=${c}`;
 
+  // 1. Today, so the first email already carries the thing people signed up for
+  const today = m && sig ? `
+    ${tempHero({ state, lang, eyebrow: de ? 'Bitcoin gerade' : 'Bitcoin right now', sentence: togetherLine(state, sig.parts, lang), price: m.price, change: m.change24h, changeLabel: '24h' })}
+    ${spacer(8)}
+    ${readings({ lang, fgValue: m.fgValue, fgClass: m.fgClass, maPct: m.maPct, athPct: m.athPct })}
+    ${spacer(22)}` : '';
+
+  // 2. What arrives when
+  const when = de
+    ? [['Jeden Sonntag', 'Das Bitcoin-Wetter: Temperatur, Preis, die drei Werte und wie die Woche lief. Eine Minute Lesezeit.'],
+       ['Bei großen Bewegungen', 'Ein kurzer Hinweis, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Höchstens einmal in 24 Stunden pro Richtung.']]
+    : [['Every Sunday', 'The Bitcoin weather: temperature, price, the three readings and how the week went. One minute to read.'],
+       ['On big moves', 'A short note when Bitcoin moves more than 3% in a day. At most once every 24 hours in the same direction.']];
+
+  // 3. Cold / Mild / Hot
   const legend = (['accumulate', 'hold', 'caution'] as SignalState[]).map(s => {
     const txt = {
       en: { accumulate: 'Fear is high, the price sits below its long-term trend and far from its peak. Sats cost less than usual.', hold: 'Nothing extreme, or the readings disagree. Most weeks look like this.', caution: 'Excitement is high, the price runs above its trend and near its peak. A good stretch for anyone who has been stacking.' },
@@ -632,48 +680,57 @@ export function welcomeEmail(
     return `<tr><td class="lb" style="padding:12px 0;border-top:1px solid rgba(237,232,222,0.10);">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
         <td valign="top" width="70" style="width:70px;"><span class="tc-${s}" style="${SERIF}font-size:20px;font-style:italic;color:${TEMP[s].hex};">${signalLabel(s, lang)}</span></td>
-        <td valign="top"><p class="em" style="margin:2px 0 0;${SERIF}font-size:14px;line-height:1.6;color:${SOFT};">${txt}</p></td>
+        <td valign="top"><p class="em" style="margin:2px 0 0;${SERIF}font-size:15px;line-height:1.6;color:${SOFT};">${txt}</p></td>
       </tr></table>
     </td></tr>`;
   }).join('');
 
-  const when = lang === 'de'
-    ? [['Jeden Sonntag', 'Das Bitcoin-Wetter: Temperatur, Preis, die drei Werte und was sich seit letzter Woche geändert hat. Eine Minute Lesezeit.'],
-       ['Bei großen Bewegungen', 'Ein kurzer Hinweis, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Höchstens einmal in 24 Stunden pro Richtung.']]
-    : [['Every Sunday', 'The Bitcoin weather: temperature, price, the three readings and what changed since last week. One minute to read.'],
-       ['On big moves', 'A short note when Bitcoin moves more than 3% in a day. At most once every 24 hours in the same direction.']];
+  // 4. Inbox placement: the single biggest lever against the Promotions tab and spam folder
+  const inbox = de
+    ? `<b class="et" style="color:${INK};">Gmail:</b> Landet diese Mail unter &#8222;Werbung&#8220;, zieh sie in &#8222;Allgemein&#8220;.<br /><b class="et" style="color:${INK};">Alle:</b> Füge alerts@whentobuybtc.xyz zu deinen Kontakten hinzu.<br /><b class="et" style="color:${INK};">Und:</b> Antworte kurz und erzähl mir, wie du Bitcoin sparst. Ich lese jede Antwort selbst, und dein Postfach merkt sich, dass diese Mails erwünscht sind.`
+    : `<b class="et" style="color:${INK};">Gmail:</b> if this landed in Promotions, drag it to Primary.<br /><b class="et" style="color:${INK};">Everyone:</b> add alerts@whentobuybtc.xyz to your contacts.<br /><b class="et" style="color:${INK};">And:</b> hit reply and tell me how you stack sats. I read every reply myself, and it tells your inbox these emails are welcome.`;
+
+  // 5. Three tools worth a look
+  const tools: [string, string, string][] = de
+    ? [['/bitcoin-angst-und-gier-index', 'Angst und Gier Index', 'Die Marktstimmung heute, und was jede Zone bedeutet.'],
+       ['/bitcoin-200-tage-linie', '200-Tage-Linie', 'Wo der Kurs zu seinem langfristigen Trend steht, mit Chart.'],
+       ['/bitcoin-sparplan-rechner', 'Sparplan Rechner', 'Was ein fester Betrag jeden Monat seit 2015 bewirkt hätte.']]
+    : [['/bitcoin-fear-and-greed-index', 'Fear &amp; Greed Index', 'Today&#39;s market mood, and what each zone means.'],
+       ['/bitcoin-200-day-moving-average', '200-day moving average', 'Where the price sits against its long-term trend, with a chart.'],
+       ['/bitcoin-dca-calculator', 'DCA calculator', 'What a fixed monthly amount since 2015 would have done.']];
+  const toolRows = tools.map(([path, name, line], i) => `<tr><td class="lb" style="padding:12px 0;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
+      <a href="${SITE}${path}?${utm('tools')}" class="el" style="color:#F7931A;text-decoration:none;${SANS}font-size:14px;font-weight:700;">${name}&nbsp;&#8594;</a>
+      <p class="em" style="margin:4px 0 0;${SERIF}font-size:15px;line-height:1.5;color:${SOFT};">${line}</p>
+    </td></tr>`).join('');
 
   const body = `
-    ${eyebrow(lang === 'de' ? 'Bestätigt' : 'Confirmed', 12)}
-    <h1 class="ehl et" style="margin:0 0 14px;${SERIF}font-size:30px;font-weight:400;line-height:1.2;color:${INK};">${lang === 'de' ? 'Du bist dabei.' : 'You&#39;re in.'}</h1>
-    ${para(lang === 'de'
-      ? 'Danke fürs Abonnieren. Hier ist alles, was du wissen musst, in zwei Minuten.'
-      : 'Thanks for subscribing. Here&#39;s everything you need to know, in two minutes.', { mb: 24 })}
-    ${eyebrow(lang === 'de' ? 'Wann du von mir hörst' : 'When you&#39;ll hear from me', 4)}
+    ${eyebrow(de ? 'Bestätigt' : 'Confirmed', 12)}
+    <h1 class="ehl et" style="margin:0 0 14px;${SERIF}font-size:30px;font-weight:400;line-height:1.2;color:${INK};">${de ? 'Du bist dabei.' : 'You&#39;re in.'}</h1>
+    ${para(de
+      ? `Danke fürs Abonnieren. ${m ? 'Hier ist die Lage von heute, danach alles Wichtige in zwei Minuten.' : 'Hier ist alles, was du wissen musst, in zwei Minuten.'}`
+      : `Thanks for subscribing. ${m ? 'Here&#39;s today&#39;s reading, then everything you need to know in two minutes.' : 'Here&#39;s everything you need to know, in two minutes.'}`, { mb: 22 })}
+    ${today}
+    ${eyebrow(de ? 'Wann du von mir hörst' : 'When you&#39;ll hear from me', 4)}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:26px;">
       ${when.map(([h, t], i) => `<tr><td class="lb" style="padding:12px 0;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
-        <p class="et" style="margin:0 0 4px;${SANS}font-size:13px;font-weight:700;color:${INK};">${h}</p>
-        <p class="em" style="margin:0;${SERIF}font-size:14px;line-height:1.6;color:${SOFT};">${t}</p></td></tr>`).join('')}
+        <p class="et" style="margin:0 0 4px;${SANS}font-size:14px;font-weight:700;color:${INK};">${h}</p>
+        <p class="em" style="margin:0;${SERIF}font-size:15px;line-height:1.6;color:${SOFT};">${t}</p></td></tr>`).join('')}
     </table>
-    ${eyebrow(lang === 'de' ? 'Kalt, Mild, Heiß' : 'Cold, Mild, Hot', 4)}
+    ${eyebrow(de ? 'Kalt, Mild, Heiß' : 'Cold, Mild, Hot', 4)}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:10px;">${legend}</table>
-    ${para(lang === 'de'
+    ${para(de
       ? 'Die Temperatur beschreibt den Markt, nicht was du tun sollst. Viele langfristige Halter legen jeden Monat denselben Betrag zurück, egal bei welchem Wetter: Kalt heißt mehr Sats fürs gleiche Geld, Heiß heißt, das Sparen hat sich gelohnt.'
-      : 'The temperature describes the market, not what you should do. Many long-term holders put the same amount aside every month, whatever the weather: cold means more sats for the same money, hot means the saving already paid off.', { size: 14, mb: 26 })}
+      : 'The temperature describes the market, not what you should do. Many long-term holders put the same amount aside every month, whatever the weather: cold means more sats for the same money, hot means the saving already paid off.', { size: 15, mb: 26 })}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="card" style="background-color:rgba(237,232,222,0.04);border:1px solid rgba(237,232,222,0.10);margin:0 0 26px;">
       <tr><td style="padding:18px 20px;">
-        ${eyebrow(lang === 'de' ? 'Sag Hallo' : 'Say hello', 8)}
-        ${para(lang === 'de'
-          ? 'Antworte einfach auf diese Mail und erzähl mir kurz, wie du Bitcoin sparst. Ich lese jede Antwort selbst.'
-          : 'Just hit reply and tell me how you stack sats. I read every reply myself.', { size: 14, mb: 0 })}
+        ${eyebrow(de ? 'Damit die Mails ankommen' : 'Make sure these reach you', 10)}
+        <p class="em" style="margin:0;${SERIF}font-size:15px;line-height:1.75;color:${SOFT};">${inbox}</p>
       </td></tr>
     </table>
-    ${button(`${SITE}/?utm_source=email&utm_medium=welcome&utm_campaign=cta#whatif`, lang === 'de' ? 'Rechner ausprobieren &#8594;' : 'Try the calculator &#8594;', state)}
-    ${spacer(12)}
-    <p class="em2" style="margin:0 0 26px;${MONO}font-size:10px;line-height:1.6;color:${MUTED};">${lang === 'de'
-      ? 'Was ein kleiner Betrag jeden Monat seit 2015 bewirkt hätte, inklusive der schlechten Phasen.'
-      : 'What a small monthly amount since 2015 would have done, including the bad stretches.'}</p>
-    ${disclaimerBox(DISCLAIMER[lang])}`;
+    ${eyebrow(de ? 'Einen Blick wert' : 'Worth a look', 4)}
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:26px;">${toolRows}</table>
+    ${signOff(lang, de ? 'Schön, dass du da bist,' : 'Glad to have you here,')}`;
 
-  return { subject, html: shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo }) };
+  const html = shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo });
+  return { subject, html, text: htmlToText(html) };
 }

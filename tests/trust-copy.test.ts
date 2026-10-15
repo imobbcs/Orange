@@ -2,27 +2,26 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'fs';
-import { alertExplanation, alertEmail, digestEmail, confirmationEmail, welcomeEmail } from '../lib/email-templates';
+import { alertEmail, digestEmail, confirmationEmail, welcomeEmail } from '../lib/email-templates';
 
-test('alert explanation: built from readings, never claims agreement that is not there', () => {
+// The alert's one-line verdict (in the temperature card) must never claim the readings agree when they don't.
+const alertFor = (signal: 'accumulate' | 'hold' | 'caution', fgValue: number, maPct: number, lang: 'en' | 'de' = 'en', athPct = -35) =>
+  alertEmail({ price: 70000, movePct: -0.05, direction: 'down', signal, fgValue, maPct, athPct, change24h: -5, unsubscribeUrl: '#', replyTo: '', lang }).html;
+
+test('alert verdict: built from readings, never claims agreement that is not there', () => {
   // Live 14 Oct case: fear (31) but price 16% ABOVE trend → the two disagree.
-  const split = alertExplanation('hold', 31, 16.2, 'en');
-  assert.ok(split.includes('fear (Fear &amp; Greed 31)'));
-  assert.ok(split.includes('16.2% above its 200-day average'));
-  assert.ok(split.includes('point different ways'));
-  assert.ok(!/same way/.test(split));
-
-  assert.ok(alertExplanation('hold', 52, 3, 'en').includes('Neither reading is extreme')); // greed side + above trend agree
+  const split = alertFor('hold', 31, 16.2);
+  assert.ok(split.includes('pull in different directions'));
+  assert.ok(!/same way|all agree/i.test(split));
+  assert.ok(alertFor('hold', 52, 3).includes('No reading is at an extreme'));
+  assert.ok(alertFor('hold', 62, -8).includes('pull in different directions')); // greed vs. below trend
 });
 
-test('alert explanation: every state and both languages', () => {
-  assert.ok(alertExplanation('hold', 62, -8, 'en').includes('point different ways')); // greed vs. below trend
-  assert.ok(alertExplanation('hold', 52, -3, 'en').includes('Neither reading is extreme')); // neutral mood, at the average
-  assert.ok(alertExplanation('hold', 40, -3, 'en').includes('Neither reading is extreme'));
-  assert.ok(alertExplanation('accumulate', 18, -12, 'en').includes('cheaper sats'));
-  assert.ok(alertExplanation('caution', 82, 25, 'en').includes('keep their regular plan'));
-  const de = alertExplanation('accumulate', 18, -12.4, 'de');
-  assert.ok(de.includes('extreme Angst') && de.includes('12,4&nbsp;% unter') && de.includes('günstigere Sats'));
+test('alert verdict: every state and both languages', () => {
+  assert.ok(alertFor('accumulate', 18, -12, 'en', -55).includes('Sats cost less than usual'));
+  assert.ok(alertFor('caution', 82, 25, 'en', -3).includes('A good stretch for anyone who has been stacking'));
+  assert.ok(alertFor('hold', 31, 16.2, 'de').includes('ziehen in verschiedene Richtungen'));
+  assert.ok(alertFor('accumulate', 18, -12.4, 'de', -55).includes('Sats kosten weniger als sonst'));
 });
 
 const ADVICE = [/pace new buys/i, /add extra/i, /add-more/i, /time to act/i, /zum Handeln/i, /kürzerzutreten/i, /Nachkaufen/i, /drosseln/i, /patience over urgency/i];
@@ -75,7 +74,7 @@ test('emails v2: welcome has no advice, digest shows the calculator card and wha
   }
   const d = digestEmail({ price: 74595, signal: 'caution', fgValue: 81, maPct: 24.5, athPct: -3.2, change24h: 1, unsubscribeUrl: '#', replyTo: '', lang: 'en',
     prevFgValue: 50, prevMaPct: -1.8, prevAthPct: -29.6, prevPrice: 72000, calc: { amount: 50, startYear: 2019, put: 4700, now: 20693 } });
-  assert.ok(d.html.includes('€20,693') && d.html.includes('€4,700') && d.html.includes('#whatif'));
+  assert.ok(d.html.includes('€20,693') && d.html.includes('€4,700') && d.html.includes('/bitcoin-dca-calculator?'));
   assert.ok(d.html.includes('last Sunday it read <b>Mild</b>, now it reads <b>Hot</b>'));
   assert.ok(d.html.includes('+3.6%'));                                   // week change vs last Sunday's price
   assert.ok(d.html.includes('utm_medium=forward&utm_campaign=digest'));   // forwarded-to-you strip
