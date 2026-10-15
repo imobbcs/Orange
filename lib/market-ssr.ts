@@ -101,7 +101,3 @@ export function pct(n: number | null, lang: 'en' | 'de' = 'en', signed = true): 
   const sign = signed ? (n > 0 ? '+' : n < 0 ? '−' : '') : '';
   return lang === 'de' ? `${sign}${v} %` : `${sign}${v}%`;
 }
-
-export function longDate(iso: string, lang: 'en' | 'de' = 'en'): string {
-  return new Date(iso).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Vienna' });
-}

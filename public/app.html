@@ -1039,85 +1039,6 @@
       max-width: 52ch;
     }
 
-    /* Phone inbox mockup */
-    .em-phone {
-      width: 100%;
-      max-width: 280px;
-      background: #0D0B0F;
-      border-radius: 36px;
-      border: 6px solid #1E1C22;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
-      overflow: hidden;
-      margin: 0 auto;
-    }
-    .em-notch {
-      width: 80px; height: 22px;
-      background: #1E1C22;
-      border-radius: 0 0 14px 14px;
-      margin: 0 auto;
-    }
-    .em-screen { padding: 8px 0 20px; }
-    .em-status {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 18px 10px;
-    }
-    .em-time { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #EDE8DE; }
-    .em-status-right { display: flex; gap: 6px; align-items: center; }
-    .em-signal { font-size: 10px; color: rgba(237,232,222,0.6); }
-    .em-battery { font-size: 10px; color: rgba(237,232,222,0.6); }
-    .em-inbox-title {
-      padding: 0 14px 10px;
-      font-family: -apple-system, sans-serif;
-      font-size: 20px; font-weight: 700;
-      color: #EDE8DE; letter-spacing: -0.3px;
-    }
-    .em-email-item {
-      margin: 0 8px 2px;
-      padding: 10px 10px;
-      border-radius: 10px;
-      display: flex; gap: 8px; align-items: flex-start;
-    }
-    .em-highlighted {
-      background: rgba(247,147,26,0.10);
-      border: 1px solid rgba(247,147,26,0.22);
-    }
-    .em-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: -apple-system, sans-serif;
-      font-size: 13px; font-weight: 700;
-    }
-    .em-avatar-dim {
-      background: rgba(237,232,222,0.1);
-      color: rgba(237,232,222,0.45);
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: -apple-system, sans-serif;
-      font-size: 13px; font-weight: 700;
-    }
-    .em-unread-dot {
-      width: 7px; height: 7px;
-      background: #F7931A; border-radius: 50%;
-      flex-shrink: 0; margin-top: 5px;
-    }
-    .em-email-content { flex: 1; min-width: 0; }
-    .em-email-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
-    .em-sender { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 600; color: #EDE8DE; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .em-sender-dim { color: rgba(237,232,222,0.4); font-weight: 400; }
-    .em-etime { font-family: -apple-system, sans-serif; font-size: 9px; color: rgba(237,232,222,0.35); flex-shrink: 0; margin-left: 4px; }
-    .em-orange { color: #F7931A !important; font-weight: 600; }
-    .em-subject { font-family: -apple-system, sans-serif; font-size: 10px; font-weight: 600; color: rgba(237,232,222,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
-    .em-subject-dim { color: rgba(237,232,222,0.3); font-weight: 400; }
-    .em-preview { font-family: -apple-system, sans-serif; font-size: 9px; color: rgba(237,232,222,0.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .em-divider { height: 1px; background: rgba(237,232,222,0.06); margin: 3px 10px; }
-    .em-home-bar { width: 80px; height: 4px; background: rgba(237,232,222,0.2); border-radius: 2px; margin: 14px auto 0; }
-
     @media (min-width: 900px) {
       .push-preview-col { display: block; }
     }
@@ -1262,12 +1183,12 @@
       /* ── NAV ── */
       nav { padding: 1.25rem 1.5rem; }
       /* Offset anchor scroll for sticky nav on mobile */
-      .section, .partner-section, .chart-section { scroll-margin-top: 108px; }
+      .section, .chart-section { scroll-margin-top: 108px; }
       /* ── TAP TARGETS ── */
       .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; }
       .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
       
-      .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
+      .btn-primary { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; align-items: center; gap: 1.5rem; }
       .footer-awards { gap: 0.75rem; }
       .footer-awards svg { width: 36px; height: 36px; }
@@ -1319,7 +1240,7 @@
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
       .signal-wrap { margin: 1.75rem 0 0.75rem; }
       
-      .section-sub, .expert-text, .push-sub { color: rgba(237,232,222,0.72); }
+      .section-sub, .push-sub { color: rgba(237,232,222,0.72); }
       
       /* CTAs: in normal flow, pushed to bottom with margin-top: auto */
       .hero-actions {
@@ -1332,8 +1253,7 @@
         width: 100%;
         justify-content: center;
       }
-      .hero-actions .btn-primary,
-      .hero-actions .btn-ghost {
+      .hero-actions .btn-primary {
         font-size: 0.625rem;
         letter-spacing: 0.12em;
         padding: 1rem 1.25rem;
@@ -1430,14 +1350,13 @@
     @media (max-width: 390px) {
       .hero-price { font-size: clamp(3.5rem, 17vw, 5.5rem); }
       .hero-actions { flex-direction: column; }
-      .hero-actions .btn-primary,
-      .hero-actions .btn-ghost { width: 100%; }
+      .hero-actions .btn-primary { width: 100%; }
     }
 
     /* Touch tap targets */
     @media (max-width: 768px) {
-      button, a.btn-primary, a.btn-ghost, a.partner-btn,
-      .chart-tf, .lang-btn, .share-btn { min-height: 44px; }
+      button, a.btn-primary,
+      .chart-tf, .lang-btn { min-height: 44px; }
     }
   
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
@@ -1691,31 +1610,6 @@
     }
 
 
-    /* ── WHATIF RESULT REVEAL ── */
-    
-    
-    /* ══ SCROLL SURPRISE — clip-path wipe ══ */
-
-
-
-    /* ══ NAV SIGNAL DOT ══ */
-    .nav-signal-dot {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      margin-left: 0.6em;
-      vertical-align: middle;
-      opacity: 0;
-      transition: opacity 0.6s ease, background 0.4s ease;
-      position: relative;
-      top: -1px;
-    }
-    .nav-signal-dot.active { opacity: 1; }
-    .nav-signal-dot.accumulate { background: var(--green); box-shadow: 0 0 6px rgba(74,222,128,0.6); }
-    .nav-signal-dot.hold      { background: var(--amber); box-shadow: 0 0 6px rgba(251,191,36,0.6); }
-    .nav-signal-dot.caution   { background: var(--orange); box-shadow: 0 0 6px rgba(247,147,26,0.6); }
-
-
     /* ══ WHAT IF STEPPER ══ */
     
     
@@ -1804,7 +1698,7 @@
     .hero-scale-labels span:nth-child(2) { text-align: center; } .hero-scale-labels span:nth-child(3) { text-align: right; } .hero-scale-labels span:nth-child(1) { text-align: left; }
     .hero-scale-labels .on { color: var(--temp); }
 
-    .temp-hero .signal-wrap, .temp-hero .hero-why, .temp-hero .hero-strip-gauge, .temp-hero .hero-horizon, .temp-hero .signal-reason, .temp-hero #ath-banner { display: none !important; }
+    .temp-hero .signal-wrap, .temp-hero .hero-why, .temp-hero .hero-strip-gauge, .temp-hero .hero-horizon, .temp-hero #ath-banner { display: none !important; }
     .temp-hero .hero-strip { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); width: min(100%, 560px); margin: 1.6rem auto 0; background: transparent;
       border-top: 1px solid rgba(237,232,222,0.12); border-bottom: 1px solid rgba(237,232,222,0.12); animation: none; opacity: 0; }
     .temp-hero.temp-in .hero-strip { opacity: 1; transition: opacity 0.6s ease 1s; }
@@ -1831,7 +1725,7 @@
       .temp-hero .hero-state { margin-top: 0.6rem; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .temp-hero .hero-state, .temp-hero .hero-sentence, .temp-hero .hero-scale, .temp-hero .hero-strip, .temp-hero .hero-actions, .temp-hero .hero-regular-line, .hero-scale-marker { transition: none !important; }
+      .temp-hero .hero-state, .temp-hero .hero-sentence, .temp-hero .hero-scale, .temp-hero .hero-strip, .temp-hero .hero-actions, .hero-scale-marker { transition: none !important; }
     }
   </style>
   <!-- ═══ TEMPERATURE HERO: CSS (end) ═══ -->
@@ -1932,7 +1826,7 @@
     
     
     .push-preview-col { display: block !important; }
-    .push-section .email-submit, .push-section .push-submit { background: var(--temp) !important; border-color: var(--temp) !important; color: #09080A !important; transition: background 1s; }
+    .push-section .email-submit { background: var(--temp) !important; border-color: var(--temp) !important; color: #09080A !important; transition: background 1s; }
 
     @media (min-width: 769px) {
       .why-v2 .instrument-body { grid-template-columns: repeat(3, minmax(0,1fr)); }
@@ -2725,7 +2619,6 @@
       metaDesc: 'A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice.',
       // Nav
       heroLabel: 'Bitcoin conditions today',
-      disclaimer: 'Not financial advice. See what the data shows, decide for yourself.',
       visitorCounter: 'Bitcoiners were here.',
       // Signal states — arrays rotate by day (see updateSignal) so repeat
       // visitors don't see the identical line every time. The "Hot"/"Dump"
@@ -2799,14 +2692,8 @@
       cxFine: "Bought at each month's average price, valued at today's price, in euro. Fees and taxes not included. Not financial advice.",
       cxShare: '{amt} {per} into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US 10-year yield' }, wmPts: 'pts',
-      wmBtc: 'Bitcoin {v} in 24 hours', wmWith: 'moving with the market.', wmAgainst: 'going its own way.', wmOwn: 'its own move, while markets were calm.', wmQuiet: 'a quiet day across markets.', wmSteady: 'holding steady while stocks moved.', wmClosed: 'US markets are closed, so these are their last moves.',
-      fpEveryMonth: 'Every month', fpOwnAmount: 'your own amount', fpGrowthTitle: 'Month by month', fpWorth: 'Worth', fpChartHint: 'Touch or hover the chart to see any month. Blue shading: worth less than what went in.',
-      fpRecBy: 'It was back above that high by {c}.', fpRecNow: 'It is back above that high today.', fpRecNot: 'It has not got back to that high yet.',
-      fpUnder: 'For {n} of the {m} months it was worth less than what had gone in.', fpUnderOne: 'For 1 of the {m} months it was worth less than what had gone in.',
-      fpStartIn: 'Starting in', fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',
-      fpPre: '{amt} a month since {y} would be worth', fpPerMonth: '/ month',
-      fpSunday: 'Sunday', fpMailMood: 'Mood {v}', fpMailLine: 'This week in one minute:',
-      fpMailL1: 'Market mood: {v}', fpMailL2: '{v} vs. 200-day average', fpMailL3: '{v} from the all-time high',
+      wmBtc: 'Bitcoin {v} in 24 hours', wmWith: 'moving with the market.', wmAgainst: 'going its own way.', wmOwn: 'its own move, while markets were calm.', wmQuiet: 'a quiet day across markets.', wmSteady: 'holding steady while stocks moved.', wmClosed: 'US markets are closed, so these are their last moves.',fpOwnAmount: 'your own amount', fpGrowthTitle: 'Month by month', fpWorth: 'Worth', fpChartHint: 'Touch or hover the chart to see any month. Blue shading: worth less than what went in.',fpRecNow: 'It is back above that high today.', fpRecNot: 'It has not got back to that high yet.',fpUnderOne: 'For 1 of the {m} months it was worth less than what had gone in.',fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',fpPerMonth: '/ month',
+      fpSunday: 'Sunday', fpMailMood: 'Mood {v}', fpMailLine: 'This week in one minute:',fpMailL2: '{v} vs. 200-day average', fpMailL3: '{v} from the all-time high',
       athPriceLabel: 'All-Time High',
       chartLabel: 'The long-term trend',
       chartTitle: 'Price and its 200-day average',
@@ -2910,7 +2797,6 @@
       metaDesc: 'Ein kostenloses Bitcoin-Marktsignal für langfristige Anleger. Kombiniert Fear & Greed, 200-Tage-Durchschnitt und ATH-Abstand zu einem klaren Signal. Kein Rauschen. Keine Handelsempfehlung.',
       // Nav
       heroLabel: 'Bitcoin-Lage heute',
-      disclaimer: 'Keine Anlageberatung. Sieh dir die Daten an und entscheide selbst.',
       visitorCounter: 'Bitcoiner waren hier.',
       // Signal states
       stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
@@ -2981,14 +2867,8 @@
       cxFine: 'Gekauft zum Durchschnittskurs des jeweiligen Monats, bewertet zum heutigen Kurs, in Euro. Ohne Gebühren und Steuern. Keine Finanzberatung.',
       cxShare: '{amt} {per} in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US-Zins 10 Jahre' }, wmPts: 'Pkt.',
-      wmBtc: 'Bitcoin {v} in 24 Stunden', wmWith: 'bewegt sich mit dem Markt.', wmAgainst: 'geht gerade eigene Wege.', wmOwn: 'eine eigene Bewegung, die Märkte waren ruhig.', wmQuiet: 'ein ruhiger Tag an allen Märkten.', wmSteady: 'bleibt ruhig, während sich die Aktien bewegen.', wmClosed: 'Die US-Börsen sind geschlossen, das sind ihre letzten Bewegungen.',
-      fpEveryMonth: 'Jeden Monat', fpOwnAmount: 'dein eigener Betrag', fpGrowthTitle: 'Monat für Monat', fpWorth: 'Wert', fpChartHint: 'Tippe oder fahre über die Grafik, um jeden Monat zu sehen. Blau markiert: weniger wert als eingezahlt.',
-      fpRecBy: 'Bis {c} lag er wieder über diesem Hoch.', fpRecNow: 'Heute liegt er wieder über diesem Hoch.', fpRecNot: 'Dieses Hoch hat er noch nicht wieder erreicht.',
-      fpUnder: 'In {n} von {m} Monaten war er weniger wert als das, was eingezahlt war.', fpUnderOne: 'In 1 von {m} Monaten war er weniger wert als das, was eingezahlt war.',
-      fpStartIn: 'Start im Jahr', fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',
-      fpPre: '{amt} im Monat seit {y} wären heute', fpPerMonth: '/ Monat',
-      fpSunday: 'Sonntag', fpMailMood: 'Stimmung {v}', fpMailLine: 'Die Woche in einer Minute:',
-      fpMailL1: 'Marktstimmung: {v}', fpMailL2: '{v} zum 200-Tage-Durchschnitt', fpMailL3: '{v} vom Allzeithoch',
+      wmBtc: 'Bitcoin {v} in 24 Stunden', wmWith: 'bewegt sich mit dem Markt.', wmAgainst: 'geht gerade eigene Wege.', wmOwn: 'eine eigene Bewegung, die Märkte waren ruhig.', wmQuiet: 'ein ruhiger Tag an allen Märkten.', wmSteady: 'bleibt ruhig, während sich die Aktien bewegen.', wmClosed: 'Die US-Börsen sind geschlossen, das sind ihre letzten Bewegungen.',fpOwnAmount: 'dein eigener Betrag', fpGrowthTitle: 'Monat für Monat', fpWorth: 'Wert', fpChartHint: 'Tippe oder fahre über die Grafik, um jeden Monat zu sehen. Blau markiert: weniger wert als eingezahlt.',fpRecNow: 'Heute liegt er wieder über diesem Hoch.', fpRecNot: 'Dieses Hoch hat er noch nicht wieder erreicht.',fpUnderOne: 'In 1 von {m} Monaten war er weniger wert als das, was eingezahlt war.',fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',fpPerMonth: '/ Monat',
+      fpSunday: 'Sonntag', fpMailMood: 'Stimmung {v}', fpMailLine: 'Die Woche in einer Minute:',fpMailL2: '{v} zum 200-Tage-Durchschnitt', fpMailL3: '{v} vom Allzeithoch',
       athPriceLabel: 'Allzeithoch',
       chartLabel: 'Der langfristige Trend',
       chartTitle: 'Kurs und sein 200-Tage-Schnitt',
@@ -3451,8 +3331,6 @@
     const text = document.getElementById('signal-text');
 
     pill.className = 'signal-pill';
-    const navDot = document.getElementById('nav-signal-dot');
-    if (navDot) { navDot.className = 'nav-signal-dot'; }
 
     const t = translations[currentLang];
     const absMaPct = Math.abs(diffPct).toFixed(0);
@@ -3466,7 +3344,6 @@
 
     if (sig.state === 'accumulate') {
       pill.classList.add('accumulate');
-      if (navDot) { navDot.classList.add('accumulate', 'active'); }
       window._cinematicSignal = 'accumulate';
       const accumulatePool = hardDump ? t.signalAccumulateDump : t.signalAccumulate;
       const accumulateHeadline = accumulatePool[dayIndex % accumulatePool.length];
@@ -3474,14 +3351,12 @@
       text.textContent = t.stateName.accumulate + '. ' + accumulateHeadline;
     } else if (sig.state === 'hold') {
       pill.classList.add('hold');
-      if (navDot) { navDot.classList.add('hold', 'active'); }
       window._cinematicSignal = 'hold';
       const holdHeadline = t.signalHold[dayIndex % t.signalHold.length];
       window._signalHeadline = holdHeadline;
       text.textContent = t.stateName.hold + '. ' + holdHeadline;
     } else {
       pill.classList.add('caution');
-      if (navDot) { navDot.classList.add('caution', 'active'); }
       window._cinematicSignal = 'caution';
       const cautionPool = hotPump ? t.signalCautionHot : t.signalCaution;
       const cautionHeadline = cautionPool[dayIndex % cautionPool.length];

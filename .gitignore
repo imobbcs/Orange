@@ -26,13 +26,6 @@ yarn-error.log*
 # Local env files
 .env*.local
 
-# Vercel
-.vercel
-
-# Replit specific
-.replit
-replit.nix
-
 # Data files
 /data/
 

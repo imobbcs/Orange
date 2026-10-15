@@ -5,9 +5,9 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 // Page-specific tags (title, description, robots, author, structured data) live in the page.
 class MyDocument extends Document {
   render() {
-    const { page, locale } = this.props.__NEXT_DATA__;
+    const { page } = this.props.__NEXT_DATA__;
     const DE_PAGES = ['/wann-bitcoin-kaufen', '/bitcoin-angst-und-gier-index', '/bitcoin-200-tage-linie', '/bitcoin-sparplan-rechner'];
-    const lang = DE_PAGES.includes(page) ? 'de' : locale || 'en';
+    const lang = DE_PAGES.includes(page) ? 'de' : 'en';
     return (
       <Html lang={lang}>
         <Head>

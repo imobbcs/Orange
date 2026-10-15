@@ -1,9 +1,6 @@
-// Locale routing only (no translation library): English at /, the old /de routes redirect below.
-const i18n = { defaultLocale: 'en', locales: ['en', 'de'], localeDetection: false };
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  i18n,
   poweredByHeader: false,
   compress: true,
   eslint: {
@@ -12,15 +9,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  devIndicators: {
-    position: 'bottom-right'
-  },
-  allowedDevOrigins: [
-    '127.0.0.1',
-    'localhost',
-    '*.replit.dev',
-    '*.riker.replit.dev'
-  ],
   async redirects() {
     return [
       // Defensive domain → German SEO page (single-hop 301)
@@ -35,6 +23,17 @@ const nextConfig = {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.whentobuybtc.xyz' }],
         destination: 'https://whentobuybtc.xyz/:path*',
+        permanent: true,
+      },
+      // Old locale prefixes from the removed Next.js i18n config
+      {
+        source: '/en',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/en/:path*',
+        destination: '/:path*',
         permanent: true,
       },
       // Old German locale routes → German SEO page
@@ -91,12 +90,7 @@ const nextConfig = {
           destination: '/api/sitemap',
         },
       ],
-      afterFiles: [
-        {
-          source: '/',
-          destination: '/app.html',
-        },
-      ],
+      afterFiles: [],
       fallback: [],
     };
   },
