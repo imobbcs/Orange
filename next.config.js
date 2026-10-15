@@ -142,6 +142,16 @@ const nextConfig = {
           },
         ],
       },
+      // Unhashed public assets: cache a week, serve stale while revalidating
+      {
+        source: '/:all*(png|jpg|jpeg|webp|avif|svg|ico|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=604800, stale-while-revalidate=86400',
+          },
+        ],
+      },
       {
         source: '/_next/static/:path*',
         headers: [
@@ -177,6 +187,10 @@ const nextConfig = {
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains'
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin'
           },
           {
             key: 'Permissions-Policy',

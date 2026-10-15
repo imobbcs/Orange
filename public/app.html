@@ -177,7 +177,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; } /* smooth only applied via JS for anchor clicks */
+    html { scroll-behavior: auto; overflow-x: hidden; overscroll-behavior-x: none; } /* smooth only via JS for anchor clicks; iOS Safari ignores body-only overflow-x, so the root must clip too or a diagonal swipe pans the page and the fixed header jumps sideways */
 
     html {
       background: var(--bg);
@@ -901,7 +901,7 @@
       transition: opacity 0.4s;
     }
     .chart-sk-line {
-      position: absolute; height: 1px;
+      position: absolute; left: 0; height: 1px;
       background: linear-gradient(90deg, transparent 0%, rgba(247,147,26,0.15) 30%, rgba(237,232,222,0.08) 60%, transparent 100%);
       background-size: 200% 100%;
       animation: shimmer 2.2s ease-in-out infinite;
@@ -1411,7 +1411,8 @@
       
       
       /* ── OVERFLOW GUARD ── */
-      .hero-ambient { max-width: 100vw; max-height: 100vh; }
+      .hero-ambient { inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; transform: none; animation-name: ambientPulseMobile; }
+      @keyframes ambientPulseMobile { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     }
 
     /* ── 390px EXTREME NARROW ── */
