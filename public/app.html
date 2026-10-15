@@ -171,9 +171,9 @@
       --amber-dim: rgba(251,191,36,0.07);
       --red:      #F87171;
       --red-dim:  rgba(248,113,113,0.07);
-      --display:  'Cormorant Garamond', Georgia, serif;
-      --mono:     'DM Mono', monospace;
-      --title:    'Bebas Neue', sans-serif;
+      --display:  "Cormorant Garamond", Georgia, serif;
+      --mono:     "DM Mono", monospace;
+      --title:    "Bebas Neue", sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -195,7 +195,7 @@
 
     /* ── GRAIN — the soul of the page ── */
     body::before {
-      content: '';
+      content: "";
       position: fixed; inset: 0; z-index: 999;
       pointer-events: none;
       opacity: 1;
@@ -267,8 +267,7 @@
         #09080A;
       transition: opacity 0.6s ease;
     }
-    #hero-placeholder.canvas-ready { opacity: 0; }
-
+    
     /* ── SCROLL PROGRESS ── */
     #progress {
       position: fixed; top: 0; left: 0; z-index: 300;
@@ -328,15 +327,9 @@
       mix-blend-mode: normal;
       transition: padding 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease;
     }
-    nav.scrolled {
-      padding: 1.1rem 4rem;
-      background: rgba(9,8,10,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(247,147,26,0.06);
-    }
+    
     nav::after {
-      content: ''; position: absolute; inset: 0;
+      content: ""; position: absolute; inset: 0;
       background: linear-gradient(180deg, rgba(9,8,10,0.92) 0%, transparent 100%);
       pointer-events: none; z-index: -1;
     }
@@ -361,21 +354,12 @@
     }
     .lang-btn.active { color: var(--orange); }
     .lang-btn.active::after {
-      content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+      content: ""; position: absolute; bottom: -3px; left: 0; right: 0;
       height: 1px; background: var(--orange);
     }
     .lang-btn:hover:not(.active) { color: var(--white); }
-    .nav-cta {
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      color: #000; background: var(--orange);
-      border: none; padding: 0.5rem 0.9rem;
-      text-decoration: none; cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.2s;
-    }
-    .nav-cta:hover { opacity: 0.85; }
-
+    
+    
     /* ═══════════════════════════════════════════════
        HERO — THE ORACLE
     ═══════════════════════════════════════════════ */
@@ -536,32 +520,11 @@
       margin-top: 0.75rem; text-align: center;
     }
 
-    .signal-reason {
-      font-family: var(--display); font-size: 1.3rem;
-      font-style: italic; font-weight: 300;
-      color: var(--muted);
-      max-width: 42ch; margin: 0 auto;
-      line-height: 1.7;
-      text-wrap: balance;
-      padding-top: 3.75rem;
-      opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
-    }
-    .signal-reason.loading { color: var(--grey); font-style: normal; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.1em; }
-    .signal-quote-cite {
-      display: block; margin-top: 1rem;
-      font-family: var(--mono); font-style: normal;
-      font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(237,232,222,0.42);
-    }
-    .signal-quote-cite::before { content: "\2014\00a0"; }
-
-    .hero-disclaimer {
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.12em; color: var(--grey);
-      margin-top: 1.25rem;
-      opacity: 0; animation: riseIn 1.2s cubic-bezier(0.16,1,0.3,1) 1.2s forwards;
-    }
-
+    
+    
+    
+    
+    
     .hero-actions {
       display: flex; gap: 1.25rem; justify-content: center;
       margin-top: 4.25rem; flex-wrap: wrap;
@@ -582,16 +545,8 @@
       box-shadow: 0 6px 24px rgba(247,147,26,0.25);
     }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(247,147,26,0.3); }
-    .btn-ghost {
-      font-family: var(--mono); font-size: 0.65rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      background: transparent; color: var(--muted);
-      border: 1px solid rgba(237,232,222,0.15); padding: 1.1rem 2.5rem;
-      text-decoration: none; cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-3px); }
-
+    
+    
     /* ═══ REDESIGN: HERO "HERE'S WHY" + INSTRUMENT STRIP ═══ */
     .hero-why {
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
@@ -721,15 +676,7 @@
     }
 
     /* ═══ REDESIGN: EXPERT LEAD ═══ */
-    .expert-lead {
-      font-family: var(--display); font-style: italic; font-weight: 300;
-      font-size: clamp(1.6rem, 2.6vw, 2.1rem); line-height: 1.4;
-      color: var(--white);
-      margin-bottom: 1.25rem;
-      position: relative; z-index: 1;
-      max-width: 30ch;
-    }
-
+    
     /* ═══ EMAIL ALERTS SECTION ═══ */
     .email-form-wrap {
       width: 100%;
@@ -806,11 +753,7 @@
     }
 
     /* ═══ REDESIGN: PARTNER STEP LABELS ═══ */
-    .partner-step {
-      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.3em;
-      text-transform: uppercase; color: rgba(247,147,26,0.8);
-    }
-
+    
     /* Scroll indicator */
     .scroll-indicator { display: none; }
     .scroll-indicator span {
@@ -853,8 +796,8 @@
       position: relative;
     }
     /* Subtle depth light on alternating sections */
-    #experts::before, #whatif::before {
-      content: '';
+    #whatif::before {
+      content: "";
       position: absolute;
       top: 0; left: 50%; transform: translateX(-50%);
       width: 60%; height: 300px;
@@ -864,9 +807,9 @@
       pointer-events: none;
       z-index: 0;
     }
-    #experts, #whatif { position: relative; }
+    #whatif { position: relative; }
     .ornament-rule::before, .ornament-rule::after {
-      content: ''; flex: 1; height: 1px;
+      content: ""; flex: 1; height: 1px;
       background: linear-gradient(90deg, transparent, var(--border2));
     }
     .ornament-rule::after {
@@ -902,51 +845,19 @@
     }
 
     /* ── SIGNAL CARDS ── */
-    .signals-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--border2);
-    }
-    .signal-card {
-      padding: 3rem 2.5rem;
-      position: relative; overflow: hidden;
-      transition: background 0.4s;
-      border-right: 1px solid var(--border2);
-    }
-    .signal-card:last-child { border-right: none; }
-    .signal-card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--orange); opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .signal-card:hover { background: rgba(247,147,26,0.025); }
-    .signal-card:hover::after { opacity: 0.4; }
-
-    .signal-card-label {
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--grey); margin-bottom: 2rem;
-    }
-    .signal-card-value {
-      font-family: var(--title); font-size: 4.5rem;
-      font-weight: 400; line-height: 1; margin-bottom: 0.75rem;
-    }
-    .signal-card-desc {
-      font-family: var(--display); font-size: 0.95rem;
-      font-style: italic; font-weight: 300;
-      color: var(--muted); line-height: 1.6;
-    }
-    .signal-card-bar {
-      margin-top: 2.5rem; height: 1px;
-      background: var(--border2); position: relative;
-    }
-    .signal-card-fill {
-      position: absolute; left: 0; top: 0; height: 100%;
-      transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
-    }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /* Gauge */
-    .gauge-wrap { display: flex; justify-content: center; margin: 1rem 0 0.5rem; }
+    
     .gauge { position: relative; }
     .gauge svg { display: block; overflow: visible; }
 
@@ -1033,155 +944,57 @@
     }
 
     /* ── EXPERT ── */
-    .expert-section { }
-    .expert-card {
-      border: 1px solid var(--border2);
-      padding: 5rem; position: relative; overflow: hidden;
-    }
-    #expert-field {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0;
-      transition: opacity 1.2s ease;
-    }
-    #expert-field.active { opacity: 0.65; }
-        .expert-signal-tag,
-    .expert-text,
-    .expert-meta { position: relative; z-index: 1; }
-    .expert-text {
-      font-family: var(--display); font-size: 1.5rem;
-      font-style: italic; font-weight: 300; line-height: 1.8;
-      color: rgba(237,232,222,0.8);
-      max-width: 72ch; position: relative;
-    }
-    .expert-meta {
-      margin-top: 3rem;
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey);
-    }
-    .expert-signal-tag {
-      display: inline-block;
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 0.3rem 0.9rem; margin-bottom: 2.5rem;
-      border: 1px solid; opacity: 0.9;
-    }
-
+    
+    
+        
+    
+    
+    
     /* ── WHAT IF ── */
     .whatif-section { }
 
-        .whatif-result-wrap {
-      border: 1px solid var(--border2); background: rgba(15,13,16,0.6); overflow: hidden;
-    }
-    .whatif-result-header {
-      padding: 3.5rem; border-bottom: 1px solid var(--border2);
-    }
-    .whatif-selected-label {
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 1.5rem; opacity: 0.8;
-    }
-    .whatif-headline {
-      font-family: var(--display); font-style: italic; font-weight: 300;
-      font-size: 1.1rem; color: var(--muted); margin-bottom: 1rem;
-    }
-    .whatif-big-number {
-      font-family: var(--title); font-size: clamp(4rem, 11vw, 8rem);
-      font-weight: 400; color: var(--orange); line-height: 1;
-      text-shadow: 0 0 60px rgba(247,147,26,0.2);
-    }
-    .whatif-big-sub {
-      font-family: var(--mono); font-size: 0.625rem;
-      letter-spacing: 0.14em; color: var(--grey);
-      text-transform: uppercase; margin-top: 1rem;
-    }
-    .whatif-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-    .whatif-stat { padding: 2rem 3.5rem; border-right: 1px solid var(--border2); }
-    .whatif-stat:last-child { border-right: none; }
-    .whatif-stat-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 0.5rem; }
-    .whatif-stat-value { font-family: var(--title); font-size: 1.8rem; font-weight: 400; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .whatif-stat-value.positive { color: var(--green); }
-    .whatif-disclaimer { padding: 1.25rem 3.5rem; font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.06em; color: var(--grey); border-top: 1px solid var(--border2); }
-    .whatif-share-row { padding: 1.5rem 3.5rem 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    /* ── WHATIF INLINE EMAIL CTA ── */
-    .whatif-email-cta {
-      padding: 2.5rem 3.5rem;
-      border-top: 1px solid var(--border2);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: center;
-    }
-    .whatif-email-cta-label {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 300;
-      font-size: 1.7rem;
-      color: var(--orange);
-      line-height: 1.35;
-    }
-    .whatif-email-cta-right { display: flex; flex-direction: column; gap: 0.75rem; }
-    .whatif-email-cta-row { width: 100%; }
-    .whatif-email-cta-meta {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.1em;
-      color: var(--grey);
-    }
-
-    /* ── SHARE ── */
-    .share-section { }
-    .share-preview {
-      border: 1px solid var(--border2); padding: 3rem;
-      text-align: center;
-      position: relative; max-width: 440px; margin: 0 auto 3rem;
-    }
-    .share-preview::before {
-      content: 'PREVIEW'; position: absolute; top: -1px; right: 1.5rem;
-      font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.15em;
-      background: var(--bg3); color: var(--grey); padding: 0.2rem 0.6rem;
-      border: 1px solid var(--border2); border-top: none;
-    }
-    .share-btc-price { font-family: var(--title); font-size: 3.5rem; font-weight: 400; color: var(--white); margin-bottom: 0.5rem; }
-    .share-signal-line { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2rem; }
-    .share-stats { display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem; }
-    .share-stat { text-align: center; }
-    .share-stat-val { font-family: var(--title); font-weight: 400; font-size: 1.8rem; color: var(--orange); }
-    .share-stat-label { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey); margin-top: 0.25rem; }
-    .share-url { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.1em; color: var(--grey); border-top: 1px solid var(--border2); padding-top: 1.25rem; }
-    .share-btns { display: flex; gap: 1rem; justify-content: flex-start; flex-wrap: wrap; }
-    .share-btn {
-      font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase;
-      background: transparent; border: 1px solid var(--border2); color: var(--white);
-      padding: 0.85rem 1.5rem; cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
-    }
-    .share-btn:hover {
-      border-color: rgba(247,147,26,0.4);
-      color: var(--orange);
-      background: rgba(247,147,26,0.04);
-    }
+        
     
-    .share-btn:hover { border-color: var(--orange); color: var(--orange); }
-    .share-btn.primary {
-      background: transparent;
-      color: #25D366;
-      border-color: rgba(37,211,102,0.35);
-    }
-    .share-btn.primary:hover {
-      background: rgba(37,211,102,0.18);
-      border-color: rgba(37,211,102,0.6);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(37,211,102,0.12);
-    }
-    .share-btn.primary:hover { opacity: 0.85; color: #000; }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* ── WHATIF INLINE EMAIL CTA ── */
+    
+    
+    
+    .whatif-email-cta-row { width: 100%; }
+    
+    /* ── SHARE ── */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /* ── ALERTS ── */
     .push-section { padding-bottom: 4rem; }
     .push-section::before {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
       background: radial-gradient(ellipse 60% 60% at 60% 50%, rgba(247,147,26,0.04) 0%, transparent 70%);
@@ -1314,125 +1127,24 @@
     }
 
     /* ── PARTNER SECTION ── */
-    .partner-section {
-      padding: 6rem 4rem;
-      scroll-margin-top: 60px;
-      position: relative;
-      border-top: 1px solid var(--border2);
-    }
-    .partner-eyebrow {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--orange);
-      opacity: 0.8;
-      margin-bottom: 3rem;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .partner-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1px 1fr;
-      gap: 0;
-      position: relative;
-      z-index: 1;
-      align-items: stretch;
-    }
-    .partner-divider {
-      background: linear-gradient(to bottom, transparent, rgba(247,147,26,0.2) 20%, rgba(247,147,26,0.2) 80%, transparent);
-      align-self: stretch;
-    }
-    .partner-card {
-      padding: 3rem 4rem;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto auto;
-      gap: 1.5rem;
-      position: relative;
-    }
-    .partner-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 100%, rgba(247,147,26,0.04) 0%, transparent 70%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .partner-card:hover::before { opacity: 1; }
-    .partner-tag {
-      font-family: var(--mono);
-      font-size: 0.5rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--orange);
-      opacity: 0.5;
-    }
-    .partner-logo {
-      display: block;
-      height: 28px;
-      width: auto;
-      opacity: 0.85;
-    }
-    .partner-desc {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 300;
-      font-size: 1rem;
-      color: rgba(237,232,222,0.5);
-      line-height: 1.7;
-      flex: 1;
-    }
-    .partner-cta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      align-items: flex-start;
-    }
-    .partner-btn {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      background: var(--orange);
-      color: #000;
-      border: none;
-      padding: 0.9rem 2rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
-      white-space: nowrap;
-      display: inline-block;
-      text-align: center;
-    }
-    .partner-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(247,147,26,0.25); }
-    .partner-btn.ghost {
-      background: none;
-      color: var(--orange);
-      border: 1px solid rgba(247,147,26,0.35);
-    }
-    .partner-btn.ghost:hover { border-color: var(--orange); background: rgba(247,147,26,0.06); box-shadow: none; }
-    .partner-ref {
-      font-family: var(--mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.18);
-      min-height: 1.2em;
-    }
-    .partner-ref strong { color: var(--orange); letter-spacing: 0.12em; }
-    @media (max-width: 768px) {
-      .partner-section { padding: 4rem 1.5rem; }
-      .partner-eyebrow { margin-bottom: 2rem; }
-      .partner-grid { grid-template-columns: 1fr; }
-      .partner-divider { display: none; }
-      .partner-card { padding: 2rem 0; border-bottom: 1px solid var(--border2); }
-      .partner-card:last-child { border-bottom: none; }
-    }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /* ── FOOTER ── */
     footer { background: var(--bg); border-top: 1px solid var(--border2); padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .footer-awards {
@@ -1449,16 +1161,8 @@
     .footer-links { display: flex; gap: 2.5rem; }
     .footer-links a { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--orange); }
-    .footer-bottom {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .footer-disclaimer { opacity: 0.45; }
-
+    
+    
     /* ── FAQ SECTION ── */
     .faq-section { }
     .faq-list { margin-top: 3rem; border-top: 1px solid var(--border2); }
@@ -1524,9 +1228,8 @@
     .reveal-left.visible  { opacity: 1; transform: none; }
 
     /* Variant: scale in (large display numbers) */
-    .reveal-scale.hidden  { opacity: 1; transform: none; }
-    .reveal-scale.visible { opacity: 1; transform: none; }
-
+    
+    
     /* Variant: fade only (body text) */
     .reveal-fade.hidden   { opacity: 1; }
     .reveal-fade.visible  { opacity: 1; }
@@ -1560,19 +1263,18 @@
       /* ── TAP TARGETS ── */
       .nav-logo { display: flex; align-items: center; min-height: 44px; padding: 0 4px 0 0; }
       .lang-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
-      .footer-back-top { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0 0.5rem; }
+      
       .btn-primary, .btn-ghost { font-size: 0.72rem; padding: 1.1rem 1.75rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; align-items: center; gap: 1.5rem; }
       .footer-awards { gap: 0.75rem; }
       .footer-awards svg { width: 36px; height: 36px; }
-      .footer-bottom { flex-direction: column; align-items: center; gap: 0.5rem; text-align: center; }
+      
       .footer-copy { font-size: 0.625rem; line-height: 1.8; }
       .footer-links { justify-content: flex-end; }
       .footer-links a { min-height: unset; padding: 0; }
-      nav.scrolled { padding: 0.8rem 1.5rem; backdrop-filter: none; -webkit-backdrop-filter: none; }
+      
       .nav-right { gap: 0.75rem; }
-      .nav-cta { display: none; }
-
+      
       /* ── HERO — mobile-first layout ──
          Single system. No competing absolute positioning.
          Hero is 100svh. Content and buttons share it predictably.
@@ -1613,21 +1315,9 @@
       .signal-pill { padding: 0.65rem 1.25rem; gap: 0.6rem; }
       .signal-text { font-size: 0.7rem; letter-spacing: 0.12em; }
       .signal-wrap { margin: 1.75rem 0 0.75rem; }
-      .signal-reason {
-        font-size: 0.95rem;
-        line-height: 1.65;
-        padding: 0;
-        margin-top: 1.75rem;
-        max-width: 40ch;
-        text-wrap: balance;
-        margin-bottom: 1.75rem;
-        color: rgba(237,232,222,0.72);
-      }
+      
       .section-sub, .expert-text, .push-sub { color: rgba(237,232,222,0.72); }
-      .hero-disclaimer { font-size: 0.625rem; margin-top: 14svh; }
-
-
-
+      
       /* CTAs: in normal flow, pushed to bottom with margin-top: auto */
       .hero-actions {
         display: flex;
@@ -1651,11 +1341,10 @@
       }
 
       /* ── EXPERT ── */
-      .expert-card { padding: 2rem 1.5rem; }
-      .expert-signal-tag { font-size: 0.55rem; letter-spacing: 0.08em; }
-      .expert-text { font-size: 1.15rem; line-height: 1.7; }
-      .expert-meta { margin-top: 1.75rem; }
-
+      
+      
+      
+      
       /* Scroll indicator: hidden on mobile */
       .scroll-indicator { display: none; }
       .signal-updated { display: none; }
@@ -1664,16 +1353,15 @@
       .section { padding: 4.5rem 1.5rem; }
       .section-inner { padding: 0; }
       .section-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
-      .section-anchor { font-size: clamp(1.9rem, 7vw, 2.8rem); }
+      
       .section-sub { font-size: 0.92rem; margin-bottom: 2.5rem; }
       .ornament-rule { padding: 0 0; }
 
       /* ── SIGNAL CARDS ── */
-      .signals-grid { grid-template-columns: 1fr; gap: 0; }
-      .signal-card { border-right: none; border-bottom: 1px solid var(--border2); padding: 2rem 1.5rem; min-height: auto; }
-      .signal-card:last-child { border-bottom: none; }
-      .signal-card-value { font-size: clamp(2.8rem, 12vw, 3.8rem); }
-
+      
+      
+      
+      
       .visitor-counter { padding-top: 3.5rem; }
 
       /* ── INSTRUMENT PANEL — mobile ── */
@@ -1692,44 +1380,36 @@
         border-right: none;
       }
       .instrument-metric:last-child { border-bottom: none; }
-      .instrument-id { grid-column: 1; grid-row: 1; font-size: 0.625rem; align-self: start; }
+      
       .instrument-value { grid-column: 2; grid-row: 1; font-size: 2.4rem; text-align: right; align-self: start; }
-      .instrument-bar-wrap { grid-column: 1 / -1; grid-row: 2; height: 2px; }
+      
       .instrument-desc { grid-column: 1 / -1; grid-row: 3; font-size: 0.78rem; }
-      .instrument-label { grid-column: 1; grid-row: 1; align-self: end; }
+      
       .instrument-sub { grid-column: 2; grid-row: 2; }
       .metric-verdict { grid-column: 1 / -1; justify-self: start; width: fit-content; }
       .instrument-metric > div[style] { grid-column: 2; grid-row: 1; display: flex; align-items: baseline; gap: 0.3rem; justify-content: flex-end; }
       .instrument-metric > div[style] .instrument-value { grid-column: unset; }
 
-      .whatif-stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .whatif-stat { padding: 1.25rem 1rem; }
-      .whatif-stat:nth-child(2) { border-right: none; }
-      .whatif-stat-value { font-size: 1.4rem; }
-      .whatif-disclaimer { padding: 1.25rem 1rem; }
-      .whatif-share-row { padding: 1rem 1rem 1.5rem; flex-direction: column; }
-      .whatif-share-row .share-btn { width: 100%; text-align: center; }
-      .whatif-email-cta { padding: 1.5rem 1rem 2rem; grid-template-columns: 1fr; gap: 1.25rem; }
+      
+      
+      
+      
+      
+      
+      
+      
       .whatif-email-cta-row { max-width: 100%; }
       /* ── WHAT IF ── */
-      .whatif-revelation { padding: 3rem 1.5rem 2.5rem; }
-      .whatif-revelation-number { font-size: clamp(3.5rem, 16vw, 6rem); }
-      .whatif-revelation-context { font-size: 0.9rem; }
-
+      
+      
+      
       /* ── PUSH / ALERTS ── */
       .push-title { font-size: clamp(1.9rem, 7vw, 2.8rem); }
 
       /* ── SHARE ── */
-      .share-btns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        max-width: 100%;
-        margin: 0 auto;
-      }
-      .share-btn.primary { grid-column: 1 / -1; }
-      .share-btn { padding: 0.9rem 1rem; font-size: 0.625rem; }
-
+      
+      
+      
       /* ── OVERFLOW GUARD ── */
       .hero-ambient { max-width: 100vw; max-height: 100vh; }
     }
@@ -1738,8 +1418,8 @@
     @media (max-width: 400px) {
       .hero-price { font-size: clamp(4rem, 19vw, 5.5rem); }
       .instrument-value { font-size: 2rem; }
-      .share-btns { grid-template-columns: 1fr; }
-      .share-btns .share-btn.primary { grid-column: 1; }
+      
+      
     }
 
     /* Small phones */
@@ -1757,23 +1437,8 @@
     }
   
     /* ── SECTION ANCHOR (Bebas Neue headline moments) ── */
-    .section-anchor {
-      font-family: var(--display);
-      font-size: clamp(2.2rem, 5vw, 4rem);
-      font-weight: 300; font-style: italic;
-      line-height: 1.18;
-      letter-spacing: 0;
-      color: var(--white); margin-bottom: 0.75rem;
-      display: block;
-    }
-    .section-anchor-sub {
-      font-family: var(--display);
-      font-size: clamp(1rem, 2vw, 1.35rem);
-      font-style: italic; font-weight: 300;
-      color: var(--muted); line-height: 1.7;
-      margin-bottom: 2rem;
-    }
-
+    
+    
     /* ── HEARTBEAT PULSE ── */
     @keyframes heartbeat-calm {
       0%, 100% { transform: scale(1); opacity: 1; }
@@ -1798,13 +1463,13 @@
       background: rgba(247,147,26,0.02);
     }
     .instrument-panel::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent);
     }
     .instrument-panel.scanning::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0; left: -60%; width: 60%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(247,147,26,0.04), transparent);
@@ -1870,7 +1535,7 @@
       border-left: 1px solid rgba(247,147,26,0.08);
     }
     .instrument-metric::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0; left: 0; right: 0; height: 2px;
       background: currentColor;
@@ -1975,23 +1640,14 @@
       0%   { background-position: -600px 0; }
       100% { background-position: 600px 0; }
     }
-    .skel {
-      display: inline-block;
-      border-radius: 2px;
-      background: linear-gradient(90deg,
-        rgba(247,147,26,0.04) 0%,
-        rgba(247,147,26,0.10) 40%,
-        rgba(247,147,26,0.04) 80%);
-      background-size: 600px 100%;
-      animation: shimmer 1.6s infinite linear;
-    }
+    
     /* Skeleton blocks for specific elements */
     #price-value.loading {
       color: transparent;
       position: relative;
     }
     #price-value.loading::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 10%; left: 5%; right: 5%; bottom: 10%;
       background: linear-gradient(90deg,
@@ -2030,17 +1686,8 @@
 
 
     /* ── WHATIF RESULT REVEAL ── */
-    .whatif-result-wrap {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-    }
-    .whatif-result-wrap.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-
+    
+    
     /* ══ SCROLL SURPRISE — clip-path wipe ══ */
 
 
@@ -2064,214 +1711,45 @@
 
 
     /* ══ WHAT IF STEPPER ══ */
-    .whatif-stepper-wrap {
-      margin-top: 2.5rem;
-      border: 1px solid rgba(247,147,26,0.15);
-      background: rgba(247,147,26,0.02);
-      overflow: hidden;
-      position: relative;
-    }
-    .whatif-stepper-wrap::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(247,147,26,0.5), transparent);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .whatif-stepper-top {
-      padding: 2.5rem 2rem 2rem;
-      border-bottom: 1px solid rgba(247,147,26,0.12);
-    }
-    .whatif-stepper-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .whatif-step-btn {
-      width: 72px;
-      height: 72px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      border: 1px solid rgba(247,147,26,0.22);
-      background: rgba(247,147,26,0.035);
-      color: var(--orange);
-      font-size: 2rem;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.18s cubic-bezier(0.16,1,0.3,1),
-                  border-color 0.18s cubic-bezier(0.16,1,0.3,1),
-                  opacity 0.25s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.12s cubic-bezier(0.34,1.56,0.64,1);
-      -webkit-tap-highlight-color: transparent;
-    }
-    .whatif-step-btn:hover { background: rgba(247,147,26,0.07); border-color: rgba(247,147,26,0.45); }
-    .whatif-step-btn:active { transform: scale(0.9); background: rgba(247,147,26,0.12); border-color: rgba(247,147,26,0.5); }
-    .whatif-step-btn.edge { opacity: 0.28; border-color: rgba(247,147,26,0.12); pointer-events: none; }
-    .whatif-stepper-center {
-      flex: 1;
-      text-align: center;
-      min-width: 0;
-      overflow: hidden;
-    }
-    .whatif-stepper-amount-mask {
-      overflow: hidden;
-      height: 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .whatif-stepper-amount {
-      font-family: var(--title);
-      font-size: clamp(3rem, 8vw, 4rem);
-      line-height: 1;
-      color: var(--white);
-      letter-spacing: 0.01em;
-      font-variant-numeric: tabular-nums;
-    }
-    .whatif-stepper-per {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.08em;
-      color: var(--grey);
-      margin-top: 0.2rem;
-    }
-    .whatif-stepper-habit {
-      font-family: var(--display);
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--muted);
-      margin-top: 0.55rem;
-      min-height: 1.45em;
-    }
-    .whatif-ticks {
-      position: relative;
-      height: 24px;
-      margin: 1.5rem 0.5rem 0;
-      display: flex;
-      align-items: center;
-    }
-    .whatif-ticks::before {
-      content: '';
-      position: absolute;
-      left: 0; right: 0;
-      top: 50%; transform: translateY(-50%);
-      height: 1px;
-      background: rgba(247,147,26,0.1);
-    }
-    .whatif-tick-marker {
-      position: absolute;
-      top: 50%;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 0 10px 1px rgba(247,147,26,0.5);
-      transform: translate(-50%, -50%);
-      transition: left 0.45s cubic-bezier(0.16,1,0.3,1);
-    }
-    .whatif-stepper-glow {
-      position: absolute;
-      left: 50%; top: 55%;
-      width: 340px; height: 160px;
-      transform: translate(-50%, -50%);
-      background: radial-gradient(ellipse at center, rgba(247,147,26,0.15), transparent 70%);
-      opacity: 0.5;
-      pointer-events: none;
-      filter: blur(8px);
-      transition: opacity 0.4s ease;
-    }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @keyframes wiStepUp   { from { opacity:0; transform:translateY(0.5em);  } to { opacity:1; transform:translateY(0); } }
     @keyframes wiStepDown { from { opacity:0; transform:translateY(-0.5em); } to { opacity:1; transform:translateY(0); } }
     @keyframes wiNudgeL   { 0%,100%{transform:translateX(0)} 35%{transform:translateX(-8px)} 65%{transform:translateX(2px)} }
     @keyframes wiNudgeR   { 0%,100%{transform:translateX(0)} 35%{transform:translateX(8px)}  65%{transform:translateX(-2px)} }
-    .wi-step-up   { animation: wiStepUp   0.4s cubic-bezier(0.16,1,0.3,1); }
-    .wi-step-down { animation: wiStepDown 0.4s cubic-bezier(0.16,1,0.3,1); }
-    .wi-nudge-l   { animation: wiNudgeL   0.35s cubic-bezier(0.16,1,0.3,1); }
-    .wi-nudge-r   { animation: wiNudgeR   0.35s cubic-bezier(0.16,1,0.3,1); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .whatif-step-btn,
-      .whatif-tick-marker,
-      .whatif-stepper-glow { transition: none !important; animation: none !important; }
-    }
+    
+    
+    
+    
+    
     /* Mobile */
-    @media (max-width: 768px) {
-      .whatif-stepper-top { padding: 2rem 1.25rem 1.75rem; }
-      .whatif-step-btn { width: 68px; height: 68px; font-size: 1.9rem; }
-      .whatif-stepper-amount { font-size: clamp(2.8rem, 11vw, 3.6rem); }
-      .whatif-stepper-amount-mask { height: 3.6rem; }
-    }
-
+    
     /* ══ WHATIF REVELATION — number dominates ══ */
-    .whatif-revelation {
-      padding: 5rem 4rem 4rem;
-      text-align: center;
-      border-bottom: 1px solid var(--border2);
-      position: relative;
-    }
-    .whatif-revelation-label {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--orange);
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-    }
-    .whatif-revelation-number {
-      font-family: var(--title);
-      font-size: clamp(4.5rem, 14vw, 10rem);
-      font-weight: 400;
-      color: var(--orange);
-      line-height: 0.9;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.25rem;
-      text-shadow:
-        0 0 60px rgba(247,147,26,0.2),
-        0 2px 0 rgba(247,147,26,0.15);
-    }
-    .whatif-revelation-sub {
-      font-family: var(--mono);
-      font-size: 0.625rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-    .whatif-revelation-context {
-      font-family: var(--display);
-      font-style: italic;
-      font-weight: 300;
-      font-size: 1rem;
-      color: var(--muted);
-      max-width: 50ch;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
+    
+    
+    
+    
+    
     /* Evidence section fades in after number settles */
-    .whatif-evidence {
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
-    .whatif-evidence.visible { opacity: 1; }
-
-
+    
+    
     /* ══ HERO DEPTH LAYERS ══ */
-    .hero-depth {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      will-change: transform;
-    }
-    .hero-depth-far  { z-index: 0; opacity: 0.5; }
-    .hero-depth-mid  { z-index: 1; opacity: 0.7; }
+    
     .hero-ambient    { z-index: 3; }
     .hero-content    { z-index: 15; }
 
@@ -2285,8 +1763,8 @@
     :root[data-temp="hot"]  { --temp: var(--temp-hot);  --temp-rgb: 247,147,26; }
 
     .hero.temp-hero { min-height: 100svh; }
-    .temp-hero .hero-temp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-    .temp-hero::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    
+    .temp-hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: radial-gradient(60% 42% at 50% 36%, rgba(var(--temp-rgb), 0.20), transparent 70%), radial-gradient(90% 55% at 50% 105%, rgba(var(--temp-rgb), 0.08), transparent 70%);
       transition: background 1.2s ease; }
     .temp-hero .hero-ambient { background: radial-gradient(ellipse at center, rgba(var(--temp-rgb),0.06) 0%, rgba(var(--temp-rgb),0.025) 25%, transparent 70%); }
@@ -2312,7 +1790,7 @@
     .temp-hero .hero-scale { width: min(100%, 560px); margin: 1.9rem auto 0; opacity: 0; }
     .temp-hero.temp-in .hero-scale { opacity: 1; transition: opacity 0.6s ease 0.8s; }
     .hero-scale-track { position: relative; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--temp-cold), var(--temp-mild) 50%, var(--temp-hot)); }
-    .hero-scale-track::before, .hero-scale-track::after { content: ''; position: absolute; top: -4px; width: 1px; height: 11px; background: rgba(237,232,222,0.25); }
+    .hero-scale-track::before, .hero-scale-track::after { content: ""; position: absolute; top: -4px; width: 1px; height: 11px; background: rgba(237,232,222,0.25); }
     .hero-scale-track::before { left: 33.3%; } .hero-scale-track::after { left: 66.6%; }
     .hero-scale-marker { position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; border-radius: 50%; transform: translate(-50%,-50%); background: var(--temp);
       box-shadow: 0 0 0 4px rgba(var(--temp-rgb),0.18), 0 0 22px rgba(var(--temp-rgb),0.9); transition: left 1.1s cubic-bezier(0.3,1.3,0.4,1) 0.9s, background 1s; }
@@ -2336,10 +1814,9 @@
     .temp-hero.temp-in .hero-actions { opacity: 1; transition: opacity 0.6s ease 1.15s; }
     .temp-hero .hero-actions .btn-primary { background: var(--temp); border-color: var(--temp); color: #09080A; font-size: 0.74rem; letter-spacing: 0.2em; padding: 1rem 2rem; min-width: 220px; flex: 0 0 auto; transition: background 1s, border-color 1s, transform 0.3s; }
     .temp-hero .hero-actions .btn-primary:hover { filter: brightness(1.08); }
-    .temp-hero .hero-regular-line { font-family: var(--display); font-style: italic; font-size: 1rem; color: var(--muted); max-width: 34ch; line-height: 1.5; margin: 0.9rem auto 0; text-align: center; opacity: 0; }
-    .temp-hero.temp-in .hero-regular-line { opacity: 1; transition: opacity 0.6s ease 1.2s; }
-    .temp-hero .hero-regular-line b { font-weight: 400; color: var(--white); }
-
+    
+    
+    
     .footer-quote { flex-basis: 100%; font-family: var(--display); font-style: italic; font-size: 0.95rem; color: rgba(237,232,222,0.55); margin: 0; }
     .footer-quote cite { font-family: var(--mono); font-style: normal; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; margin-left: 0.6rem; color: rgba(237,232,222,0.4); }
 
@@ -2354,11 +1831,10 @@
   <!-- ═══ TEMPERATURE HERO: CSS (end) ═══ -->
   <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (start) ═══ -->
   <style>
-    #experts[hidden], #share[hidden] { display: none !important; }
     /* The trend chart continues "Why": tighter join, no divider above it */
     #chart.section { padding-top: 2.5rem; }
     /* One signup in the flow: the section right after the calculator */
-    .whatif-email-cta { display: none !important; }
+    
     /* Compact share row in the hero */
     .hero-share { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem 1.1rem; margin-top: 1.4rem;
       font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: #8A837A; opacity: 0; }
@@ -2368,12 +1844,8 @@
     .hero-share-label { width: 100%; text-align: center; }
     @media (min-width: 640px) { .hero-share-label { width: auto; } }
     /* Market context: sentence first; tiles open on request on phones */
-    .mc-more { display: none; }
-    @media (max-width: 768px) {
-      .mc-more { display: block; width: 100%; background: none; border: 0; border-top: 1px solid var(--border); padding: 0.9rem 1.1rem; text-align: left;
-        font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); cursor: pointer; }
-      .mc-panel:not(.open) .mc-tiles, .mc-panel:not(.open) .mc-foot { display: none; }
-    }
+    
+    
   </style>
   <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (end) ═══ -->
   <!-- ═══ FULL PAGE V2: CSS (start) ═══ -->
@@ -2386,7 +1858,7 @@
     /* ── Mini cold-hot scale (shared) ── */
     .fp-scale { position: relative; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--temp-cold), var(--temp-mild) 50%, var(--temp-hot)); }
     .fp-scale.lg { height: 3px; }
-    .fp-scale::before, .fp-scale::after { content: ''; position: absolute; top: -4px; width: 1px; height: 10px; background: rgba(237,232,222,0.22); }
+    .fp-scale::before, .fp-scale::after { content: ""; position: absolute; top: -4px; width: 1px; height: 10px; background: rgba(237,232,222,0.22); }
     .fp-scale::before { left: 33.3%; } .fp-scale::after { left: 66.6%; }
     .fp-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%,-50%); background: var(--temp);
       box-shadow: 0 0 0 3px rgba(var(--temp-rgb),0.15), 0 0 10px rgba(var(--temp-rgb),0.7); transition: left 0.9s cubic-bezier(0.3,1.3,0.4,1), background 1s; }
@@ -2419,50 +1891,47 @@
     .fp-together p { margin: 8px 0 18px; font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
 
     /* ── Trend chart continues "Why" ── */
-    #chart .chart-wrap, #chart .chart-container { background: var(--fp-bg2); border: 1px solid var(--fp-line); }
-
+    
     /* ── Calculator ── */
-    .fp-calc { margin-top: 2rem; background: var(--fp-bg2); border: 1px solid var(--fp-line); }
-    .fp-calc-in { padding: 22px 20px; display: grid; gap: 20px; align-content: start; }
-    .fp-stepper { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; text-align: center; }
-    .fp-stepper button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--fp-line); background: none; color: var(--white); font-size: 1.4rem; cursor: pointer; }
-    .fp-stepper button:disabled { opacity: 0.3; cursor: default; }
-    .fp-amt { font-family: var(--title); font-size: 2.6rem; line-height: 1; color: var(--white); }
-    .fp-amt small { font-family: var(--mono); font-size: 0.7rem; color: var(--fp-quiet); margin-left: 4px; letter-spacing: 0.1em; }
-    .fp-habit { font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.05rem; margin-top: 4px; }
-    .fp-mini-l { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); margin-bottom: 8px; }
-    .fp-years { display: flex; gap: 6px; flex-wrap: wrap; }
-    .fp-years button { background: none; border: 1px solid var(--fp-line); padding: 9px 12px; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); cursor: pointer; }
-    .fp-years button[aria-pressed="true"] { border-color: var(--temp); color: var(--temp); }
-    .fp-result { border-top: 1px solid var(--fp-line); padding: 24px 20px; text-align: center; background: radial-gradient(70% 90% at 50% 0%, rgba(var(--temp-rgb),0.1), transparent 70%); }
-    .fp-pre { font-family: var(--display); font-style: italic; color: var(--muted); font-size: 1.05rem; margin: 0; }
-    .fp-big { font-family: var(--title); font-size: clamp(3rem, 14vw, 5.5rem); line-height: 1; color: var(--temp); margin: 8px 0 4px; font-variant-numeric: tabular-nums; transition: color 1s; overflow-wrap: anywhere; }
-    .fp-stats { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin-top: 16px; border-top: 1px solid var(--fp-line); }
-    .fp-stats div { padding: 12px 6px 0; min-width: 0; } .fp-stats div + div { border-left: 1px solid var(--fp-line); }
-    .fp-stats span { display: block; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fp-quiet); }
-    .fp-stats b { display: block; font-family: var(--title); font-weight: 400; font-size: 1.5rem; margin-top: 6px; color: var(--white); }
-    .fp-honest { margin: 18px 0 0; padding: 14px 16px; border-left: 2px solid var(--temp-cold); background: rgba(142,201,255,0.06); text-align: left; font-family: var(--display); font-style: italic; font-size: 1.02rem; line-height: 1.5; color: var(--white); }
-    .fp-fine { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; color: var(--fp-quiet); margin: 14px 0 0; text-align: left; line-height: 1.6; }
-    .fp-share { display: flex; gap: 14px; justify-content: center; margin-top: 16px; }
-    .fp-share button { background: none; border: 0; border-bottom: 1px solid var(--fp-line); padding: 6px 0; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); cursor: pointer; }
-    #whatif-legacy[hidden] { display: none !important; }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     
+    
+    
+    
+    
+    
+    
     /* ── Weekly read: live email preview instead of the phone mock ── */
-    .fp-mail { background: #1C1917; border: 1px solid var(--fp-line); max-width: 380px; width: 100%; margin: 0 auto; box-shadow: 0 30px 60px rgba(0,0,0,0.5); text-align: left; }
-    .fp-mail-band { padding: 18px 18px 16px; background: radial-gradient(120% 140% at 50% 0%, rgba(var(--temp-rgb),0.28), transparent 70%); border-bottom: 1px solid var(--fp-line); }
-    .fp-mail-meta { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fp-quiet); display: flex; justify-content: space-between; }
-    .fp-mail-word { font-family: var(--display); font-style: italic; font-size: 3rem; line-height: 1; color: var(--temp); margin-top: 10px; transition: color 1s; }
-    .fp-mail-price { font-family: var(--title); font-size: 1.6rem; margin-top: 2px; color: var(--white); }
-    .fp-mail-body { padding: 14px 18px 18px; font-family: var(--display); font-size: 0.98rem; line-height: 1.5; color: var(--muted); font-style: italic; }
-    .fp-mail-lines { list-style: none; padding: 0; margin: 10px 0 0; font-family: var(--mono); font-style: normal; font-size: 0.7rem; color: var(--white); display: grid; gap: 6px; }
-    .fp-mail-lines li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--fp-line); padding-bottom: 6px; }
+    
+    
+    
+    
+    
+    
+    
+    
     .push-preview-col { display: block !important; }
     .push-section .email-submit, .push-section .push-submit { background: var(--temp) !important; border-color: var(--temp) !important; color: #09080A !important; transition: background 1s; }
 
     @media (min-width: 769px) {
       .why-v2 .instrument-body { grid-template-columns: repeat(3, minmax(0,1fr)); }
-      .fp-calc { display: grid; grid-template-columns: 1fr 1.2fr; }
-      .fp-result { border-top: 0; border-left: 1px solid var(--fp-line); }
+      
+      
     }
     @media (max-width: 768px) {
       .push-preview-col { margin-top: 2rem; }
@@ -2474,73 +1943,69 @@
     .chart-legend-item.zone-item { color: rgba(142,201,255,0.75); }
     .push-title em { color: var(--temp); transition: color 1s; }
     /* ── Calculator v3 ── */
-    .fp-calc-in > *, .fp-calc > * { min-width: 0; }
-    .fp-tip[hidden] { display: none; }
-    @media (min-width: 769px) { .fp-result { display: flex; flex-direction: column; justify-content: center; } }
-    .fp-amt-wrap { display: flex; align-items: baseline; justify-content: center; gap: 2px; cursor: text; border-bottom: 1px dashed rgba(237,232,222,0.25); padding: 0 6px 4px; margin: 0 auto; max-width: 100%; }
-    .fp-amt-wrap:focus-within { border-bottom-color: var(--temp); }
-    .fp-cur { font-family: var(--title); font-size: 1.6rem; color: var(--fp-quiet); }
-    .fp-amt-in { background: none; border: 0; outline: none; color: var(--white); font-family: var(--title); font-size: 2.8rem; line-height: 1.05; width: 4.2ch; min-width: 2ch; text-align: center; padding: 0; font-variant-numeric: tabular-nums; caret-color: var(--temp); }
-    .fp-stepper { grid-template-columns: 48px minmax(0,1fr) 48px; gap: 8px; }
-    .fp-stepper button:hover:not(:disabled), .fp-stepper button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
-    .fp-habit { text-align: center; margin-top: 8px; }
-    .fp-presets { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 14px -20px 0; padding: 2px 20px 4px; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
-    .fp-presets::-webkit-scrollbar { display: none; }
-    .fp-presets button { flex: 0 0 auto; scroll-snap-align: start; background: none; border: 1px solid var(--fp-line); padding: 9px 12px; min-height: 40px; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--muted); cursor: pointer; white-space: nowrap; }
-    .fp-presets button[aria-pressed="true"] { border-color: var(--temp); color: var(--temp); }
-    .fp-year-head { display: flex; justify-content: space-between; align-items: baseline; }
-    .fp-year-head b { font-family: var(--title); font-weight: 400; font-size: 1.6rem; color: var(--white); font-variant-numeric: tabular-nums; }
-    .fp-year { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 6px 0 0; cursor: pointer; --p: 0%; }
-    .fp-year::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--temp) var(--p), rgba(237,232,222,0.15) var(--p)); }
-    .fp-year::-moz-range-track { height: 3px; border-radius: 2px; background: rgba(237,232,222,0.15); }
-    .fp-year::-moz-range-progress { height: 3px; background: var(--temp); }
-    .fp-year::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9.5px; border-radius: 50%; background: var(--temp); box-shadow: 0 0 0 5px rgba(var(--temp-rgb),0.18), 0 0 14px rgba(var(--temp-rgb),0.6); border: 0; }
-    .fp-year::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--temp); border: 0; box-shadow: 0 0 0 5px rgba(var(--temp-rgb),0.18); }
-    .fp-year:focus-visible { outline: none; } .fp-year:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 7px rgba(var(--temp-rgb),0.35); }
-    .fp-year-ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--fp-quiet); margin-top: 2px; }
-    .fp-growth { border-top: 1px solid var(--fp-line); padding: 20px 20px 22px; grid-column: 1 / -1; }
-    .fp-growth-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-    .fp-growth-head .fp-mini-l { margin: 0; }
-    .fp-legend { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fp-quiet); }
-    .fp-legend span { margin-right: 8px; }
-    .fp-lg-worth, .fp-lg-put { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--temp); vertical-align: middle; margin-right: 5px; }
-    .fp-lg-put { border-top: 1.5px dashed rgba(237,232,222,0.6); }
-    .fp-chart-wrap { position: relative; height: 210px; margin-top: 12px; touch-action: pan-y; }
-    .fp-chart-wrap canvas { display: block; cursor: crosshair; }
-    .fp-tip { position: absolute; top: 0; pointer-events: none; background: rgba(9,8,10,0.92); border: 1px solid var(--fp-line); padding: 8px 10px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.04em; color: var(--white); white-space: nowrap; display: grid; gap: 3px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
-    .fp-tip b { font-weight: 400; color: var(--fp-quiet); text-transform: uppercase; letter-spacing: 0.12em; }
-    .fp-tip em { font-style: normal; } .fp-tip em.up { color: var(--temp); } .fp-tip em.down { color: var(--temp-cold); }
-    .fp-chart-hint { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; color: var(--fp-quiet); margin: 8px 0 0; line-height: 1.6; }
-    .fp-growth .fp-honest { margin-top: 16px; }
-    @media (min-width: 769px) {
-      .fp-chart-wrap { height: 280px; }
-      .fp-growth { border-top: 1px solid var(--fp-line); padding: 24px 28px 26px; }
-      .fp-presets { flex-wrap: wrap; overflow: visible; margin: 14px 0 0; padding: 0; }
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
     /* ── Quick wins (design pass) ── */
     .temp-hero #price-change { margin-top: 1.1rem; }
     .hero-share { color: #A39B90; }
     .hero-share button { color: #CFC8BD; border-bottom-color: rgba(237,232,222,0.3); }
     .faq-chevron { color: var(--temp); transition: transform 0.3s ease, color 1s; }
     .faq-item:first-child { border-top-color: rgba(var(--temp-rgb),0.35); }
-    .fp-share { gap: 10px; flex-wrap: wrap; }
-    .fp-share button { border: 1px solid var(--fp-line); padding: 11px 16px; min-height: 44px; color: var(--white); transition: border-color 0.2s, color 0.2s; }
-    .fp-share button:hover, .fp-share button:focus-visible { border-color: var(--temp); color: var(--temp); outline: none; }
+    
+    
+    
     .push-meta { color: #8A837A; margin-top: 0.9rem; }
     .fp-more { min-height: 44px; }
     @media (min-width: 769px) {
-      .fp-calc-in { align-content: center; }
+      
       .push-inner { align-items: center; }
     }
     @media (max-width: 768px) {
       .push-inner { gap: 2rem; }
       .push-preview-col { width: 100%; }
-      .fp-mail { max-width: 100%; }
+      
       #alerts.section { padding-bottom: 3.5rem; }
     }
     .fp-wider { margin: 16px 0 0 !important; padding-top: 14px; border-top: 1px solid var(--fp-line); font-family: var(--display); font-style: italic; font-size: 0.98rem !important; line-height: 1.5; color: var(--muted); }
     .fp-wider-l { font-family: var(--mono); font-style: normal; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); margin-right: 6px; }
-    .fp-wider-a { font-family: var(--mono); font-style: normal; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--temp); text-decoration: none; white-space: nowrap; }
+    
     .chart-tf.active, .chart-tf:hover { color: var(--temp); border-color: rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.05); }
   </style>
   <!-- ═══ FULL PAGE V2: CSS (end) ═══ -->
@@ -2549,7 +2014,6 @@
   <style>
     /* No particles: plain background, no star dots, no field canvases */
     html { background-image: none !important; }
-    #expert-field, .hero-temp-canvas { display: none !important; }
     .tc-accumulate { color: #8EC9FF; } .tc-hold { color: #F2C46B; } .tc-caution { color: #F7931A; }
 
 
@@ -2574,7 +2038,7 @@
     .cx-seg button[aria-checked="true"] { background: rgba(var(--temp-rgb), 0.14); color: var(--temp); box-shadow: inset 0 0 0 1px var(--temp); }
     .cx-seg button:focus-visible, #cx-year:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--temp); }
     .cx-sel { position: relative; display: block; }
-    .cx-sel::after { content: ''; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; border-right: 1.5px solid var(--fp-quiet); border-bottom: 1.5px solid var(--fp-quiet); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+    .cx-sel::after { content: ""; position: absolute; right: 16px; top: 50%; width: 8px; height: 8px; border-right: 1.5px solid var(--fp-quiet); border-bottom: 1.5px solid var(--fp-quiet); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
     #cx-year { -webkit-appearance: none; appearance: none; width: 100%; min-height: 48px; background: transparent; border: 1px solid var(--fp-line); border-radius: 0; color: var(--white); font-family: var(--title); font-size: 1.5rem; letter-spacing: 0.04em; padding: 4px 40px 0 14px; cursor: pointer; }
     #cx-year option { background: #1C1917; color: #EDE8DE; font-family: system-ui, sans-serif; font-size: 1rem; }
     .cx-out { padding: 24px 20px 22px; text-align: center; background: radial-gradient(70% 60% at 50% 0%, rgba(var(--temp-rgb), 0.1), transparent 70%); }
@@ -2608,21 +2072,21 @@
     .mx-subj { margin-top: 4px; font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; color: #EDE8DE; }
     .mx-body { position: relative; background: #1C1917; padding: 0 18px; max-height: 480px; overflow: hidden; }
     .mx-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(237,232,222,0.08); font-family: Arial, Helvetica, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; color: #EDE8DE; }
-    .mx-head img { vertical-align: middle; margin-right: 6px; } .mx-head span:last-child { font-family: 'Courier New', monospace; font-weight: 400; color: rgba(237,232,222,0.55); text-transform: uppercase; }
+    .mx-head img { vertical-align: middle; margin-right: 6px; } .mx-head span:last-child { font-family: "Courier New", monospace; font-weight: 400; color: rgba(237,232,222,0.55); text-transform: uppercase; }
     .mx-band { margin: 16px 0 6px; padding: 16px 16px 14px; border: 1px solid rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.09); transition: border-color 1s, background 1s; }
-    .mx-eye { margin: 0; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
-    .mx-word { margin: 2px 0 0; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 40px; line-height: 1.1; }
-    .mx-sent { margin: 4px 0 12px; font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-size: 13px; line-height: 1.5; color: rgba(237,232,222,0.82); }
-    .mx-price { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-family: 'Courier New', monospace; font-size: 10px; color: rgba(237,232,222,0.55); }
+    .mx-eye { margin: 0; font-family: "Courier New", monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
+    .mx-word { margin: 2px 0 0; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 40px; line-height: 1.1; }
+    .mx-sent { margin: 4px 0 12px; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 13px; line-height: 1.5; color: rgba(237,232,222,0.82); }
+    .mx-price { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; font-family: "Courier New", monospace; font-size: 10px; color: rgba(237,232,222,0.55); }
     #mx-price { font-family: Arial, Helvetica, sans-serif; font-size: 22px; color: #EDE8DE; } .mx-price b { font-weight: 700; }
     .mx-scale { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; } .mx-scale i { height: 4px; opacity: 0.28; }
     .mx-scale i[data-s="accumulate"] { background: #8EC9FF; } .mx-scale i[data-s="hold"] { background: #F2C46B; } .mx-scale i[data-s="caution"] { background: #F7931A; } .mx-scale i.on { opacity: 1; }
-    .mx-scale-l { display: flex; justify-content: space-between; margin-top: 6px; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.42); } .mx-scale-l .on { font-weight: 700; }
+    .mx-scale-l { display: flex; justify-content: space-between; margin-top: 6px; font-family: "Courier New", monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.42); } .mx-scale-l .on { font-weight: 700; }
     .mx-row { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid rgba(237,232,222,0.1); } .mx-row:first-child { border-top: 0; }
-    .mx-rl { margin: 0 0 3px; font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
-    .mx-rt { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 12px; line-height: 1.5; color: rgba(237,232,222,0.82); }
+    .mx-rl { margin: 0 0 3px; font-family: "Courier New", monospace; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
+    .mx-rt { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 12px; line-height: 1.5; color: rgba(237,232,222,0.82); }
     .mx-rv { text-align: right; white-space: nowrap; } .mx-rv b { display: block; font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 17px; color: #EDE8DE; }
-    .mx-rv span { font-family: 'Courier New', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .mx-rv span { font-family: "Courier New", monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; }
     .mx-fade { position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: linear-gradient(rgba(28,25,23,0), #1C1917); }
     @media (min-width: 900px) { .mx { transform: perspective(1400px) rotateY(-5deg); } }
   </style>
@@ -2900,7 +2364,7 @@
       <div class="cx-in" role="group" aria-label="Savings plan">
         <label class="cx-amt" for="cx-amt">
           <span class="cx-k" data-i18n="cxAmount">Amount</span>
-          <span class="cx-amt-row"><span class="cx-cur">€</span><input id="cx-amt" type="text" inputmode="numeric" autocomplete="off" maxlength="6" value="50"></span>
+          <span class="cx-amt-row"><span class="cx-cur">€</span><input id="cx-amt" type="text" inputmode="numeric" autocomplete="off" maxlength="6" value="50" aria-describedby="cx-pre"></span>
         </label>
         <div class="cx-freq">
           <span class="cx-k" data-i18n="cxEvery">Every</span>
@@ -2934,65 +2398,6 @@
 </section>
 
 <!-- WHAT IF CALCULATOR (legacy, hidden: old script still writes here) -->
-<section class="section whatif-section" id="whatif-legacy" hidden>
-  <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="whatifLabel">What If?</p>
-    <h2 class="section-anchor reveal reveal-scale" data-delay="2" data-i18n="whatifTitle">The money was always there.</h2>
-    <p class="section-anchor-sub reveal reveal-scale reveal-fade" data-delay="3" data-i18n="whatifSub">Small, regular spending adds up faster than most people realise. Pick a habit and see what it would look like if you had put that money into Bitcoin instead.</p>
-
-    <!-- HABIT STEPPER -->
-    <div class="whatif-stepper-wrap reveal" data-delay="4" id="habit-list">
-      <div class="whatif-stepper-top">
-        <div class="whatif-stepper-row">
-          <button class="whatif-step-btn" id="habit-prev" aria-label="Less" data-umami-event="whatif-step" data-umami-event-direction="prev">−</button>
-          <div class="whatif-stepper-center">
-            <div class="whatif-stepper-amount-mask">
-              <div class="whatif-stepper-amount" id="whatif-stepper-amount">€50</div>
-            </div>
-            <div class="whatif-stepper-per">/ month</div>
-            <div class="whatif-stepper-habit" id="whatif-stepper-habit">≈ coffee on the go</div>
-          </div>
-          <button class="whatif-step-btn" id="habit-next" aria-label="More" data-umami-event="whatif-step" data-umami-event-direction="next">+</button>
-        </div>
-        <div class="whatif-ticks" id="whatif-ticks">
-          <div class="whatif-tick-marker" id="whatif-tick-marker"></div>
-        </div>
-      </div>
-
-      <!-- RESULT — always visible, animates on first scroll-into-view, rolls on step -->
-      <div class="whatif-result-wrap revealed" id="whatif-result-wrap">
-        <div class="whatif-revelation">
-          <p class="whatif-revelation-label" id="whatif-selected-label">COFFEE ON THE GO</p>
-          <p class="whatif-revelation-context" data-i18n="whatifHeadline">If you'd saved that monthly into Bitcoin since 2015, you'd have</p>
-          <div class="whatif-stepper-glow" id="whatif-stepper-glow"></div>
-          <div class="whatif-revelation-number" id="whatif-btc-value">—</div>
-          <p class="whatif-revelation-sub" data-i18n="whatifBigSub">today, instead of nothing</p>
-        </div>
-
-        <div class="whatif-evidence" id="whatif-evidence">
-          <div class="whatif-stats-grid">
-            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statInvested">Total invested</p><div class="whatif-stat-value" id="whatif-invested">—</div></div>
-            <div class="whatif-stat"><p class="whatif-stat-label" data-i18n="statGain">Total gain</p><div class="whatif-stat-value positive" id="whatif-gain">—</div></div>
-          </div>
-          <p class="whatif-disclaimer" data-i18n="whatifDisclaimer">Based on actual Bitcoin monthly average prices since 2015. Not financial advice. This is for perspective.</p>
-          <div class="whatif-email-cta">
-            <p class="whatif-email-cta-label" data-i18n="whatifCtaLabel">See how the market looks, every Sunday.</p>
-            <div class="whatif-email-cta-right">
-              <div class="whatif-email-cta-row">
-                <div class="email-row">
-                  <input class="email-input" id="email-input-calc" type="email" autocomplete="email" inputmode="email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-                  <button class="email-submit" id="email-submit-calc" onclick="submitEmailCalc()" data-umami-event="email-subscribe-calc" data-i18n="whatifCtaBtn">Send me the weekly read →</button>
-                </div>
-                <p class="email-msg" id="email-msg-calc" aria-live="polite"></p>
-              </div>
-              <p class="whatif-email-cta-meta" data-i18n="pushMeta">Free · No account needed · Unsubscribe anytime</p>
-            </div>
-          </div>
-        </div><!-- /whatif-evidence -->
-      </div><!-- /whatif-result-wrap -->
-    </div><!-- /whatif-stepper -->
-  </div>
-</section>
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
@@ -3052,42 +2457,8 @@
 
 <!-- Kept in the DOM, hidden: updateSignal() and the share functions still write here (UX phase 5) -->
 <!-- WHAT EXPERTS DO -->
-<section class="section expert-section" id="experts" hidden>
-  <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="expertsLabel">How long-term holders see it</p>
-    <h2 class="section-title reveal" data-delay="2" data-i18n="expertsTitle">In moments like this,<br>here's what tends to happen.</h2>
-    <div class="expert-card reveal" data-delay="3" style="margin-top:3rem;position:relative;overflow:hidden;">
-      <canvas id="expert-field" aria-hidden="true"></canvas>
-      <span class="expert-signal-tag" id="expert-tag">Today</span>
-      <p class="expert-lead" id="expert-lead">Bitcoiners tend to treat deep fear as a signal, not a warning.</p>
-      <p class="expert-text" id="expert-text">When the Fear & Greed Index is in extreme fear territory, as it is now, Bitcoiners tend to treat it as a signal, not a warning. Historically, the deepest fear has aligned with local price bottoms.</p>
-      <p class="expert-meta" id="expert-date" data-i18n="expertDate">Updated today · Based on current market conditions</p>
-    </div>
-  </div>
-</section>
 
 <!-- SHARE -->
-<section class="section share-section" id="share" hidden>
-  <div class="section-inner">
-    <p class="section-label reveal reveal-left" data-delay="1" data-i18n="shareLabel">Share the Signal</p>
-    <h2 class="section-title reveal" data-delay="2" data-i18n="shareTitle">Send this to a friend<br>thinking about buying.</h2>
-    <p class="section-sub reveal reveal-fade" data-delay="3" style="margin-bottom:3rem;" data-i18n="shareSub">One tap. They'll see exactly what the signal is today and why.</p>
-    <!-- Hidden data nodes for share functions (populated by API fetches) -->
-    <span id="share-price" style="display:none"></span>
-    <span id="share-signal" style="display:none"></span>
-    <span id="share-fg" style="display:none"></span>
-    <span id="share-ma" style="display:none"></span>
-    <span id="share-ath" style="display:none"></span>
-
-    <div class="share-btns reveal" data-delay="4">
-      <button class="share-btn primary" onclick="shareWhatsApp()" data-umami-event="share-whatsapp" data-i18n="shareWhatsapp">WhatsApp</button>
-      <button class="share-btn" onclick="shareTwitter()" data-umami-event="share-x" data-i18n="shareX">X / Twitter</button>
-      <button class="share-btn" onclick="shareSignal()" data-umami-event="share-signal">Signal</button>
-      <button class="share-btn" onclick="shareTelegram()" data-umami-event="share-telegram">Telegram</button>
-      <button class="share-btn" onclick="copyLink(this)" data-i18n="shareCopy">Copy Link</button>
-    </div>
-  </div>
-</section>
 
 <div class="ornament-rule"><div class="ornament-rule-line"></div><span class="ornament-rule-center">✦</span><div class="ornament-rule-line"></div></div>
 
@@ -3339,13 +2710,8 @@
       announceLink: 'Get alerts →',
       metaDesc: 'A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, 200-day average, and ATH distance into one clear signal. No noise. No trading advice.',
       // Nav
-      navCta: 'Buy on Relai',
-      // Hero
       heroLabel: 'Bitcoin conditions today',
       disclaimer: 'Not financial advice. See what the data shows, decide for yourself.',
-      heroBtn1: 'Understand the signal',
-      heroBtn2: 'Calculate your "What If?"',
-      scrollHint: '↓ Scroll to explore',
       visitorCounter: 'Bitcoiners were here.',
       // Signal states — arrays rotate by day (see updateSignal) so repeat
       // visitors don't see the identical line every time. The "Hot"/"Dump"
@@ -3402,8 +2768,6 @@
         "Enjoy the move. Long-term holders tend to keep their regular plan, up or down.",
       ],
       signalUpdatedPrefix: 'Updated at',
-      statusLive: 'Receiving signal',
-      // Signal breakdown
       signalBreakdownLabel: 'Signal Breakdown',
       signalBreakdownTitle: 'Three readings.<br>One temperature.',
       signalBreakdownSub: "Each reading leans colder or warmer. Added up, they give today's temperature. No jargon, no advice.",
@@ -3421,93 +2785,21 @@
       cxFine: "Bought at each month's average price, valued at today's price, in euro. Fees and taxes not included. Not financial advice.",
       cxShare: '{amt} {per} into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US 10-year yield' }, wmPts: 'pts',
-      wmBtc: 'Bitcoin {v} in 24 hours', wmWith: 'moving with the market.', wmAgainst: 'going its own way.', wmOwn: 'its own move, while markets were calm.', wmQuiet: 'a normal day, nothing unusual.', wmClosed: 'US markets are closed, so these are their last moves.',
-      fpCalcSubOld: 'Pick a habit or type your own amount, then a start year. See what putting that money into Bitcoin every month would have done, including the bad stretches.',
+      wmBtc: 'Bitcoin {v} in 24 hours', wmWith: 'moving with the market.', wmAgainst: 'going its own way.', wmOwn: 'its own move, while markets were calm.', wmQuiet: 'a quiet day across markets.', wmSteady: 'holding steady while stocks moved.', wmClosed: 'US markets are closed, so these are their last moves.',
       fpEveryMonth: 'Every month', fpOwnAmount: 'your own amount', fpGrowthTitle: 'Month by month', fpWorth: 'Worth', fpChartHint: 'Touch or hover the chart to see any month. Blue shading: worth less than what went in.',
       fpRecBy: 'It was back above that high by {c}.', fpRecNow: 'It is back above that high today.', fpRecNot: 'It has not got back to that high yet.',
       fpUnder: 'For {n} of the {m} months it was worth less than what had gone in.', fpUnderOne: 'For 1 of the {m} months it was worth less than what had gone in.',
-      fpShareOwn: '{amt} a month into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       fpStartIn: 'Starting in', fpToday: 'today', fpPutIn: 'Put in', fpMultiple: 'Multiple', fpMonths: 'Months',
-      fpFine: "Bought every month at that month's average price, valued at today's price. Fees and taxes not included. Not financial advice; this is for perspective.",
       fpPre: '{amt} a month since {y} would be worth', fpPerMonth: '/ month',
-      fpHonestNone: 'The honest part: it moved around a lot along the way, but never fell far from a high.',
-      fpHonest: 'The honest part: at its worst, the pot was down {d} from its high ({a} to {b}).',
-      fpShare: '{h}: {amt} a month into Bitcoin since {y} would be worth {v} today (put in {i}). Check yours: whentobuybtc.xyz',
       fpSunday: 'Sunday', fpMailMood: 'Mood {v}', fpMailLine: 'This week in one minute:',
       fpMailL1: 'Market mood: {v}', fpMailL2: '{v} vs. 200-day average', fpMailL3: '{v} from the all-time high',
-      fgLabel: 'Fear & Greed Index',
-      maLabel: 'vs. 200-Day Average',
-      athLabel: 'From All-Time High',
-      ma200Label: '200-Day Moving Average',
       athPriceLabel: 'All-Time High',
-      fgLoading: 'Loading Fear & Greed data...',
-      maLoading: 'Loading price data...',
-      athLoading: 'Loading ATH data...',
-      // Chart
       chartLabel: 'The long-term trend',
       chartTitle: 'Price and its 200-day average',
       chartSub: "The bright line is Bitcoin's price, the dashed line its 200-day average. When the price sits below the average, the market reads colder. Above it, warmer.",
-      legendBtc: 'Bitcoin Price',
       legend200ma: '200-Day Moving Average',
       // Expert section
-      expertsLabel: "How long-term holders see it",
-      expertsTitle: "What tends to happen<br>in moments like this.",
-      expertDate: 'Updated today · Based on current market conditions',
-      expertTagAccumulate: "Today: Cold",
-      expertTagHold: "Today: Mild",
-      expertTagCaution: "Today: Hot",
-      expertTextAccumulate: [
-        "When the Fear & Greed Index falls into fear, long-term holders tend to treat it as background noise rather than a warning. The deepest fear has historically come close to local price bottoms. For someone who buys a fixed amount on a schedule, a lower price simply means more sats for the same money.",
-        "Extreme fear has a pattern in Bitcoin's history: it marks the moments most people want nothing to do with it. Those who kept their regular plan through those periods didn't need perfect timing. They just didn't stop.",
-        "Conditions like these (fear high, price below its trend) are what long-term holders prepare for in advance. A bottom is never guaranteed, and nobody can call it. A regular plan makes days like this automatic rather than emotional.",
-        "The market is showing fear. For many long-term holders, this is the reason they set up regular buys in the first place. History doesn't repeat exactly, but fear followed by recovery has happened often enough to be worth knowing about.",
-        "When sentiment is this low, Bitcoin tends to be out of the news and out of dinner conversations. Historically, these quiet, unloved stretches have looked very different in hindsight. Nobody knows if this is the bottom.",
-      ],
-      expertTextHold: [
-        "When readings are mixed, most long-term holders simply keep their regular plan. That's what a regular plan is for: it removes the question of whether to do more or less today.",
-        "Calm conditions are where discipline gets tested. There's no fear or greed to react to. Long-term holders who do best in these phases usually decided what they'd do long before today.",
-        "Mixed readings aren't a problem to solve. They're the market's way of saying nothing definitive is happening. A regular plan exists so nobody has to make new decisions every time the picture is unclear.",
-        "In calm phases, the biggest risk isn't doing nothing. It's overreacting. Most experienced long-term holders treat these periods as routine: keep the schedule, tune out the commentary.",
-        "The signal isn't pointing strongly either way right now. That's normal. Bitcoin spends a lot of time in these in-between states, and long-term holders tend not to change anything here.",
-      ],
-      expertTextCaution: [
-        "When greed is high and Bitcoin trades well above its 200-day average, the market is in one of its exciting phases. Long-term holders tend to enjoy it without changing their plan. Selling to time the top is as hard as timing the bottom.",
-        "Hot markets bring the most new attention to Bitcoin. Pullbacks from stretched levels are normal and can be sharp, and long-term holders tend to expect them without reacting to them.",
-        "A new high, or close to one, is a moment to celebrate. It's the payoff for holding through the quiet and fearful stretches.",
-        "High greed readings have come before corrections often in Bitcoin's history. That doesn't mean the top is in; nobody knows that. Long-term holders tend to treat the run-up and any pullback as part of the same long ride.",
-        "Near all-time highs, Bitcoin is the talk of the town. Long-term holders tend to use the moment to look at the bigger picture: years, not weeks.",
-      ],
-      // What If
-      whatifLabel: 'What If?',
-      whatifTitle: 'The money was always there.',
-      whatifSub: 'See what consistent small amounts can do over time. Pick a habit and see what ten years of putting that money into Bitcoin would have looked like instead.',
-      whatifNudge: '↑ Pick a habit to see your number',
-      habitCoffee: 'Daily latte',
-      habitCigarettes: 'Cigarettes',
-      habitGym: 'Gym membership',
-      habitShopping: 'Online shopping',
-      habitDelivery: 'Food delivery',
-      habitBeer: 'Nights out',
-      whatifHeadline: "If you'd saved that monthly into Bitcoin since 2015, you'd have",
-      whatifBigSub: 'today, instead of nothing',
-      habitCalcBtn: 'Calculate →',
-      statMonthly: 'Monthly amount',
-      statInvested: 'Total invested',
-      statGain: 'Total gain',
-      statReturn: 'Total growth',
-      whatifDisclaimer: 'Based on actual Bitcoin monthly average prices since 2015. Not financial advice. This is for perspective.',
-      // Share
-      shareLabel: 'Share the Signal',
-      shareTitle: 'Send this to a friend<br>thinking about buying.',
-      shareSub: "One tap. They'll see exactly what the signal is today and why.",
-      shareFgLabel: 'Fear & Greed',
-      shareMaLabel: 'vs 200D MA',
-      shareAthLabel: 'From ATH',
-      shareUrl: 'Not financial advice · Check the data yourself',
-      shareWhatsapp: 'Share on WhatsApp',
       shareCopy: 'Copy Link',
-      shareX: 'Share on X',
-      // Alerts
       alertsLabel: 'Alerts',
       pushTitle: 'The Bitcoin weather,<br><em>every Sunday.</em>',
       pushSub: 'One short email a week, plus a note when Bitcoin moves more than 3% in a day. Free, no account, unsubscribe in one click.',
@@ -3519,25 +2811,11 @@
       emailErr: 'Something went wrong. Please try again.',
       emailInvalid: 'Please enter a valid email address.',
       // Calculator inline CTA
-      whatifCtaLabel: 'See how the market looks, every Sunday.',
-      whatifCtaBtn: 'Send me the weekly read →',
-      multiplierLabel: 'your money back',
       emailConfirmed: 'You\'re confirmed. Alerts are on.',
       emailUnsubscribed: 'You\'ve been unsubscribed.',
+      emailLinkError: 'That link didn\'t work. Please sign up again below.',
       emailTrustPre: 'Join',
       emailTrustPost: 'others on the signal.',
-      mockupTimeNow: 'now',
-      mockupEmailSubject: 'Bitcoin dropped 5.2% today.',
-      mockupEmailPreview: 'Market mood reads fear and the price is 4.2% below its 200-day average…',
-      // Partner section
-      partnerEyebrow: 'Ready to act on the signal?',
-      partnerRelaiDesc: "Buy Bitcoin in minutes. No altcoins, no complexity. Just Bitcoin, straight to a wallet only you control.",
-      partnerRelaiBtn: 'Get the app →',
-      partnerRelaiRef: 'Use code',
-      partnerRelaiRef2: 'for 0.9% fees',
-      partnerTrezorDesc: 'Secure your Bitcoin offline with a Trezor hardware wallet.',
-      partnerTrezorBtn: 'Get a Trezor →',
-      // ── Redesign additions ──
       heroWhy: "Here's why",
       heroStripFg: "Market mood",
       heroStripMa: "Long-term trend",
@@ -3555,13 +2833,6 @@
       chipSupports: "Cold side",
       chipNeutral: "Mild",
       chipCaution: "Hot side",
-      expertLeadAccumulate: "Long-term holders tend to see deep fear as cheaper sats, not a warning.",
-      expertLeadHold: "Steady conditions favour steady plans.",
-      expertLeadCaution: "High greed is a moment to enjoy, not a problem to fix.",
-      statMultiplier: (x) => `${x}× your money`,
-      partnerStep1: 'Step 01: Buy',
-      partnerStep2: 'Step 02: Store',
-      // Footer
       footerBuilt: 'Built by',
       footerDisclaimer: 'Data only, not financial advice',
       footerTop: '↑ Top',
@@ -3569,8 +2840,6 @@
       footerX: 'Follow @WhenToBuyBTC',
       // Loading states
       loading: 'Loading…',
-      priceLoading: 'Loading...',
-      // Signal card descriptions (dynamic)
       fgExtremeFear: "Extreme fear. The Fear & Greed Index measures how emotional the market is right now. Extreme fear means most people are panicking or staying away. Historically, these moments have come close to price bottoms, and long-term holders tend to see them as cheaper sats.",
       fgFear: "Fear in the market. The Fear & Greed Index measures how emotional the market is right now. Fear means uncertainty is high and many people are pulling back. Long-term holders tend to keep their regular plan through periods like this.",
       fgNeutral: 'Neutral market sentiment. The Fear & Greed Index measures how emotional the market is right now. Neutral means it is neither particularly fearful nor greedy.',
@@ -3626,13 +2895,8 @@
       announceLink: 'Jetzt anmelden →',
       metaDesc: 'Ein kostenloses Bitcoin-Marktsignal für langfristige Anleger. Kombiniert Fear & Greed, 200-Tage-Durchschnitt und ATH-Abstand zu einem klaren Signal. Kein Rauschen. Keine Handelsempfehlung.',
       // Nav
-      navCta: 'Bei Relai kaufen',
-      // Hero
       heroLabel: 'Bitcoin-Lage heute',
       disclaimer: 'Keine Anlageberatung. Sieh dir die Daten an und entscheide selbst.',
-      heroBtn1: 'Signal verstehen',
-      heroBtn2: 'Berechne dein „Was wäre wenn?“',
-      scrollHint: '↓ Nach unten scrollen',
       visitorCounter: 'Bitcoiner waren hier.',
       // Signal states
       stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
@@ -3686,8 +2950,6 @@
         "Genieß die Bewegung. Langfristige Halter bleiben meist bei ihrem Plan, egal ob es rauf oder runter geht.",
       ],
       signalUpdatedPrefix: 'Aktualisiert um',
-      statusLive: 'Signal empfangen',
-      // Signal breakdown
       signalBreakdownLabel: 'Signal im Detail',
       signalBreakdownTitle: 'Drei Werte.<br>Eine Temperatur.',
       signalBreakdownSub: 'Jeder Wert zeigt eher Richtung kalt oder warm. Zusammen ergeben sie die Temperatur von heute. Kein Fachjargon, keine Empfehlung.',
@@ -3705,93 +2967,21 @@
       cxFine: 'Gekauft zum Durchschnittskurs des jeweiligen Monats, bewertet zum heutigen Kurs, in Euro. Ohne Gebühren und Steuern. Keine Finanzberatung.',
       cxShare: '{amt} {per} in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       wmNames: { spx: 'S&amp;P 500', ndx: 'Nasdaq', gold: 'Gold', us10y: 'US-Zins 10 Jahre' }, wmPts: 'Pkt.',
-      wmBtc: 'Bitcoin {v} in 24 Stunden', wmWith: 'bewegt sich mit dem Markt.', wmAgainst: 'geht gerade eigene Wege.', wmOwn: 'eine eigene Bewegung, die Märkte waren ruhig.', wmQuiet: 'ein normaler Tag, nichts Ungewöhnliches.', wmClosed: 'Die US-Börsen sind geschlossen, das sind ihre letzten Bewegungen.',
-      fpCalcSubOld: 'Wähle eine Gewohnheit oder tippe deinen eigenen Betrag, dann ein Startjahr. Sieh, was dieses Geld jeden Monat in Bitcoin bewirkt hätte, inklusive der schlechten Phasen.',
+      wmBtc: 'Bitcoin {v} in 24 Stunden', wmWith: 'bewegt sich mit dem Markt.', wmAgainst: 'geht gerade eigene Wege.', wmOwn: 'eine eigene Bewegung, die Märkte waren ruhig.', wmQuiet: 'ein ruhiger Tag an allen Märkten.', wmSteady: 'bleibt ruhig, während sich die Aktien bewegen.', wmClosed: 'Die US-Börsen sind geschlossen, das sind ihre letzten Bewegungen.',
       fpEveryMonth: 'Jeden Monat', fpOwnAmount: 'dein eigener Betrag', fpGrowthTitle: 'Monat für Monat', fpWorth: 'Wert', fpChartHint: 'Tippe oder fahre über die Grafik, um jeden Monat zu sehen. Blau markiert: weniger wert als eingezahlt.',
       fpRecBy: 'Bis {c} lag er wieder über diesem Hoch.', fpRecNow: 'Heute liegt er wieder über diesem Hoch.', fpRecNot: 'Dieses Hoch hat er noch nicht wieder erreicht.',
       fpUnder: 'In {n} von {m} Monaten war er weniger wert als das, was eingezahlt war.', fpUnderOne: 'In 1 von {m} Monaten war er weniger wert als das, was eingezahlt war.',
-      fpShareOwn: '{amt} im Monat in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       fpStartIn: 'Start im Jahr', fpToday: 'heute', fpPutIn: 'Eingezahlt', fpMultiple: 'Faktor', fpMonths: 'Monate',
-      fpFine: 'Jeden Monat zum Durchschnittskurs des Monats gekauft, bewertet zum heutigen Kurs. Ohne Gebühren und Steuern. Keine Finanzberatung, nur zur Einordnung.',
       fpPre: '{amt} im Monat seit {y} wären heute', fpPerMonth: '/ Monat',
-      fpHonestNone: 'Der ehrliche Teil: Es ging unterwegs viel auf und ab, aber nie weit unter ein Hoch.',
-      fpHonest: 'Der ehrliche Teil: Im schlimmsten Moment lag der Topf {d} unter seinem Hoch ({a} bis {b}).',
-      fpShare: '{h}: {amt} im Monat in Bitcoin seit {y} wären heute {v} wert (eingezahlt: {i}). Berechne deins: whentobuybtc.xyz',
       fpSunday: 'Sonntag', fpMailMood: 'Stimmung {v}', fpMailLine: 'Die Woche in einer Minute:',
       fpMailL1: 'Marktstimmung: {v}', fpMailL2: '{v} zum 200-Tage-Durchschnitt', fpMailL3: '{v} vom Allzeithoch',
-      fgLabel: 'Fear & Greed Index',
-      maLabel: 'vs. 200-Tage-Durchschnitt',
-      athLabel: 'Vom Allzeithoch',
-      ma200Label: '200-Tage-Durchschnitt',
       athPriceLabel: 'Allzeithoch',
-      fgLoading: 'Fear & Greed Daten laden...',
-      maLoading: 'Preisdaten laden...',
-      athLoading: 'ATH-Daten laden...',
-      // Chart
       chartLabel: 'Der langfristige Trend',
       chartTitle: 'Kurs und sein 200-Tage-Schnitt',
       chartSub: 'Die helle Linie ist der Bitcoin-Kurs, die gestrichelte sein 200-Tage-Durchschnitt. Liegt der Kurs darunter, liest sich der Markt kälter. Darüber wärmer.',
-      legendBtc: 'Bitcoin-Kurs',
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
-      expertsLabel: "So sehen es langfristige Halter",
-      expertsTitle: 'Was in Momenten wie diesem<br>typischerweise passiert.',
-      expertDate: 'Heute aktualisiert · Basierend auf aktuellen Marktbedingungen',
-      expertTagAccumulate: "Heute: Kalt",
-      expertTagHold: "Heute: Mild",
-      expertTagCaution: "Heute: Heiß",
-      expertTextAccumulate: [
-        "Fällt der Fear & Greed Index in den Angstbereich, behandeln langfristige Halter das meist als Hintergrundrauschen, nicht als Warnung. Die tiefste Angst lag historisch nah an lokalen Kurstiefs. Wer regelmäßig einen festen Betrag kauft, bekommt bei niedrigerem Preis einfach mehr Sats für dasselbe Geld.",
-        "Extreme Angst hat in der Geschichte von Bitcoin ein Muster: Sie markiert die Momente, in denen die meisten nichts damit zu tun haben wollen. Wer in diesen Phasen bei seinem Plan blieb, brauchte kein perfektes Timing. Er hat einfach nicht aufgehört.",
-        "Bedingungen wie diese (hohe Angst, Preis unter dem Trend) sind genau das, worauf sich langfristige Halter im Voraus vorbereiten. Ein Tief ist nie garantiert, und niemand kann es vorhersagen. Ein regelmäßiger Plan macht solche Tage automatisch statt emotional.",
-        "Der Markt zeigt Angst. Für viele langfristige Halter ist genau das der Grund, warum sie überhaupt regelmäßige Käufe eingerichtet haben. Die Geschichte wiederholt sich nicht exakt, aber Angst gefolgt von Erholung kam oft genug vor, um es zu kennen.",
-        "Wenn die Stimmung so gedrückt ist, ist Bitcoin meist aus den Nachrichten und aus den Gesprächen verschwunden. Historisch sahen diese ruhigen, ungeliebten Phasen im Rückblick ganz anders aus. Niemand weiß, ob das der Tiefpunkt ist.",
-      ],
-      expertTextHold: [
-        "Bei gemischten Werten bleiben die meisten langfristigen Halter einfach bei ihrem Plan. Genau dafür ist ein regelmäßiger Plan da: Er nimmt die Frage ab, ob man heute mehr oder weniger tun sollte.",
-        "Ruhige Bedingungen sind der eigentliche Test für Disziplin. Es gibt keine Angst und keine Gier, auf die man reagieren könnte. Langfristige Halter, die in diesen Phasen gut fahren, haben meist lange vorher entschieden, was sie tun.",
-        "Gemischte Werte sind kein Problem, das gelöst werden muss. Sie sind die Art des Marktes zu sagen, dass gerade nichts Eindeutiges passiert. Ein regelmäßiger Plan existiert, damit niemand bei jedem unklaren Bild neu entscheiden muss.",
-        "In ruhigen Phasen ist das größte Risiko nicht, nichts zu tun. Es ist Überreaktion. Die meisten erfahrenen langfristigen Halter behandeln diese Phasen als Routine: Plan beibehalten, Kommentare ausblenden.",
-        "Das Signal zeigt gerade in keine klare Richtung. Das ist normal. Bitcoin verbringt viel Zeit in diesen Zwischenzuständen, und langfristige Halter ändern hier meist nichts.",
-      ],
-      expertTextCaution: [
-        "Ist die Gier hoch und Bitcoin weit über seinem 200-Tage-Durchschnitt, ist der Markt in einer seiner spannenden Phasen. Langfristige Halter genießen das meist, ohne ihren Plan zu ändern. Das Hoch zum Verkaufen zu timen ist genauso schwer wie das Tief zum Kaufen.",
-        "Heiße Märkte bringen Bitcoin die meiste neue Aufmerksamkeit. Rücksetzer von gestreckten Niveaus sind normal und können heftig sein, und langfristige Halter rechnen meist damit, ohne darauf zu reagieren.",
-        "Ein neues Hoch, oder nah dran, ist ein Moment zum Feiern. Es ist der Lohn dafür, durch die ruhigen und ängstlichen Phasen gehalten zu haben.",
-        "Hohe Gier-Werte kamen in Bitcoins Geschichte oft vor Korrekturen. Das heißt nicht, dass das Hoch erreicht ist; das weiß niemand. Langfristige Halter sehen den Anstieg und jeden Rücksetzer meist als Teil derselben langen Reise.",
-        "Nahe am Allzeithoch ist Bitcoin in aller Munde. Langfristige Halter nutzen den Moment meist, um auf das große Bild zu schauen: Jahre, nicht Wochen.",
-      ],
-      // What If
-      whatifLabel: 'Was wäre wenn?',
-      whatifTitle: 'Das Geld war immer da.',
-      whatifSub: 'Sieh, was regelmäßige kleine Beträge über Zeit bewirken können. Wähle eine Gewohnheit und schau, was daraus geworden wäre, wenn du das Geld seit 2015 stattdessen in Bitcoin gesteckt hättest.',
-      whatifNudge: '↑ Wähle eine Gewohnheit',
-      habitCoffee: 'Täglicher Latte',
-      habitCigarettes: 'Zigaretten',
-      habitGym: 'Fitnessstudio',
-      habitShopping: 'Online-Shopping',
-      habitDelivery: 'Lieferdienst',
-      habitBeer: 'Ausgehen',
-      whatifHeadline: 'Hättest du das monatlich seit 2015 in Bitcoin gesteckt, hättest du heute',
-      whatifBigSub: 'statt bei nichts',
-      habitCalcBtn: 'Berechnen →',
-      statMonthly: 'Monatlicher Betrag',
-      statInvested: 'Gesamt investiert',
-      statGain: 'Gesamtgewinn',
-      statReturn: 'Gesamtwachstum',
-      whatifDisclaimer: 'Basierend auf tatsächlichen monatlichen Bitcoin-Durchschnittspreisen seit 2015. Keine Anlageberatung. Das dient der Veranschaulichung.',
-      // Share
-      shareLabel: 'Signal teilen',
-      shareTitle: 'Schick das einem Freund,<br>der über Bitcoin nachdenkt.',
-      shareSub: 'Ein Tap reicht. Er sieht genau, was das Signal heute zeigt und warum.',
-      shareFgLabel: 'Fear & Greed',
-      shareMaLabel: 'vs 200T-MA',
-      shareAthLabel: 'Vom ATH',
-      shareUrl: 'Keine Anlageberatung · Sieh dir die Daten selbst an',
-      shareWhatsapp: 'Auf WhatsApp teilen',
       shareCopy: 'Link kopieren',
-      shareX: 'Auf X teilen',
-      // Alerts
       alertsLabel: 'Benachrichtigungen',
       pushTitle: 'Das Bitcoin-Wetter,<br><em>jeden Sonntag.</em>',
       pushSub: 'Eine kurze E-Mail pro Woche, plus ein Hinweis, wenn Bitcoin an einem Tag um mehr als 3 % steigt oder fällt. Kostenlos, ohne Konto, Abmeldung mit einem Klick.',
@@ -3804,24 +2994,9 @@
       emailInvalid: 'Bitte eine gültige E-Mail-Adresse eingeben.',
       emailConfirmed: 'Bestätigt. Du erhältst ab jetzt Alerts.',
       emailUnsubscribed: 'Du wurdest abgemeldet.',
+      emailLinkError: 'Der Link hat nicht funktioniert. Bitte melde dich unten erneut an.',
       emailTrustPre: 'Schon',
       emailTrustPost: 'Leser sind dabei.',
-      mockupTimeNow: 'jetzt',
-      mockupEmailSubject: 'Bitcoin fiel heute um 5,2 %.',
-      mockupEmailPreview: 'Die Marktstimmung zeigt Angst, der Preis liegt 4,2 % unter dem 200-Tage-Schnitt…',
-      // Calculator inline CTA
-      whatifCtaLabel: 'So sieht der Markt aus, jeden Sonntag.',
-      whatifCtaBtn: 'Wochenüberblick erhalten →',
-      multiplierLabel: 'dein Geld zurück',
-      // Partner section
-      partnerEyebrow: 'Bereit zu handeln?',
-      partnerRelaiDesc: 'Bitcoin kaufen in Minuten. Keine Altcoins, keine Komplexität. Nur Bitcoin, direkt in eine Wallet, die nur du kontrollierst.',
-      partnerRelaiBtn: 'App holen →',
-      partnerRelaiRef: 'Code',
-      partnerRelaiRef2: 'für 0,9% Gebühren',
-      partnerTrezorDesc: 'Sichere deine Bitcoin offline mit einer Trezor Hardware Wallet.',
-      partnerTrezorBtn: 'Trezor holen →',
-      // ── Redesign additions ──
       heroWhy: 'Darum',
       heroStripFg: "Marktstimmung",
       heroStripMa: "Langfristiger Trend",
@@ -3839,13 +3014,6 @@
       chipSupports: "Kalte Seite",
       chipNeutral: "Mild",
       chipCaution: "Heiße Seite",
-      expertLeadAccumulate: "Langfristige Halter sehen tiefe Angst meist als günstigere Sats, nicht als Warnung.",
-      expertLeadHold: "Stabile Bedingungen sprechen für stabile Pläne.",
-      expertLeadCaution: "Hohe Gier ist ein Moment zum Genießen, kein Problem, das gelöst werden muss.",
-      statMultiplier: (x) => `${x}× dein Geld`,
-      partnerStep1: 'Schritt 01: Kaufen',
-      partnerStep2: 'Schritt 02: Verwahren',
-      // Footer
       footerBuilt: 'Erstellt von',
       footerDisclaimer: 'Nur Daten, keine Anlageberatung',
       footerTop: '↑ Nach oben',
@@ -3853,8 +3021,6 @@
       footerX: 'Follow @WhenToBuyBTC',
       // Loading states
       loading: 'Lädt…',
-      priceLoading: 'Lädt...',
-      // Signal card descriptions (dynamic)
       fgExtremeFear: "Extreme Angst. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Extreme Angst bedeutet, dass die meisten in Panik sind oder sich fernhalten. Historisch lagen solche Momente nah an Kurstiefs, und langfristige Halter sehen sie meist als günstigere Sats.",
       fgFear: "Angst im Markt. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Angst bedeutet, dass die Unsicherheit hoch ist und viele sich zurückziehen. Langfristige Halter bleiben in solchen Phasen meist bei ihrem Plan.",
       fgNeutral: 'Neutrale Marktstimmung. Der Fear & Greed Index misst, wie emotional der Markt gerade ist. Neutral bedeutet weder besonders ängstlich noch gierig.',
@@ -4042,12 +3208,10 @@
 
       const pv = document.getElementById('price-value'); pv.textContent = formatPrice(currentPrice); pv.classList.remove('loading');
       const changeEl = document.getElementById('price-change');
-      const sign = change >= 0 ? '+' : '';
       const prevPrice = currentPrice / (1 + change / 100);
       const absDiff = Math.abs(currentPrice - prevPrice);
-      changeEl.textContent = `${sign}${change.toFixed(2)}% · ${sign}${sym}${formatPrice(absDiff)} ${currentLang === 'de' ? 'heute' : 'today'}`;
+      changeEl.textContent = `${fmtPct(change, 2)} · ${change < 0 ? '−' : '+'}${sym}${formatPrice(absDiff)} ${currentLang === 'de' ? 'heute' : 'today'}`;
       changeEl.className = `change ${change >= 0 ? 'up' : 'down'}`;
-      document.getElementById('share-price').textContent = sym + formatPrice(currentPrice);
       // Update "last updated" timestamp
       const now = new Date();
       const t = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -4070,16 +3234,23 @@
     if (currentPrice == null) return;
     if (athPrice) {
       athDropPct = (currentPrice - athPrice) / athPrice * 100;
-      const a = document.getElementById('ath-value'); if (a) a.textContent = athDropPct.toFixed(1) + '%';
+      const a = document.getElementById('ath-value'); if (a) a.textContent = fmtPct(athDropPct, 1, false);
     }
     if (maPrice) {
       const d = (currentPrice - maPrice) / maPrice * 100;
-      const m = document.getElementById('ma-value'); if (m) m.textContent = (d >= 0 ? '+' : '') + d.toFixed(1) + '%';
+      const m = document.getElementById('ma-value'); if (m) m.textContent = fmtPct(d);
     }
     if (fgValue !== null && maPrice !== null && athDropPct !== null) updateSignal();
   }
 
   function numLocale() { return currentLang === 'de' ? 'de-DE' : 'en-GB'; }
+  // Percent in the visitor's locale with a true minus sign: "+5.0%" / "−31,9%". No "−0.0%".
+  function fmtPct(v, dp, signed) {
+    dp = dp == null ? 1 : dp;
+    const r = Number(v.toFixed(dp));
+    const sign = r < 0 ? '−' : (r > 0 && signed !== false ? '+' : '');
+    return sign + Math.abs(r).toLocaleString(numLocale(), { minimumFractionDigits: dp, maximumFractionDigits: dp }) + '%';
+  }
 
   function formatPrice(p) {
     if (p >= 1000) return Math.round(p).toLocaleString(numLocale());
@@ -4097,7 +3268,6 @@
 
       const fgEl2 = document.getElementById('fg-value'); fgEl2.textContent = fgValue; fgEl2.classList.remove('loading'); document.getElementById('fg-desc').classList.remove('loading');
       document.getElementById('fg-bar').style.width = fgValue + '%';
-      document.getElementById('share-fg').textContent = fgValue;
 
       // Same bands as the score (SIGNAL MODEL), led by the publisher's own label
       const band = wtbFgBand(fgValue, label);
@@ -4130,9 +3300,8 @@
       const absPct = Math.abs(dropPct).toFixed(0);
 
       document.getElementById('ath-price').textContent = sym + formatPrice(athPrice);
-      const athEl2 = document.getElementById('ath-value'); athEl2.textContent = dropPct.toFixed(1) + '%'; athEl2.classList.remove('loading'); document.getElementById('ath-desc').classList.remove('loading');
+      const athEl2 = document.getElementById('ath-value'); athEl2.textContent = fmtPct(dropPct, 1, false); athEl2.classList.remove('loading'); document.getElementById('ath-desc').classList.remove('loading');
       document.getElementById('ath-bar').style.width = Math.min(Math.abs(dropPct), 100) + '%';
-      document.getElementById('share-ath').textContent = dropPct.toFixed(0) + '%';
 
       let color, desc;
       if (dropPct < -50) {
@@ -4204,8 +3373,7 @@
       const sym = currentCurrency === 'EUR' ? '€' : '$';
 
       document.getElementById('ma-price').textContent = sym + formatPrice(maPrice);
-      const maEl2 = document.getElementById('ma-value'); maEl2.textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(1) + '%'; maEl2.classList.remove('loading'); document.getElementById('ma-desc').classList.remove('loading');
-      document.getElementById('share-ma').textContent = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(0) + '%';
+      const maEl2 = document.getElementById('ma-value'); maEl2.textContent = fmtPct(diffPct); maEl2.classList.remove('loading'); document.getElementById('ma-desc').classList.remove('loading');
 
       const fillPct = Math.min(Math.max((diffPct + 50) / 100 * 100, 5), 95);
       document.getElementById('ma-bar').style.width = fillPct + '%';
@@ -4271,10 +3439,6 @@
 
     const pill = document.getElementById('signal-pill');
     const text = document.getElementById('signal-text');
-    const shareSignal = document.getElementById('share-signal');
-    const expertTag = document.getElementById('expert-tag');
-    const expertText = document.getElementById('expert-text');
-    const expertLead = document.getElementById('expert-lead');
 
     pill.className = 'signal-pill';
     const navDot = document.getElementById('nav-signal-dot');
@@ -4293,47 +3457,26 @@
     if (sig.state === 'accumulate') {
       pill.classList.add('accumulate');
       if (navDot) { navDot.classList.add('accumulate', 'active'); }
-      if (window._setExpertFieldState) window._setExpertFieldState('accumulate');
       window._cinematicSignal = 'accumulate';
       const accumulatePool = hardDump ? t.signalAccumulateDump : t.signalAccumulate;
       const accumulateHeadline = accumulatePool[dayIndex % accumulatePool.length];
       window._signalHeadline = accumulateHeadline;
       text.textContent = t.stateName.accumulate + '. ' + accumulateHeadline;
-      shareSignal.style.color = 'var(--green)';
-      shareSignal.textContent = '● ' + t.stateName.accumulate + '. ' + accumulateHeadline;
-      expertTag.textContent = t.expertTagAccumulate;
-      expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(74,222,128,0.3); background:var(--green-dim); color:var(--green); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = t.expertTextAccumulate[dayIndex % t.expertTextAccumulate.length];
-      if (expertLead) expertLead.textContent = t.expertLeadAccumulate;
     } else if (sig.state === 'hold') {
       pill.classList.add('hold');
       if (navDot) { navDot.classList.add('hold', 'active'); }
-      if (window._setExpertFieldState) window._setExpertFieldState('hold');
       window._cinematicSignal = 'hold';
       const holdHeadline = t.signalHold[dayIndex % t.signalHold.length];
       window._signalHeadline = holdHeadline;
       text.textContent = t.stateName.hold + '. ' + holdHeadline;
-      shareSignal.style.color = 'var(--amber)';
-      shareSignal.textContent = '● ' + t.stateName.hold + '. ' + holdHeadline;
-      expertTag.textContent = t.expertTagHold;
-      expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(251,191,36,0.3); background:var(--amber-dim); color:var(--amber); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = t.expertTextHold[dayIndex % t.expertTextHold.length];
-      if (expertLead) expertLead.textContent = t.expertLeadHold;
     } else {
       pill.classList.add('caution');
       if (navDot) { navDot.classList.add('caution', 'active'); }
-      if (window._setExpertFieldState) window._setExpertFieldState('caution');
       window._cinematicSignal = 'caution';
       const cautionPool = hotPump ? t.signalCautionHot : t.signalCaution;
       const cautionHeadline = cautionPool[dayIndex % cautionPool.length];
       window._signalHeadline = cautionHeadline;
       text.textContent = t.stateName.caution + '. ' + cautionHeadline;
-      shareSignal.style.color = 'var(--orange)';
-      shareSignal.textContent = '● ' + t.stateName.caution + '. ' + cautionHeadline;
-      expertTag.textContent = t.expertTagCaution;
-      expertTag.style.cssText = 'display:inline-block; border:1px solid rgba(247,147,26,0.3); background:var(--orange-dim); color:var(--orange); font-family:var(--mono); font-size:0.625rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.75rem; margin-bottom:1.5rem;';
-      expertText.textContent = t.expertTextCaution[dayIndex % t.expertTextCaution.length];
-      if (expertLead) expertLead.textContent = t.expertLeadCaution;
     }
 
     if (window._renderTempHero) window._renderTempHero();
@@ -4412,14 +3555,14 @@
       const v = document.getElementById('hero-ma-value');
       const s = document.getElementById('hero-ma-state');
       const color = diffPct < -10 ? 'var(--green)' : diffPct < 10 ? 'var(--amber)' : 'var(--orange)';
-      if (v) { v.textContent = (diffPct >= 0 ? '+' : '−') + Math.abs(diffPct).toFixed(1) + '%'; v.style.color = color; }
+      if (v) { v.textContent = fmtPct(diffPct); v.style.color = color; }
       if (s) { s.textContent = diffPct >= 0 ? t.heroAbove : t.heroBelow; s.style.color = color; }
     }
     if (athDropPct !== null) {
       const v = document.getElementById('hero-ath-value');
       const s = document.getElementById('hero-ath-state');
       const color = athDropPct < -50 ? 'var(--green)' : athDropPct < -25 ? 'var(--amber)' : 'var(--orange)';
-      if (v) { v.textContent = athDropPct.toFixed(1) + '%'; v.style.color = color; }
+      if (v) { v.textContent = fmtPct(athDropPct, 1, false); v.style.color = color; }
       if (s) { s.textContent = athDropPct < 0 ? t.heroDiscount : ''; s.style.color = color; }
     }
   }
@@ -4769,45 +3912,9 @@
     }
   }
 
-  // All amounts in monthly EUR
-  const HABITS = {
-    netflix:   { label: 'Netflix',                    labelDe: 'Netflix',                       monthly: 15  },
-    gym:       { label: 'The gym you never go to',    labelDe: 'Das Fitnessstudio, das du nie besuchst', monthly: 30  },
-    coffee:    { label: 'Coffee on the go',           labelDe: 'Kaffee unterwegs',              monthly: 50  },
-    lunch:     { label: 'Grabbing lunch',             labelDe: 'Mittagessen to go',             monthly: 60  },
-    takeaway:  { label: 'Takeaways',                  labelDe: 'Bestellungen nach Hause',       monthly: 70  },
-    drinks:    { label: 'Drinks after work',          labelDe: 'Drinks nach der Arbeit',        monthly: 80  },
-    uber:      { label: 'A few Ubers',                labelDe: 'Ein paar Uber-Fahrten',         monthly: 90  },
-    fashion:   { label: 'Clothes you didn\'t need',  labelDe: 'Klamotten, die du nicht brauchtest', monthly: 100 },
-    dining:    { label: 'Dinner out',                 labelDe: 'Essen gehen',                   monthly: 120 },
-    nights:    { label: 'A proper night out',         labelDe: 'Ein richtiger Abend aus',       monthly: 150 },
-  };
-
-  // selectHabit replaced by whatif stepper — see WHAT IF STEPPER IIFE above
-
-
-
-  function shareWhatIfWhatsApp() {
-    const label = document.getElementById('whatif-selected-label').textContent;
-    const val = document.getElementById('whatif-btc-value').textContent;
-    const invested = document.getElementById('whatif-invested').textContent;
-    const text = currentLang === 'de'
-      ? `${label}: Hätte ich das Geld stattdessen seit 2015 monatlich in Bitcoin gesteckt, hätte ich heute ${val} (investiert: ${invested}). Berechne deins: whentobuybtc.xyz`
-      : `${label}: if I'd put that money into Bitcoin monthly since 2015 instead, I'd have ${val} today (invested ${invested}). Check yours: whentobuybtc.xyz`;
-    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-  }
-  function shareWhatIfTwitter() {
-    const label = document.getElementById('whatif-selected-label').textContent;
-    const val = document.getElementById('whatif-btc-value').textContent;
-    const text = currentLang === 'de'
-      ? `${label}: hätte ich das Geld seit 2015 monatlich in Bitcoin investiert, wäre es heute ${val} wert. 👀 whentobuybtc.xyz`
-      : `${label}: if that money had gone into Bitcoin monthly since 2015, it would be worth ${val} today. 👀 whentobuybtc.xyz`;
-    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
-  }
-
   // ── SHARE ──
   function _shareText(short) {
-    const price = document.getElementById('share-price').textContent;
+    const price = currentPrice != null ? (currentCurrency === 'EUR' ? '€' : '$') + formatPrice(currentPrice) : '';
     const tt    = translations[currentLang];
     const name  = window._signalState ? tt.stateName[window._signalState] : '';
     const line  = window._signalHeadline || '';
@@ -4878,7 +3985,6 @@
       });
   }
   function submitEmail()     { subscribeEmail('email-input',      'email-submit',      'email-msg',      'emailSubmit');   }
-  function submitEmailCalc() { subscribeEmail('email-input-calc', 'email-submit-calc', 'email-msg-calc', 'whatifCtaBtn'); }
 
   // Handle ?email=confirmed / ?email=unsubscribed redirects from the API
   (function handleEmailRedirect() {
@@ -4898,206 +4004,14 @@
     } else if (state === 'unsubscribed') {
       msg.textContent = t.emailUnsubscribed;
       msg.className   = 'email-msg';
+    } else if (state === 'error' || state === 'invalid') {
+      msg.textContent = t.emailLinkError;
+      msg.className   = 'email-msg err';
     }
 
     document.getElementById('alerts')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   })();
 
-
-  // ── WHAT IF STEPPER ──
-  (function() {
-    const HABITS_ORDERED = [
-      { key: 'netflix',  monthly: 15,  label: 'Netflix',                    labelDe: 'Netflix' },
-      { key: 'gym',      monthly: 30,  label: 'The gym you never use',       labelDe: 'Das Fitnessstudio, das du nie besuchst' },
-      { key: 'coffee',   monthly: 50,  label: 'Coffee on the go',            labelDe: 'Kaffee unterwegs' },
-      { key: 'lunch',    monthly: 60,  label: 'Grabbing lunch',              labelDe: 'Mittagessen to go' },
-      { key: 'takeaway', monthly: 70,  label: 'Takeaways',                   labelDe: 'Bestellungen nach Hause' },
-      { key: 'drinks',   monthly: 80,  label: 'Drinks after work',           labelDe: 'Drinks nach der Arbeit' },
-      { key: 'uber',     monthly: 90,  label: 'A few Ubers',                 labelDe: 'Ein paar Uber-Fahrten' },
-      { key: 'fashion',  monthly: 100, label: "Clothes you didn't need",     labelDe: 'Klamotten, die du nicht brauchtest' },
-      { key: 'dining',   monthly: 120, label: 'Dinner out',                  labelDe: 'Essen gehen' },
-      { key: 'nights',   monthly: 150, label: 'A proper night out',          labelDe: 'Ein richtiger Abend aus' },
-    ];
-    const N = HABITS_ORDERED.length;
-    let idx = 2; // default: coffee
-    let prevFinal = 0, prevGain = 0, prevInvested = 0;
-    let firstRender = true;
-    let rafId = null;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const amountEl  = document.getElementById('whatif-stepper-amount');
-    const habitEl   = document.getElementById('whatif-stepper-habit');
-    const labelEl   = document.getElementById('whatif-selected-label');
-    const resultEl  = document.getElementById('whatif-btc-value');
-    const investedEl= document.getElementById('whatif-invested');
-    const gainEl    = document.getElementById('whatif-gain');
-    const glowEl    = document.getElementById('whatif-stepper-glow');
-    const markerEl  = document.getElementById('whatif-tick-marker');
-    const minusBtn  = document.getElementById('habit-prev');
-    const plusBtn   = document.getElementById('habit-next');
-    const centerEl  = document.getElementById('whatif-stepper-amount')?.closest('.whatif-stepper-center');
-    const evidenceEl= document.getElementById('whatif-evidence');
-    if (!amountEl || !resultEl) return;
-
-    function fmt(v) {
-      const sym = currentCurrency === 'EUR' ? '€' : '$';
-      return sym + Math.round(v).toLocaleString(numLocale());
-    }
-
-    function calcHabit(monthlyEur) {
-      let totalInvested = 0, totalBTC = 0;
-      for (const [, rawPrice] of Object.entries(BTC_MONTHLY_EUR)) {
-        const monthPriceEur = rawPrice ?? (currentCurrency === 'EUR' ? currentPrice : currentPrice / eurUsdRate);
-        const monthPrice    = currentCurrency === 'EUR' ? monthPriceEur : monthPriceEur * eurUsdRate;
-        const monthly       = currentCurrency === 'EUR' ? monthlyEur : Math.round(monthlyEur * eurUsdRate);
-        totalInvested += monthly;
-        totalBTC      += monthly / monthPrice;
-      }
-      const finalValue = totalBTC * currentPrice;
-      return { finalValue, totalInvested, gainValue: finalValue - totalInvested };
-    }
-
-    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
-    function rollNum(el, from, to, dur) {
-      if (reduce) { el.textContent = fmt(to); return; }
-      const start = performance.now();
-      function tick(now) {
-        const t = Math.min((now - start) / dur, 1);
-        el.textContent = fmt(from + (to - from) * easeOut(t));
-        if (t < 1) rafId = requestAnimationFrame(tick);
-        else el.textContent = fmt(to);
-      }
-      rafId = requestAnimationFrame(tick);
-    }
-
-    function pulseGlow(dur) {
-      if (reduce || !glowEl) return;
-      const start = performance.now();
-      (function tick(now) {
-        const t = Math.min((now - start) / dur, 1);
-        glowEl.style.opacity = (0.5 + Math.sin(t * Math.PI) * 0.4).toFixed(3);
-        if (t < 1) requestAnimationFrame(tick);
-        else glowEl.style.opacity = '0.5';
-      })(performance.now());
-    }
-
-    function reanimate(el, cls) {
-      if (reduce || !el) return;
-      el.classList.remove('wi-step-up', 'wi-step-down', 'wi-nudge-l', 'wi-nudge-r');
-      void el.offsetWidth;
-      el.classList.add(cls);
-    }
-
-    function haptic() {
-      try { if ('vibrate' in navigator) navigator.vibrate(8); } catch(e) {}
-    }
-
-    function updateMarker() {
-      if (markerEl) markerEl.style.left = (idx / (N - 1) * 100) + '%';
-    }
-
-    function updateEdge() {
-      minusBtn?.classList.toggle('edge', idx === 0);
-      plusBtn?.classList.toggle('edge',  idx === N - 1);
-    }
-
-    function render(dir) {
-      if (!currentPrice) return;
-      const h = HABITS_ORDERED[idx];
-      const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
-      const habitName = (lang === 'de' && h.labelDe) ? h.labelDe : h.label;
-      const d = calcHabit(h.monthly);
-
-      // Amount + habit label
-      amountEl.textContent = (currentCurrency === 'EUR' ? '€' : '$') + (currentCurrency === 'EUR' ? h.monthly : Math.round(h.monthly * eurUsdRate));
-      habitEl.textContent  = '≈ ' + habitName.toLowerCase();
-      if (labelEl) labelEl.textContent = habitName.toUpperCase();
-
-      // Reel animations
-      if (!firstRender && dir !== 0) {
-        reanimate(amountEl, dir > 0 ? 'wi-step-up' : 'wi-step-down');
-        reanimate(habitEl,  dir > 0 ? 'wi-step-up' : 'wi-step-down');
-      }
-
-      updateMarker();
-      updateEdge();
-
-      // Roll numbers
-      if (rafId) cancelAnimationFrame(rafId);
-      const dur = firstRender ? 1500 : 650;
-      rollNum(resultEl,   firstRender ? 0 : prevFinal,    d.finalValue,    dur);
-      rollNum(investedEl, firstRender ? 0 : prevInvested, d.totalInvested, dur);
-      rollNum(gainEl,     firstRender ? 0 : prevGain,     d.gainValue,     dur);
-      pulseGlow(dur);
-
-      // Show evidence after initial count-up settles
-      if (firstRender && evidenceEl) {
-        evidenceEl.classList.remove('visible');
-        setTimeout(() => evidenceEl.classList.add('visible'), dur + 400);
-      } else if (evidenceEl && !evidenceEl.classList.contains('visible')) {
-        evidenceEl.classList.add('visible');
-      }
-
-      prevFinal    = d.finalValue;
-      prevInvested = d.totalInvested;
-      prevGain     = d.gainValue;
-      firstRender  = false;
-    }
-
-    function step(dir) {
-      const ni = Math.max(0, Math.min(N - 1, idx + dir));
-      if (ni === idx) {
-        reanimate(centerEl, dir > 0 ? 'wi-nudge-r' : 'wi-nudge-l');
-        return;
-      }
-      idx = ni;
-      haptic();
-
-      // Umami tracking
-      if (typeof umami !== 'undefined') {
-        try { umami.track('whatif-step', { direction: dir > 0 ? 'next' : 'prev', habit: HABITS_ORDERED[idx].key, amount: HABITS_ORDERED[idx].monthly }); } catch(e) {}
-      }
-
-      render(dir);
-    }
-
-    minusBtn?.addEventListener('click', () => step(-1));
-    plusBtn?.addEventListener('click',  () => step(+1));
-
-    // Keyboard support when section is visible
-    document.addEventListener('keydown', e => {
-      const rect = document.getElementById('habit-list')?.getBoundingClientRect();
-      if (!rect || rect.top > window.innerHeight || rect.bottom < 0) return;
-      if (e.key === 'ArrowLeft')  step(-1);
-      if (e.key === 'ArrowRight') step(+1);
-    });
-
-    // Init: render immediately, then do the cinematic count-up on first scroll into view
-    updateMarker();
-    updateEdge();
-
-    // Pre-populate static text even before price loads
-    const h0 = HABITS_ORDERED[idx];
-    amountEl.textContent = '€' + h0.monthly;
-    habitEl.textContent  = '≈ ' + h0.label.toLowerCase();
-    if (labelEl) labelEl.textContent = h0.label.toUpperCase();
-
-    // Wait for price to load, then trigger first render on scroll-into-view
-    function tryInit() {
-      if (!currentPrice) { setTimeout(tryInit, 300); return; }
-      const target = document.getElementById('whatif-result-wrap');
-      if (!target) { render(0); return; }
-      const io = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting) { render(0); io.disconnect(); }
-      }, { threshold: 0.2 });
-      io.observe(target);
-    }
-    tryInit();
-
-    // Re-render on currency change (currentCurrency changes globally)
-    window._whatifStepperRefresh = () => { firstRender = true; render(0); };
-  })();
 
   // ── SCROLL PROGRESS + PARALLAX — single listener, no RAF loop, no smoothing
   let scrollHintHidden = false;
@@ -5143,12 +4057,6 @@
       document.querySelector('.scroll-hint')?.classList.add('hide');
     }
 
-    // Depth layers
-    const farLayer = document.getElementById('hero-depth-far');
-    const midLayer = document.getElementById('hero-depth-mid');
-    if (farLayer) farLayer.style.transform = `translateY(${sy * 0.06}px) translateZ(0)`;
-    if (midLayer) midLayer.style.transform = `translateY(${sy * 0.13}px) translateZ(0)`;
-
     // Hide depth fade near bottom of page so footer is readable
     const dofEl = document.querySelector('.dof-overlay');
     if (dofEl) {
@@ -5157,8 +4065,6 @@
     const ambientEl = document.querySelector('.hero-ambient');
     const fadeFraction = Math.max(0, 1 - (sy / (window.innerHeight * 0.40)));
     if (ambientEl) ambientEl.style.opacity = fadeFraction.toFixed(3);
-    if (farLayer)  farLayer.style.opacity  = (fadeFraction * 0.5).toFixed(3);
-    if (midLayer)  midLayer.style.opacity  = (fadeFraction * 0.7).toFixed(3);
 
   }
 
@@ -5325,237 +4231,6 @@
     if (typeof window._signalScore === 'number') window.updateSignal();
   }, 100);
 
-  // Drag-to-scroll habit cards
-  // [drag scroll removed]
-
-
-
-
-
-  // ══ HERO STARFIELD DEPTH ══
-  (function() {
-    // Static star layers — drawn once, re-seeded on resize
-    function makeStars(canvasId, count, minR, maxR, colour) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const DPR = Math.min(window.devicePixelRatio || 1, 2);
-      let stars = [];
-
-      function seed() {
-        const W = window.innerWidth;
-        const H = canvas.closest('.hero') ? canvas.closest('.hero').offsetHeight : window.innerHeight;
-        canvas.width = W * DPR; canvas.height = H * DPR;
-        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-        ctx.setTransform(1,0,0,1,0,0);
-        ctx.scale(DPR, DPR);
-        stars = [];
-        for (let i = 0; i < count; i++) {
-          stars.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: minR + Math.random() * (maxR - minR),
-            a: 0.12 + Math.random() * 0.5,
-          });
-        }
-        ctx.clearRect(0, 0, W, H);
-        stars.forEach(s => {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = colour.replace('A', s.a.toFixed(2));
-          ctx.fill();
-        });
-      }
-
-      seed();
-      window.addEventListener('resize', seed, { passive: true });
-    }
-
-    // Animated near layer — twinkle + very slow drift across full hero
-    function makeDeepSpace(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const DPR = Math.min(window.devicePixelRatio || 1, 2);
-      let W, H, stars = [];
-      let raf;
-
-      function seed() {
-        const hero = canvas.closest('.hero');
-        W = window.innerWidth;
-        H = hero ? hero.offsetHeight : window.innerHeight;
-        canvas.width = W * DPR; canvas.height = H * DPR;
-        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-        ctx.setTransform(1,0,0,1,0,0);
-        ctx.scale(DPR, DPR);
-        stars = [];
-
-        // Layer 1: many tiny static-ish stars — the "field"
-        for (let i = 0; i < 280; i++) {
-          stars.push({
-            x: Math.random() * W, y: Math.random() * H,
-            r: 0.3 + Math.random() * 0.7,
-            baseA: 0.08 + Math.random() * 0.35,
-            a: 0,
-            twinkleSpeed: 0.004 + Math.random() * 0.012,
-            twinkleOffset: Math.random() * Math.PI * 2,
-            vx: 0, vy: 0,
-            type: 'field',
-            col: Math.random() > 0.92 ? '247,147,26' : '237,232,222',
-          });
-        }
-
-        // Layer 2: a few brighter accent stars with subtle drift
-        for (let i = 0; i < 18; i++) {
-          stars.push({
-            x: Math.random() * W, y: Math.random() * H,
-            r: 0.9 + Math.random() * 1.1,
-            baseA: 0.25 + Math.random() * 0.45,
-            a: 0,
-            twinkleSpeed: 0.002 + Math.random() * 0.006,
-            twinkleOffset: Math.random() * Math.PI * 2,
-            vx: (Math.random() - 0.5) * 0.04,
-            vy: (Math.random() - 0.5) * 0.02,
-            type: 'accent',
-            col: Math.random() > 0.7 ? '247,147,26' : '237,232,222',
-          });
-        }
-
-        // Layer 3: 4-6 large diffuse nebula-like blobs (very faint radial gradients)
-        stars._nebulae = [];
-        for (let i = 0; i < 5; i++) {
-          stars._nebulae.push({
-            x: Math.random() * W, y: Math.random() * H,
-            r: 60 + Math.random() * 120,
-            a: 0.018 + Math.random() * 0.022,
-            col: Math.random() > 0.5 ? '247,147,26' : '100,80,150',
-          });
-        }
-
-        // Layer 4: energy particles — drift outward from centre like the sigil radiates
-        stars._particles = [];
-        const cx = W / 2, cy = H / 2;
-        for (let i = 0; i < 38; i++) {
-          const angle = Math.random() * Math.PI * 2;
-          const dist  = 40 + Math.random() * Math.min(W, H) * 0.42;
-          const speed = 0.08 + Math.random() * 0.18;
-          stars._particles.push({
-            x: cx + Math.cos(angle) * dist,
-            y: cy + Math.sin(angle) * dist,
-            r: 0.8 + Math.random() * 1.4,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            baseA: 0.12 + Math.random() * 0.32,
-            a: 0,
-            twinkleSpeed: 0.008 + Math.random() * 0.016,
-            twinkleOffset: Math.random() * Math.PI * 2,
-            angle, dist,
-            maxDist: Math.min(W, H) * (0.52 + Math.random() * 0.2),
-          });
-        }
-      }
-
-      let t = 0;
-      let _lastStarFrame = 0;
-      function draw(now) {
-        if (document.hidden) { raf = requestAnimationFrame(draw); return; }
-        if (now - _lastStarFrame < 33) { raf = requestAnimationFrame(draw); return; }
-        _lastStarFrame = now;
-        t++;
-        ctx.clearRect(0, 0, W, H);
-
-        // Draw nebulae first
-        if (stars._nebulae) {
-          stars._nebulae.forEach(n => {
-            const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
-            g.addColorStop(0, `rgba(${n.col},${n.a})`);
-            g.addColorStop(1, `rgba(${n.col},0)`);
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-            ctx.fillStyle = g;
-            ctx.fill();
-          });
-        }
-
-        // Draw stars
-        stars.forEach(s => {
-          // Twinkle
-          s.a = s.baseA * (0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset));
-
-          // Drift for accent stars
-          if (s.type === 'accent') {
-            s.x += s.vx; s.y += s.vy;
-            if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
-            if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
-          }
-
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${s.col},${s.a.toFixed(3)})`;
-          ctx.fill();
-        });
-
-        // Draw energy particles — drift outward, fade near edge, respawn at centre
-        const cx = W / 2, cy = H / 2;
-        if (stars._particles) {
-          stars._particles.forEach(p => {
-            p.dist += p.vx * Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.6 + 0.06;
-            p.x = cx + Math.cos(p.angle) * p.dist;
-            p.y = cy + Math.sin(p.angle) * p.dist;
-
-            // Fade in near centre, fade out near edge
-            const progress = p.dist / p.maxDist;
-            const fade = progress < 0.15
-              ? progress / 0.15
-              : progress > 0.75
-                ? 1 - (progress - 0.75) / 0.25
-                : 1;
-
-            p.a = p.baseA * fade * (0.6 + 0.4 * Math.sin(t * p.twinkleSpeed + p.twinkleOffset));
-
-            // Respawn when it drifts too far
-            if (p.dist >= p.maxDist) {
-              p.dist = 30 + Math.random() * 60;
-              p.angle = Math.random() * Math.PI * 2;
-              p.maxDist = Math.min(W, H) * (0.52 + Math.random() * 0.2);
-            }
-
-            if (p.a > 0.01) {
-              // Soft glow
-              const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-              glow.addColorStop(0, `rgba(247,147,26,${(p.a * 0.5).toFixed(3)})`);
-              glow.addColorStop(1, `rgba(247,147,26,0)`);
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-              ctx.fillStyle = glow;
-              ctx.fill();
-
-              // Core dot
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(247,147,26,${p.a.toFixed(3)})`;
-              ctx.fill();
-            }
-          });
-        }
-
-        raf = requestAnimationFrame(draw);
-      }
-
-      seed();
-      window.addEventListener('resize', () => {
-        cancelAnimationFrame(raf);
-        seed();
-        raf = requestAnimationFrame(draw);
-      }, { passive: true });
-      raf = requestAnimationFrame(draw);
-    }
-
-    makeStars('hero-depth-far', 160, 0.3, 0.9, 'rgba(237,232,222,A)');
-    makeStars('hero-depth-mid',  60, 0.7, 1.4, 'rgba(247,147,26,A)');
-  })();
-
-
   // ══ INSTRUMENT COUNT-UP ══
   (function() {
     let hasCountedUp = false;
@@ -5571,7 +4246,7 @@
         const eased = easeOut(progress);
         const value = start + (end - start) * eased;
         el.textContent = isFloat
-          ? (value >= 0 ? '+' : '') + value.toFixed(1) + suffix
+          ? fmtPct(value)
           : Math.round(value) + suffix;
         if (progress < 1) requestAnimationFrame(update);
       }
@@ -5616,114 +4291,6 @@
     countUpObserver.observe(signalSection);
   })();
 
-
-  // ══ EXPERT ENERGY FIELD ══
-  (function() {
-    const canvas = document.getElementById('expert-field');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let W, H, particles = [];
-    let signalState = 'hold'; // default until updateSignal fires
-
-    const STATES = {
-      accumulate: { count: 100, speed: 0.25, drift: 0.015, color: '74,222,128',  gather: true,  spread: 0.3 },
-      hold:       { count: 80,  speed: 0.4,  drift: 0.008, color: '251,191,36',  gather: false, spread: 0.5 },
-      caution:    { count: 120, speed: 0.6,  drift: 0.018, color: '247,147,26',  gather: false, spread: 0.75 },
-    };
-
-    function resize() {
-      const rect = (canvas.closest('.expert-card') || canvas.parentElement).getBoundingClientRect();
-      W = canvas.width  = rect.width  || 800;
-      H = canvas.height = rect.height || 400;
-      canvas.style.width  = W + 'px';
-      canvas.style.height = H + 'px';
-    }
-
-    function initParticles(state) {
-      const s = STATES[state] || STATES.hold;
-      particles = [];
-      for (let i = 0; i < s.count; i++) {
-        particles.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() * 1.8 + 0.4,
-          vx: (Math.random() - 0.5) * s.speed,
-          vy: (Math.random() - 0.5) * s.speed,
-          alpha: Math.random() * 0.6 + 0.2,
-        });
-      }
-    }
-
-    let _expertLastFrame = 0;
-    function draw(now) {
-      if (document.hidden) { requestAnimationFrame(draw); return; }
-      if (now - _expertLastFrame < 33) { requestAnimationFrame(draw); return; }
-      _expertLastFrame = now;
-      ctx.clearRect(0, 0, W, H);
-      const s = STATES[signalState] || STATES.hold;
-      const cx = W / 2, cy = H / 2;
-
-      particles.forEach(p => {
-        // Drift toward/away from centre
-        if (s.gather) {
-          p.vx += (cx - p.x) * s.drift * 0.001;
-          p.vy += (cy - p.y) * s.drift * 0.001;
-        } else {
-          p.vx += (Math.random() - 0.5) * s.drift;
-          p.vy += (Math.random() - 0.5) * s.drift;
-        }
-
-        // Clamp speed
-        const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-        if (spd > s.speed) { p.vx = p.vx / spd * s.speed; p.vy = p.vy / spd * s.speed; }
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Wrap edges
-        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.color},${p.alpha})`;
-        ctx.fill();
-      });
-
-      requestAnimationFrame(draw);
-    }
-
-    // Expose state setter — called by updateSignal
-    window._setExpertFieldState = function(state) {
-      signalState = state;
-      if (running) initParticles(state);
-    };
-
-    // Init
-    let running = false;
-    function start() {
-      if (running) return;
-      running = true;
-      resize();
-      initParticles(signalState);
-      requestAnimationFrame(draw);
-      requestAnimationFrame(() => canvas.classList.add('active'));
-    }
-    const card = canvas.closest('.expert-card') || canvas.parentElement;
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        start();
-        observer.disconnect();
-      }
-    }, { threshold: 0.05 });
-    observer.observe(card);
-
-    window.addEventListener('resize', () => {
-      resize();
-      initParticles(signalState);
-    }, { passive: true });
-  })();
 
   // ══ VISITOR COUNTER ══
   (function() {
@@ -5970,13 +4537,21 @@
         var cls = function (v) { return v > 0.004 ? 'up' : v < -0.004 ? 'down' : 'flat'; };
         var item = function (k) {
           var x = mk[k]; if (!x || x.change1d == null) return '';
-          var v = k === 'us10y' ? x.change1d / 100 : x.change1d;
+          var dp = k === 'us10y' ? 2 : 1, f = Math.pow(10, dp);
+          var v = Math.round((k === 'us10y' ? x.change1d / 100 : x.change1d) * f) / f; /* sign follows the shown value: no "−0.0%" */
           var val = k === 'us10y' ? sg(v) + nf(v, 2) + ' ' + t.wmPts : sg(v) + nf(v, 1) + '%';
           return '<span class="wm-i"><span class="wm-n">' + t.wmNames[k] + '</span> <b class="' + cls(v) + '">' + val + '</b></span>';
         };
-        var key = (M.context && M.context.key) || '';
-        var verdict = /^with/.test(key) ? t.wmWith : /^against/.test(key) ? t.wmAgainst : /^btcOnly/.test(key) ? t.wmOwn : key === 'quiet' ? t.wmQuiet : (key === 'weekend' || key === 'holiday') ? t.wmClosed : '';
-        var b24 = M.btc && M.btc.change24h != null ? M.btc.change24h : null;
+        /* Same 24h figure as the hero; verdict compares it with the Nasdaq session */
+        var b24 = typeof currentChange24h === 'number' ? currentChange24h : (M.btc && M.btc.change24h != null ? M.btc.change24h : null);
+        var n1 = mk.ndx && mk.ndx.change1d != null ? mk.ndx.change1d : null;
+        var closed = M.status === 'weekend' || M.status === 'holiday';
+        var verdict = closed ? t.wmClosed : (b24 == null || n1 == null) ? '' :
+          (Math.abs(b24) < 1 && Math.abs(n1) < 0.5) ? t.wmQuiet :
+          Math.abs(n1) < 0.5 ? t.wmOwn :
+          Math.abs(b24) < 0.5 ? t.wmSteady :
+          (b24 > 0) === (n1 > 0) ? t.wmWith : t.wmAgainst;
+        if (b24 != null) b24 = Math.round(b24 * 10) / 10;
         var btcLine = b24 != null ? fill(t.wmBtc, { v: '<b class="' + cls(b24) + '">' + sg(b24) + nf(b24, 1) + '%</b>' }) + (verdict ? ': ' + verdict : '.') : verdict;
         wide.innerHTML = '<span class="fp-wider-l">' + t.fpWider + '</span>' +
           '<p class="wm-row">' + ['spx', 'ndx', 'gold', 'us10y'].map(item).filter(Boolean).join('<span class="wm-sep"> · </span>') + '</p>' +
@@ -5997,7 +4572,7 @@
       el('mx-sent').textContent = el('fp-together-text') ? el('fp-together-text').textContent : '';
       el('mx-price').textContent = currentPrice ? (currentCurrency === 'EUR' ? '€' : '$') + formatPrice(currentPrice) : '';
       var ch2 = currentChange24h;
-      el('mx-chg').innerHTML = ch2 == null ? '' : '<b class="' + (ch2 >= 0 ? 'up' : 'down') + '">' + (ch2 >= 0 ? '+' : '−') + Math.abs(ch2).toFixed(1) + '%</b> 24h';
+      el('mx-chg').innerHTML = ch2 == null ? '' : '<b class="' + (ch2 >= 0 ? 'up' : 'down') + '">' + fmtPct(ch2) + '</b> 24h';
       document.querySelectorAll('.mx-scale i').forEach(function (n) { n.classList.toggle('on', n.getAttribute('data-s') === st); });
       el('mx-scale-l').innerHTML = ['accumulate', 'hold', 'caution'].map(function (k) { return '<span' + (k === st ? ' class="on tc-' + k + '"' : '') + '>' + t.stateName[k] + '</span>'; }).join('');
       var vtxt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
@@ -6075,8 +4650,12 @@
 
     var t1 = null;
     input.addEventListener('input', function () {
-      var v = input.value.replace(/[^0-9]/g, ''); if (v !== input.value) input.value = v;
-      var n = parseInt(v, 10); if (n > 0) { amount = Math.min(MAX, n); render(); }
+      /* Whole euros: drop decimals ("12,50" in DE, "12.50" in EN), strip thousands separators, cap at MAX */
+      var raw = input.value, cut = raw.indexOf(currentLang === 'de' ? ',' : '.');
+      var v = (cut >= 0 ? raw.slice(0, cut) : raw).replace(/[^0-9]/g, '');
+      if (parseInt(v, 10) > MAX) v = String(MAX);
+      if (v !== input.value) input.value = v;
+      var n = parseInt(v, 10); if (n > 0) { amount = n; render(); }
       clearTimeout(t1); t1 = setTimeout(function () { if (n > 0) track('whatif-amount', { amount: amount, frequency: freq }); }, 1200);
     });
     input.addEventListener('blur', function () { if (!(parseInt(input.value, 10) > 0)) input.value = String(amount); });

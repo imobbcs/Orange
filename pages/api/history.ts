@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { HistoryData } from '../../types';
+type HistoryData = { prices: [number, number][] };
 
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes, matches old Cache-Control intent
 

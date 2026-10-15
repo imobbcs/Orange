@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email.toLowerCase().trim(),
-      ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
+      ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       subject,
       html,
     });

@@ -55,6 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (err: any) {
     console.error('fear-greed alternative.me error:', err.message);
     if (cache) return res.status(200).json(cache);
-    return res.status(200).json({ value: 50, value_classification: 'Neutral' });
+    // Never invent a reading: the site shows its error state and the emails skip this run.
+    return res.status(503).json({ error: 'Fear & Greed data temporarily unavailable' });
   }
 }

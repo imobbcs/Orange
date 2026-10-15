@@ -2,7 +2,7 @@
 //
 // Fail-soft by design: every source is fetched independently, any field can be null,
 // a failed field falls back to its last good value, and the endpoint only returns 503
-// when nothing at all is available. Not consumed by the site or emails yet; safe to deploy alone.
+// when nothing at all is available. Used by the site's "Wider market" line and (behind MACRO_CONTEXT) the emails.
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildMacro, mergeWithPrevious, MacroResponse } from '../../lib/macro/build';

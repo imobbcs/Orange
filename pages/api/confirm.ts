@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email,
-      ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
+      ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       subject,
       html,
     }).catch(err => console.error('welcome email error:', err.message));
