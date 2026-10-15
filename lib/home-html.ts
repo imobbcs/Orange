@@ -2,10 +2,14 @@
 // (rendered by JS in the browser); here the English items are also written into the HTML
 // and into FAQPage schema, so crawlers that don't run JavaScript still read them.
 // Single source of truth stays in app.html: nothing to keep in sync by hand.
+// homeHtml() also fills the hero with today's numbers (lib/home-hero.ts).
 import fs from 'fs';
 import path from 'path';
 import vm from 'vm';
 import crypto from 'crypto';
+import type { IncomingMessage } from 'http';
+import { marketSnapshot } from './market-ssr';
+import { readTranslations, renderHero, type HeroSnapshot } from './home-hero';
 
 interface FaqItem { q: string; a: string }
 
@@ -67,15 +71,64 @@ export function buildHomeHtml(raw: string): string {
     .replace('</head>', ld);
 }
 
-let cached: { mtime: number; html: string; etag: string } | null = null;
+// ── Static part: app.html + server-rendered FAQ, rebuilt only when the file changes ──
+let base: { mtime: number; html: string; tr: ReturnType<typeof readTranslations> } | null = null;
 
-export function homeHtml(): { html: string; etag: string } {
+function baseHtml() {
   const file = path.join(process.cwd(), 'public', 'app.html');
   const mtime = fs.statSync(file).mtimeMs;
-  if (!cached || cached.mtime !== mtime) {
-    const html = buildHomeHtml(fs.readFileSync(file, 'utf8'));
-    const etag = 'W/"' + crypto.createHash('sha1').update(html).digest('base64url').slice(0, 27) + '"';
-    cached = { mtime, html, etag };
+  if (!base || base.mtime !== mtime) {
+    const raw = fs.readFileSync(file, 'utf8');
+    base = { mtime, html: buildHomeHtml(raw), tr: readTranslations(raw) };
   }
-  return cached;
+  return base;
+}
+
+// ── Live part: today's numbers. Never makes a visitor wait long: serves the last good snapshot
+// while a fresh one loads in the background, and waits at most ~1.5s when there is none yet. ──
+const FRESH_MS = 60 * 1000;      // refresh in the background after a minute
+const MAX_AGE_MS = 30 * 60 * 1000; // older than this, don't show it (fall back to the plain page)
+const FIRST_WAIT_MS = 1500;
+let snap: { data: HeroSnapshot; at: number } | null = null;
+let inflight: Promise<void> | null = null;
+
+function refresh(req: IncomingMessage): Promise<void> {
+  inflight = inflight || marketSnapshot(req, { history: true })
+    .then((m) => {
+      if (m.price && m.fg !== null && m.ma200 && m.athEur) {
+        snap = { at: Date.now(), data: { price: m.price, priceUsd: m.priceUsd, change24h: m.change24h, fg: m.fg, fgLabel: m.fgLabel, ma200: m.ma200, athEur: m.athEur } };
+      }
+    })
+    .catch(() => {})
+    .finally(() => { inflight = null; });
+  return inflight;
+}
+
+async function currentSnapshot(req: IncomingMessage): Promise<HeroSnapshot | null> {
+  const age = snap ? Date.now() - snap.at : Infinity;
+  if (age < FRESH_MS) return snap!.data;
+  const pending = refresh(req);
+  if (age < MAX_AGE_MS) return snap!.data;
+  await Promise.race([pending, new Promise((r) => setTimeout(r, FIRST_WAIT_MS))]);
+  return snap && Date.now() - snap.at < MAX_AGE_MS ? snap.data : null;
+}
+
+const pages = new Map<string, { html: string; etag: string }>();
+
+/** The homepage for this request: hero filled with today's numbers when available, plain app.html otherwise. */
+export async function homeHtml(req: IncomingMessage, lang: 'en' | 'de' = 'en'): Promise<{ html: string; etag: string }> {
+  const b = baseHtml();
+  const data = b.tr ? await currentSnapshot(req) : null;
+  const key = `${b.mtime}|${lang}|${data ? snap!.at : 'plain'}`;
+  let page = pages.get(key);
+  if (!page) {
+    let html = b.html;
+    if (data && b.tr) {
+      try { html = renderHero(html, data, lang, b.tr); } catch (e) { console.error('home hero render failed:', (e as Error).message); }
+    }
+    page = { html, etag: 'W/"' + crypto.createHash('sha1').update(html).digest('base64url').slice(0, 27) + '"' };
+    if (pages.size > 20) pages.clear();
+    pages.set(key, page);
+  }
+  return page;
 }

@@ -5,9 +5,12 @@ import { computeSignal, fgBand, type FgBand, type SignalState } from './signal';
 
 export interface MarketSnapshot {
   price: number | null;
+  priceUsd: number | null;
   change24h: number | null;
   fg: number | null;
   fgBand: FgBand | null;
+  /** The publisher's own label ("Fear", "Greed"…), as the homepage script expects it. */
+  fgLabel: string | null;
   ma200: number | null;
   maPct: number | null;
   athEur: number | null;
@@ -51,9 +54,11 @@ export async function marketSnapshot(req: IncomingMessage, opts: { history?: boo
 
   const s: MarketSnapshot = {
     price: price?.eur ?? null,
+    priceUsd: price?.usd ?? null,
     change24h: typeof price?.eur_24h_change === 'number' ? price.eur_24h_change : null,
     fg: typeof fg?.value === 'number' ? fg.value : null,
     fgBand: null,
+    fgLabel: typeof fg?.value_classification === 'string' ? fg.value_classification : null,
     ma200: null, maPct: null,
     athEur: ath?.ath_eur ?? null,
     athDate: ath?.ath_date ? String(ath.ath_date).slice(0, 10) : null,
