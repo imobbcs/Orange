@@ -1,26 +1,29 @@
 const SITE = 'https://whentobuybtc.xyz';
+// Both pages show live market data, so they change every day.
+const TODAY = new Date().toISOString().slice(0, 10);
 
 // ── Add future pages here: one object per URL. ──────────────────────────────
 // To add a page, copy a block and edit loc / lastmod / priority / alternates.
 const pages = [
   {
     loc: `${SITE}/`,
-    lastmod: '2026-06-20',
+    lastmod: TODAY,
     changefreq: 'daily',
     priority: '1.0',
     alternates: [
       { hreflang: 'en', href: `${SITE}/` },
-      { hreflang: 'de', href: `${SITE}/?lang=de` },
+      { hreflang: 'de', href: `${SITE}/wann-bitcoin-kaufen` },
       { hreflang: 'x-default', href: `${SITE}/` },
     ],
   },
   {
     loc: `${SITE}/wann-bitcoin-kaufen`,
-    lastmod: '2026-06-20',
+    lastmod: TODAY,
     changefreq: 'daily',
     priority: '0.9',
     alternates: [
       { hreflang: 'de', href: `${SITE}/wann-bitcoin-kaufen` },
+      { hreflang: 'en', href: `${SITE}/` },
       { hreflang: 'x-default', href: `${SITE}/` },
     ],
   },

@@ -15,9 +15,6 @@ const nextConfig = {
   devIndicators: {
     position: 'bottom-right'
   },
-  experimental: {
-    optimizePackageImports: ['recharts', 'swr']
-  },
   allowedDevOrigins: [
     '127.0.0.1',
     'localhost',
@@ -119,15 +116,6 @@ const nextConfig = {
         ],
       },
       {
-        source: '/api/visitor-count',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-store',
-          },
-        ],
-      },
-      {
         source: '/api/:path*',
         headers: [
           {
@@ -137,6 +125,20 @@ const nextConfig = {
           {
             key: 'X-Robots-Tag',
             value: 'noindex',
+          },
+        ],
+      },
+      // Email flows and cron endpoints must never be cached (after the /api catch-all: the last matching rule wins per header)
+      ...['/api/confirm', '/api/unsubscribe', '/api/subscribe', '/api/check-signal', '/api/weekly-digest', '/api/email-preview'].map((source) => ({
+        source,
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      })),
+      {
+        source: '/api/visitor-count',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store',
           },
         ],
       },

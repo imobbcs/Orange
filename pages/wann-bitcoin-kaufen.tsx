@@ -31,9 +31,11 @@ function getFearGreedLabel(value: number, cls?: string | null): string {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const host = req.headers.host || 'whentobuybtc.xyz';
-  const protocol = host.includes('localhost') ? 'http' : 'https';
-  const base = `${protocol}://${host}`;
+  // Fixed base: never build server-side fetch URLs from the request's Host header.
+  const host = req.headers.host || '';
+  const base = /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)
+    ? `http://${host}`
+    : (process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz');
 
   const data: SignalData = {
     fearGreed: null,
@@ -51,10 +53,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   let fgClass: string | null = null;
   try {
     const [fgRes, priceRes, athRes, histRes] = await Promise.allSettled([
-      fetch(`${base}/api/fear-greed`),
-      fetch(`${base}/api/price`),
-      fetch(`${base}/api/ath`),
-      fetch(`${base}/api/history?timeframe=1y&currency=eur`),
+      fetch(`${base}/api/fear-greed`, { signal: AbortSignal.timeout(8000) }),
+      fetch(`${base}/api/price`, { signal: AbortSignal.timeout(8000) }),
+      fetch(`${base}/api/ath`, { signal: AbortSignal.timeout(8000) }),
+      fetch(`${base}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(8000) }),
     ]);
 
     if (fgRes.status === 'fulfilled' && fgRes.value.ok) {

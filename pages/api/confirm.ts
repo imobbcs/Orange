@@ -45,9 +45,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email,
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
+      // One-click unsubscribe (RFC 8058): Gmail/Yahoo show their own Unsubscribe button
+      headers:  { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
       subject,
       html,
-    }).catch(err => console.error('welcome email error:', err.message));
+    }).then(r => { if (r.error) console.error('welcome email error:', JSON.stringify(r.error)); })
+      .catch(err => console.error('welcome email error:', err.message));
     // Sync to Resend Contacts as confirmed (unsubscribed:false) — now
     // eligible for Broadcasts. Fire-and-forget, same as the welcome email.
     void syncResendContact(email, false);

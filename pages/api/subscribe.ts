@@ -14,6 +14,19 @@ const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
 function token() { return crypto.randomBytes(32).toString('hex'); }
 
+// Simple in-memory rate limit (single Railway instance): stops anyone using the form to
+// flood an inbox with confirmation emails, which would also hurt our sender reputation.
+const HOUR = 60 * 60 * 1000;
+const hits = new Map<string, number[]>();
+function limited(key: string, max: number): boolean {
+  const now = Date.now();
+  const recent = (hits.get(key) || []).filter((t) => now - t < HOUR);
+  if (recent.length >= max) { hits.set(key, recent); return true; }
+  recent.push(now); hits.set(key, recent);
+  if (hits.size > 5000) hits.clear(); // bound memory
+  return false;
+}
+
 function isValidEmail(e: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && e.length <= 254;
 }
@@ -50,6 +63,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!email || !isValidEmail(email)) {
     return res.status(400).json({ error: 'Invalid email address' });
   }
+  const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  if (limited('ip:' + ip, 20) || limited('email:' + String(email).toLowerCase().trim(), 3)) {
+    return res.status(429).json({ error: 'Too many attempts. Please try again later.' });
+  }
+
   const confirmToken     = token();
   const unsubscribeToken = token();
   try {
@@ -76,13 +94,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       signal:  signal ?? undefined,
       replyTo: REPLY_TO,
     });
-    await resend.emails.send({
+    const sent = await resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email.toLowerCase().trim(),
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       subject,
       html,
     });
+    // The SDK reports a failed send as { error }, it doesn't throw: don't tell the visitor to check their inbox.
+    if (sent.error) throw new Error(`confirmation email failed: ${JSON.stringify(sent.error)}`);
     // Sync to Resend Contacts as pending (unsubscribed:true) — not yet
     // opted in, so they shouldn't receive Broadcasts. Fire-and-forget:
     // never blocks the response, never fails the subscribe flow.

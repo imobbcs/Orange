@@ -104,6 +104,8 @@ async function sendEmailAlerts(
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email,
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
+      // One-click unsubscribe (RFC 8058): Gmail/Yahoo show their own Unsubscribe button
+      headers:  { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
       subject,
       html,
     });

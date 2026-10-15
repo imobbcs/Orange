@@ -11,7 +11,7 @@
   <meta name="theme-color" content="#0a0800" />
   <link rel="canonical" href="https://whentobuybtc.xyz/" />
   <link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/" />
-  <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/?lang=de" />
+  <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
   <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
   <link rel="icon" type="image/svg+xml" href="/Bitcoin.svg" />
   <link rel="manifest" href="/manifest.json" />
@@ -47,7 +47,7 @@
       "200-day moving average analysis",
       "ATH distance indicator",
       "What If? DCA calculator",
-      "Email signal alerts",
+      "Email alerts on big moves (3% or more in 24 hours)",
       "Weekly Sunday digest"
     ],
     "offers": {
@@ -116,7 +116,7 @@
           "itemOffered": {
             "@type": "Service",
             "name": "What If? Calculator",
-            "description": "Interactive calculator showing the compounding value of redirecting small daily habits into Bitcoin over time."
+            "description": "Interactive calculator: any amount, monthly or weekly, from any start year since 2015, with the result in euros and bitcoin."
           }
         },
         {
@@ -124,7 +124,7 @@
           "itemOffered": {
             "@type": "Service",
             "name": "Bitcoin Signal Email Alerts",
-            "description": "Free email alerts when the Bitcoin signal changes, plus a weekly digest every Sunday. Available in English and German."
+            "description": "Free weekly email every Sunday, plus an alert when Bitcoin moves 3% or more in a day. Available in English and German."
           }
         }
       ]
@@ -3181,8 +3181,10 @@
     try {
       const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(2500) });
       const data = await res.json();
-      const eurCountries = ['AT','DE','FR','IT','ES','NL','BE','PT','FI','GR','IE','LU','SK','SI','EE','LV','LT','CY','MT'];
-      currentCurrency = eurCountries.includes(data.country_code) ? 'EUR' : 'USD';
+      // Euro area (incl. Croatia since 2023) plus countries that use the euro without being members
+      const eurCountries = ['AT','DE','FR','IT','ES','NL','BE','PT','FI','GR','IE','LU','SK','SI','EE','LV','LT','CY','MT','HR','AD','MC','SM','VA','ME','XK'];
+      // No country (e.g. the lookup is rate-limited) keeps the EUR default
+      currentCurrency = !data.country_code || eurCountries.includes(data.country_code) ? 'EUR' : 'USD';
     } catch {
       currentCurrency = 'EUR';
     }
@@ -4098,9 +4100,6 @@
 
   // ── INIT (parallel where safe) ──
   async function init() {
-    // detectCurrency and fetchPrice run in parallel — price uses currentCurrency at resolution time
-    // If currency detection finishes first, price displays in correct currency
-    // If price finishes first, it uses default EUR (correct for most users anyway)
     // Currency first (capped at 2.5s): price, ATH and the 200-day average must all be in the
     // same currency, or the distances between them are off by the exchange rate.
     await detectCurrency();
