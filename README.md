@@ -45,6 +45,7 @@ The calculator model is `lib/dca.ts` (mirrored as `wtbDca` in `app.html`). It bu
 - **Next.js 15** (Pages Router) on **Railway**, with **Postgres** on Railway
 - **Frontend**: one self-contained `public/app.html`, served at `/` by `pages/index.tsx` (200, no redirect). Hand-built canvas charts, no UI framework
 - **German SEO page**: `pages/wann-bitcoin-kaufen.tsx`, server-rendered React
+- **Data pages** (EN + DE, server-rendered with live numbers): Fear & Greed, 200-day moving average, DCA calculator. Shared layout in `components/SeoPage.tsx`
 - **Email**: [Resend](https://resend.com) (sending plus Contacts sync). Postgres is the source of truth for subscribers
 - **Analytics**: Umami v3, self-hosted at `umami-orange.up.railway.app`
 - **Scheduler**: [cron-job.org](https://cron-job.org) calls the two cron endpoints with `Authorization: Bearer <CRON_SECRET>`
@@ -129,8 +130,10 @@ The X bot (`twitter-bot/`) runs as separate Railway cron services with `POST_TYP
 
 ```
 pages/
-  index.tsx                  Serves public/app.html at /
+  index.tsx                  Serves public/app.html at / (FAQ + FAQPage schema added server-side)
   wann-bitcoin-kaufen.tsx    German SEO page (SSR)
+  bitcoin-*.tsx              Data pages, EN + DE pairs (SSR)
+  404.tsx
   _document.tsx, _app.tsx
   api/                       Endpoints above
 lib/
@@ -141,12 +144,15 @@ lib/
   subscribers.ts             Live reader count for emails
   resend-contact.ts          Resend Contacts sync (REST, fire-and-forget)
   cron-auth.ts               Bearer / token check for cron endpoints
+  market-ssr.ts              Live market snapshot for the data pages
+  home-html.ts               Builds the homepage HTML from app.html (server-rendered FAQ)
+components/                  Data page layout and the three data pages
 public/
   app.html                   The whole homepage (HTML, CSS, JS)
   llms.txt, robots.txt, manifest.json, icons, OG images
 tests/                       node:test suites (signal parity, DCA, macro, emails, copy)
 twitter-bot/                 X posting bot (separate Railway service)
-next.config.js               Redirects, headers (CSP, noindex on /api), en/de locale routing
+next.config.js               Redirects, headers (CSP, noindex on /api)
 railway.toml                 Start command
 ```
 
@@ -156,7 +162,7 @@ railway.toml                 Start command
 
 ```bash
 npm install
-npm run dev                                   # http://localhost:5000
+npm run dev                                   # http://localhost:3000
 npx -y tsx --test tests/*.test.ts             # unit tests
 npx tsc --noEmit -p .                         # type check
 npm run build && npm start                    # production build
