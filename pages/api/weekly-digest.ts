@@ -1,5 +1,5 @@
 // pages/api/weekly-digest.ts
-// Cron: 0 15 * * 0 (Sunday 17:00 Vienna time)
+// Called by cron-job.org ("When To Buy BTC Weekly"): POST every Sunday 15:00 UTC, Authorization: Bearer CRON_SECRET
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import { Resend } from 'resend';
@@ -120,7 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const result = await resend.emails.send({
         from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
         to:       email,
-        ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
+        ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
         subject,
         html,
       });

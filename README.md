@@ -1,106 +1,184 @@
 # When to Buy BTC
-A free Bitcoin market signal for long-term thinkers. Combines Fear & Greed, the 200-day moving average, and ATH distance into one clear signal. No noise. No trading advice.
-🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz)
+
+The Bitcoin weather for long-term holders. Three readings (market mood, the 200-day average and distance from the all-time high) add up to one temperature: **Cold, Mild or Hot**. Descriptive only, never advice.
+
+🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz) · 🇩🇪 [whentobuybtc.xyz/wann-bitcoin-kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen)
+
 ---
+
 ## What it does
-- **Live Bitcoin signal** — Accumulate / Hold / Caution, updated in real time
-- **Three indicators** — Fear & Greed Index, 200-day moving average, distance from ATH
-- **Live price** — EUR/USD with automatic currency detection by location
-- **Price chart** — 1M / 3M / 1Y historical chart with 200-day MA overlay
-- **"What if?" calculator** — Shows what daily habits (coffee, gym, takeaways, etc.) would be worth if invested in Bitcoin monthly since 2015
-- **Email alerts** — Opt-in email notifications when the signal changes, plus a weekly Sunday digest
-- **Visitor counter** — Live count of unique visitors via Umami analytics
-- **Subscriber counter** — Live count of email subscribers shown in the alerts section
-- **Relai integration** — Direct link to buy Bitcoin via Relai with referral code IMO
-- **Trezor integration** — Direct link to hardware wallet via Trezor referral
-- **EN / DE** — English and German language support
-- **Cinematic design** — Dark, atmospheric UI with animated starfield, particle energy field, horizon chart, and film grain — CSSDA Best UI, Best UX, Best Innovation, and Special Kudos awards
+
+- **Live price as the hero**: EUR or USD, picked from the visitor's location, with the 24h change
+- **Today's temperature**: Cold / Mild / Hot (Kalt / Mild / Heiß) with a one-line reading and a cold-to-hot scale
+- **Why this temperature**: one card per reading (mood, trend, peak), each leaning colder or warmer, plus a **Together** box that adds them up
+- **Wider market**: S&P 500, Nasdaq, gold and the US 10-year yield, and whether Bitcoin moved with the market or on its own (context only, never part of the score)
+- **Price chart**: 1M / 3M / 1Y with the 200-day average
+- **"What if?" calculator**: any amount, monthly or weekly, any start year since 2015. Result in EUR and BTC with a worth-vs-put-in chart
+- **Email**: a Sunday digest for everyone, plus an alert when Bitcoin moves 3% or more in 24 hours. The alerts section shows a live preview of the email
+- **EN / DE** throughout, with locale number formatting
+- **Share**: WhatsApp, X, Telegram, Signal, copy link
+
+Awards: CSSDA Best UI, Best UX, Best Innovation, Special Kudos.
+
 ---
+
+## The temperature model
+
+One source of truth: `lib/signal.ts`. Each reading scores from +2 (leans cold) to −2 (leans hot). The total runs from −5 to +5:
+
+| Reading | Leans cold | Middle (0) | Leans hot |
+|---|---|---|---|
+| Fear & Greed | Extreme fear +2, fear +1 | Neutral | Greed −1, extreme greed −2 |
+| Price vs 200-day average | below −10% +2, below −5% +1 | within ±5% | above +5% −1, above +20% −2 |
+| Distance from all-time high | more than 50% below +1 | 20–50% below | within 20% −1 |
+
+**Cold** at +3 or more, **Hot** at −3 or less, **Mild** in between. Fear & Greed bands follow the publisher's own label, with a numeric fallback (25 / 47 / 55 / 76).
+
+The same logic is copied into `public/app.html` (between the `SIGNAL MODEL` markers) and `twitter-bot/bot.js`. `tests/signal.test.ts` checks that all copies agree. Internal state names are still `accumulate` / `hold` / `caution` (= Cold / Mild / Hot).
+
+The calculator model is `lib/dca.ts` (mirrored as `wtbDca` in `app.html`). It buys at each month's average price, values at today's price, and makes weekly buys every 7 days from 1 January of the start year.
+
+---
+
 ## Tech stack
-- **Framework** — Next.js
-- **Frontend** — Single-page `app.html` served via Next.js rewrite from `/`
-- **Fonts** — Bebas Neue, Cormorant Garamond, DM Mono (Google Fonts)
-- **Charts** — Hand-built Canvas (price chart, hero horizon chart), no charting library
-- **Analytics** — Umami v3 (self-hosted on Railway)
-- **Internationalization** — next-i18next (EN / DE)
-- **APIs** — see Data sources section below
+
+- **Next.js 15** (Pages Router) on **Railway**, with **Postgres** on Railway
+- **Frontend**: one self-contained `public/app.html`, served at `/` by `pages/index.tsx` (200, no redirect). Hand-built canvas charts, no UI framework
+- **German SEO page**: `pages/wann-bitcoin-kaufen.tsx`, server-rendered React
+- **Email**: [Resend](https://resend.com) (sending plus Contacts sync). Postgres is the source of truth for subscribers
+- **Analytics**: Umami v3, self-hosted at `umami-orange.up.railway.app`
+- **Scheduler**: [cron-job.org](https://cron-job.org) calls the two cron endpoints with `Authorization: Bearer <CRON_SECRET>`
+- **Fonts**: Bebas Neue, Cormorant Garamond, DM Mono (Google Fonts)
+
 ---
+
 ## Data sources
 
-| Endpoint | Primary | Fallback 1 | Fallback 2 |
-|---|---|---|---|
-| `/api/price` | CoinGecko Demo | CoinMarketCap | CryptoCompare |
-| `/api/fear-greed` | CoinMarketCap | Alternative.me | — |
-| `/api/ath` | CoinGecko Demo | Stale cache | Hardcoded fallback |
-| `/api/history` | CoinGecko Demo | Stale cache | — |
-| `/api/btc-history-monthly` | CoinGecko Demo (last 12 months merged over hardcoded baseline) | Hardcoded fallback (2015–early 2025) | — |
+| Endpoint | Source | Cache |
+|---|---|---|
+| `/api/price` | CoinGecko Pro | 90 s |
+| `/api/fear-greed` | CoinMarketCap, fallback Alternative.me. Returns 503 rather than a made-up value | 3 h |
+| `/api/ath` | CoinGecko Pro | 12 h |
+| `/api/history` | CoinGecko Pro market chart (the site uses `timeframe=1y` for the 200-day average) | 5 min |
+| `/api/btc-history-monthly` | CoinGecko Pro (`days=max`, EUR + USD), monthly averages since 2015 | 12 h |
+| `/api/macro` | FRED (S&P 500, Nasdaq, US 10Y), ECB (FX), CoinGecko (BTC, gold via PAXG). Every field fails soft | 15 min |
+| `/api/visitor-count` | Umami stats | 10 min |
+| `/api/subscriber-count` | Postgres, floored to the nearest 10 | |
+
+The German page reads the block height from mempool.space in the browser (halving countdown).
 
 ---
+
 ## API endpoints
-| Endpoint | Description |
-|---|---|
-| `/api/price` | Live BTC price in EUR and USD |
-| `/api/fear-greed` | Fear & Greed Index |
-| `/api/ath` | All-time high price |
-| `/api/history` | Historical price data (1m / 3m / 1y) |
-| `/api/btc-history-monthly` | Monthly BTC prices since 2015 for the What If calculator |
-| `/api/visitor-count` | Unique visitor count from Umami v3 |
-| `/api/subscriber-count` | Email subscriber count |
-| `/api/subscribe` | Handles email subscription (POST) |
-| `/api/sitemap` | XML sitemap |
+
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/price` `/api/fear-greed` `/api/ath` `/api/history` | GET | Market data for the site and emails |
+| `/api/btc-history-monthly` | GET | Monthly prices for the calculator and the digest's "What if?" card |
+| `/api/macro` | GET | Wider-market context |
+| `/api/visitor-count` `/api/subscriber-count` | GET | Counters |
+| `/api/subscribe` | POST | Double opt-in: stores a pending subscriber, sends the confirmation email |
+| `/api/confirm` | GET | Confirms, sends the welcome email, redirects to `/?email=confirmed#alerts` |
+| `/api/unsubscribe` | GET | One-click unsubscribe from any email footer |
+| `/api/check-signal` | GET/POST, **Bearer** | Alert check (every 15 min). Sends when the 24h move is ≥3%, with a 24h same-direction cooldown |
+| `/api/weekly-digest` | POST, **Bearer** | Sunday digest (Sundays 15:00 UTC), 24h cooldown |
+| `/api/email-preview` | GET, `?token=` | Renders any email in the browser with live market data. Sends nothing |
+| `/api/sitemap` | GET | XML sitemap (also at `/sitemap.xml`) |
+
+Cron endpoints accept `Authorization: Bearer <CRON_SECRET>` (or `?token=`, see `lib/cron-auth.ts`).
+
 ---
-## Local development
+
+## Emails
+
+Templates live in `lib/email-templates.ts`, EN and DE:
+
+- **Confirmation** ("One tap and you're in"), with today's temperature as a teaser
+- **Welcome**: how to read the temperature
+- **Alert**: big 24h move, the three readings, a plain-language explanation
+- **Weekly digest**: this week's temperature, week-over-week changes, a "What if?" card from the calculator model, and the wider market
+
+The market block in alerts and digests is controlled by `MACRO_CONTEXT`: `off` (default), `test` (only `MACRO_CONTEXT_TEST_EMAIL`) or `on`.
+
+Preview everything at `/api/email-preview?token=<CRON_SECRET>&type=digest|alert|welcome|confirm&lang=en|de&state=accumulate|hold|caution`.
+
+Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
+
+---
+
+## Environment variables (Railway)
+
+| Variable | Used by |
+|---|---|
+| `DATABASE_URL` | Postgres (subscribers, logs) |
+| `RESEND_API_KEY` | Sending email, Contacts sync |
+| `REPLY_TO_EMAIL` | Reply-To on every email ("just hit reply") |
+| `CRON_SECRET` | Auth for `/api/check-signal`, `/api/weekly-digest`, `/api/email-preview` |
+| `COINGECKO_API_KEY` | CoinGecko Pro |
+| `COINMARKETCAP_API_KEY` | Fear & Greed (primary) |
+| `FRED_API_KEY` | `/api/macro` |
+| `UMAMI_PASSWORD` | Visitor counter |
+| `NEXT_PUBLIC_BASE_URL` | Optional, defaults to `https://whentobuybtc.xyz` |
+| `MACRO_CONTEXT`, `MACRO_CONTEXT_TEST_EMAIL` | Optional, market block in emails |
+
+The X bot (`twitter-bot/`) runs as separate Railway cron services with `POST_TYPE` (`signal` / `bullish`), `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET` and `DATABASE_URL`. Railway reference variables come through empty in cron services, so use `DATABASE_PUBLIC_URL` directly.
+
+---
+
+## Project structure
+
+```
+pages/
+  index.tsx                  Serves public/app.html at /
+  wann-bitcoin-kaufen.tsx    German SEO page (SSR)
+  _document.tsx, _app.tsx
+  api/                       Endpoints above
+lib/
+  signal.ts                  Temperature model (shared)
+  dca.ts                     Calculator model (shared)
+  email-templates.ts         All emails, EN/DE
+  macro/                     Wider-market sources, maths, copy, email blocks
+  subscribers.ts             Live reader count for emails
+  resend-contact.ts          Resend Contacts sync (REST, fire-and-forget)
+  cron-auth.ts               Bearer / token check for cron endpoints
+public/
+  app.html                   The whole homepage (HTML, CSS, JS)
+  llms.txt, robots.txt, manifest.json, icons, OG images
+tests/                       node:test suites (signal parity, DCA, macro, emails, copy)
+twitter-bot/                 X posting bot (separate Railway service)
+next.config.js               Redirects, headers (CSP, noindex on /api), en/de locale routing
+railway.toml                 Start command
+```
+
+---
+
+## Development
+
 ```bash
 npm install
-npm run dev
+npm run dev                                   # http://localhost:5000
+npx -y tsx --test tests/*.test.ts             # unit tests
+npx tsc --noEmit -p .                         # type check
+npm run build && npm start                    # production build
 ```
-Open [http://localhost:3000](http://localhost:3000).
----
-## Deployment
-Deployed on [Railway](https://railway.app) via GitHub. Every push to `main` triggers a new deployment automatically.
-```bash
-# Environment variables required
-COINGECKO_API_KEY=your_coingecko_demo_key_here
-COINMARKETCAP_API_KEY=your_key_here
-UMAMI_PASSWORD=your_umami_password_here
-```
----
-## Project structure
-```
-/pages
-  index.tsx                  # Serves app.html directly via getServerSideProps (200, no redirect)
-  wann-bitcoin-kaufen.tsx    # German SEO landing page (SSR, targets "wann bitcoin kaufen")
-  /api               # All API route handlers
-    price.ts
-    fear-greed.ts
-    ath.ts
-    history.ts
-    btc-history-monthly.ts
-    visitor-count.ts
-    subscriber-count.ts
-    subscribe.ts
-    sitemap.ts
-/public
-  app.html           # Main frontend (single page)
-  Bitcoin.svg        # Favicon and email avatar
-  social-image.png   # OG image
-  manifest.json
-  robots.txt
-next.config.js
-next-i18next.config.js
-```
----
-## SEO
-- **German landing page** at `/wann-bitcoin-kaufen` — purpose-built SSR page targeting "wann bitcoin kaufen" and related DACH queries. Uses `getServerSideProps` to fetch live signal data server-side so Google can index it. Includes FAQPage schema markup, hreflang tags, mobile sticky bar, and a footer link from `app.html` (visible only in DE language mode). Submitted to Google Search Console.
-- **Sitemap** at `/sitemap.xml` includes both the homepage and the German SEO page (priority 0.9, daily changefreq)
-- **hreflang** configured across homepage, SEO page, and sitemap — homepage points German users to `/?lang=de`, SEO page has its own de/en/x-default triangle
-- **Glossary pages** (`/200-tage-durchschnitt-bitcoin`, `/fear-and-greed-index-bitcoin`) deferred pending keyword volume validation
+
+Without API keys the market endpoints return errors. Point the browser at production data, or mock the `/api/*` routes, to work on the UI.
 
 ---
-## Notes
-- `app.html` is edited directly via the GitHub web editor and served via a Next.js `getServerSideProps` in `index.tsx` — no redirect, URL stays clean at `whentobuybtc.xyz/`
-- CoinGecko Demo API key is passed as `x_cg_demo_api_key` query param — if env var is missing, falls back to keyless request gracefully
-- Umami v3 returns visitor stats as plain numbers (e.g. `stats.visitors`), not as `{value, prev}` objects
-- Railway container restarts resolve simultaneous API timeout errors (`UND_ERR_CONNECT_TIMEOUT`) across multiple external APIs
+
+## Deployment
+
+Railway deploys every push to `main`. Changes go through pull requests; merges are done by hand. Don't commit `package-lock.json`.
+
 ---
-Built by [Imo Babics](https://imobabics.com) · Not financial advice
+
+## Notes
+
+- `app.html` can be edited directly in the GitHub web editor. Keep it a single file
+- Copy rules: third-person and descriptive ("most long-term holders…"), never buy/sell/wait instructions, no em dashes, every string in EN and DE
+- When editing the signal bands, change `lib/signal.ts`, the `SIGNAL MODEL` block in `app.html` and `twitter-bot/bot.js` together; the parity test will fail otherwise
+- Umami v3 returns `stats.visitors` as a plain number
+
+---
+
+Built by [Imo Babics](https://imobabics.com) · Market data only, not financial advice

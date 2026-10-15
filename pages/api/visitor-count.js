@@ -1,4 +1,10 @@
+// All-time visitors from Umami, for the "Bitcoiners were here" counter.
+// Cached for 10 minutes so page views don't each log in to Umami.
+const TTL = 10 * 60 * 1000;
+let cache = null; // { visitors, at }
+
 export default async function handler(req, res) {
+  if (cache && Date.now() - cache.at < TTL) return res.status(200).json({ visitors: cache.visitors });
   try {
     const loginRes = await fetch('https://umami-orange.up.railway.app/api/auth/login', {
       method: 'POST',
@@ -16,8 +22,9 @@ export default async function handler(req, res) {
     );
     const stats = await statsRes.json();
     const visitors = stats?.visitors ?? null;
+    if (visitors !== null) cache = { visitors, at: Date.now() };
     return res.status(200).json({ visitors });
   } catch (e) {
-    return res.status(200).json({ visitors: null });
+    return res.status(200).json({ visitors: cache ? cache.visitors : null });
   }
 }

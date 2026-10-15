@@ -1,4 +1,5 @@
-const { i18n } = require('./next-i18next.config');
+// Locale routing only (no translation library): English at /, the old /de routes redirect below.
+const i18n = { defaultLocale: 'en', locales: ['en', 'de'], localeDetection: false };
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
@@ -181,7 +182,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://umami-orange.up.railway.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://ipapi.co https://umami-orange.up.railway.app; img-src 'self' data:; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://umami-orange.up.railway.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://ipapi.co https://umami-orange.up.railway.app https://mempool.space; img-src 'self' data:; frame-ancestors 'none';"
           }
         ]
       }

@@ -59,6 +59,7 @@ async function fetchSignalData(): Promise<Readings> {
     fetch(`${BASE}/api/price`,                             { signal: AbortSignal.timeout(8000) }),
     fetch(`${BASE}/api/ath`,                               { signal: AbortSignal.timeout(8000) }),
   ]);
+  if (!fgRes.ok || !histRes.ok || !priceRes.ok || !athRes.ok) throw new Error('One or more signal APIs failed');
   const fg      = await fgRes.json();
   const history = await histRes.json();
   const price   = await priceRes.json();
@@ -102,7 +103,7 @@ async function sendEmailAlerts(
     const result = await resend.emails.send({
       from:     'When to Buy BTC <alerts@whentobuybtc.xyz>',
       to:       email,
-      ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
+      ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
       subject,
       html,
     });

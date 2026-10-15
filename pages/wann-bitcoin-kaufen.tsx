@@ -182,15 +182,8 @@ function HalvingCountdown() {
 
   const [blocksLeft, setBlocksLeft] = useState<number | null>(null);
   const [targetDate, setTargetDate] = useState<Date>(FALLBACK_DATE);
-  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number }>(() => {
-    const diff = FALLBACK_DATE.getTime() - Date.now();
-    return {
-      days:    Math.max(0, Math.floor(diff / 86400000)),
-      hours:   Math.max(0, Math.floor((diff % 86400000) / 3600000)),
-      minutes: Math.max(0, Math.floor((diff % 3600000) / 60000)),
-      seconds: Math.max(0, Math.floor((diff % 60000) / 1000)),
-    };
-  });
+  // null until mounted: the server and the browser would otherwise render different seconds (hydration mismatch)
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
 
   // Fetch current block height from Mempool.space once on mount
   useEffect(() => {
@@ -232,14 +225,14 @@ function HalvingCountdown() {
         fontFamily: "'Bebas Neue', sans-serif", letterSpacing: '0.04em',
       }}>
         {[
-          { value: timeLeft.days,    label: 'Tage' },
-          { value: timeLeft.hours,   label: 'Std' },
-          { value: timeLeft.minutes, label: 'Min' },
-          { value: timeLeft.seconds, label: 'Sek' },
+          { value: timeLeft?.days,    label: 'Tage' },
+          { value: timeLeft?.hours,   label: 'Std' },
+          { value: timeLeft?.minutes, label: 'Min' },
+          { value: timeLeft?.seconds, label: 'Sek' },
         ].map(({ value, label }, i) => (
           <span key={label} style={{ display: 'inline-flex', alignItems: 'baseline', gap: '0.2rem' }}>
             {i > 0 && <span style={{ color: 'rgba(247,147,26,0.25)', fontSize: '1.1rem', margin: '0 0.3rem' }}>·</span>}
-            <span style={{ fontSize: '2rem', color: '#F7931A', lineHeight: 1 }}>{i === 0 ? timeLeft.days : pad(value)}</span>
+            <span style={{ fontSize: '2rem', color: '#F7931A', lineHeight: 1 }}>{value == null ? '--' : i === 0 ? value : pad(value)}</span>
             <span style={{ fontSize: '0.52rem', letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(237,232,222,0.3)', fontFamily: "'DM Mono', monospace" }}>{label}</span>
           </span>
         ))}
@@ -311,12 +304,13 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
     unknown: '',
   };
 
-  const updatedStr = new Date(data.updatedAt).toLocaleString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const updatedStr = new Date(data.updatedAt).toLocaleString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Vienna' });
   const priceStr = data.currentPrice !== null ? `€${formatPrice(data.currentPrice)}` : '—';
 
   return (
     <>
-      <style>{`
+      {/* Raw CSS: as a text child React escapes the quotes on the server, which breaks the CSS and hydration */}
+      <style dangerouslySetInnerHTML={{ __html: `
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html {
@@ -611,7 +605,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           .wbc-status-dot { animation: none; }
           .wbc-sticky-bar { transition: none; }
         }
-      `}</style>
+      ` }} />
 
       <Head>
         <title>Wann Bitcoin kaufen 2026: Das aktuelle Marktsignal</title>
@@ -620,9 +614,9 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <link rel="canonical" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
-        <link rel="alternate" hreflang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
-        <link rel="alternate" hreflang="en" href="https://whentobuybtc.xyz/" />
-        <link rel="alternate" hreflang="x-default" href="https://whentobuybtc.xyz/" />
+        <link rel="alternate" hrefLang="de" href="https://whentobuybtc.xyz/wann-bitcoin-kaufen" />
+        <link rel="alternate" hrefLang="en" href="https://whentobuybtc.xyz/" />
+        <link rel="alternate" hrefLang="x-default" href="https://whentobuybtc.xyz/" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" />
@@ -699,7 +693,6 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
             ]
           }
         ])}} />
-        <script key="set-lang-de" dangerouslySetInnerHTML={{ __html: 'document.documentElement.lang="de";' }} />
         <script defer key="umami" src="https://umami-orange.up.railway.app/script.js" data-website-id="c884bf96-c757-4dfb-b2bb-8195d5876958" />
       </Head>
 
