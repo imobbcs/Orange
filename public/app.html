@@ -2552,12 +2552,6 @@
     #expert-field, .hero-temp-canvas { display: none !important; }
     .tc-accumulate { color: #8EC9FF; } .tc-hold { color: #F2C46B; } .tc-caution { color: #F7931A; }
 
-    /* Hero state word: rendered image (ice / plain / fire) when available, text otherwise */
-    .temp-hero .hero-state-img { display: block; height: clamp(6.5rem, 30vw, 13.5rem); width: auto; max-width: 100%; margin: 0.6rem auto -0.6rem; object-fit: contain;
-      mix-blend-mode: screen; opacity: 0; transform: scale(0.97); transition: opacity 0.9s ease 0.15s, transform 1.2s cubic-bezier(0.2,0.8,0.2,1) 0.15s; }
-    .temp-hero .hero-state-img[hidden] { display: none; }
-    .temp-hero.temp-in .hero-state-img { opacity: 1; transform: none; }
-    .temp-hero.has-state-img .hero-state { position: absolute !important; width: 1px; height: 1px; min-height: 0; margin: 0; overflow: hidden; clip-path: inset(50%) !important; white-space: nowrap; }
 
     /* Wider market: numbers in one line, then what Bitcoin did */
     .fp-wider .fp-wider-l { display: block; margin: 0 0 6px; }
@@ -2691,7 +2685,6 @@
     </div>
     <!-- TEMPERATURE HERO: state word, sentence, cold-hot scale -->
     <p class="hero-state" id="hero-state" aria-live="polite"></p>
-    <img class="hero-state-img" id="hero-state-img" alt="" aria-hidden="true" hidden>
     <p class="hero-sentence" id="hero-sentence"></p>
     <div class="hero-scale" id="hero-scale" role="img" aria-label="">
       <div class="hero-scale-track"><span class="hero-scale-marker" id="hero-scale-marker"></span></div>
@@ -5851,15 +5844,6 @@
     var temp = TEMP[st], name = t.stateName[st];
     root.setAttribute('data-temp', temp);
     el('hero-state').textContent = name + '.';
-    /* Rendered word (ice / plain / fire) when the image exists; the text stays for screen readers */
-    var img = el('hero-state-img'), de = currentLang === 'de';
-    var file = '/states/' + ({ accumulate: de ? 'kalt' : 'cold', hold: 'mild', caution: de ? 'heiss' : 'hot' })[st] + '.webp';
-    if (img && img.getAttribute('data-src') !== file) {
-      img.setAttribute('data-src', file);
-      img.onload = function () { img.hidden = false; hero.classList.add('has-state-img'); };
-      img.onerror = function () { img.hidden = true; hero.classList.remove('has-state-img'); };
-      img.src = file;
-    }
     el('hero-sentence').textContent = window._signalHeadline || '';
     ['accumulate', 'hold', 'caution'].forEach(function (k, i) {
       var s = el(['hs-cold', 'hs-mild', 'hs-hot'][i]);
