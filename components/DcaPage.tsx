@@ -142,7 +142,7 @@ export default function DcaPage({ m, lang }: { m: MarketSnapshot; lang: Lang }) 
         <>
           <h2 className="sp-h2">Warum so viele Bitcoiner regelmäßig sparen</h2>
           <p>Niemand weiß, wo der Kurs nächste Woche steht. Ein Sparplan nimmt diese Frage aus der Gleichung: Es wird jeden Monat gekauft, bei Angst und bei Euphorie. {minDrop >= 20 ? `Die Tabelle zeigt, dass jeder Startpunkt durch Rückgänge von ${minDrop} % und mehr gegangen ist. ` : ''}Wer in Rückgängen weitergespart hat, hat genau in diesen Phasen die meisten Sats bekommen.</p>
-          <p>Wie heiß oder kalt der Markt gerade ist, zeigt die <a href="/wann-bitcoin-kaufen">Markttemperatur</a> aus <a href="/bitcoin-angst-und-gier-index">Angst und Gier Index</a>, <a href="/bitcoin-200-tage-linie">200-Tage-Linie</a> und Abstand zum Allzeithoch. Die Steuerregeln für Deutschland (§ 23 EStG) erklärt der <a href="/wann-bitcoin-kaufen">Einsteiger-Guide</a>.</p>
+          <p>Wie heiß oder kalt der Markt gerade ist, zeigt die <a href="/?lang=de">Markttemperatur</a> aus <a href="/bitcoin-angst-und-gier-index">Angst und Gier Index</a>, <a href="/bitcoin-200-tage-linie">200-Tage-Linie</a> und Abstand zum Allzeithoch. Die Steuerregeln für Deutschland (§ 23 EStG) erklärt der <a href="/wann-bitcoin-kaufen">Einsteiger-Guide</a>.</p>
         </>
       ) : (
         <>

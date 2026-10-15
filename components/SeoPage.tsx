@@ -10,7 +10,7 @@ type Lang = 'en' | 'de';
 export interface Faq { q: string; a: string }
 
 export const PAGES: Record<string, { en: { path: string; label: string }; de: { path: string; label: string } }> = {
-  signal: { en: { path: '/', label: "Today's Bitcoin signal" }, de: { path: '/wann-bitcoin-kaufen', label: 'Wann Bitcoin kaufen?' } },
+  signal: { en: { path: '/', label: "Today's Bitcoin signal" }, de: { path: '/?lang=de', label: 'Das heutige Bitcoin-Signal' } },
   fg: { en: { path: '/bitcoin-fear-and-greed-index', label: 'Bitcoin Fear & Greed Index' }, de: { path: '/bitcoin-angst-und-gier-index', label: 'Angst und Gier Index' } },
   ma: { en: { path: '/bitcoin-200-day-moving-average', label: 'Bitcoin 200-day moving average' }, de: { path: '/bitcoin-200-tage-linie', label: 'Bitcoin 200-Tage-Linie' } },
   dca: { en: { path: '/bitcoin-dca-calculator', label: 'Bitcoin DCA calculator' }, de: { path: '/bitcoin-sparplan-rechner', label: 'Bitcoin Sparplan Rechner' } },
@@ -87,7 +87,7 @@ export default function SeoPage(p: Props) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: homeLabel, item: SITE + (de ? '/wann-bitcoin-kaufen' : '/') },
+        { '@type': 'ListItem', position: 1, name: homeLabel, item: SITE + '/' },
         { '@type': 'ListItem', position: 2, name: PAGES[p.pageKey][p.lang].label, item: url },
       ],
     },
@@ -129,13 +129,13 @@ export default function SeoPage(p: Props) {
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       <header className="sp-nav">
-        <a href={de ? '/wann-bitcoin-kaufen' : '/'} className="sp-logo">When to Buy <b>BTC</b></a>
+        <a href={de ? '/?lang=de' : '/'} className="sp-logo">When to Buy <b>BTC</b></a>
         <a href={alt} className="sp-lang" hrefLang={de ? 'en' : 'de'} lang={de ? 'en' : 'de'}>{de ? 'EN' : 'DE'}</a>
       </header>
 
       <main className="sp-main">
         <nav className="sp-crumbs" aria-label={de ? 'Brotkrumen' : 'Breadcrumb'}>
-          <a href={de ? '/wann-bitcoin-kaufen' : '/'}>{homeLabel}</a> <span aria-hidden="true">/</span> <span>{PAGES[p.pageKey][p.lang].label}</span>
+          <a href={de ? '/?lang=de' : '/'}>{homeLabel}</a> <span aria-hidden="true">/</span> <span>{PAGES[p.pageKey][p.lang].label}</span>
         </nav>
 
         <p className="sp-kicker">{p.kicker}</p>
@@ -153,7 +153,7 @@ export default function SeoPage(p: Props) {
           <p className="sp-cta-text">{de
             ? 'Kostenlos. Dazu eine kurze Notiz, wenn Bitcoin an einem Tag 3 % oder mehr bewegt. Keine Werbung, jederzeit abbestellbar.'
             : 'Free. Plus a short note when Bitcoin moves 3% or more in a day. No ads, unsubscribe anytime.'}</p>
-          <a className="sp-btn" href={de ? '/wann-bitcoin-kaufen#email' : '/#alerts'}>{de ? 'Kostenlos anmelden →' : 'Get the free alerts →'}</a>
+          <a className="sp-btn" href={de ? '/?lang=de#alerts' : '/#alerts'}>{de ? 'Kostenlos anmelden →' : 'Get the free alerts →'}</a>
         </section>
 
         <section className="sp-faq">

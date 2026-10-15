@@ -1475,14 +1475,16 @@
     .instrument-panel.scanning::after {
       content: "";
       position: absolute;
-      top: 0; left: -60%; width: 60%; height: 100%;
+      top: 0; left: 0; width: 60%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(247,147,26,0.04), transparent);
+      transform: translateX(-100%);
       animation: scanPass 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
       pointer-events: none;
     }
+    /* transform, not left: compositor-only. Panel clips it horizontally (see why-v2 below) */
     @keyframes scanPass {
-      0%   { left: -60%; }
-      100% { left: 110%; }
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(185%); }
     }
     .instrument-header {
       display: flex;
@@ -1872,7 +1874,7 @@
     .fp-scale-l .on { color: var(--temp); }
 
     /* ── WHY: the instrument panel becomes three reading cards ── */
-    .why-v2 .instrument-panel { border: 0; background: transparent; overflow: visible; margin-top: 2rem; }
+    .why-v2 .instrument-panel { border: 0; background: transparent; overflow: visible; overflow-x: clip; margin-top: 2rem; } /* clip-x: the scan highlight once pushed the page ~230px wider on phones, so Android redrew the fixed top strip shifted */
     .why-v2 .instrument-panel::before, .why-v2 .instrument-header, .why-v2 .instrument-footer,
     .why-v2 .instrument-gauge, .why-v2 .instrument-bar-track, .why-v2 .metric-verdict { display: none !important; }
     .why-v2 .instrument-body { display: grid; grid-template-columns: 1fr; gap: 14px; }
@@ -2687,15 +2689,14 @@
 </svg>
     </a>
   </div>
-  <nav class="footer-tools" aria-label="Free Bitcoin tools">
+  <div class="footer-tools" role="navigation" aria-label="Free Bitcoin tools">
     <a href="/bitcoin-fear-and-greed-index" data-tool-lang="en">Fear &amp; Greed Index today</a>
     <a href="/bitcoin-200-day-moving-average" data-tool-lang="en">200-day moving average</a>
     <a href="/bitcoin-dca-calculator" data-tool-lang="en">DCA calculator</a>
-    <a href="/wann-bitcoin-kaufen" data-tool-lang="en" hreflang="de" lang="de">Auf Deutsch</a>
     <a href="/bitcoin-angst-und-gier-index" data-tool-lang="de" style="display:none;">Angst und Gier Index</a>
     <a href="/bitcoin-200-tage-linie" data-tool-lang="de" style="display:none;">200-Tage-Linie</a>
     <a href="/bitcoin-sparplan-rechner" data-tool-lang="de" style="display:none;">Sparplan Rechner</a>
-  </nav>
+  </div>
   <div class="footer-links">
     <a href="/wann-bitcoin-kaufen" class="footer-de-link" data-i18n="footerDeLink" style="display:none;">Einsteiger-Guide</a>
     <a href="https://x.com/WhenToBuyBTC" target="_blank" rel="noopener" data-i18n="footerX">Follow @WhenToBuyBTC</a>
