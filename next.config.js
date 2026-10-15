@@ -123,7 +123,7 @@ const nextConfig = {
         ],
       },
       // Email flows and cron endpoints must never be cached (after the /api catch-all: the last matching rule wins per header)
-      ...['/api/confirm', '/api/unsubscribe', '/api/subscribe', '/api/check-signal', '/api/weekly-digest', '/api/email-preview'].map((source) => ({
+      ...['/api/confirm', '/api/unsubscribe', '/api/subscribe', '/api/check-signal', '/api/weekly-digest', '/api/email-preview', '/api/admin/:path*'].map((source) => ({
         source,
         headers: [{ key: 'Cache-Control', value: 'no-store' }],
       })),
