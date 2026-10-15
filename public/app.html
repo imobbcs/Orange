@@ -3177,18 +3177,11 @@
   }
 
   // ── CURRENCY DETECTION ──
+  // Euros for everyone: same currency as the emails, the German page and the X bot,
+  // so every visitor sees the same temperature. No IP lookup.
   async function detectCurrency() {
-    try {
-      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(2500) });
-      const data = await res.json();
-      // Euro area (incl. Croatia since 2023) plus countries that use the euro without being members
-      const eurCountries = ['AT','DE','FR','IT','ES','NL','BE','PT','FI','GR','IE','LU','SK','SI','EE','LV','LT','CY','MT','HR','AD','MC','SM','VA','ME','XK'];
-      // No country (e.g. the lookup is rate-limited) keeps the EUR default
-      currentCurrency = !data.country_code || eurCountries.includes(data.country_code) ? 'EUR' : 'USD';
-    } catch {
-      currentCurrency = 'EUR';
-    }
-    document.getElementById('currency-symbol').textContent = currentCurrency === 'EUR' ? '€' : '$';
+    currentCurrency = 'EUR';
+    document.getElementById('currency-symbol').textContent = '€';
     if (window._whatifStepperRefresh) window._whatifStepperRefresh();
   }
 

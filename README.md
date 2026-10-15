@@ -8,7 +8,7 @@ The Bitcoin weather for long-term holders. Three readings (market mood, the 200-
 
 ## What it does
 
-- **Live price as the hero**: EUR or USD, picked from the visitor's location, with the 24h change
+- **Live price as the hero**: in euros for every visitor, with the 24h change
 - **Today's temperature**: Cold / Mild / Hot (Kalt / Mild / Heiß) with a one-line reading and a cold-to-hot scale
 - **Why this temperature**: one card per reading (mood, trend, peak), each leaning colder or warmer, plus a **Together** box that adds them up
 - **Wider market**: S&P 500, Nasdaq, gold and the US 10-year yield, and whether Bitcoin moved with the market or on its own (context only, never part of the score)
