@@ -184,7 +184,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://umami-orange.up.railway.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://ipapi.co https://umami-orange.up.railway.app https://mempool.space; img-src 'self' data:; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' https://umami-orange.up.railway.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://umami-orange.up.railway.app https://mempool.space; img-src 'self' data:; frame-ancestors 'none';"
           }
         ]
       }
