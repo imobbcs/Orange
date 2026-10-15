@@ -1,11 +1,7 @@
-import crypto from 'crypto';
+import { homeHtml } from '../lib/home-html';
 
 export const getServerSideProps = async ({ req, res }) => {
-  const fs = require('fs');
-  const path = require('path');
-  const html = fs.readFileSync(path.join(process.cwd(), 'public', 'app.html'), 'utf8');
-  // Weak validator so crawlers and browsers can revalidate with a cheap 304
-  const etag = 'W/"' + crypto.createHash('sha1').update(html).digest('base64url').slice(0, 27) + '"';
+  const { html, etag } = homeHtml();
   const headers = {
     'Content-Type': 'text/html; charset=utf-8',
     // Live data is fetched client-side, so the shell can sit at the edge briefly

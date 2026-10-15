@@ -1147,6 +1147,9 @@
     
     /* ── FOOTER ── */
     footer { background: var(--bg); border-top: 1px solid var(--border2); padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-tools { flex-basis: 100%; order: 10; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border2); }
+    .footer-tools a { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(237,232,222,0.5); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; transition: color 0.2s; }
+    .footer-tools a:hover { color: var(--orange); }
     .footer-awards {
       display: flex; align-items: center; gap: 1rem;
     }
@@ -2684,6 +2687,15 @@
 </svg>
     </a>
   </div>
+  <nav class="footer-tools" aria-label="Free Bitcoin tools">
+    <a href="/bitcoin-fear-and-greed-index" data-tool-lang="en">Fear &amp; Greed Index today</a>
+    <a href="/bitcoin-200-day-moving-average" data-tool-lang="en">200-day moving average</a>
+    <a href="/bitcoin-dca-calculator" data-tool-lang="en">DCA calculator</a>
+    <a href="/wann-bitcoin-kaufen" data-tool-lang="en" hreflang="de" lang="de">Auf Deutsch</a>
+    <a href="/bitcoin-angst-und-gier-index" data-tool-lang="de" style="display:none;">Angst und Gier Index</a>
+    <a href="/bitcoin-200-tage-linie" data-tool-lang="de" style="display:none;">200-Tage-Linie</a>
+    <a href="/bitcoin-sparplan-rechner" data-tool-lang="de" style="display:none;">Sparplan Rechner</a>
+  </nav>
   <div class="footer-links">
     <a href="/wann-bitcoin-kaufen" class="footer-de-link" data-i18n="footerDeLink" style="display:none;">Einsteiger-Guide</a>
     <a href="https://x.com/WhenToBuyBTC" target="_blank" rel="noopener" data-i18n="footerX">Follow @WhenToBuyBTC</a>
@@ -3151,6 +3163,7 @@
     // Show DE guide link only in German
     const deLinkEl = document.querySelector('.footer-de-link');
     if (deLinkEl) deLinkEl.style.display = lang === 'de' ? 'inline' : 'none';
+    document.querySelectorAll('[data-tool-lang]').forEach(el => { el.style.display = el.dataset.toolLang === lang ? '' : 'none'; });
 
     // Persist choice
     try { localStorage.setItem('wtb_lang', lang); } catch(e) {}

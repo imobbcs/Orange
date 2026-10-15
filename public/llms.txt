@@ -12,6 +12,9 @@
 ## Key pages
 - [Signal](https://whentobuybtc.xyz/) — Current Bitcoin market signal based on three indicators: Fear & Greed Index, 200-day moving average, and distance from all-time high
 - [Wann Bitcoin kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen) — Deutschsprachiger Einsteiger-Guide: Was macht der Markt gerade, wie entsteht das Signal, wann lohnt sich der Bitcoin-Kauf, und die steuerliche Haltefrist nach § 23 EStG (privates Veräußerungsgeschäft, Einjahresfrist)
+- [Bitcoin Fear & Greed Index today](https://whentobuybtc.xyz/bitcoin-fear-and-greed-index) — Live Fear & Greed value (0 to 100), what each zone means, and how it feeds the market temperature. German: [Angst und Gier Index](https://whentobuybtc.xyz/bitcoin-angst-und-gier-index)
+- [Bitcoin 200-day moving average today](https://whentobuybtc.xyz/bitcoin-200-day-moving-average) — Live 200-day moving average in euros, distance of the price from it, chart. German: [200-Tage-Linie](https://whentobuybtc.xyz/bitcoin-200-tage-linie)
+- [Bitcoin DCA calculator](https://whentobuybtc.xyz/bitcoin-dca-calculator) — What a monthly or weekly euro amount since any year from 2015 would be worth today, with results for €100 a month by start year. German: [Sparplan Rechner](https://whentobuybtc.xyz/bitcoin-sparplan-rechner)
 - [What If?](https://whentobuybtc.xyz/#whatif) — Calculator: what a regular amount (monthly or weekly, any start year since 2015) would be worth today, in euros and bitcoin
 - [Alerts](https://whentobuybtc.xyz/#alerts) — Free weekly email every Sunday, plus a note when Bitcoin moves 3% or more in a day
 
