@@ -68,6 +68,7 @@ async function postTweet(text) {
   const authHeader = buildAuthHeader('POST', url, {});
 
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(20000),
     method: 'POST',
     headers: {
       'Authorization': authHeader,
@@ -92,10 +93,10 @@ async function fetchSignal() {
 
   // Run all three fetches in parallel
   const [fgRes, priceRes, athRes, historyRes] = await Promise.all([
-    fetch(`${SITE_BASE}/api/fear-greed`),
-    fetch(`${SITE_BASE}/api/price`),
-    fetch(`${SITE_BASE}/api/ath`),
-    fetch(`${SITE_BASE}/api/history?timeframe=1y&currency=eur`),
+    fetch(`${SITE_BASE}/api/fear-greed`, { signal: AbortSignal.timeout(15000) }),
+    fetch(`${SITE_BASE}/api/price`, { signal: AbortSignal.timeout(15000) }),
+    fetch(`${SITE_BASE}/api/ath`, { signal: AbortSignal.timeout(15000) }),
+    fetch(`${SITE_BASE}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(15000) }),
   ]);
 
   if (!fgRes.ok)      throw new Error(`fear-greed API ${fgRes.status}`);
@@ -123,16 +124,19 @@ async function fetchSignal() {
   const prices = historyData.prices.map(p => p[1]);
   const last200 = prices.slice(-200);
   const ma200 = last200.reduce((a, b) => a + b, 0) / last200.length;
-  const vsMA = ((currentPrice - ma200) / ma200 * 100).toFixed(1);
+  const maPct = (currentPrice - ma200) / ma200 * 100;
+  const vsMA = maPct.toFixed(1);
   console.log(`MA200: ${Math.round(ma200)} EUR, vs MA: ${vsMA}%`);
 
   // ATH distance
   const ath = athData.ath_eur;
-  const fromATH = ((currentPrice - ath) / ath * 100).toFixed(1);
+  const athPct = (currentPrice - ath) / ath * 100;
+  const fromATH = athPct.toFixed(1);
   console.log(`ATH: ${Math.round(ath)} EUR, from ATH: ${fromATH}%`);
 
   // Composite signal: same model as lib/signal.ts and app.html (see SIGNAL MODEL below)
-  const { score, state } = wtbSignal(fearGreed, fgLabel, parseFloat(vsMA), parseFloat(fromATH));
+  // Score the exact values (like the site); round only for display.
+  const { score, state } = wtbSignal(fearGreed, fgLabel, maPct, athPct);
 
   let signal, emoji;
   if (state === 'accumulate') { signal = 'Cold'; emoji = '❄️'; }

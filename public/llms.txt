@@ -12,8 +12,10 @@
 ## Key pages
 - [Signal](https://whentobuybtc.xyz/) — Current Bitcoin market signal based on three indicators: Fear & Greed Index, 200-day moving average, and distance from all-time high
 - [Wann Bitcoin kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen) — Deutschsprachiger Einsteiger-Guide: Was macht der Markt gerade, wie entsteht das Signal, wann lohnt sich der Bitcoin-Kauf, und die steuerliche Haltefrist nach § 23 EStG (privates Veräußerungsgeschäft, Einjahresfrist)
-- [What If?](https://whentobuybtc.xyz/#whatif) — Calculator showing the compounding value of small daily habits redirected into Bitcoin over time
+- [What If?](https://whentobuybtc.xyz/#whatif) — Calculator: what a regular amount (monthly or weekly, any start year since 2015) would be worth today, in euros and bitcoin
+- [Alerts](https://whentobuybtc.xyz/#alerts) — Free weekly email every Sunday, plus a note when Bitcoin moves 3% or more in a day
 
 ## Data sources
-- Fear & Greed Index: alternative.me
+- Fear & Greed Index: CoinMarketCap (fallback: alternative.me)
+- Wider market (context only, not scored): S&P 500, Nasdaq and US 10-year yield from FRED, gold, ECB exchange rates
 - Bitcoin price, 200-day average, all-time high: CoinGecko

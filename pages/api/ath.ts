@@ -34,5 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (cache) return res.status(200).json(cache);
-  return res.status(200).json({ ath_usd: 109000, ath_eur: 101000, ath_date: '2025-01-20' });
+  // Last known all-time high (an ATH only ever rises, so this can only understate it).
+  // Update when a new ATH is set: CoinGecko 2025-10-06, $126,080 / €107,662.
+  return res.status(200).json({ ath_usd: 126080, ath_eur: 107662, ath_date: '2025-10-06T10:57:42.000Z' });
 }
