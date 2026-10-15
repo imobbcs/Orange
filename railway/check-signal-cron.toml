@@ -1,0 +1,14 @@
+# Railway config for the "check-signal-cron" service (big-move alerts).
+#
+# The repo's root railway.toml sets `npm run start` (the website) for every service built from
+# this repo. This file overrides that for the cron only. Point the service at it in Railway:
+#   check-signal-cron → Settings → Config-as-code → Railway config file: railway/check-signal-cron.toml
+#
+# Needs a CRON_SECRET variable on the cron service itself, with the real value pasted in
+# (reference variables like ${{web.CRON_SECRET}} come through empty in cron services).
+# Runs every 15 minutes, calls the alert check once, and exits.
+
+[deploy]
+startCommand = "sh -c 'curl -fsS --max-time 60 -H \"Authorization: Bearer $CRON_SECRET\" https://whentobuybtc.xyz/api/check-signal'"
+cronSchedule = "*/15 * * * *"
+restartPolicyType = "NEVER"
