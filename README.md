@@ -83,10 +83,13 @@ The German page reads the block height from mempool.space in the browser (halvin
 | `/api/unsubscribe` | GET | One-click unsubscribe from any email footer |
 | `/api/check-signal` | GET/POST, **Bearer** | Alert check (every 15 min). Sends when the 24h move is ≥3%, with a 24h same-direction cooldown |
 | `/api/weekly-digest` | POST, **Bearer** | Sunday digest (Sundays 15:00 UTC), 24h cooldown |
+| `/api/admin/backup` | GET/POST, **Bearer** | Weekly: emails the `subscribers` table as CSV to `BACKUP_EMAIL`. `&download=1` downloads it instead |
 | `/api/email-preview` | GET, `?token=` | Renders any email in the browser with live market data. Sends nothing |
 | `/api/sitemap` | GET | XML sitemap (also at `/sitemap.xml`) |
 
 Cron endpoints accept `Authorization: Bearer <CRON_SECRET>` (or `?token=`, see `lib/cron-auth.ts`).
+
+**Monitoring:** every scheduled job pings its own [healthchecks.io](https://healthchecks.io) check when it finishes (`<url>` on success, `<url>/fail` on a 5xx, an error or failed sends). A missing ping means the job stopped running; either way the owner gets an email. See `lib/heartbeat.ts`. Unset URL → no ping.
 
 ---
 
@@ -121,8 +124,10 @@ Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot 
 | `UMAMI_PASSWORD` | Visitor counter |
 | `NEXT_PUBLIC_BASE_URL` | Optional, defaults to `https://whentobuybtc.xyz` |
 | `MACRO_CONTEXT`, `MACRO_CONTEXT_TEST_EMAIL` | Optional, market block in emails |
+| `HEALTHCHECK_URL_SIGNAL`, `HEALTHCHECK_URL_DIGEST`, `HEALTHCHECK_URL_BACKUP` | Optional, healthchecks.io ping URLs |
+| `BACKUP_EMAIL` | Optional, where the weekly backup goes (default `REPLY_TO_EMAIL`) |
 
-The X bot (`twitter-bot/`) runs as separate Railway cron services with `POST_TYPE` (`signal` / `bullish`), `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET` and `DATABASE_URL`. Railway reference variables come through empty in cron services, so use `DATABASE_PUBLIC_URL` directly.
+The X bot (`twitter-bot/`) runs as separate Railway cron services with `POST_TYPE` (`signal` / `bullish`), `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET`, `DATABASE_URL` and optionally `HEALTHCHECK_URL` (its own check). Railway reference variables come through empty in cron services, so use `DATABASE_PUBLIC_URL` directly.
 
 ---
 
@@ -163,7 +168,7 @@ railway.toml                 Start command
 ```bash
 npm install
 npm run dev                                   # http://localhost:3000
-npx -y tsx --test tests/*.test.ts             # unit tests
+npm test                                      # unit tests (also run by CI on every PR)
 npx tsc --noEmit -p .                         # type check
 npm run build && npm start                    # production build
 ```

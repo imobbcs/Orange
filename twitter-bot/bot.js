@@ -251,6 +251,18 @@ async function postBullish() {
 
 // ─── MAIN ────────────────────────────────────────────────────────────────────
 
+// Dead-man's switch: each Railway cron service sets its own HEALTHCHECK_URL (healthchecks.io).
+// Ping on success, "<url>/fail" on error; if no ping arrives on schedule, the owner gets an email.
+async function heartbeat(ok, message) {
+  const base = (process.env.HEALTHCHECK_URL || '').trim().replace(/\/+$/, '');
+  if (!/^https:\/\//.test(base)) return;
+  try {
+    await fetch(ok ? base : base + '/fail', { method: 'POST', body: String(message || '').slice(0, 10000), signal: AbortSignal.timeout(5000) });
+  } catch (e) {
+    console.error('Heartbeat failed:', e.message);
+  }
+}
+
 if (require.main === module) (async () => {
   try {
     if (!POST_TYPE) throw new Error('POST_TYPE env var not set ("signal" or "bullish")');
@@ -259,9 +271,11 @@ if (require.main === module) (async () => {
     if (POST_TYPE === 'bullish') await postBullish();
 
     console.log('Done.');
+    await heartbeat(true, POST_TYPE + ': posted');
     process.exit(0);
   } catch (err) {
     console.error('Bot error:', err.message);
+    await heartbeat(false, POST_TYPE + ': ' + err.message);
     process.exit(1);
   }
 })();
