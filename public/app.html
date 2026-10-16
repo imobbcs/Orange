@@ -1992,12 +1992,12 @@
   </style>
   <!-- ═══ SITE V3: CSS (end) ═══ -->
 
-  <!-- ═══ EMAIL CAPTURE: hero and calculator (start) ═══ -->
+  <!-- ═══ EMAIL CAPTURE: hero (start) ═══ -->
   <style>
     .hero-capture { width: min(100%, 560px); margin: 1.4rem auto 0; text-align: center; }
     .temp-hero .hero-capture { opacity: 0; }
     .temp-hero.temp-in .hero-capture { opacity: 1; transition: opacity 0.6s ease 1.1s; }
-    .hero-capture-label, .cx-capture-label { font-family: var(--display); font-style: italic; font-size: 1.05rem; line-height: 1.4; color: rgba(237,232,222,0.72); margin: 0 0 0.35rem; }
+    .hero-capture-label { font-family: var(--display); font-style: italic; font-size: 1.05rem; line-height: 1.4; color: rgba(237,232,222,0.72); margin: 0 0 0.35rem; }
     /* Quiet one-line form: underline field + text button, same voice as the share links. Beats the
        mobile rule that stacks the big form into two 56px slabs. */
     .email-row.quiet, .email-row.quiet:focus-within { flex-direction: row; align-items: center; width: min(100%, 400px); margin: 0 auto;
@@ -2009,8 +2009,7 @@
       background: none; color: var(--temp, var(--orange)); font-size: 0.68rem; letter-spacing: 0.14em; }
     .email-row.quiet .email-submit::after { content: " \2192"; }
     .email-row.quiet .email-submit:hover { opacity: 0.75; }
-    .hero-capture .email-msg, .cx-capture .email-msg { text-align: center; }
-    .cx-capture { margin-top: 1.5rem; text-align: center; }
+    .hero-capture .email-msg { text-align: center; }
   </style>
   <!-- ═══ EMAIL CAPTURE (end) ═══ -->
 </head>
@@ -2323,15 +2322,6 @@
         <div class="cx-share">
           <button type="button" id="fp-share-wa" data-umami-event="share-whatif-whatsapp"><span data-i18n="fpShareOn">Share on</span> WhatsApp</button>
           <button type="button" id="fp-share-x" data-umami-event="share-whatif-x"><span data-i18n="fpShareOn">Share on</span> X</button>
-        </div>
-        <!-- EMAIL CAPTURE: calculator (peak interest, right after the result) -->
-        <div class="cx-capture email-form-wrap">
-          <p class="cx-capture-label" data-i18n="captureCalc">A fresh "what if" every Sunday, with the Bitcoin weather.</p>
-          <div class="email-row quiet">
-          <input class="email-input" id="calc-email-input" type="email" autocomplete="email" inputmode="email" enterkeyhint="send" aria-label="Email" data-i18n-placeholder="emailPlaceholder" placeholder="your@email.com" />
-          <button class="email-submit" id="calc-email-submit" type="button" onclick="subscribeEmail('calc-email-input', 'calc-email-submit', 'calc-email-msg', 'captureBtn')" data-umami-event="email-subscribe" data-umami-event-form="calculator" data-i18n="captureBtn">Get it free</button>
-        </div>
-        <p class="email-msg" id="calc-email-msg" aria-live="polite"></p>
         </div>
       </div>
     </div>
@@ -2658,7 +2648,6 @@
       announceText: 'The Bitcoin weather, every Sunday.',
       announceLink: 'Get it free →',
       captureHero: 'This reading in your inbox, every Sunday.',
-      captureCalc: 'A fresh "what if" every Sunday, with the Bitcoin weather.',
       captureBtn: 'Get it free',
       metaDesc: 'A free Bitcoin market signal for long-term holders. Fear & Greed, the 200-day average and the distance from the all-time high, combined into one reading: Cold, Mild or Hot. No trading advice.',
       // Nav
@@ -2839,7 +2828,6 @@
       announceText: 'Das Bitcoin-Wetter, jeden Sonntag.',
       announceLink: 'Kostenlos →',
       captureHero: 'Diese Lage jeden Sonntag im Postfach.',
-      captureCalc: 'Jeden Sonntag ein neues „Was wäre, wenn?“, mit dem Bitcoin-Wetter.',
       captureBtn: 'Kostenlos erhalten',
       metaDesc: 'Ein kostenloses Bitcoin-Marktsignal für langfristige Anleger. Fear & Greed, 200-Tage-Durchschnitt und Abstand zum Allzeithoch, zusammengefasst in einer Lage: Kalt, Mild oder Heiß. Keine Handelsempfehlung.',
       // Nav
