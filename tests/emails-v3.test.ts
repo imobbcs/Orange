@@ -61,7 +61,7 @@ test('welcome: today\'s reading when data is there, inbox tips, tools, still fin
 test('digest: the week in plain words', () => {
   const [, , , d] = all('en');
   assert.ok(d.html.includes('A choppy week. Bitcoin moved between €70,100 and €76,400, a 9.0% range, and ended the week down 3.7%.'));
-  assert.ok(d.html.includes('The biggest day was Tuesday, at −4.1%.'));
+  assert.ok(d.html.includes('The biggest move came on Tuesday: −4.1%.'));
   assert.ok(d.html.includes('The mood rose from 31 to 48.'));
   assert.ok(d.html.includes('See you next Sunday,'));
 });
