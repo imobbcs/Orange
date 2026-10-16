@@ -4299,7 +4299,7 @@
       fetch('/api/subscriber-count')
         .then(r => r.json())
         .then(({ subscribers }) => {
-          if (!subscribers || subscribers < 10) return; // hide until meaningful
+          if (!subscribers || subscribers < 100) return; // hide until meaningful (the API sends 0 below 100 too)
           const target   = subscribers;
           const duration = 1400;
 
