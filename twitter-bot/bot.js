@@ -62,9 +62,9 @@ function buildAuthHeader(method, url, extraParams = {}) {
   return headerValue;
 }
 
-async function postTweet(text) {
+async function postTweet(text, replyToId) {
   const url = 'https://api.x.com/2/tweets';
-  const body = JSON.stringify({ text });
+  const body = JSON.stringify(replyToId ? { text, reply: { in_reply_to_tweet_id: replyToId } } : { text });
   const authHeader = buildAuthHeader('POST', url, {});
 
   const res = await fetch(url, {
@@ -118,6 +118,7 @@ async function fetchSignal() {
 
   // Current price
   const currentPrice = priceData.eur;
+  const change24h = typeof priceData.eur_24h_change === 'number' ? priceData.eur_24h_change : null;
   console.log(`Price: ${Math.round(currentPrice)} EUR`);
 
   // 200-day MA from history
@@ -144,38 +145,64 @@ async function fetchSignal() {
   else                        { signal = 'Hot';  emoji = '🔥'; }
 
   console.log(`Signal: ${signal} (score ${score})`);
-  return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice) };
+  return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice),
+    state, parts: wtbSignal(fearGreed, fgLabel, maPct, athPct).parts, maPct, athPct, change24h };
 }
 
 // ─── SIGNAL POST ─────────────────────────────────────────────────────────────
+// One post a day, written like the site: the temperature, one plain sentence, the four numbers.
+// The link goes in a reply (X shows link posts to fewer people). Describes, never advises.
+
+const SITE_URL = 'https://whentobuybtc.xyz';
+
+function fmtPct(v, signed = true) {
+  const r = Number(v.toFixed(1));
+  const sign = r < 0 ? '−' : (r > 0 && signed ? '+' : '');
+  return sign + Math.abs(r).toFixed(1) + '%';
+}
+
+function signalSentence(s) {
+  if (s.athPct >= 0) return 'Bitcoin is at a new all-time high. A day to celebrate for long-term holders.';
+  if (s.change24h !== null && s.change24h <= -5) return `A ${fmtPct(Math.abs(s.change24h), false)} drop in a day. For long-term holders, that means cheaper sats.`;
+  if (s.change24h !== null && s.change24h >= 5) return `Up ${fmtPct(s.change24h, false)} in a day. This is what the quiet months were for.`;
+  const v = [s.parts.fg, s.parts.ma, s.parts.ath];
+  if (s.state === 'accumulate') return 'The readings lean cold. Sats cost less than usual.';
+  if (s.state === 'caution') return 'The readings lean hot. A good stretch for anyone who has been stacking.';
+  return v.some(x => x > 0) && v.some(x => x < 0)
+    ? 'The readings pull in different directions, so the market reads mild.'
+    : 'No reading is at an extreme, so the market reads mild.';
+}
+
+function buildSignalPost(s) {
+  const price = s.currentPrice.toLocaleString('en-GB');
+  const change = s.change24h === null ? '' : ` (${fmtPct(s.change24h)} in 24h)`;
+  const mood = String(s.fgLabel || '').toLowerCase();
+  return `$BTC today: ${s.signal} ${s.emoji}
+
+€${price}${change}
+Mood: ${s.fearGreed}${mood ? `, ${mood}` : ''}
+vs 200-day average: ${fmtPct(s.maPct)}
+From the all-time high: ${fmtPct(s.athPct)}
+
+${signalSentence(s)}`;
+}
+
+function buildSignalReply(s) {
+  return `Why it reads ${s.signal.toLowerCase()}, and the free Sunday email: ${SITE_URL}/?utm_source=x&utm_medium=social&utm_campaign=daily`;
+}
 
 async function postSignal() {
   const s = await fetchSignal();
-
-  const vsMAStr  = parseFloat(s.vsMA)  >= 0 ? `+${s.vsMA}%` : `${s.vsMA}%`;
-  const athStr   = parseFloat(s.fromATH) >= 0 ? `+${s.fromATH}%` : `${s.fromATH}%`;
-
-  const today = new Date().toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'short', year: 'numeric'
-  });
-
-  const price = s.currentPrice.toLocaleString('en-GB');
-
-  const text =
-`$BTC price signal - ${today}
-
-${s.emoji} Market today: ${s.signal}
-
-Bitcoin price: €${price}
-Fear & Greed: ${s.fearGreed} (${s.fgLabel})
-vs 200-day avg: ${vsMAStr}
-From ATH: ${athStr}
-
-#Bitcoin #BTC`;
-
+  const text = buildSignalPost(s);
   console.log('Posting signal:\n', text);
   const result = await postTweet(text);
-  console.log('Posted:', result.data?.id);
+  const id = result.data?.id;
+  console.log('Posted:', id);
+  // Link as a reply; never fail the job over it
+  if (id) {
+    try { const r = await postTweet(buildSignalReply(s), id); console.log('Reply:', r.data?.id); }
+    catch (e) { console.error('Reply failed (signal post is up):', e.message); }
+  }
 }
 
 // ─── BULLISH TWEET ───────────────────────────────────────────────────────────
@@ -193,23 +220,23 @@ async function postBullish() {
     )
   `);
 
-  // Load tweets
+  // Load tweets. Retired tweets are null so every index (logged in btc_tweet_log) keeps its meaning.
   const tweets = require('./tweets_final.json');
-  const total = tweets.length;
+  const live = [...tweets.keys()].filter(i => typeof tweets[i] === 'string' && tweets[i].trim());
 
   // Find which indices have been used
   const used = await client.query('SELECT tweet_index FROM btc_tweet_log');
   const usedSet = new Set(used.rows.map(r => r.tweet_index));
 
-  // If all used, reset cycle
-  if (usedSet.size >= total) {
+  // If every live tweet has been used, start a new cycle
+  if (live.every(i => usedSet.has(i))) {
     await client.query('DELETE FROM btc_tweet_log');
     usedSet.clear();
     console.log('All tweets used — cycle reset.');
   }
 
   // Pick a random unused index
-  const available = [...Array(total).keys()].filter(i => !usedSet.has(i));
+  const available = live.filter(i => !usedSet.has(i));
   const idx = available[Math.floor(Math.random() * available.length)];
   const text = tweets[idx];
 
@@ -224,7 +251,7 @@ async function postBullish() {
 
 // ─── MAIN ────────────────────────────────────────────────────────────────────
 
-(async () => {
+if (require.main === module) (async () => {
   try {
     if (!POST_TYPE) throw new Error('POST_TYPE env var not set ("signal" or "bullish")');
 
@@ -257,3 +284,4 @@ function wtbSignal(fgValue, fgClass, maPct, athPct) {
 }
 /* SIGNAL MODEL (end) */
 
+module.exports = { buildSignalPost, buildSignalReply, signalSentence, wtbSignal };
