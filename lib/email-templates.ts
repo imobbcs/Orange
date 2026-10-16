@@ -38,7 +38,10 @@ const SOFT  = 'rgba(237,232,222,0.82)';
 // ─── Formatting ───────────────────────────────────────────────────────────────
 
 function loc(lang: Lang): string { return lang === 'de' ? 'de-DE' : 'en-GB'; }
-function eur(n: number, lang: Lang = 'de'): string { return '€' + Math.round(n).toLocaleString(loc(lang)); }
+function eur(n: number, lang: Lang = 'de'): string {
+  const v = Math.round(n).toLocaleString(loc(lang));
+  return lang === 'de' ? `${v}&nbsp;€` : `€${v}`; // German style: 73.315 €
+}
 function pct(n: number, lang: Lang, dp = 1, sign = true): string {
   const s = Math.abs(n).toLocaleString(loc(lang), { minimumFractionDigits: dp, maximumFractionDigits: dp });
   return (sign ? (n > 0 ? '+' : n < 0 ? '−' : '') : '') + s + (lang === 'de' ? '&nbsp;%' : '%');
@@ -88,8 +91,8 @@ function togetherLine(state: SignalState, parts: { fg: number; ma: number; ath: 
     de: {
       accumulate: 'Die Werte zeigen Richtung kalt. Sats kosten weniger als sonst.',
       caution: 'Die Werte zeigen Richtung heiß. Eine schöne Phase für alle, die schon länger stapeln.',
-      split: 'Die Werte ziehen in verschiedene Richtungen, also liest sich der Markt mild.',
-      calm: 'Kein Wert ist im Extrem, also liest sich der Markt mild.',
+      split: 'Die Werte ziehen in verschiedene Richtungen, deshalb ist der Markt mild.',
+      calm: 'Kein Wert ist extrem, deshalb ist der Markt mild.',
     },
   }[lang];
   return state === 'hold' ? (split ? t.split : t.calm) : t[state];
@@ -357,9 +360,10 @@ function spreadSection(o: { lang: Lang; shareText: string; campaign: string; sub
 
 function shareText(state: SignalState, lang: Lang, price: number, fgValue: number, fgClass?: string | null): string {
   const word = FG_WORD[lang][fgBand(fgValue, fgClass)];
-  return lang === 'de'
+  const text = lang === 'de'
     ? `Bitcoin heute: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, Stimmung ${fgValue} (${word}). Das Bitcoin-Wetter, kostenlos jeden Sonntag:`
     : `Bitcoin today: ${signalLabel(state, lang)} ${TEMP[state].emoji} ${eur(price, lang)}, mood ${fgValue} (${word}). The Bitcoin weather, free every Sunday:`;
+  return text.replace(/&nbsp;/g, ' '); // plain text for share links
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -441,8 +445,8 @@ export function alertEmail(opts: {
     ? `Bitcoin ${isDown ? 'fiel' : 'stieg'} heute um ${move}.`
     : `Bitcoin ${isDown ? 'fell' : 'rose'} ${move} today.`;
   const intro = lang === 'de'
-    ? (isDown ? 'Ein großer Tag nach unten. Für langfristige Halter heißt das vor allem: Sats kosten gerade weniger.' : 'Ein großer Tag nach oben. Das ist der Teil, für den man durch die ruhigen Phasen geht.')
-    : (isDown ? 'A big day down. For long-term holders that mostly means sats cost less right now.' : 'A big day up. This is the part that makes holding through the quiet stretches worth it.');
+    ? (isDown ? 'Ein großer Tag nach unten. Für langfristige Halter heißt das vor allem: Sats kosten gerade weniger.' : 'Ein großer Tag nach oben. Dafür lohnen sich die ruhigen Monate.')
+    : (isDown ? 'A big day down. For long-term holders, that mostly means sats cost less right now.' : 'A big day up. This is what the quiet months were for.');
   const parts = computeSignal({ fgValue, fgClass, maPct, athPct: athPct ?? -35 }).parts;
   const cta = `${SITE}/?${lang === 'de' ? 'lang=de&' : ''}utm_source=email&utm_medium=alert&utm_campaign=cta#signal`;
 
@@ -520,7 +524,7 @@ export function weekStats(points: [number, number][], now = Date.now()): WeekSta
 function weekLine(w: WeekStats, lang: Lang, weekChange: number | null, prevFg?: number, fg?: number): string {
   const range = (w.high - w.low) / w.low * 100;
   const de = lang === 'de';
-  const tone = range < 4 ? (de ? 'Eine ruhige Woche' : 'A quiet week') : range < 8 ? (de ? 'Eine normale Woche' : 'An ordinary week') : (de ? 'Eine bewegte Woche' : 'A choppy week');
+  const tone = range < 4 ? (de ? 'Eine ruhige Woche' : 'A quiet week') : range < 8 ? (de ? 'Eine normale Woche' : 'An ordinary week') : (de ? 'Eine unruhige Woche' : 'A choppy week');
   const r = range.toLocaleString(loc(lang), { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + (de ? '&nbsp;%' : '%');
   let out = de
     ? `${tone}. Bitcoin bewegte sich zwischen ${eur(w.low, lang)} und ${eur(w.high, lang)}, eine Spanne von ${r}`
@@ -531,8 +535,8 @@ function weekLine(w: WeekStats, lang: Lang, weekChange: number | null, prevFg?: 
   if (w.bigDay && Math.abs(w.bigDay.pct) >= 2) {
     const day = new Date(w.bigDay.date).toLocaleDateString(loc(lang), { weekday: 'long', timeZone: 'Europe/Vienna' });
     out += de
-      ? ` Der größte Tag war ${day} mit ${pct(w.bigDay.pct, lang)}.`
-      : ` The biggest day was ${day}, at ${pct(w.bigDay.pct, lang)}.`;
+      ? ` Die größte Bewegung gab es am ${day}: ${pct(w.bigDay.pct, lang)}.`
+      : ` The biggest move came on ${day}: ${pct(w.bigDay.pct, lang)}.`;
   }
   if (prevFg != null && fg != null && Math.abs(fg - prevFg) >= 5) {
     out += de
@@ -606,8 +610,8 @@ export function digestEmail(opts: {
 
   const cta = `${SITE}/?${lang === 'de' ? 'lang=de&' : ''}utm_source=email&utm_medium=digest&utm_campaign=cta#signal`;
   const hello = lang === 'de'
-    ? 'Hey, hier ist dein Bitcoin-Wetter für die Woche. Drei Werte, eine Temperatur, eine Minute Lesezeit.'
-    : 'Hey, here&#39;s your Bitcoin weather for the week. Three readings, one temperature, one minute to read.';
+    ? 'Hallo! Hier ist dein Bitcoin-Wetter für die Woche. Lesezeit: eine Minute.'
+    : 'Hi, here&#39;s your Bitcoin weather for the week. It takes a minute to read.';
 
   const body = `
     ${para(hello, { mb: 22 })}
@@ -626,7 +630,7 @@ export function digestEmail(opts: {
 
   const footerReason = lang === 'de'
     ? 'Du erhältst diesen Wochenüberblick, weil du das Bitcoin-Wetter auf whentobuybtc.xyz abonniert hast.'
-    : 'You&#39;re getting this weekly read because you subscribed to the Bitcoin weather at whentobuybtc.xyz.';
+    : 'You&#39;re getting this weekly email because you subscribed to the Bitcoin weather at whentobuybtc.xyz.';
   const html = shell({ lang, preheader, headerRight: lang === 'de' ? 'Sonntag' : 'Sunday', body, footerReason, unsubscribeUrl, replyTo, top: forwardStrip(lang, 'digest') });
   return { subject, html, text: htmlToText(html), replyTo };
 }
