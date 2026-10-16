@@ -8,6 +8,7 @@ import { computeDca } from '../../lib/dca';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
 import { ensurePrefColumns } from '../../lib/email-prefs';
 import { cronAuthorized } from '../../lib/cron-auth';
+import { withHeartbeat } from '../../lib/heartbeat';
 import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
 
@@ -59,7 +60,7 @@ async function fetchSignalData() {
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   if (!cronAuthorized(req)) return res.status(401).json({ error: 'Unauthorized' });
   try {
@@ -146,3 +147,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: err.message });
   }
 }
+
+// Pings HEALTHCHECK_URL_DIGEST after each authorised run (lib/heartbeat.ts)
+export default withHeartbeat('DIGEST', cronAuthorized, handler);

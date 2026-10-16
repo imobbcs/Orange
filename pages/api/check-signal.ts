@@ -8,6 +8,7 @@ import { signalFromApis } from '../../lib/signal';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
 import { ensurePrefColumns } from '../../lib/email-prefs';
 import { cronAuthorized } from '../../lib/cron-auth';
+import { withHeartbeat } from '../../lib/heartbeat';
 
 const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -123,7 +124,7 @@ async function sendEmailAlerts(
   console.log(`sendEmailAlerts: ${sent}/${rows.length} sent successfully, ${failed} failed`);
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET' && req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   // Only the scheduler may run this: it can email every subscriber.
   if (!cronAuthorized(req)) return res.status(401).json({ error: 'Unauthorized' });
@@ -174,3 +175,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: err.message });
   }
 }
+
+// Pings HEALTHCHECK_URL_SIGNAL after each authorised run (lib/heartbeat.ts)
+export default withHeartbeat('SIGNAL', cronAuthorized, handler);
