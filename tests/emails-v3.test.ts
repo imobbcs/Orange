@@ -80,3 +80,14 @@ test('alert stays short: no repeated numbers paragraph', () => {
   assert.ok(!a.html.includes('Market mood reads'), 'old explanation paragraph still present');
   assert.ok(EMAIL_FROM.startsWith('Imo from When to Buy BTC <'));
 });
+
+test('reader count: hidden below the minimum, shown from it', async () => {
+  const { readerCount, READER_MIN_SHOWN } = await import('../lib/subscribers');
+  const pool = (n: number) => ({ query: async () => ({ rows: [{ count: String(n) }] }) }) as any;
+  assert.equal(READER_MIN_SHOWN, 100);
+  assert.equal(await readerCount(pool(20)), undefined);
+  assert.equal(await readerCount(pool(99)), undefined);
+  assert.equal(await readerCount(pool(104)), 100);
+  const d = digestEmail({ price: 1, signal: 'hold', fgValue: 50, maPct: 0, athPct: -30, change24h: 0, unsubscribeUrl: '#', replyTo: '', lang: 'en', subscriberCount: undefined });
+  assert.ok(d.html.includes('This is a one-person project. If it helps you'), 'lead without a count reads cleanly');
+});

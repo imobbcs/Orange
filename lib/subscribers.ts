@@ -1,12 +1,12 @@
 // Live reader count for the emails, floored to the nearest 10 like the site (never overpromise).
-// Returns undefined on any error, and the emails then simply leave the counter out.
+// Returns undefined on any error, or while the list is small, and the emails then leave the counter out.
 import type { Pool } from 'pg';
 
 export async function readerCount(pool: Pool): Promise<number | undefined> {
   try {
     const r = await pool.query<{ count: string }>(`SELECT COUNT(*) AS count FROM subscribers WHERE status = 'confirmed'`);
     const n = Math.floor(parseInt(r.rows[0].count, 10) / 10) * 10;
-    return n > 0 ? n : undefined;
+    return n >= READER_MIN_SHOWN ? n : undefined;
   } catch (e: any) {
     console.error('readerCount failed:', e?.message || e);
     return undefined;
@@ -14,3 +14,5 @@ export async function readerCount(pool: Pool): Promise<number | undefined> {
 }
 
 export const READER_GOAL = 1000;
+/** Below this, a reader count reads as "nobody's here yet", so the site and emails don't show one. */
+export const READER_MIN_SHOWN = 100;
