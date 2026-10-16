@@ -4,6 +4,7 @@ import { Pool } from 'pg';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { confirmationEmail, EMAIL_FROM, type Lang, type SignalState } from '../../lib/email-templates';
+import { ensurePrefColumns } from '../../lib/email-prefs';
 import { syncResendContact } from '../../lib/resend-contact';
 import { signalFromApis } from '../../lib/signal';
 
@@ -71,12 +72,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const confirmToken     = token();
   const unsubscribeToken = token();
   try {
+    await ensurePrefColumns(pool);
     const result = await pool.query(
       `INSERT INTO subscribers (email, lang, status, confirm_token, unsubscribe_token)
        VALUES ($1, $2, 'pending', $3, $4)
        ON CONFLICT (email) DO UPDATE
          SET lang          = EXCLUDED.lang,
              confirm_token = CASE WHEN subscribers.status = 'confirmed' THEN subscribers.confirm_token ELSE EXCLUDED.confirm_token END,
+             -- Signing up again after unsubscribing starts fresh: both emails back on
+             wants_digest  = CASE WHEN subscribers.status = 'unsubscribed' THEN TRUE ELSE subscribers.wants_digest END,
+             wants_alerts  = CASE WHEN subscribers.status = 'unsubscribed' THEN TRUE ELSE subscribers.wants_alerts END,
              status        = CASE WHEN subscribers.status = 'unsubscribed' THEN 'pending' ELSE subscribers.status END
        RETURNING status`,
       [email.toLowerCase().trim(), lang, confirmToken, unsubscribeToken]

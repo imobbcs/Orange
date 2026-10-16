@@ -6,6 +6,7 @@ import { Resend } from 'resend';
 import { digestEmail, calcHookForWeek, weekStats, EMAIL_FROM, type SignalState, type CalcHook } from '../../lib/email-templates';
 import { computeDca } from '../../lib/dca';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
+import { ensurePrefColumns } from '../../lib/email-prefs';
 import { cronAuthorized } from '../../lib/cron-auth';
 import { getMacroForEmail, includeMacroFor, macroDigestBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
@@ -99,8 +100,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       [fgValue, maPct, athPct, currentPrice]
     );
 
+    await ensurePrefColumns(pool);
     const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
-      `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed'`
+      `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed' AND wants_digest`
     );
     if (rows.length === 0) return res.status(200).json({ status: 'no_subscribers' });
 
