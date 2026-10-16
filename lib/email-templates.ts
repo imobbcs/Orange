@@ -185,7 +185,7 @@ ${top}
       <p class="ed" style="margin:0 0 8px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason}</p>
       <p class="ed" style="margin:0 0 10px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${disclaimer}</p>
       <p class="ed" style="margin:0;${MONO}font-size:11px;line-height:1.9;color:rgba(237,232,222,0.58);">
-        <a href="${unsubscribeUrl}" class="el" style="color:#F7931A;text-decoration:none;">${lang === 'de' ? 'Abmelden' : 'Unsubscribe'}</a>
+        <a href="${unsubscribeUrl}" class="el" style="color:#F7931A;text-decoration:none;">${lang === 'de' ? 'E-Mails wählen oder abmelden' : 'Choose emails or unsubscribe'}</a>
         &nbsp;&#183;&nbsp; <a href="${SITE}" class="el" style="color:#F7931A;text-decoration:none;">whentobuybtc.xyz</a>
         &nbsp;&#183;&nbsp; <a href="https://x.com/WhenToBuyBTC" class="el" style="color:#F7931A;text-decoration:none;">@WhenToBuyBTC</a>
         &nbsp;&#183;&nbsp; ${lang === 'de' ? 'Wien, &#214;sterreich' : 'Vienna, Austria'}
@@ -464,9 +464,10 @@ export function alertEmail(opts: {
     ${spacer(28)}
     ${spreadSection({ lang, campaign: 'alert', shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
 
+  const onlySundays = `<a href="${unsubscribeUrl}" class="el" style="color:#F7931A;text-decoration:none;">${lang === 'de' ? 'Nur noch sonntags?' : 'Sundays only?'}</a>`;
   const footerReason = lang === 'de'
-    ? 'Du erhältst diese E-Mail, weil du das Bitcoin-Wetter auf whentobuybtc.xyz abonniert hast. Hinweise wie dieser kommen nur, wenn Bitcoin sich an einem Tag um mehr als 3&nbsp;% bewegt.'
-    : 'You&#39;re getting this because you subscribed to the Bitcoin weather at whentobuybtc.xyz. Notes like this only come when Bitcoin moves more than 3% in a day.';
+    ? `Du erhältst diese E-Mail, weil du das Bitcoin-Wetter auf whentobuybtc.xyz abonniert hast. Hinweise wie dieser kommen nur, wenn Bitcoin sich an einem Tag um mehr als 3&nbsp;% bewegt. ${onlySundays}`
+    : `You&#39;re getting this because you subscribed to the Bitcoin weather at whentobuybtc.xyz. Notes like this only come when Bitcoin moves more than 3% in a day. ${onlySundays}`;
   const html = shell({ lang, preheader, headerRight: lang === 'de' ? 'Hinweis' : 'Alert', body, footerReason, unsubscribeUrl, replyTo, top: forwardStrip(lang, 'alert') });
   return { subject, html, text: htmlToText(html), replyTo };
 }
@@ -671,9 +672,9 @@ export function welcomeEmail(
   // 2. What arrives when
   const when = de
     ? [['Jeden Sonntag', 'Das Bitcoin-Wetter: Temperatur, Preis, die drei Werte und wie die Woche lief. Eine Minute Lesezeit.'],
-       ['Bei großen Bewegungen', 'Ein kurzer Hinweis, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Höchstens einmal in 24 Stunden pro Richtung.']]
+       ['Bei großen Bewegungen', 'Ein kurzer Hinweis, wenn Bitcoin an einem Tag um mehr als 3&nbsp;% steigt oder fällt. Höchstens einmal in 24 Stunden pro Richtung. Lieber nur eines von beiden? Das kannst du unten in jeder E-Mail auswählen.']]
     : [['Every Sunday', 'The Bitcoin weather: temperature, price, the three readings and how the week went. One minute to read.'],
-       ['On big moves', 'A short note when Bitcoin moves more than 3% in a day. At most once every 24 hours in the same direction.']];
+       ['On big moves', 'A short note when Bitcoin moves more than 3% in a day. At most once every 24 hours in the same direction. Only want one of the two? You can choose at the bottom of every email.']];
 
   // 3. Cold / Mild / Hot
   const legend = (['accumulate', 'hold', 'caution'] as SignalState[]).map(s => {
