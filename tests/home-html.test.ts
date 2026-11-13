@@ -29,3 +29,12 @@ test('homepage: a failed live refresh never replaces numbers already on screen',
   assert.ok(raw.includes(".every(v => typeof v === 'number' && isFinite(v))) return;"), 'updateSignal must not score half-loaded numbers');
   for (const l of ['emailTooMany: \'Too many', 'emailTooMany: \'Zu viele']) assert.ok(raw.includes(l), 'rate-limit message missing: ' + l);
 });
+
+test('homepage: every number has one source (no second count-up, previews read data not text)', () => {
+  const raw = readFileSync('public/app.html', 'utf8');
+  assert.ok(!/parseInt\(fgEl\.textContent\)/.test(raw), 'a count-up must never take its target from on-screen text');
+  assert.equal((raw.match(/animateValue\(ready\('fg-value'\)/g) || []).length, 1, 'exactly one count-up for the mood number');
+  assert.ok(raw.includes("animateValue(ready('fg-value'), () => fgValue"), 'count-up must land on the live value');
+  assert.ok(raw.includes("(currentPrice != null && maPrice) ? fmtPct((currentPrice - maPrice) / maPrice * 100)"), 'email preview must compute its numbers from data');
+  assert.ok(!/if \(ageHrs > 0\.5\)/.test(raw), 'chart must always end at the live price');
+});
