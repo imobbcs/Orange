@@ -80,7 +80,7 @@ export function renderHero(html: string, s: HeroSnapshot, lang: Lang, tr: { en: 
   const day = Math.floor(now / 86400000);
   const ch = s.change24h;
   const pool: string[] = st === 'accumulate' ? (ch !== null && ch <= -5 ? t.signalAccumulateDump : t.signalAccumulate)
-    : st === 'hold' ? t.signalHold
+    : st === 'hold' ? (ch !== null && ch <= -5 ? t.signalHoldDump : ch !== null && ch >= 5 ? t.signalHoldPump : t.signalHold)
     : (ch !== null && ch >= 5 ? t.signalCautionHot : t.signalCaution);
   const headline = pool[day % pool.length];
 
