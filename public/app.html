@@ -2072,6 +2072,23 @@
     .hero-capture .email-msg { text-align: center; }
   </style>
   <!-- ═══ EMAIL CAPTURE (end) ═══ -->
+<style>
+  /* ── UI: readable inactive controls + 44px tap targets on touch screens ──
+     The inactive language and the footer text used --grey (#4A4540, ~2:1 on the background,
+     reads as disabled). #8A837A is the page's quiet text colour (~5:1). */
+  .lang-btn:not(.active), .footer-copy, .footer-links a { color: #8A837A; }
+  .lang-btn:not(.active):hover, .footer-links a:hover { color: var(--white); }
+  /* Small links keep their look; an invisible 44px box around them takes the tap. */
+  .announce-link, .hero-share button, .footer-copy a, .footer-links a { position: relative; }
+  @media (max-width: 768px) {
+    .announce-link::after, .hero-share button::after, .footer-copy a::after, .footer-links a::after {
+      content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: 44px; transform: translate(-50%, -50%);
+    }
+    .footer-links { gap: 2rem; }
+    .hero-share { column-gap: 1.5rem; } /* room for the 44px box around "X" without overlapping its neighbours */
+    .footer-awards svg { width: 44px; height: 44px; }
+  }
+</style>
 </head>
 <body>
 
@@ -2229,7 +2246,7 @@
   <div class="section-inner">
     <p class="section-label reveal reveal-left" data-delay="1" data-i18n="signalBreakdownLabel">Signal Breakdown</p>
     <h2 class="section-title reveal reveal-wipe" data-delay="2" data-i18n="signalBreakdownTitle">Three readings.<br>One temperature.</h2>
-    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">Each reading leans colder or warmer. Added up, they give today's temperature. No jargon, no advice.</p>
+    <p class="section-sub reveal reveal-fade" data-delay="3" data-i18n="signalBreakdownSub">Each reading leans cold or hot, and a sharp day tips it one more step. Added up, they give today's temperature.</p>
 
     <!-- INSTRUMENT PANEL -->
     <div class="instrument-panel reveal" data-delay="4" id="instrument-panel">
@@ -2398,7 +2415,7 @@
 
     <!-- LEFT: copy + form -->
     <div class="push-copy">
-      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">Alerts</p>
+      <p class="section-label reveal reveal-left" data-delay="1" data-i18n="alertsLabel">The Sunday email</p>
       <h2 class="push-title reveal" data-delay="2" data-i18n="pushTitle">The Bitcoin weather, <em>every Sunday.</em></h2>
       <p class="push-sub reveal reveal-fade" data-delay="3" data-i18n="pushSub">One short email a week, plus a note when Bitcoin moves more than 3% in a day. Free, no account, unsubscribe in one click.</p>
 
@@ -2788,7 +2805,7 @@
       signalUpdatedPrefix: 'Updated at',
       signalBreakdownLabel: 'The three readings',
       signalBreakdownTitle: 'Three readings.<br>One temperature.',
-      signalBreakdownSub: "Each reading leans cold or hot. Added up, they give today's temperature.",
+      signalBreakdownSub: "Each reading leans cold or hot, and a sharp day (a 5% move or more) tips it one more step. Added up, they give today's temperature.",
       fpShareOn: 'Share on', fpWider: 'Wider market', fpWiderLink: 'See the markets ↓',
       fpWhy: 'Why {s}?', fpMore: 'More', fpLess: 'Less', fpTogether: 'Together',
       fpLeanCold: 'Leans cold', fpLeanMild: 'Neutral', fpLeanHot: 'Leans hot',
@@ -2797,7 +2814,7 @@
       fpMoveId: '04 / Today · 24h move',
       fpLineMove: { 1: 'A fall of 5% or more. It tips the temperature one step colder.', 0: 'Less than 5% either way. It does not change the temperature.', '-1': 'A rise of 5% or more. It tips the temperature one step hotter.' },
       fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is within 20% of its all-time high.' },
-      fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', accumulateMove: 'The readings lean cold, and a sharp drop today tips it over. Sats are cheaper than usual.', cautionMove: 'The readings lean hot, and a sharp rise today tips it over. A good moment for anyone who has been stacking.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
+      fpTogetherText: { accumulate: 'The readings lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', accumulateMove: 'The readings lean cold, and a sharp drop today tips it over. Sats are cheaper than usual.', cautionMove: 'The readings lean hot, and a sharp rise today tips it over. A good moment for anyone who has been stacking.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
       fpCalcLabel: 'What if?', fpCalcTitle: 'What if you had<br>started back then?',
       fpCalcSub: 'Type an amount, pick how often and since when. See what it would be worth today.',
       cxAmount: 'Amount', cxEvery: 'Every', cxMonth: 'Month', cxWeek: 'Week', cxSince: 'Since', cxWorth: 'Worth', cxPutIn: 'Put in',
@@ -2814,7 +2831,7 @@
       legend200ma: '200-Day Moving Average',
       // Expert section
       shareCopy: 'Copy Link',
-      alertsLabel: 'Alerts',
+      alertsLabel: 'The Sunday email',
       pushTitle: 'The Bitcoin weather,<br><em>every Sunday.</em>',
       pushSub: 'One short email a week, plus a note when Bitcoin moves more than 3% in a day. Free, no account, unsubscribe in one click.',
       pushMeta: 'Free · No account needed · Unsubscribe anytime',
@@ -2874,7 +2891,7 @@
       faqItems: [
         {
           q: 'What do Cold, Mild and Hot mean?',
-          a: `<p>They describe the market, not what anyone should do. Three readings go into it, and each one leans cold, sits in the middle, or leans hot:</p><p><b>Market mood</b> (Fear &amp; Greed, 0 to 100): fear leans cold, extreme fear counts double. Neutral (roughly 47 to 54) counts as the middle. Greed leans hot, extreme greed counts double.<br><b>Price vs. its 200-day average:</b> more than 5% below leans cold (more than 10% below counts double). Within 5% either side is the middle. More than 5% above leans hot (more than 20% above counts double).<br><b>Distance from the all-time high:</b> more than 50% below leans cold, 20 to 50% below is the middle, closer than 20% leans hot.</p><p>A sharp day tips it one step: a fall of 5% or more in 24 hours counts toward cold, a rise of 5% or more toward hot. Added up, the result runs from +6 to −6. <b>Cold</b> is +3 or more, <b>Hot</b> is −3 or less, <b>Mild</b> is everything in between. Many long-term holders buy a little every month whatever the temperature: a cold market means more sats for the same money, a hot one means the savings already look good.</p>`
+          a: `<p>They describe the market, not what anyone should do. Three readings go into it, plus the day's move. Each reading leans cold, sits in the middle, or leans hot:</p><p><b>Market mood</b> (Fear &amp; Greed, 0 to 100): fear leans cold, extreme fear counts double. Neutral (roughly 47 to 54) counts as the middle. Greed leans hot, extreme greed counts double.<br><b>Price vs. its 200-day average:</b> more than 5% below leans cold (more than 10% below counts double). Within 5% either side is the middle. More than 5% above leans hot (more than 20% above counts double).<br><b>Distance from the all-time high:</b> more than 50% below leans cold, 20 to 50% below is the middle, closer than 20% leans hot.</p><p>A sharp day tips it one step: a fall of 5% or more in 24 hours counts toward cold, a rise of 5% or more toward hot. Added up, the result runs from +6 to −6. <b>Cold</b> is +3 or more, <b>Hot</b> is −3 or less, <b>Mild</b> is everything in between. Many long-term holders buy a little every month whatever the temperature: a cold market means more sats for the same money, a hot one means the savings already look good.</p>`
         },
         {
           q: 'Who built this, and why should I trust it?',
@@ -2985,7 +3002,7 @@
       signalUpdatedPrefix: 'Aktualisiert um',
       signalBreakdownLabel: 'Die drei Werte',
       signalBreakdownTitle: 'Drei Werte.<br>Eine Temperatur.',
-      signalBreakdownSub: 'Jeder Wert zeigt Richtung kalt oder heiß. Zusammengezählt ergeben sie die Temperatur von heute.',
+      signalBreakdownSub: 'Jeder Wert zeigt Richtung kalt oder heiß, und ein heftiger Tag (5 % Bewegung oder mehr) gibt einen Schritt dazu. Zusammengezählt ergibt das die Temperatur von heute.',
       fpShareOn: 'Teilen auf', fpWider: 'Marktumfeld', fpWiderLink: 'Zu den Märkten ↓',
       fpWhy: 'Warum {s}?', fpMore: 'Mehr', fpLess: 'Weniger', fpTogether: 'Zusammen',
       fpLeanCold: 'Eher kalt', fpLeanMild: 'Neutral', fpLeanHot: 'Eher heiß',
@@ -2994,7 +3011,7 @@
       fpMoveId: '04 / Heute · 24h-Bewegung',
       fpLineMove: { 1: 'Ein Minus von 5 % oder mehr. Das macht die Temperatur eine Stufe kälter.', 0: 'Weniger als 5 % in beide Richtungen. Das ändert die Temperatur nicht.', '-1': 'Ein Plus von 5 % oder mehr. Das macht die Temperatur eine Stufe heißer.' },
       fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs liegt weniger als 20 % unter dem Allzeithoch.' },
-      fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, deshalb ist der Markt mild.', holdCalm: 'Kein Wert ist extrem, deshalb ist der Markt mild.', accumulateMove: 'Die Werte zeigen Richtung kalt, und der starke Rückgang heute gibt den Ausschlag. Sats sind günstiger als sonst.', cautionMove: 'Die Werte zeigen Richtung heiß, und der starke Anstieg heute gibt den Ausschlag. Ein schöner Moment für alle, die schon länger stapeln.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
+      fpTogetherText: { accumulate: 'Die Werte zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, deshalb ist der Markt mild.', holdCalm: 'Kein Wert ist extrem, deshalb ist der Markt mild.', accumulateMove: 'Die Werte zeigen Richtung kalt, und der starke Rückgang heute gibt den Ausschlag. Sats sind günstiger als sonst.', cautionMove: 'Die Werte zeigen Richtung heiß, und der starke Anstieg heute gibt den Ausschlag. Ein schöner Moment für alle, die schon länger stapeln.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
       fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was wäre, wenn du<br>damals angefangen hättest?',
       fpCalcSub: 'Tippe einen Betrag, wähle wie oft und seit wann. Sieh, was es heute wert wäre.',
       cxAmount: 'Betrag', cxEvery: 'Wie oft', cxMonth: 'Monatlich', cxWeek: 'Wöchentlich', cxSince: 'Seit', cxWorth: 'Wert', cxPutIn: 'Eingezahlt',
@@ -3011,7 +3028,7 @@
       legend200ma: '200-Tage-Durchschnitt',
       // Expert section
       shareCopy: 'Link kopieren',
-      alertsLabel: 'Benachrichtigungen',
+      alertsLabel: 'Die Sonntags-E-Mail',
       pushTitle: 'Das Bitcoin-Wetter,<br><em>jeden Sonntag.</em>',
       pushSub: 'Eine kurze E-Mail pro Woche, plus ein Hinweis, wenn Bitcoin an einem Tag um mehr als 3 % steigt oder fällt. Kostenlos, ohne Konto, Abmeldung mit einem Klick.',
       pushMeta: 'Kostenlos · Kein Konto nötig · Jederzeit abmeldbar',
@@ -3070,7 +3087,7 @@
       faqItems: [
         {
           q: 'Was bedeuten Kalt, Mild und Heiß?',
-          a: `<p>Sie beschreiben den Markt, nicht was jemand tun sollte. Drei Werte fließen ein, und jeder zeigt Richtung kalt, liegt in der Mitte oder zeigt Richtung heiß:</p><p><b>Marktstimmung</b> (Fear &amp; Greed, 0 bis 100): Angst zeigt Richtung kalt, extreme Angst zählt doppelt. Neutral (etwa 47 bis 54) ist die Mitte. Gier zeigt Richtung heiß, extreme Gier zählt doppelt.<br><b>Kurs zum 200-Tage-Durchschnitt:</b> mehr als 5 % darunter zeigt Richtung kalt (mehr als 10 % darunter zählt doppelt). Bis 5 % in beide Richtungen ist die Mitte. Mehr als 5 % darüber zeigt Richtung heiß (mehr als 20 % darüber zählt doppelt).<br><b>Abstand zum Allzeithoch:</b> mehr als 50 % darunter zeigt Richtung kalt, 20 bis 50 % darunter ist die Mitte, näher als 20 % zeigt Richtung heiß.</p><p>Ein heftiger Tag gibt einen Schritt dazu: Ein Minus von 5 % oder mehr in 24 Stunden zählt Richtung kalt, ein Plus von 5 % oder mehr Richtung heiß. Zusammengezählt ergibt das einen Wert von +6 bis −6. <b>Kalt</b> ist +3 oder mehr, <b>Heiß</b> ist −3 oder weniger, <b>Mild</b> ist alles dazwischen. Viele Langfrist-Halter kaufen jeden Monat ein wenig, egal bei welcher Temperatur: Ein kalter Markt bringt mehr Sats fürs gleiche Geld, ein heißer zeigt, dass sich das Sparen gelohnt hat.</p>`
+          a: `<p>Sie beschreiben den Markt, nicht was jemand tun sollte. Drei Werte fließen ein, dazu die Bewegung des Tages. Jeder Wert zeigt Richtung kalt, liegt in der Mitte oder zeigt Richtung heiß:</p><p><b>Marktstimmung</b> (Fear &amp; Greed, 0 bis 100): Angst zeigt Richtung kalt, extreme Angst zählt doppelt. Neutral (etwa 47 bis 54) ist die Mitte. Gier zeigt Richtung heiß, extreme Gier zählt doppelt.<br><b>Kurs zum 200-Tage-Durchschnitt:</b> mehr als 5 % darunter zeigt Richtung kalt (mehr als 10 % darunter zählt doppelt). Bis 5 % in beide Richtungen ist die Mitte. Mehr als 5 % darüber zeigt Richtung heiß (mehr als 20 % darüber zählt doppelt).<br><b>Abstand zum Allzeithoch:</b> mehr als 50 % darunter zeigt Richtung kalt, 20 bis 50 % darunter ist die Mitte, näher als 20 % zeigt Richtung heiß.</p><p>Ein heftiger Tag gibt einen Schritt dazu: Ein Minus von 5 % oder mehr in 24 Stunden zählt Richtung kalt, ein Plus von 5 % oder mehr Richtung heiß. Zusammengezählt ergibt das einen Wert von +6 bis −6. <b>Kalt</b> ist +3 oder mehr, <b>Heiß</b> ist −3 oder weniger, <b>Mild</b> ist alles dazwischen. Viele Langfrist-Halter kaufen jeden Monat ein wenig, egal bei welcher Temperatur: Ein kalter Markt bringt mehr Sats fürs gleiche Geld, ein heißer zeigt, dass sich das Sparen gelohnt hat.</p>`
         },
         {
           q: 'Wer hat das gebaut, und warum sollte ich dem vertrauen?',
@@ -3449,31 +3466,8 @@
       updateSignal();
   }
 
-  /* SIGNAL MODEL (start) — keep in sync with lib/signal.ts (tests/signal.test.ts checks it).
-     Each reading leans cold (+), neutral (0) or hot (−); every reading has a neutral middle.
-     A 24h move of 5% or more tips it one step (down = colder, up = hotter).
-     Total −6…+6: Cold at +3 or more, Hot at −3 or less, Mild in between. */
-  function wtbFgBand(v, cls) {
-    var m = { 'extreme fear': 'extreme-fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme greed': 'extreme-greed' };
-    var k = cls ? m[String(cls).trim().toLowerCase()] : null;
-    if (k) return k;
-    return v < 25 ? 'extreme-fear' : v < 47 ? 'fear' : v < 55 ? 'neutral' : v < 76 ? 'greed' : 'extreme-greed';
-  }
-  function wtbSignal(fgValue, fgClass, maPct, athPct, change24h) {
-    var fg = { 'extreme-fear': 2, 'fear': 1, 'neutral': 0, 'greed': -1, 'extreme-greed': -2 }[wtbFgBand(fgValue, fgClass)];
-    var ma = maPct < -10 ? 2 : maPct < -5 ? 1 : maPct <= 5 ? 0 : maPct <= 20 ? -1 : -2;
-    var ath = athPct < -50 ? 1 : athPct < -20 ? 0 : -1;
-    var move = (change24h == null || !isFinite(change24h)) ? 0 : change24h <= -5 ? 1 : change24h >= 5 ? -1 : 0;
-    var score = fg + ma + ath + move;
-    return { score: score, state: score >= 3 ? 'accumulate' : score <= -3 ? 'caution' : 'hold', parts: { fg: fg, ma: ma, ath: ath, move: move } };
-  }
-  /* Marker position on the Cold–Mild–Hot bar (0 = cold end, 1 = hot end); each state owns one third. */
-  function wtbScalePos(score) {
-    var s = Math.max(-6, Math.min(6, Math.round(score)));
-    if (s >= 3) return ((6 - s + 0.5) / 4) / 3;
-    if (s <= -3) return 2 / 3 + ((-s - 3 + 0.5) / 4) / 3;
-    return 1 / 3 + ((2 - s + 0.5) / 5) / 3;
-  }
+  /* SIGNAL MODEL (start) — filled from lib/signal-model.js when the page is served (lib/home-html.ts).
+     Do not edit here: the rules live in that one file. */
   /* SIGNAL MODEL (end) */
 
   // ── SIGNAL ENGINE ──

@@ -1,7 +1,9 @@
 // pages/api/check-signal.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
 import { Resend } from 'resend';
+import { pool } from '../../lib/db';
+import { ensureSendLog, ensureRunColumns, newRunKey, sendOnce, type Outgoing } from '../../lib/send-once';
+import { resumeUnfinishedDigest } from '../../lib/digest-run';
 import { alertEmail, EMAIL_FROM } from '../../lib/email-templates';
 import { getMacroForEmail, includeMacroFor, macroAlertBlock } from '../../lib/macro/email';
 import { signalFromApis } from '../../lib/signal';
@@ -9,13 +11,13 @@ import { readerCount, READER_GOAL } from '../../lib/subscribers';
 import { ensurePrefColumns } from '../../lib/email-prefs';
 import { cronAuthorized } from '../../lib/cron-auth';
 
-const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE     = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';
 
 const MOVE_THRESHOLD = 0.03;              // 3% — compared against the 24h change
 const COOLDOWN_MS    = 24 * 60 * 60 * 1000;
+const RESUME_WINDOW  = '3 hours';             // an alert run left unfinished this recently is completed on the next run
 
 
 async function getCurrentPrice(): Promise<{ eur: number; change24h: number }> {
@@ -44,11 +46,25 @@ async function getLastAlert(): Promise<{ firedAt: Date; direction: string | null
   return { firedAt: new Date(r.rows[0].fired_at), direction: r.rows[0].direction ?? null };
 }
 
-async function logAlert(price: number, refPrice: number, movePct: number, direction: string) {
+// Logged BEFORE anything is sent (completed_at stays empty until the run finishes), so a crash
+// mid-send leaves a row the next run can finish instead of a cooldown-less retry that emails everyone again.
+async function startAlertRun(price: number, refPrice: number, movePct: number, direction: string): Promise<string> {
+  const key = newRunKey('alert');
   await pool.query(
-    'INSERT INTO alert_log (fired_at, price_eur, reference_price_eur, move_pct, direction) VALUES (NOW(), $1, $2, $3, $4)',
-    [price, refPrice, movePct, direction]
+    'INSERT INTO alert_log (fired_at, price_eur, reference_price_eur, move_pct, direction, run_key) VALUES (NOW(), $1, $2, $3, $4, $5)',
+    [price, refPrice, movePct, direction, key]
   );
+  return key;
+}
+
+async function unfinishedAlertRun(): Promise<{ key: string; price: number; movePct: number; direction: 'up' | 'down' } | null> {
+  const r = await pool.query(
+    `SELECT run_key, price_eur, move_pct, direction FROM alert_log
+     WHERE completed_at IS NULL AND run_key IS NOT NULL AND fired_at > NOW() - INTERVAL '${RESUME_WINDOW}' ORDER BY fired_at DESC LIMIT 1`
+  );
+  if (!r.rows.length) return null;
+  const row = r.rows[0];
+  return { key: row.run_key, price: Number(row.price_eur), movePct: Number(row.move_pct), direction: row.direction === 'up' ? 'up' : 'down' };
 }
 
 type Readings = { fgValue: number; fgClass: string | null; maPct: number; athPct: number | null; signal: 'accumulate' | 'hold' | 'caution' };
@@ -74,9 +90,9 @@ async function fetchSignalData(): Promise<Readings> {
   return { fgValue, fgClass, maPct, athPct, signal };
 }
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sendEmailAlerts(
+  runKey: string,
   price: number,
   change24h: number,
   movePct: number,
@@ -87,14 +103,13 @@ async function sendEmailAlerts(
   const { rows } = await pool.query<{ email: string; lang: 'en' | 'de'; unsubscribe_token: string }>(
     `SELECT email, lang, unsubscribe_token FROM subscribers WHERE status = 'confirmed' AND wants_alerts`
   );
-  if (rows.length === 0) return;
+  if (rows.length === 0) return { sent: 0, failed: 0, skipped: 0 };
 
   // Market context (off unless MACRO_CONTEXT=test|on). Fetched once; null → emails unchanged.
   const macro = await getMacroForEmail();
   const readers = await readerCount(pool);
 
-  let sent = 0; let failed = 0;
-  for (const { email, lang, unsubscribe_token } of rows) {
+  const out: Outgoing[] = rows.map(({ email, lang, unsubscribe_token }) => {
     const unsubscribeUrl = `${BASE}/api/unsubscribe?token=${unsubscribe_token}`;
     const { subject, html, text } = alertEmail({
       price, change24h, movePct, direction, signal: r.signal, fgValue: r.fgValue, fgClass: r.fgClass, maPct: r.maPct, athPct: r.athPct,
@@ -102,7 +117,7 @@ async function sendEmailAlerts(
       subscriberCount: readers, subscriberGoal: READER_GOAL,
       marketBlock: macro && includeMacroFor(email) ? macroAlertBlock(macro, lang) : undefined,
     });
-    const result = await resend.emails.send({
+    return { email, message: {
       from:     EMAIL_FROM,
       to:       email,
       ...(REPLY_TO ? { replyTo: REPLY_TO } : {}),
@@ -111,16 +126,14 @@ async function sendEmailAlerts(
       subject,
       html,
       text,
-    });
-    if (result.error) {
-      console.error(`sendEmailAlerts: failed for ${email}:`, JSON.stringify(result.error));
-      failed++;
-    } else {
-      sent++;
-    }
-    await delay(250);
-  }
-  console.log(`sendEmailAlerts: ${sent}/${rows.length} sent successfully, ${failed} failed`);
+    } };
+  });
+  return sendOnce(pool, resend, runKey, out);
+}
+
+async function finishAlertRun(runKey: string, failed: number) {
+  // A run with failed batches stays open, so the next run (15 min later) retries just those readers.
+  if (failed === 0) await pool.query('UPDATE alert_log SET completed_at = NOW() WHERE run_key = $1', [runKey]);
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -129,6 +142,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!cronAuthorized(req)) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
+    await ensureSendLog(pool);
+    await ensureRunColumns(pool, 'alert_log');
+
+    // Finish anything a crash or deploy left half-sent: first an alert run, then the Sunday digest.
+    const open = await unfinishedAlertRun();
+    if (open) {
+      let readings: Readings;
+      try { readings = await fetchSignalData(); } catch (e: any) {
+        return res.status(200).json({ status: 'readings_unavailable' });
+      }
+      const r = await sendEmailAlerts(open.key, open.price, open.movePct * 100, open.movePct, open.direction, readings);
+      await finishAlertRun(open.key, r.failed);
+      return res.status(200).json({ status: 'alert_resumed', ...r });
+    }
+    // A failing digest resume must never block this run's alert check.
+    let digest = null;
+    try { digest = await resumeUnfinishedDigest(resend); } catch (e: any) { console.error('digest resume failed:', e.message); }
+    if (digest) return res.status(200).json({ status: 'digest_resumed', ...digest });
+
     const { eur: currentPrice, change24h } = await getCurrentPrice();
     await storePriceSnapshot(currentPrice);
 
@@ -162,12 +194,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ status: 'readings_unavailable' });
     }
 
-    await sendEmailAlerts(currentPrice, change24h, movePct, direction, readings);
     // reference_price_eur is derived from the 24h change so the logged row stays self-consistent.
     const refPrice = currentPrice / (1 + movePct);
-    await logAlert(currentPrice, refPrice, movePct, direction);
+    const runKey = await startAlertRun(currentPrice, refPrice, movePct, direction);
+    const result = await sendEmailAlerts(runKey, currentPrice, change24h, movePct, direction, readings);
+    await finishAlertRun(runKey, result.failed);
 
-    return res.status(200).json({ status: 'alert_sent', direction, movePct: change24h.toFixed(2) + '%' });
+    return res.status(200).json({ status: 'alert_sent', direction, movePct: change24h.toFixed(2) + '%', ...result });
 
   } catch (err: any) {
     console.error('check-signal error:', err.message);

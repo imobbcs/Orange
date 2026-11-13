@@ -47,7 +47,15 @@ const strip = (h: string) => h.replace(/<br\s*\/?>/gi, ' ').replace(/<\/p>\s*<p>
   .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
 const escAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-export function buildHomeHtml(raw: string): string {
+// The scoring rules live in one file; the homepage gets them pasted into its SIGNAL MODEL block.
+const MODEL_RE = /(\/\* SIGNAL MODEL \(start\)[\s\S]*?\*\/)[\s\S]*?(\/\* SIGNAL MODEL \(end\) \*\/)/;
+export function injectSignalModel(html: string, model = fs.readFileSync(path.join(process.cwd(), 'lib', 'signal-model.js'), 'utf8')): string {
+  if (!MODEL_RE.test(html)) throw new Error('SIGNAL MODEL block missing from app.html');
+  return html.replace(MODEL_RE, (_m, a, b) => `${a}\n${model}\n  ${b}`);
+}
+
+export function buildHomeHtml(input: string): string {
+  const raw = injectSignalModel(input);
   const faq = englishFaq(raw);
   if (!faq.length) return raw;
   const items = faq.map((item, i) => `

@@ -89,64 +89,21 @@ async function postTweet(text, replyToId) {
 const SITE_BASE = 'https://whentobuybtc.xyz';
 
 async function fetchSignal() {
-  console.log('Fetching signal from whentobuybtc.xyz APIs...');
+  // The site scores the temperature (lib/signal-model.js); the bot only reads the result,
+  // so it can never drift from what the site and the emails show.
+  console.log('Fetching signal from whentobuybtc.xyz/api/signal...');
+  const r = await fetch(`${SITE_BASE}/api/signal`, { signal: AbortSignal.timeout(20000) });
+  if (!r.ok) throw new Error(`signal API ${r.status}`);
+  return fromSignalApi(await r.json());
+}
 
-  // Run all three fetches in parallel
-  const [fgRes, priceRes, athRes, historyRes] = await Promise.all([
-    fetch(`${SITE_BASE}/api/fear-greed`, { signal: AbortSignal.timeout(15000) }),
-    fetch(`${SITE_BASE}/api/price`, { signal: AbortSignal.timeout(15000) }),
-    fetch(`${SITE_BASE}/api/ath`, { signal: AbortSignal.timeout(15000) }),
-    fetch(`${SITE_BASE}/api/history?timeframe=1y&currency=eur`, { signal: AbortSignal.timeout(15000) }),
-  ]);
-
-  if (!fgRes.ok)      throw new Error(`fear-greed API ${fgRes.status}`);
-  if (!priceRes.ok)   throw new Error(`price API ${priceRes.status}`);
-  if (!athRes.ok)     throw new Error(`ath API ${athRes.status}`);
-  if (!historyRes.ok) throw new Error(`history API ${historyRes.status}`);
-
-  const [fgData, priceData, athData, historyData] = await Promise.all([
-    fgRes.json(),
-    priceRes.json(),
-    athRes.json(),
-    historyRes.json(),
-  ]);
-
-  // Fear & Greed
-  const fearGreed = parseInt(fgData.value, 10);
-  const fgLabel   = fgData.value_classification;
-  console.log(`Fear & Greed: ${fearGreed} (${fgLabel})`);
-
-  // Current price
-  const currentPrice = priceData.eur;
-  const change24h = typeof priceData.eur_24h_change === 'number' ? priceData.eur_24h_change : null;
-  console.log(`Price: ${Math.round(currentPrice)} EUR`);
-
-  // 200-day MA from history
-  const prices = historyData.prices.map(p => p[1]);
-  const last200 = prices.slice(-200);
-  const ma200 = last200.reduce((a, b) => a + b, 0) / last200.length;
-  const maPct = (currentPrice - ma200) / ma200 * 100;
-  const vsMA = maPct.toFixed(1);
-  console.log(`MA200: ${Math.round(ma200)} EUR, vs MA: ${vsMA}%`);
-
-  // ATH distance
-  const ath = athData.ath_eur;
-  const athPct = (currentPrice - ath) / ath * 100;
-  const fromATH = athPct.toFixed(1);
-  console.log(`ATH: ${Math.round(ath)} EUR, from ATH: ${fromATH}%`);
-
-  // Composite signal: same model as lib/signal.ts and app.html (see SIGNAL MODEL below)
-  // Score the exact values (like the site); round only for display.
-  const { score, state, parts } = wtbSignal(fearGreed, fgLabel, maPct, athPct, change24h);
-
-  let signal, emoji;
-  if (state === 'accumulate') { signal = 'Cold'; emoji = '❄️'; }
-  else if (state === 'hold')  { signal = 'Mild'; emoji = '🌤️'; }
-  else                        { signal = 'Hot';  emoji = '🔥'; }
-
-  console.log(`Signal: ${signal} (score ${score})`);
-  return { fearGreed, fgLabel, vsMA, fromATH, signal, emoji, currentPrice: Math.round(currentPrice),
-    state, parts, maPct, athPct, change24h };
+const STATE_LABEL = { accumulate: ['Cold', '❄️'], hold: ['Mild', '🌤️'], caution: ['Hot', '🔥'] };
+function fromSignalApi(d) {
+  const [signal, emoji] = STATE_LABEL[d.state];
+  console.log(`Signal: ${signal} (score ${d.score}) · F&G ${d.fg} · vs MA ${d.maPct.toFixed(1)}% · from ATH ${d.athPct.toFixed(1)}%`);
+  return { fearGreed: d.fg, fgLabel: d.fgLabel, vsMA: d.maPct.toFixed(1), fromATH: d.athPct.toFixed(1), signal, emoji,
+    currentPrice: Math.round(d.price), state: d.state, parts: d.parts, maPct: d.maPct, athPct: d.athPct,
+    change24h: typeof d.change24h === 'number' ? d.change24h : null };
 }
 
 // ─── SIGNAL POST ─────────────────────────────────────────────────────────────
@@ -266,31 +223,4 @@ if (require.main === module) (async () => {
   }
 })();
 
-/* SIGNAL MODEL (start) — keep in sync with lib/signal.ts (tests/signal.test.ts checks it).
-   Each reading leans cold (+), neutral (0) or hot (−); every reading has a neutral middle.
-   A 24h move of 5% or more tips it one step (down = colder, up = hotter).
-   Total −6…+6: Cold at +3 or more, Hot at −3 or less, Mild in between. */
-function wtbFgBand(v, cls) {
-  var m = { 'extreme fear': 'extreme-fear', 'fear': 'fear', 'neutral': 'neutral', 'greed': 'greed', 'extreme greed': 'extreme-greed' };
-  var k = cls ? m[String(cls).trim().toLowerCase()] : null;
-  if (k) return k;
-  return v < 25 ? 'extreme-fear' : v < 47 ? 'fear' : v < 55 ? 'neutral' : v < 76 ? 'greed' : 'extreme-greed';
-}
-function wtbSignal(fgValue, fgClass, maPct, athPct, change24h) {
-  var fg = { 'extreme-fear': 2, 'fear': 1, 'neutral': 0, 'greed': -1, 'extreme-greed': -2 }[wtbFgBand(fgValue, fgClass)];
-  var ma = maPct < -10 ? 2 : maPct < -5 ? 1 : maPct <= 5 ? 0 : maPct <= 20 ? -1 : -2;
-  var ath = athPct < -50 ? 1 : athPct < -20 ? 0 : -1;
-  var move = (change24h == null || !isFinite(change24h)) ? 0 : change24h <= -5 ? 1 : change24h >= 5 ? -1 : 0;
-  var score = fg + ma + ath + move;
-  return { score: score, state: score >= 3 ? 'accumulate' : score <= -3 ? 'caution' : 'hold', parts: { fg: fg, ma: ma, ath: ath, move: move } };
-}
-/* Marker position on the Cold–Mild–Hot bar (0 = cold end, 1 = hot end); each state owns one third. */
-function wtbScalePos(score) {
-  var s = Math.max(-6, Math.min(6, Math.round(score)));
-  if (s >= 3) return ((6 - s + 0.5) / 4) / 3;
-  if (s <= -3) return 2 / 3 + ((-s - 3 + 0.5) / 4) / 3;
-  return 1 / 3 + ((2 - s + 0.5) / 5) / 3;
-}
-/* SIGNAL MODEL (end) */
-
-module.exports = { buildSignalPost, buildSignalReply, signalSentence, wtbSignal, wtbScalePos };
+module.exports = { buildSignalPost, buildSignalReply, signalSentence, fromSignalApi };

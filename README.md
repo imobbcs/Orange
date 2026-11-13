@@ -1,6 +1,6 @@
 # When to Buy BTC
 
-The Bitcoin weather for long-term holders. Three readings (market mood, the 200-day average and distance from the all-time high) add up to one temperature: **Cold, Mild or Hot**. Descriptive only, never advice.
+The Bitcoin weather for long-term holders. Three readings (market mood, the 200-day average and distance from the all-time high), plus one step for a 5% day, add up to one temperature: **Cold, Mild or Hot**. Descriptive only, never advice.
 
 🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz) · 🇩🇪 [whentobuybtc.xyz/wann-bitcoin-kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen)
 
@@ -34,7 +34,7 @@ One source of truth: `lib/signal.ts`. Each reading scores from +2 (leans cold) t
 
 **Cold** at +3 or more, **Hot** at −3 or less, **Mild** in between. Fear & Greed bands follow the publisher's own label, with a numeric fallback (25 / 47 / 55 / 76).
 
-The same logic is copied into `public/app.html` (between the `SIGNAL MODEL` markers) and `twitter-bot/bot.js`. `tests/signal.test.ts` checks that all copies agree. Internal state names are still `accumulate` / `hold` / `caution` (= Cold / Mild / Hot).
+The rules live in one file, `lib/signal-model.js`. `lib/signal.ts` wraps it with types, `lib/home-html.ts` pastes it into the homepage's `SIGNAL MODEL` block when serving, and the X bot reads the result from `/api/signal`. `tests/signal.test.ts` checks the served page runs the same file. Internal state names are still `accumulate` / `hold` / `caution` (= Cold / Mild / Hot).
 
 The calculator model is `lib/dca.ts` (mirrored as `wtbDca` in `app.html`). It buys at each month's average price, values at today's price, and makes weekly buys every 7 days from 1 January of the start year.
 
@@ -103,7 +103,7 @@ The market block in alerts and digests is controlled by `MACRO_CONTEXT`: `off` (
 
 Preview everything at `/api/email-preview?token=<CRON_SECRET>&type=digest|alert|welcome|confirm&lang=en|de&state=accumulate|hold|caution`.
 
-Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
+Tables: `subscribers`, `alert_log`, `digest_log` (both with `run_key` + `completed_at`), `email_sends` (who got which run, so nobody gets one twice), `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
 
 ---
 

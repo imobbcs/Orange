@@ -7,7 +7,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    // A type error now stops the deploy instead of shipping (CI catches it on the PR first)
+    ignoreBuildErrors: false,
   },
   async redirects() {
     return [
@@ -66,6 +67,12 @@ const nextConfig = {
       },
       {
         source: '/it/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      // The raw template is only ever served through / (it needs the signal model pasted in)
+      {
+        source: '/app.html',
         destination: '/',
         permanent: true,
       },
