@@ -34,7 +34,7 @@ One source of truth: `lib/signal.ts`. Each reading scores from +2 (leans cold) t
 
 **Cold** at +3 or more, **Hot** at −3 or less, **Mild** in between. Fear & Greed bands follow the publisher's own label, with a numeric fallback (25 / 47 / 55 / 76).
 
-The same logic is copied into `public/app.html` (between the `SIGNAL MODEL` markers) and `twitter-bot/bot.js`. `tests/signal.test.ts` checks that all copies agree. Internal state names are still `accumulate` / `hold` / `caution` (= Cold / Mild / Hot).
+The rules live in one file, `lib/signal-model.js`. `lib/signal.ts` wraps it with types, `lib/home-html.ts` pastes it into the homepage's `SIGNAL MODEL` block when serving, and the X bot reads the result from `/api/signal`. `tests/signal.test.ts` checks the served page runs the same file. Internal state names are still `accumulate` / `hold` / `caution` (= Cold / Mild / Hot).
 
 The calculator model is `lib/dca.ts` (mirrored as `wtbDca` in `app.html`). It buys at each month's average price, values at today's price, and makes weekly buys every 7 days from 1 January of the start year.
 
