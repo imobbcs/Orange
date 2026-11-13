@@ -14,7 +14,7 @@ const text = (h: string, id: string) => (h.match(new RegExp(`id="${id}"[^>]*>([\
 test('home hero: translations are readable from app.html', () => {
   assert.ok(tr, 'translations block could not be evaluated');
   for (const l of ['en', 'de'] as const) {
-    for (const k of ['stateName', 'signalHold', 'signalAccumulate', 'signalAccumulateDump', 'signalCaution', 'signalCautionHot', 'heroAbove', 'heroBelow', 'heroDiscount']) {
+    for (const k of ['stateName', 'signalHold', 'signalHoldDump', 'signalHoldPump', 'signalAccumulate', 'signalAccumulateDump', 'signalCaution', 'signalCautionHot', 'heroAbove', 'heroBelow', 'heroDiscount']) {
       assert.ok(tr[l][k], `${l}.${k} missing`);
     }
   }
@@ -60,4 +60,17 @@ test('home hero: German render and states', () => {
 test('home hero: snapshot cannot break out of its script tag', () => {
   const out = renderHero(html, { ...snap, fgLabel: '</script><script>alert(1)</script>' }, 'en', tr);
   assert.ok(!out.includes('</script><script>alert(1)'));
+});
+
+test('home hero: a sharp day in a Mild market never reads as calm', () => {
+  const down = renderHero(html, { ...snap, change24h: -7.09 }, 'en', tr, Date.UTC(2026, 10, 13));
+  assert.equal(text(down, 'hero-state'), 'Mild.');
+  assert.ok(tr.en.signalHoldDump.includes(text(down, 'hero-sentence')));
+  const up = renderHero(html, { ...snap, change24h: 6.2 }, 'de', tr, Date.UTC(2026, 10, 13));
+  assert.ok(tr.de.signalHoldPump.includes(text(up, 'hero-sentence')));
+  for (const l of ['en', 'de'] as const)
+    for (const k of ['signalHoldDump', 'signalHoldPump']) {
+      assert.equal(tr[l][k].length, 7, `${l}.${k} has 7 lines`);
+      for (const line of tr[l][k]) assert.ok(!/—/.test(line) && !/\bcalm\b|ruhiger Markt/i.test(line), `${l}.${k}: ${line}`);
+    }
 });

@@ -2689,6 +2689,24 @@
         "Calm data. Most long-term holders change nothing on days like this.",
         "Quiet conditions. Good weather for stacking on schedule.",
       ],
+      signalHoldDump: [
+        "A sharp drop today, but the bigger picture is mixed.",
+        "Bitcoin fell hard today. The longer-term readings are not at an extreme.",
+        "A red day in a market without a clear lean. Most long-term holders keep their plan.",
+        "Prices fell fast today. Days like this have been part of every cycle so far.",
+        "A big move down, while the long-term readings stay in the middle.",
+        "A rough day on the chart. Most long-term holders change nothing on days like this.",
+        "Bitcoin is down sharply today. The same money buys more sats than yesterday.",
+      ],
+      signalHoldPump: [
+        "A strong day up, but the bigger picture is mixed.",
+        "Bitcoin jumped today. The longer-term readings are not at an extreme.",
+        "A green day in a market without a clear lean. Most long-term holders keep their plan.",
+        "Prices rose fast today. A nice day for anyone who has been stacking.",
+        "A big move up, while the long-term readings stay in the middle.",
+        "A good day on the chart. Most long-term holders just enjoy it.",
+        "Bitcoin is up sharply today. This is what the quiet months were for.",
+      ],
       signalCaution: [
         "Greed is high and the price is stretched above its trend.",
         "A hot market. Most long-term holders enjoy it and keep their plan.",
@@ -2865,6 +2883,24 @@
         "Ein gewöhnlicher Tag. An gewöhnlichen Tagen wirkt regelmäßiges Sparen.",
         "Ruhige Daten. Die meisten langfristigen Halter ändern an solchen Tagen nichts.",
         "Ruhige Bedingungen. Gutes Wetter, um planmäßig weiterzusparen.",
+      ],
+      signalHoldDump: [
+        "Heute ein starker Rückgang, das Gesamtbild bleibt aber gemischt.",
+        "Bitcoin ist heute stark gefallen. Die längerfristigen Werte sind nicht im Extrem.",
+        "Ein roter Tag in einem Markt ohne klare Richtung. Die meisten langfristigen Halter bleiben bei ihrem Plan.",
+        "Die Preise sind heute schnell gefallen. Solche Tage gehörten bisher zu jedem Zyklus.",
+        "Eine große Bewegung nach unten, während die langfristigen Werte in der Mitte bleiben.",
+        "Ein harter Tag im Chart. Die meisten langfristigen Halter ändern an solchen Tagen nichts.",
+        "Bitcoin ist heute deutlich im Minus. Für dasselbe Geld gibt es mehr Sats als gestern.",
+      ],
+      signalHoldPump: [
+        "Heute ein starker Anstieg, das Gesamtbild bleibt aber gemischt.",
+        "Bitcoin ist heute deutlich gestiegen. Die längerfristigen Werte sind nicht im Extrem.",
+        "Ein grüner Tag in einem Markt ohne klare Richtung. Die meisten langfristigen Halter bleiben bei ihrem Plan.",
+        "Die Preise sind heute schnell gestiegen. Ein schöner Tag für alle, die regelmäßig sparen.",
+        "Eine große Bewegung nach oben, während die langfristigen Werte in der Mitte bleiben.",
+        "Ein guter Tag im Chart. Die meisten langfristigen Halter genießen es einfach.",
+        "Bitcoin ist heute deutlich im Plus. Dafür waren die ruhigen Monate da.",
       ],
       signalCaution: [
         "Die Gier ist hoch, und der Kurs liegt deutlich über seinem Trend.",
@@ -3407,7 +3443,8 @@
     } else if (sig.state === 'hold') {
       pill.classList.add('hold');
       window._cinematicSignal = 'hold';
-      const holdHeadline = t.signalHold[dayIndex % t.signalHold.length];
+      const holdPool = hardDump ? t.signalHoldDump : hotPump ? t.signalHoldPump : t.signalHold;
+      const holdHeadline = holdPool[dayIndex % holdPool.length];
       window._signalHeadline = holdHeadline;
       text.textContent = t.stateName.hold + '. ' + holdHeadline;
     } else {
