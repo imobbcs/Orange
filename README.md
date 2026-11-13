@@ -64,6 +64,7 @@ The calculator model is `lib/dca.ts` (mirrored as `wtbDca` in `app.html`). It bu
 | `/api/btc-history-monthly` | CoinGecko Pro (`days=max`, EUR + USD), monthly averages since 2015 | 12 h |
 | `/api/macro` | FRED (S&P 500, Nasdaq, US 10Y), ECB (FX), CoinGecko (BTC, gold via PAXG). Every field fails soft | 15 min |
 | `/api/visitor-count` | Umami stats | 10 min |
+| `/api/streak` | Each of the last 180 days' temperature, rebuilt from CoinGecko Pro prices + Fear & Greed history (`lib/streak.ts`), for "Mild since 2 Nov" | 3 h |
 | `/api/subscriber-count` | Postgres, floored to the nearest 10 | |
 
 The German page reads the block height from mempool.space in the browser (halving countdown).
@@ -102,8 +103,6 @@ Templates live in `lib/email-templates.ts`, EN and DE:
 The market block in alerts and digests is controlled by `MACRO_CONTEXT`: `off` (default), `test` (only `MACRO_CONTEXT_TEST_EMAIL`) or `on`.
 
 Preview everything at `/api/email-preview?token=<CRON_SECRET>&type=digest|alert|welcome|confirm&lang=en|de&state=accumulate|hold|caution`.
-
-`/api/streak` rebuilds the temperature of each of the last 180 days from price and Fear & Greed history (`lib/streak.ts`), so the hero can say "Mild since 2 Nov" without logging anything.
 
 Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
 
