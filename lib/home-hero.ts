@@ -3,7 +3,7 @@
 // script re-renders the same elements from the same numbers (seedFromServer → apply* functions).
 // Everything here mirrors app.html's own rendering, so the hand-over is invisible.
 import vm from 'vm';
-import { computeSignal, type SignalState } from './signal';
+import { computeSignal, scalePos, type SignalState } from './signal';
 
 export interface HeroSnapshot {
   price: number;
@@ -71,7 +71,7 @@ export function renderHero(html: string, s: HeroSnapshot, lang: Lang, tr: { en: 
   const t = tr[lang];
   const maPct = ((s.price - s.ma200) / s.ma200) * 100;
   const athPct = ((s.price - s.athEur) / s.athEur) * 100;
-  const sig = computeSignal({ fgValue: s.fg, fgClass: s.fgLabel, maPct, athPct });
+  const sig = computeSignal({ fgValue: s.fg, fgClass: s.fgLabel, maPct, athPct, change24h: s.change24h });
   const st: SignalState = sig.state;
   const name: string = t.stateName[st];
   const temp = { accumulate: 'cold', hold: 'mild', caution: 'hot' }[st];
@@ -104,8 +104,7 @@ export function renderHero(html: string, s: HeroSnapshot, lang: Lang, tr: { en: 
     out = fill(out, ['hs-cold', 'hs-mild', 'hs-hot'][i], esc(t.stateName[k]), k === st ? { class: 'on' } : {});
   });
   out = fill(out, 'hero-scale', null, { 'aria-label': (lang === 'de' ? 'Markttemperatur: ' : 'Market temperature: ') + name });
-  const score = Math.max(-5, Math.min(5, sig.score));
-  out = fill(out, 'hero-scale-marker', '', { style: `left: ${((5 - score) / 10) * 100}%` });
+  out = fill(out, 'hero-scale-marker', '', { style: `left: ${scalePos(sig.score) * 100}%` });
   out = fill(out, 'hero-why-btn', esc((lang === 'de' ? 'Warum ' : 'Why ') + name.toLowerCase() + '?'));
 
   // The three readings (updateHeroStrip)

@@ -50,7 +50,7 @@ async function fetchCurrentSignal(): Promise<SignalState | null> {
       fgRes.json(), histRes.json(), priceRes.json(), athRes.json(),
     ]);
     const prices  = (history.prices as [number, number][]).map(p => p[1]);
-    return signalFromApis(price.eur, prices, ath.ath_eur as number, fg.value as number, fg.value_classification).state;
+    return signalFromApis(price.eur, prices, ath.ath_eur as number, fg.value as number, fg.value_classification, price.eur_24h_change ?? null).state;
   } catch (e: any) {
     console.error('fetchCurrentSignal failed, omitting confirmation teaser:', e.message);
     return null;
