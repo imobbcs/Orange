@@ -1,6 +1,6 @@
 // pages/api/subscribe.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { pool } from '../../lib/db';
 import crypto from 'crypto';
 import { Resend } from 'resend';
 import { confirmationEmail, EMAIL_FROM, type Lang, type SignalState } from '../../lib/email-templates';
@@ -8,7 +8,6 @@ import { ensurePrefColumns } from '../../lib/email-prefs';
 import { syncResendContact } from '../../lib/resend-contact';
 import { signalFromApis } from '../../lib/signal';
 
-const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE   = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';

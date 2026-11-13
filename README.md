@@ -103,7 +103,7 @@ The market block in alerts and digests is controlled by `MACRO_CONTEXT`: `off` (
 
 Preview everything at `/api/email-preview?token=<CRON_SECRET>&type=digest|alert|welcome|confirm&lang=en|de&state=accumulate|hold|caution`.
 
-Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
+Tables: `subscribers`, `alert_log`, `digest_log` (both with `run_key` + `completed_at`), `email_sends` (who got which run, so nobody gets one twice), `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
 
 ---
 

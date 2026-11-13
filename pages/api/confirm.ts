@@ -3,14 +3,13 @@
 // Redirects to the site with a query param so the UI can show a success state.
 // Also sends a welcome email confirming the subscription is active.
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { pool } from '../../lib/db';
 import { Resend } from 'resend';
 import { welcomeEmail, EMAIL_FROM, type Lang, type WelcomeMarket } from '../../lib/email-templates';
 import { marketSnapshot } from '../../lib/market-ssr';
 import { syncResendContact } from '../../lib/resend-contact';
 import { readerCount, READER_GOAL } from '../../lib/subscribers';
 
-const pool   = new Pool({ connectionString: process.env.DATABASE_URL });
 const resend = new Resend(process.env.RESEND_API_KEY);
 const BASE   = process.env.NEXT_PUBLIC_BASE_URL || 'https://whentobuybtc.xyz';
 const REPLY_TO = process.env.REPLY_TO_EMAIL || '';

@@ -8,12 +8,11 @@
 // (so a Resend Broadcast can never reach them), pending (never confirmed) → skipped.
 // Paced for Resend's default limit of 2 requests/second; each contact can take two calls.
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { pool } from '../../../lib/db';
 import { cronAuthorized } from '../../../lib/cron-auth';
 import { syncResendContact } from '../../../lib/resend-contact';
 import { backfillContacts } from '../../../lib/contact-backfill';
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const GAP_MS = 1100;
 
 type Run = { startedAt: string; finishedAt: string | null; total: number; done: number; subscribed: number; unsubscribed: number };
