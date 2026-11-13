@@ -6,14 +6,13 @@
 //   POST token=…&choice=none               → unsubscribe from everything
 //   POST ?token=… List-Unsubscribe=One-Click → the inbox's own unsubscribe button (RFC 8058): instant
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { pool } from '../../lib/db';
 import { syncResendContact } from '../../lib/resend-contact';
 import {
   ensurePrefColumns, loadByToken, applyChoice, parseChoice, isOneClick, preferencesPage,
   type Lang, type PageState,
 } from '../../lib/email-prefs';
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 function guessLang(req: NextApiRequest): Lang {
   if (req.query.lang === 'de') return 'de';

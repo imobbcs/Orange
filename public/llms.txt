@@ -10,7 +10,7 @@
 - Imo Babics, Gründer — https://imobabics.com
 
 ## Key pages
-- [Signal](https://whentobuybtc.xyz/) — Current Bitcoin market signal based on three indicators: Fear & Greed Index, 200-day moving average, and distance from all-time high
+- [Signal](https://whentobuybtc.xyz/) — Current Bitcoin market signal based on three indicators (Fear & Greed Index, 200-day moving average, distance from all-time high), plus one step colder or hotter when the price moves 5% or more in 24 hours
 - [Wann Bitcoin kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen) — Deutschsprachiger Einsteiger-Guide: Was macht der Markt gerade, wie entsteht das Signal, wann lohnt sich der Bitcoin-Kauf, und die steuerliche Haltefrist nach § 23 EStG (privates Veräußerungsgeschäft, Einjahresfrist)
 - [Bitcoin Fear & Greed Index today](https://whentobuybtc.xyz/bitcoin-fear-and-greed-index) — Live Fear & Greed value (0 to 100), what each zone means, and how it feeds the market temperature. German: [Angst und Gier Index](https://whentobuybtc.xyz/bitcoin-angst-und-gier-index)
 - [Bitcoin 200-day moving average today](https://whentobuybtc.xyz/bitcoin-200-day-moving-average) — Live 200-day moving average in euros, distance of the price from it, chart. German: [200-Tage-Linie](https://whentobuybtc.xyz/bitcoin-200-tage-linie)

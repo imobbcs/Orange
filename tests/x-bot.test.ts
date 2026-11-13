@@ -47,3 +47,13 @@ test('tweet pool: stable indices, clean, independent, no advice', () => {
     assert.ok(!/40% of all US dollars|Vierzig Prozent aller/i.test(t), 'myth: ' + t.slice(0, 40));
   }
 });
+
+test('bot reads the temperature from /api/signal instead of scoring it itself', () => {
+  const s = bot.fromSignalApi({ price: 61618.4, change24h: -7.09, fg: 19, fgLabel: 'Extreme fear', maPct: -3.31, athPct: -42.77,
+    score: 3, state: 'accumulate', parts: { fg: 2, ma: 0, ath: 0, move: 1 } });
+  assert.equal(s.signal, 'Cold');
+  assert.equal(s.currentPrice, 61618);
+  assert.equal(s.vsMA, '-3.3');
+  const p = bot.buildSignalPost(s);
+  assert.ok(p.startsWith('$BTC today: Cold') && p.length <= 280, p);
+});

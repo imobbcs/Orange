@@ -2,10 +2,9 @@
 // Returns the number of confirmed email subscribers, floored to nearest 10.
 // Same response shape as /api/visitor-count: { subscribers: number }
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
+import { pool } from '../../lib/db';
 import { READER_MIN_SHOWN } from '../../lib/subscribers';
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

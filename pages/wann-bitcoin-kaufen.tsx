@@ -839,7 +839,7 @@ export default function WannBitcoinKaufen({ data }: { data: SignalData }) {
           </div>
           <div className="wbc-body" style={{ marginTop: '1.75rem' }}>
             <p>Ob das viel oder wenig ist, lässt sich nicht am Preis allein ablesen, sondern daran, wie er im Vergleich zu historischen Werten und der aktuellen Marktstimmung steht. Genau hier setzt die Frage an, ob man jetzt Bitcoin kaufen soll oder lieber wartet.</p>
-            <p>Dafür gibt es drei Indikatoren. Zusammen ergeben sie das Signal oben.</p>
+            <p>Dafür gibt es drei Indikatoren. Zusammen, plus ein Schritt an Tagen mit 5 % Bewegung oder mehr, ergeben sie das Signal oben.</p>
           </div>
           {data.currentPrice !== null && (
             <div style={{
