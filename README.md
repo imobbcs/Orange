@@ -103,6 +103,8 @@ The market block in alerts and digests is controlled by `MACRO_CONTEXT`: `off` (
 
 Preview everything at `/api/email-preview?token=<CRON_SECRET>&type=digest|alert|welcome|confirm&lang=en|de&state=accumulate|hold|caution`.
 
+`/api/streak` rebuilds the temperature of each of the last 180 days from price and Fear & Greed history (`lib/streak.ts`), so the hero can say "Mild since 2 Nov" without logging anything.
+
 Tables: `subscribers`, `alert_log`, `digest_log`, `btc_price_history` (snapshot written on each alert check, 7-day retention; not read by the app).
 
 ---
