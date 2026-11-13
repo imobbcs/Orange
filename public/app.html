@@ -2012,6 +2012,64 @@
     .hero-capture .email-msg { text-align: center; }
   </style>
   <!-- ═══ EMAIL CAPTURE (end) ═══ -->
+<style>
+  /* ── DESIGN: compact "Why" section ──
+     Each reading becomes a tight card: number left, plain line right, the lean scale under both.
+     The fourth input (today's move) is a slim row. Together keeps its sentence and the wider
+     market, and drops its own scale (the hero shows the same one). */
+  .fp-move { background: var(--fp-bg2); border: 1px solid var(--fp-line); padding: 14px 16px; }
+  .fp-move.tips { border-color: rgba(var(--temp-rgb),0.45); }
+  .why-v2 .instrument-body > .fp-move { grid-column: 1 / -1; }
+  .fp-move-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; }
+  .fp-move-id { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fp-quiet); }
+  .fp-move-row { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 14px; }
+  .fp-move-v { font-family: var(--title); font-size: 1.9rem; line-height: 1; color: var(--white); }
+  .fp-move-line { font-family: var(--display); font-style: italic; font-size: 1rem; line-height: 1.4; color: var(--muted); }
+  .fp-move-lean { font-family: var(--mono); font-weight: 400; font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fp-quiet); white-space: nowrap; }
+  .fp-move.tips .fp-move-lean { color: var(--temp); }
+  .fp-together .fp-scale, .fp-together .fp-scale-l { display: none; }
+  .fp-together { padding: 18px 20px; }
+  .fp-together p { margin-bottom: 4px; }
+  @media (max-width: 768px) {
+    .why-v2 .instrument-panel { margin-top: 1.25rem; }
+    .why-v2 .instrument-body { gap: 10px; }
+    /* Card grid:  id ............ LEAN
+                   19 │ plain line
+                      │ small sub
+                   ──●──┼──┼──     MORE ↓      */
+    .why-v2 .instrument-metric, .why-v2 .instrument-metric.primary {
+      display: grid !important; grid-template-columns: auto 1fr auto; column-gap: 14px; align-items: center; padding: 14px 16px;
+    }
+    .why-v2 .instrument-metric > * { grid-column: 1 / -1; }
+    .why-v2 .instrument-metric-id { grid-column: 1 / 3; grid-row: 1; margin: 0; }
+    .why-v2 .fp-scale-l { grid-column: 3; grid-row: 1; margin: 0; justify-content: flex-end; }
+    .why-v2 .fp-scale-l span { display: none; }
+    .why-v2 .instrument-metric > div[style] { grid-column: 1; grid-row: 2 / span 2; align-self: start; margin-top: 10px; }
+    .why-v2 .instrument-value, .why-v2 .instrument-metric.primary .instrument-value { font-size: 2.4rem; }
+    .why-v2 .fp-line { grid-column: 2 / -1; grid-row: 2; margin: 10px 0 0; font-size: 1rem; line-height: 1.4; }
+    .why-v2 .instrument-sub { grid-column: 2 / -1; grid-row: 3; margin: 4px 0 0; }
+    .why-v2 .fp-scale { grid-column: 1 / 3; grid-row: 4; margin: 16px 0 0; }
+    .why-v2 .fp-more { grid-column: 3; grid-row: 4; width: auto; border: 0; margin: 16px 0 0; padding: 0 0 0 8px; min-height: 0; text-align: right; position: relative; }
+    .why-v2 .fp-more::after { content: ""; position: absolute; inset: -14px -8px; }
+    .why-v2 .instrument-desc { grid-column: 1 / -1; grid-row: 5; }
+    .fp-move-row { grid-template-columns: auto 1fr; }
+    .fp-move { padding: 14px 16px; }
+    .fp-together-word { font-size: 1.8rem; }
+
+    /* ── DESIGN: nothing under 11px on a phone (labels that were 8–10.9px) ── */
+    .announce-text, .announce-link, .nav-word, .lang-btn, .hero-scale-labels span, .hero-strip-label, .email-submit,
+    .hero-share-label, .hero-share button, .visitor-counter, .visitor-counter span, .section-label,
+    .why-v2 .instrument-metric-id, .why-v2 .instrument-metric-id span, .why-v2 .instrument-sub, .why-v2 .instrument-sub span,
+    .fp-scale-l span, .fp-scale-l b, .fp-more, .fp-together-label, .chart-tf, .chart-legend-item span,
+    .chart-annotation-ma, .chart-annotation-price, .cx-k, .cx-legend span span, .cx-fine, .cx-share button, .cx-share button span,
+    .email-trust, .email-trust span, .push-meta, .mx-head span, .mx-eye, #mx-chg, #mx-chg b, .mx-scale-l span, .mx-rl, .mx-rv span,
+    .footer-quote cite, .footer-copy, .footer-copy span, .footer-copy a, .footer-tools a, .footer-links a {
+      font-size: 0.6875rem !important;
+    }
+    /* At 11px the top bar needs the room: drop the coin icon there */
+    .announce-bar > svg { display: none !important; }
+  }
+</style>
 </head>
 <body>
 
@@ -2734,6 +2792,8 @@
       fpLeanCold: 'Leans cold', fpLeanMild: 'Neutral', fpLeanHot: 'Leans hot',
       fpLineFg: { 2: 'People are scared. Prices often feel cheapest when the mood is worst.', 1: 'The mood is cautious, more worried than excited.', 0: 'The mood is neutral, neither scared nor excited.', '-1': 'The mood is upbeat. People feel good about Bitcoin.', '-2': 'The mood is euphoric. Excitement runs high.' },
       fpLineMa: { 2: 'The price sits well below its long-term average.', 1: 'The price sits below its long-term average.', 0: 'The price sits close to its long-term average.', '-1': 'The price sits above its long-term average.', '-2': 'The price sits far above its long-term average.' },
+      fpMoveId: '04 / Today · 24h move',
+      fpLineMove: { 1: 'A fall of 5% or more. It tips the temperature one step colder.', 0: 'Less than 5% either way. It does not change the temperature.', '-1': 'A rise of 5% or more. It tips the temperature one step hotter.' },
       fpLineAth: { 1: 'The price is more than half below its all-time high.', 0: 'The price is well below its all-time high.', '-1': 'The price is within 20% of its all-time high.' },
       fpTogetherText: { accumulate: 'All three lean cold. Sats are cheaper than usual.', hold: 'The readings pull in different directions, so the market reads mild.', holdCalm: 'No reading is at an extreme, so the market reads mild.', accumulateMove: 'The readings lean cold, and a sharp drop today tips it over. Sats are cheaper than usual.', cautionMove: 'The readings lean hot, and a sharp rise today tips it over. A good moment for anyone who has been stacking.', caution: 'The readings lean hot. A good moment for anyone who has been stacking.' },
       fpCalcLabel: 'What if?', fpCalcTitle: 'What if you had<br>started back then?',
@@ -2929,6 +2989,8 @@
       fpLeanCold: 'Eher kalt', fpLeanMild: 'Neutral', fpLeanHot: 'Eher heiß',
       fpLineFg: { 2: 'Die Leute haben Angst. Am günstigsten fühlt es sich oft an, wenn die Stimmung am schlechtesten ist.', 1: 'Die Stimmung ist vorsichtig, eher besorgt als begeistert.', 0: 'Die Stimmung ist neutral, weder ängstlich noch begeistert.', '-1': 'Die Stimmung ist gut. Die Leute fühlen sich wohl mit Bitcoin.', '-2': 'Die Stimmung ist euphorisch. Die Begeisterung ist groß.' },
       fpLineMa: { 2: 'Der Kurs liegt deutlich unter seinem langfristigen Durchschnitt.', 1: 'Der Kurs liegt unter seinem langfristigen Durchschnitt.', 0: 'Der Kurs liegt nah an seinem langfristigen Durchschnitt.', '-1': 'Der Kurs liegt über seinem langfristigen Durchschnitt.', '-2': 'Der Kurs liegt weit über seinem langfristigen Durchschnitt.' },
+      fpMoveId: '04 / Heute · 24h-Bewegung',
+      fpLineMove: { 1: 'Ein Minus von 5 % oder mehr. Das macht die Temperatur eine Stufe kälter.', 0: 'Weniger als 5 % in beide Richtungen. Das ändert die Temperatur nicht.', '-1': 'Ein Plus von 5 % oder mehr. Das macht die Temperatur eine Stufe heißer.' },
       fpLineAth: { 1: 'Der Kurs liegt mehr als die Hälfte unter dem Allzeithoch.', 0: 'Der Kurs liegt deutlich unter dem Allzeithoch.', '-1': 'Der Kurs liegt weniger als 20 % unter dem Allzeithoch.' },
       fpTogetherText: { accumulate: 'Alle drei zeigen Richtung kalt. Sats sind günstiger als sonst.', hold: 'Die Werte ziehen in verschiedene Richtungen, deshalb ist der Markt mild.', holdCalm: 'Kein Wert ist extrem, deshalb ist der Markt mild.', accumulateMove: 'Die Werte zeigen Richtung kalt, und der starke Rückgang heute gibt den Ausschlag. Sats sind günstiger als sonst.', cautionMove: 'Die Werte zeigen Richtung heiß, und der starke Anstieg heute gibt den Ausschlag. Ein schöner Moment für alle, die schon länger stapeln.', caution: 'Die Werte zeigen Richtung heiß. Ein schöner Moment für alle, die schon länger stapeln.' },
       fpCalcLabel: 'Was wäre, wenn?', fpCalcTitle: 'Was wäre, wenn du<br>damals angefangen hättest?',
@@ -4511,6 +4573,21 @@
       var more = el(c.id + '-fpmore');
       if (more) { var open = more.getAttribute('aria-expanded') === 'true'; more.textContent = (open ? t.fpLess : t.fpMore) + (open ? ' ↑' : ' ↓'); }
     });
+    /* Today: the fourth input, so the readings visibly add up to the word */
+    var mv = el('fp-move');
+    if (!mv && el('ath-metric')) {
+      mv = document.createElement('div'); mv.id = 'fp-move'; mv.className = 'fp-move';
+      mv.innerHTML = '<div class="fp-move-top"><span class="fp-move-id" id="fp-move-id"></span><b class="fp-move-lean" id="fp-move-lean"></b></div><div class="fp-move-row"><span class="fp-move-v" id="fp-move-v"></span><span class="fp-move-line" id="fp-move-line"></span></div>';
+      el('ath-metric').parentNode.appendChild(mv);
+    }
+    if (mv) {
+      var ms = parts.move || 0, ch = typeof currentChange24h === 'number' ? currentChange24h : null;
+      el('fp-move-id').textContent = t.fpMoveId || '';
+      el('fp-move-v').textContent = ch === null ? '–' : (ch > 0 ? '+' : ch < 0 ? '−' : '') + Math.abs(ch).toLocaleString(numLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + (currentLang === 'de' ? ' %' : '%');
+      el('fp-move-line').textContent = (t.fpLineMove || {})[ms] || '';
+      el('fp-move-lean').textContent = lean(ms);
+      mv.classList.toggle('tips', ms !== 0);
+    }
     /* Together */
     el('fp-together-word').textContent = name + '.';
     var pv = [parts.fg, parts.ma, parts.ath, parts.move || 0];
