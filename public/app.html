@@ -2012,6 +2012,23 @@
     .hero-capture .email-msg { text-align: center; }
   </style>
   <!-- ═══ EMAIL CAPTURE (end) ═══ -->
+<style>
+  /* ── UI: readable inactive controls + 44px tap targets on touch screens ──
+     The inactive language and the footer text used --grey (#4A4540, ~2:1 on the background,
+     reads as disabled). #8A837A is the page's quiet text colour (~5:1). */
+  .lang-btn:not(.active), .footer-copy, .footer-links a { color: #8A837A; }
+  .lang-btn:not(.active):hover, .footer-links a:hover { color: var(--white); }
+  /* Small links keep their look; an invisible 44px box around them takes the tap. */
+  .announce-link, .hero-share button, .footer-copy a, .footer-links a { position: relative; }
+  @media (max-width: 768px) {
+    .announce-link::after, .hero-share button::after, .footer-copy a::after, .footer-links a::after {
+      content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: 44px; transform: translate(-50%, -50%);
+    }
+    .footer-links { gap: 2rem; }
+    .hero-share { column-gap: 1.5rem; } /* room for the 44px box around "X" without overlapping its neighbours */
+    .footer-awards svg { width: 44px; height: 44px; }
+  }
+</style>
 </head>
 <body>
 
