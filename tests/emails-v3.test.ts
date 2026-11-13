@@ -91,3 +91,20 @@ test('reader count: hidden below the minimum, shown from it', async () => {
   const d = digestEmail({ price: 1, signal: 'hold', fgValue: 50, maPct: 0, athPct: -30, change24h: 0, unsubscribeUrl: '#', replyTo: '', lang: 'en', subscriberCount: undefined });
   assert.ok(d.html.includes('This is a one-person project. If it helps you'), 'lead without a count reads cleanly');
 });
+
+test('emails never rely on opacity (Gmail removes it) and never go under 12px', () => {
+  for (const lang of ['en', 'de'] as const) {
+    const base = { unsubscribeUrl: '#', replyTo: 'x', lang, price: 61618, fgValue: 19, fgClass: 'Extreme Fear', maPct: -3.3, athPct: -42.8 };
+    const all = [
+      alertEmail({ ...base, signal: 'accumulate', movePct: -0.071, direction: 'down', change24h: -7.1 }).html,
+      digestEmail({ ...base, signal: 'hold', change24h: -1.3 }).html,
+      welcomeEmail('#', lang, { replyTo: 'x', market: { price: 61618, change24h: -7.1, fgValue: 19, fgClass: 'Extreme Fear', maPct: -3.3, athPct: -42.8 } }).html,
+    ];
+    for (const html of all) {
+      assert.ok(!/[;"]opacity:/.test(html), 'opacity found in an email');
+      const sizes = (html.match(/font-size:(\d+)px/g) || []).map((s) => parseInt(s.slice(10), 10)).filter((n) => n > 1);
+      assert.ok(Math.min(...sizes) >= 12, 'text under 12px: ' + Math.min(...sizes));
+      assert.ok(!/Fear &amp; Greed<\/p>\s*<p[^>]*>Market mood/.test(html));
+    }
+  }
+});

@@ -26,6 +26,14 @@ const TEMP: Record<SignalState, { hex: string; rgb: string; light: string; emoji
   hold:       { hex: '#F2C46B', rgb: '242,196,107', light: '#8A6208', emoji: '🌤️' },
   caution:    { hex: '#F7931A', rgb: '247,147,26',  light: '#A14F00', emoji: '🔥' },
 };
+/** Solid colour for "fg at alpha over bg" (Gmail removes opacity, so dimmed things need a real colour). */
+function mix(fg: string, bg: string, a: number): string {
+  const p = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const f = p(fg), b = p(bg);
+  return '#' + f.map((v, i) => Math.round(v * a + b[i] * (1 - a)).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+const DIM = (s: SignalState) => mix(TEMP[s].hex, '#1F1E20', 0.28);        // on the dark card
+const DIM_LIGHT = (s: SignalState) => mix(TEMP[s].light, '#F7F3EE', 0.28); // on the light card
 const LEAN_STATE = (n: number): SignalState => (n > 0 ? 'accumulate' : n < 0 ? 'caution' : 'hold');
 
 const MONO  = "font-family:'Courier New',Courier,monospace;";
@@ -114,7 +122,7 @@ function shell(opts: {
   const tempCss = (Object.keys(TEMP) as SignalState[]).map(s =>
     `.tc-${s}{color:${TEMP[s].hex}!important}`).join('');
   const tempCssLight = (Object.keys(TEMP) as SignalState[]).map(s =>
-    `.tc-${s}{color:${TEMP[s].light}!important}.tb-${s}{background-color:${TEMP[s].light}!important}.bt-${s}{background-color:${TEMP[s].light}!important;color:#FFFFFF!important}`).join('');
+    `.tc-${s}{color:${TEMP[s].light}!important}.tb-${s}{background-color:${TEMP[s].light}!important}.tbo-${s}{background-color:${DIM_LIGHT(s)}!important}.bt-${s}{background-color:${TEMP[s].light}!important;color:#FFFFFF!important}`).join('');
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="${lang}">
@@ -184,7 +192,7 @@ ${top}
   <tr>
     <td class="efooter lb" style="padding:22px 32px 26px;border-top:1px solid rgba(237,232,222,0.08);">
       ${replyLine ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:12px;line-height:1.7;color:${MUTED};">${replyLine}</p>` : ''}
-      <p class="ed" style="margin:0 0 8px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason}</p>
+      <p class="ed" style="margin:0 0 8px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason.replace('whentobuybtc.xyz', `<a href="${SITE}" class="ed" style="color:rgba(237,232,222,0.58);text-decoration:none;">whentobuybtc.xyz</a>`)}</p>
       <p class="ed" style="margin:0 0 10px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">${disclaimer}</p>
       <p class="ed" style="margin:0;${MONO}font-size:12px;line-height:1.5;color:rgba(237,232,222,0.58);">
         <a href="${unsubscribeUrl}" class="el" style="display:inline-block;padding:8px 0;color:#F7931A;text-decoration:none;">${lang === 'de' ? 'E-Mails wählen oder abmelden' : 'Choose emails or unsubscribe'}</a><br />
@@ -242,7 +250,7 @@ const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing=
 /** Cold / Mild / Hot bar: three segments, the current one lit, labels underneath. */
 function tempScale(state: SignalState, lang: Lang): string {
   const order: SignalState[] = ['accumulate', 'hold', 'caution'];
-  const seg = order.map((s, i) => `<td width="33%" class="tb-${s}" style="height:4px;font-size:1px;line-height:4px;background-color:${TEMP[s].hex};${s === state ? '' : 'opacity:0.28;'}${i ? 'border-left:3px solid transparent;' : ''}">&nbsp;</td>`).join('');
+  const seg = order.map((s, i) => `<td width="33%" class="${s === state ? 'tb' : 'tbo'}-${s}" style="height:4px;font-size:1px;line-height:4px;background-color:${s === state ? TEMP[s].hex : DIM(s)};${i ? 'border-left:3px solid transparent;' : ''}">&nbsp;</td>`).join('');
   const lab = order.map((s, i) => `<td width="33%" align="${i === 0 ? 'left' : i === 1 ? 'center' : 'right'}" style="padding-top:8px;${MONO}font-size:12px;letter-spacing:0.16em;text-transform:uppercase;">${s === state
     ? `<b class="tc-${s}" style="color:${TEMP[s].hex};">${signalLabel(s, lang)}</b>`
     : `<span class="ed" style="color:rgba(237,232,222,0.58);">${signalLabel(s, lang)}</span>`}</td>`).join('');
