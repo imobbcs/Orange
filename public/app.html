@@ -2125,7 +2125,9 @@
     .mx-scale { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; } .mx-scale i { height: 4px; opacity: 0.28; }
     .mx-scale i[data-s="accumulate"] { background: #8EC9FF; } .mx-scale i[data-s="hold"] { background: #F2C46B; } .mx-scale i[data-s="caution"] { background: #F7931A; } .mx-scale i.on { opacity: 1; }
     .mx-scale-l { display: flex; justify-content: space-between; margin-top: 6px; font-family: "Courier New", monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.42); } .mx-scale-l .on { font-weight: 700; }
-    .mx-row { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid rgba(237,232,222,0.1); } .mx-row:first-child { border-top: 0; }
+    .mx-row { padding: 11px 0; border-top: 1px solid rgba(237,232,222,0.1); } .mx-row:first-child { border-top: 0; }
+    .mx-rh { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+    .mx-rk { margin: 0; font-family: "Courier New", monospace; font-size: 11px; letter-spacing: 0.04em; color: rgba(237,232,222,0.5); }
     .mx-rl { margin: 0 0 3px; font-family: "Courier New", monospace; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(237,232,222,0.55); }
     .mx-rt { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 12px; line-height: 1.5; color: rgba(237,232,222,0.82); }
     .mx-rv { text-align: right; white-space: nowrap; } .mx-rv b { display: block; font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 17px; color: #EDE8DE; }
@@ -3972,7 +3974,7 @@
       const lastTs  = stitchedPrices[stitchedPrices.length - 1][0];
       const nowTs   = Date.now();
       const ageHrs  = (nowTs - lastTs) / 3600000;
-      if (ageHrs > 0.5) { // last candle is stale — extend to now
+      { // the line always ends at the live price, so "Now" matches the big number at the top
         if (ageHrs <= 6) {
           // Close gap: replace last point with live price (same-day movement)
           stitchedPrices = [...stitchedPrices.slice(0, -1), [nowTs, currentPrice]];
@@ -4419,19 +4421,8 @@
         // Trigger scan line
         panel.classList.add('scanning');
         setTimeout(() => panel.classList.remove('scanning'), 1600);
-        // Count-up: fg-value if it's a number
+        // (The count-up lives in INSTRUMENT COUNT-UP below: one animation per number, never two.)
         setTimeout(() => {
-          const fgEl = document.getElementById('fg-value');
-          const target = parseInt(fgEl.textContent);
-          if (!isNaN(target)) {
-            let current = 0;
-            const step = target / 30;
-            const interval = setInterval(() => {
-              current = Math.min(current + step, target);
-              fgEl.textContent = Math.round(current);
-              if (current >= target) clearInterval(interval);
-            }, 30);
-          }
           // Update instrument footer labels
           const scoreEl = document.getElementById('instrument-score');
           const sigLabelEl = document.getElementById('instrument-signal-label');
@@ -4528,21 +4519,21 @@
 
     function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
-    function animateValue(el, start, end, isFloat, suffix, duration) {
+    // Counts up to whatever getEnd() returns, and finishes by writing the live value itself,
+    // so the card can never end on a different number than the hero shows.
+    function animateValue(el, getEnd, format, duration) {
       if (!el) return;
       const startTime = performance.now();
       function update(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = easeOut(progress);
-        const value = start + (end - start) * eased;
-        el.textContent = isFloat
-          ? fmtPct(value)
-          : Math.round(value) + suffix;
+        const end = getEnd();
+        if (typeof end !== 'number' || !isFinite(end)) return;
+        const progress = Math.min((now - startTime) / duration, 1);
+        el.textContent = format(progress < 1 ? end * easeOut(progress) : end);
         if (progress < 1) requestAnimationFrame(update);
       }
       requestAnimationFrame(update);
     }
+    const reducedMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const signalSection = document.getElementById('signal');
     if (!signalSection) return;
@@ -4552,26 +4543,11 @@
         if (entry.isIntersecting && !hasCountedUp) {
           // Wait a beat for the section reveal to complete
           setTimeout(() => {
-            if (fgValue !== null) {
-              const fgEl = document.getElementById('fg-value');
-              if (fgEl && fgEl.textContent !== '—') {
-                animateValue(fgEl, 0, fgValue, false, '', 1400);
-              }
-            }
-            if (currentPrice !== null && maPrice !== null) {
-              const maEl = document.getElementById('ma-value');
-              if (maEl && maEl.textContent !== '—') {
-                const diffPct = (currentPrice - maPrice) / maPrice * 100;
-                animateValue(maEl, 0, diffPct, true, '%', 1400);
-              }
-            }
-            if (currentPrice !== null && athPrice !== null) {
-              const athEl = document.getElementById('ath-value');
-              if (athEl && athEl.textContent !== '—') {
-                const dropPct = (currentPrice - athPrice) / athPrice * 100;
-                animateValue(athEl, 0, dropPct, true, '%', 1400);
-              }
-            }
+            if (reducedMotion) { hasCountedUp = true; return; }
+            const ready = id => { const n = document.getElementById(id); return n && n.textContent !== '—' ? n : null; };
+            animateValue(ready('fg-value'), () => fgValue, v => String(Math.round(v)), 1400);
+            animateValue(ready('ma-value'), () => (currentPrice != null && maPrice ? (currentPrice - maPrice) / maPrice * 100 : NaN), fmtPct, 1400);
+            animateValue(ready('ath-value'), () => (currentPrice != null && athPrice ? (currentPrice - athPrice) / athPrice * 100 : NaN), fmtPct, 1400);
             hasCountedUp = true;
           }, 300);
           countUpObserver.disconnect();
@@ -4884,13 +4860,13 @@
       el('mx-scale-l').innerHTML = ['accumulate', 'hold', 'caution'].map(function (k) { return '<span' + (k === st ? ' class="on tc-' + k + '"' : '') + '>' + t.stateName[k] + '</span>'; }).join('');
       var vtxt = function (id) { var n = el(id); return n ? n.textContent.trim() : ''; };
       var rows = [
-        [de2 ? 'Marktstimmung' : 'Market mood', String(fgValue), parts.fg, (t.fpLineFg || {})[parts.fg]],
-        [de2 ? 'Langfristiger Trend' : 'Long-term trend', vtxt('ma-value'), parts.ma, (t.fpLineMa || {})[parts.ma]],
-        [de2 ? 'Vom Hoch' : 'From the peak', vtxt('ath-value'), parts.ath, (t.fpLineAth || {})[parts.ath]]
+        [de2 ? 'Marktstimmung' : 'Market mood', String(fgValue), parts.fg, (t.fpLineFg || {})[parts.fg], 'Fear & Greed'],
+        [de2 ? 'Langfristiger Trend' : 'Long-term trend', (currentPrice != null && maPrice) ? fmtPct((currentPrice - maPrice) / maPrice * 100) : vtxt('ma-value'), parts.ma, (t.fpLineMa || {})[parts.ma], de2 ? '200-Tage-Schnitt' : '200-day average'],
+        [de2 ? 'Vom Hoch' : 'From the peak', (currentPrice != null && athPrice) ? fmtPct((currentPrice - athPrice) / athPrice * 100) : vtxt('ath-value'), parts.ath, (t.fpLineAth || {})[parts.ath], de2 ? 'Allzeithoch' : 'All-time high']
       ];
       el('mx-rows').innerHTML = rows.map(function (r) {
         var ls = r[2] > 0 ? 'accumulate' : r[2] < 0 ? 'caution' : 'hold';
-        return '<div class="mx-row"><div><p class="mx-rl">' + r[0] + '</p><p class="mx-rt">' + (r[3] || '') + '</p></div><div class="mx-rv"><b>' + r[1] + '</b><span class="tc-' + ls + '">' + lean(r[2]) + '</span></div></div>';
+        return '<div class="mx-row"><div class="mx-rh"><div><p class="mx-rl">' + r[0] + '</p><p class="mx-rk">' + r[4].replace('&', '&amp;') + '</p></div><div class="mx-rv"><b>' + r[1] + '</b><span class="tc-' + ls + '">' + lean(r[2]) + '</span></div></div><p class="mx-rt">' + (r[3] || '') + '</p></div>';
       }).join('');
     }
     /* Chart follows the temperature */
