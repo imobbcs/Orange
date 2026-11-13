@@ -87,7 +87,7 @@ export async function marketSnapshot(req: IncomingMessage, opts: { history?: boo
   }
 
   if (s.fg !== null && s.maPct !== null && s.athPct !== null) {
-    const r = computeSignal({ fgValue: s.fg, fgClass: fg?.value_classification, maPct: s.maPct, athPct: s.athPct });
+    const r = computeSignal({ fgValue: s.fg, fgClass: fg?.value_classification, maPct: s.maPct, athPct: s.athPct, change24h: s.change24h });
     s.state = r.state;
     s.score = r.score;
   }

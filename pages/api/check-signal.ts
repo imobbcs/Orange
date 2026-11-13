@@ -69,7 +69,7 @@ async function fetchSignalData(): Promise<Readings> {
   const prices  = (history.prices as [number, number][]).map(p => p[1]);
   const fgValue = fg.value as number;
   const fgClass = (fg.value_classification as string) ?? null;
-  const { maPct, athPct, state: signal } = signalFromApis(price.eur, prices, ath.ath_eur as number, fgValue, fgClass);
+  const { maPct, athPct, state: signal } = signalFromApis(price.eur, prices, ath.ath_eur as number, fgValue, fgClass, price.eur_24h_change ?? null);
 
   return { fgValue, fgClass, maPct, athPct, signal };
 }

@@ -2,7 +2,8 @@
 //
 // Each reading leans cold (+), sits in the middle (0) or leans hot (−). Every reading has a
 // neutral middle band, so a value in the middle of its range never counts toward either side.
-// Total range −5…+5; Cold at +3 or more, Hot at −3 or less, Mild in between (symmetric).
+// A sharp day tips it one step: a 24h move of 5% or more (down = colder, up = hotter).
+// Total range −6…+6; Cold at +3 or more, Hot at −3 or less, Mild in between (symmetric).
 //
 // public/app.html carries an inline copy of this logic (between the SIGNAL MODEL markers);
 // tests/signal.test.ts checks the two agree. twitter-bot/bot.js has a plain-JS copy too.
@@ -41,21 +42,42 @@ export function athScore(pct: number): number {
   return -1;
 }
 
+// The last 24 hours, in %. A move of 5% or more either way tips the temperature one step.
+export const MOVE_BAND = 5;
+export function moveScore(change24h?: number | null): number {
+  if (change24h == null || !isFinite(change24h)) return 0;
+  if (change24h <= -MOVE_BAND) return 1;
+  if (change24h >= MOVE_BAND) return -1;
+  return 0;
+}
+
+export const SCORE_MAX = 6;
+
+// Where a score sits on the Cold–Mild–Hot bar (0 = far left/cold, 1 = far right/hot).
+// Each state gets exactly one third of the bar, so the marker can never sit in a zone
+// that disagrees with the word.
+export function scalePos(score: number): number {
+  const s = Math.max(-SCORE_MAX, Math.min(SCORE_MAX, Math.round(score)));
+  if (s >= 3) return ((SCORE_MAX - s + 0.5) / (SCORE_MAX - 2)) / 3;
+  if (s <= -3) return 2 / 3 + ((-s - 3 + 0.5) / (SCORE_MAX - 2)) / 3;
+  return 1 / 3 + ((2 - s + 0.5) / 5) / 3;
+}
+
 export function stateFromScore(score: number): SignalState {
   return score >= 3 ? 'accumulate' : score <= -3 ? 'caution' : 'hold';
 }
 
-export function computeSignal(r: { fgValue: number; fgClass?: string | null; maPct: number; athPct: number }) {
-  const parts = { fg: fgScore(r.fgValue, r.fgClass), ma: maScore(r.maPct), ath: athScore(r.athPct) };
-  const score = parts.fg + parts.ma + parts.ath;
+export function computeSignal(r: { fgValue: number; fgClass?: string | null; maPct: number; athPct: number; change24h?: number | null }) {
+  const parts = { fg: fgScore(r.fgValue, r.fgClass), ma: maScore(r.maPct), ath: athScore(r.athPct), move: moveScore(r.change24h) };
+  const score = parts.fg + parts.ma + parts.ath + parts.move;
   return { score, state: stateFromScore(score), parts };
 }
 
-// Shared by the server routes: price (EUR), daily history (EUR), ATH (EUR), F&G → signal.
-export function signalFromApis(price: number, dailyPrices: number[], athEur: number, fgValue: number, fgClass?: string | null) {
+// Shared by the server routes: price (EUR), daily history (EUR), ATH (EUR), F&G, 24h change → signal.
+export function signalFromApis(price: number, dailyPrices: number[], athEur: number, fgValue: number, fgClass?: string | null, change24h?: number | null) {
   const last = dailyPrices.slice(-200);
   const ma = last.reduce((a, b) => a + b, 0) / last.length;
   const maPct = ((price - ma) / ma) * 100;
   const athPct = ((price - athEur) / athEur) * 100;
-  return { ma, maPct, athPct, ...computeSignal({ fgValue, fgClass, maPct, athPct }) };
+  return { ma, maPct, athPct, ...computeSignal({ fgValue, fgClass, maPct, athPct, change24h }) };
 }

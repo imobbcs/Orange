@@ -17,9 +17,9 @@ interface SignalData {
 }
 
 // Same model as the main site and the emails (lib/signal.ts): one temperature everywhere.
-function computeSignal(fg: number | null, fgClass: string | null, ma: number | null, ath: number | null): { signal: 'accumulate' | 'hold' | 'caution' | 'unknown'; score: number } {
+function computeSignal(fg: number | null, fgClass: string | null, ma: number | null, ath: number | null, change24h: number | null): { signal: 'accumulate' | 'hold' | 'caution' | 'unknown'; score: number } {
   if (fg === null || ma === null || ath === null) return { signal: 'unknown', score: 0 };
-  const r = signalModel({ fgValue: fg, fgClass, maPct: ma, athPct: ath });
+  const r = signalModel({ fgValue: fg, fgClass, maPct: ma, athPct: ath, change24h });
   return { signal: r.state, score: r.score };
 }
 
@@ -51,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 
   let fgClass: string | null = null;
+  let change24h: number | null = null;
   try {
     const [fgRes, priceRes, athRes, histRes] = await Promise.allSettled([
       fetch(`${base}/api/fear-greed`, { signal: AbortSignal.timeout(8000) }),
@@ -70,6 +71,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     if (priceRes.status === 'fulfilled' && priceRes.value.ok) {
       const price = await priceRes.value.json();
       data.currentPrice = price.eur ?? price.usd ?? null;
+      change24h = typeof price.eur_24h_change === 'number' ? price.eur_24h_change : null;
     }
 
     if (athRes.status === 'fulfilled' && athRes.value.ok) {
@@ -90,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   } catch (_) {}
 
-  const { signal, score } = computeSignal(data.fearGreed, fgClass, data.maPercent, data.athPercent);
+  const { signal, score } = computeSignal(data.fearGreed, fgClass, data.maPercent, data.athPercent, change24h);
   data.signal = signal;
   data.score = score;
 

@@ -650,7 +650,7 @@ export function welcomeEmail(
 ): { subject: string; html: string; text: string } {
   const replyTo = opts?.replyTo ?? '';
   const m = opts?.market ?? null;
-  const sig = m ? computeSignal({ fgValue: m.fgValue, fgClass: m.fgClass, maPct: m.maPct, athPct: m.athPct }) : null;
+  const sig = m ? computeSignal({ fgValue: m.fgValue, fgClass: m.fgClass, maPct: m.maPct, athPct: m.athPct, change24h: m.change24h }) : null;
   const state: SignalState = sig?.state ?? opts?.signal ?? 'hold';
   const de = lang === 'de';
   const subject = de ? 'Du bist dabei. Hier ist die Lage von heute' : "You're in. Here's today's reading";
