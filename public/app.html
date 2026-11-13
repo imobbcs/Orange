@@ -1748,6 +1748,59 @@
     
   </style>
   <!-- ═══ UX PHASE 5, MERGE AND CUT: CSS (end) ═══ -->
+  <!-- ═══ UX: how long (start) ═══ -->
+  <style>
+  /* ── UX: how long it has been this temperature ── */
+  .hero-since { min-height: 1.6em; margin: 12px auto 0; text-align: center; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8A837A; opacity: 0; }
+  .temp-hero.temp-in .hero-since { opacity: 1; transition: opacity 0.6s ease 1s; }
+  .hero-since b { font-weight: 400; color: var(--temp); }
+</style>
+<script>
+(function () {
+  /* "Mild since 2 Nov": /api/streak gives each past day's temperature; count back from today's live one. */
+  var hist = null, asked = false;
+  function render() {
+    var el = document.getElementById('hero-since'), st = window._signalState;
+    if (!el || !hist || !st || typeof translations === 'undefined') return;
+    var t = translations[currentLang] || translations.en, name = t.stateName[st];
+    var n = 0, since = null;
+    for (var i = hist.length - 1; i >= 0 && hist[i].s === st; i--) { since = hist[i].d; n++; }
+    var txt;
+    if (!n) txt = t.heroSinceToday;
+    else if (n === hist.length) txt = t.heroSinceLong.replace('{n}', String(n));
+    else {
+      var d = new Date(since + 'T12:00:00Z').toLocaleDateString(currentLang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+      txt = t.heroSince.replace('{d}', d).replace('{n}', String(n + 1));
+    }
+    el.innerHTML = txt.replace('{s}', '<b>' + name + '</b>');
+  }
+  function load() {
+    if (asked) return render(); asked = true;
+    fetch('/api/streak').then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && Array.isArray(d.days) && d.days.length) { hist = d.days; render(); } }).catch(function () {});
+  }
+  /* Runs after every temperature render (and language switch, which re-renders the hero) */
+  var wait = setInterval(function () {
+    if (typeof window._renderTempHero !== 'function') return;
+    clearInterval(wait);
+    var orig = window._renderTempHero;
+    window._renderTempHero = function () { orig.apply(this, arguments); if (window._signalState) load(); };
+    if (window._signalState) load();
+  }, 100);
+
+  /* Top bar "Get it free": the hero form is already on screen, so focus it instead of scrolling past the page */
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('.announce-link') : null;
+    var input = document.getElementById('hero-email-input');
+    if (!a || !input || !input.getClientRects().length) return;
+    e.preventDefault();
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    input.scrollIntoView({ block: 'center', behavior: still ? 'auto' : 'smooth' });
+    input.focus({ preventScroll: true });
+  });
+})();
+</script>
+  <!-- ═══ UX: how long (end) ═══ -->
   <!-- ═══ FULL PAGE V2: CSS (start) ═══ -->
   <style>
     :root { --fp-bg2: #110F12; --fp-line: rgba(237,232,222,0.12); --fp-quiet: #8A837A; }
@@ -2152,6 +2205,7 @@
       <div class="hero-scale-track"><span class="hero-scale-marker" id="hero-scale-marker"></span></div>
       <div class="hero-scale-labels"><span id="hs-cold">Cold</span><span id="hs-mild">Mild</span><span id="hs-hot">Hot</span></div>
     </div>
+    <p class="hero-since" id="hero-since"></p>
 
     <div class="signal-wrap">
       <div class="signal-pill loading" id="signal-pill">
@@ -2736,6 +2790,7 @@
       // read as flat or passive on a day the price is actually moving hard.
       stateName: {"accumulate": "Cold", "hold": "Mild", "caution": "Hot"},
       heroShareLabel: "Share today's reading",
+      heroSince: '{s} since {d} · {n} days', heroSinceToday: '{s} since today', heroSinceLong: '{s} for more than {n} days',
       miMood: "01 / Market mood · Fear &amp; Greed",
       miTrend: '02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg',
       miPeak: '03 / From the peak · <span style="white-space:nowrap">all-time</span> high',
@@ -2933,6 +2988,7 @@
       // Signal states
       stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
       heroShareLabel: "Heutige Lage teilen",
+      heroSince: '{s} seit {d} · {n} Tage', heroSinceToday: '{s} seit heute', heroSinceLong: '{s} seit mehr als {n} Tagen',
       miMood: "01 / Marktstimmung · Fear &amp; Greed",
       miTrend: '02 / Langfristiger Trend · vs. <span style="white-space:nowrap">200-Tage</span>-Schnitt',
       miPeak: '03 / Vom Hoch · <span style="white-space:nowrap">Allzeit</span>hoch',
