@@ -82,3 +82,8 @@ test('why section: the fourth input (the 24h move) has its copy in both language
   }
   assert.ok(raw.includes("el('fp-move-line')"), 'Today row is no longer rendered');
 });
+
+test('card labels keep their technical half in its own span (phones put it on a second line)', () => {
+  for (const l of ['en', 'de'] as const)
+    for (const k of ['miMood', 'miTrend', 'miPeak']) assert.ok(/<span class="mi-sep"> · <\/span><span class="mi-tech">[^<]+<\/span>$/.test(tr[l][k]), `${l}.${k}: ${tr[l][k]}`);
+});

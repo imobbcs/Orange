@@ -2195,6 +2195,69 @@
 </style>
   <!-- ═══ DESIGN: compact (end) ═══ -->
 
+  <!-- ═══ MOBILE ALIGNMENT (start) ═══ -->
+  <style>
+  .mi-tech { white-space: nowrap; }
+  /* Hero readings: the three numbers always sit on one line, even when a label needs two lines.
+     (Labels and values share rows across the three cells; a short label sits right above its number.) */
+  .temp-hero .hero-strip { grid-template-rows: auto auto; }
+  .temp-hero .hero-strip-fg-body { display: contents; }
+  .temp-hero .hero-strip-cell, .temp-hero .hero-strip-cell.fg { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; grid-row: span 2; justify-items: center; row-gap: 0.35rem; }
+  .temp-hero .hero-strip-label, .temp-hero .hero-strip-value { grid-column: 1; max-width: 100%; }
+  .temp-hero .hero-strip-label { align-self: end; text-wrap: balance; }
+  @supports not (grid-template-rows: subgrid) {
+    .temp-hero .hero-strip-cell, .temp-hero .hero-strip-cell.fg { display: flex; }
+    .temp-hero .hero-strip-label { display: flex; align-items: flex-end; justify-content: center; min-height: 2.6em; }
+  }
+  @media (max-width: 768px) {
+    .temp-hero .hero-strip-label { letter-spacing: 0.1em; line-height: 1.3; }
+    .temp-hero .hero-strip-cell, .temp-hero .hero-strip-cell.fg { padding-inline: 4px; }
+    .temp-hero .hero-strip-state { text-align: center; line-height: 1.2; }
+
+    /* Reading cards: everything on one left edge, in the same order in every card.
+         01 / MARKET MOOD            LEANS COLD
+         FEAR & GREED
+         19
+         People are scared. …
+         ──●──┼──┼──                  MORE ↓     */
+    .why-v2 .instrument-metric, .why-v2 .instrument-metric.primary { grid-template-columns: 1fr auto; position: relative; align-items: start; }
+    .why-v2 .instrument-metric-id { grid-column: 1 / -1; grid-row: 1; padding-right: 5.5rem; line-height: 1.5; letter-spacing: 0.08em; white-space: nowrap; }
+    @media (max-width: 340px) { .why-v2 .instrument-metric-id { white-space: normal; } }
+    .fp-move-id { letter-spacing: 0.08em; }
+    .why-v2 .mi-sep { display: none; }
+    .why-v2 .mi-tech { display: block; }
+    .why-v2 .fp-scale-l { position: absolute; top: 14px; right: 16px; margin: 0; grid-column: auto; grid-row: auto; line-height: 1.5; }
+    .why-v2 .instrument-metric > .instrument-value, .why-v2 .instrument-metric > div[style] { grid-column: 1 / -1; grid-row: 2; margin-top: 12px; }
+    .why-v2 .fp-line { grid-column: 1 / -1; grid-row: 3; margin: 8px 0 0; }
+    .why-v2 .instrument-sub { grid-column: 1 / -1; grid-row: 4; margin: 6px 0 0; }
+    .why-v2 .fp-scale { grid-column: 1; grid-row: 5; align-self: center; }
+    .why-v2 .fp-more { grid-column: 2; grid-row: 5; align-self: center; }
+    .why-v2 .instrument-desc { grid-column: 1 / -1; grid-row: 6; }
+    /* "Today" row and "Together" box follow the same edge and order */
+    .fp-move-row { grid-template-columns: 1fr; gap: 8px; }
+
+    /* Footer: one centred column (the quote and the copyright line were left-aligned above centred badges and links) */
+    footer .footer-quote { text-align: center; text-wrap: balance; }
+    footer .footer-quote cite { display: block; margin: 8px 0 0; }
+    footer .footer-copy { text-align: center; line-height: 2; }
+    .fc-part { display: block; white-space: nowrap; }
+    .fc-sep { display: none; }
+    .footer-links a, .footer-tools a { white-space: nowrap; }
+    .footer-links { flex-wrap: wrap; justify-content: center; row-gap: 0.25rem; }
+  }
+  /* Sunday-email form: the empty message line and the hidden reader count were holding 80px of blank space under the button */
+  #alerts .email-msg:empty { min-height: 0; margin-top: 0; }
+  #alerts .email-trust:not(.loaded) { display: none; }
+  @media (max-width: 380px) {
+    .temp-hero .hero-strip-label { letter-spacing: 0.04em; }
+    /* the long German button was covering the end of the placeholder */
+    .email-row.quiet .email-submit { letter-spacing: 0.06em; }
+    .email-row.quiet .email-input::placeholder { font-size: 0.8rem; }
+    .email-row.quiet .email-input { text-overflow: ellipsis; }
+  }
+  </style>
+  <!-- ═══ MOBILE ALIGNMENT (end) ═══ -->
+
   <!-- ═══ EMAIL CAPTURE: hero (start) ═══ -->
   <style>
     .hero-capture { width: min(100%, 560px); margin: 1.4rem auto 0; text-align: center; }
@@ -2406,7 +2469,7 @@
       <div class="instrument-body">
         <!-- FEAR & GREED — primary, larger -->
         <div class="instrument-metric primary" id="fg-metric" style="color: var(--amber);">
-          <div class="instrument-metric-id" data-i18n="miMood">01 / Market mood · Fear &amp; Greed</div>
+          <div class="instrument-metric-id" data-i18n="miMood">01 / Market mood<span class="mi-sep"> · </span><span class="mi-tech">Fear &amp; Greed</span></div>
           <div class="instrument-value loading" id="fg-value">—</div>
           <div class="instrument-gauge">
             <svg viewBox="0 0 100 56" fill="none" style="width:100px;height:56px;max-width:100px;display:block;">
@@ -2426,7 +2489,7 @@
 
         <!-- VS 200-DAY MA -->
         <div class="instrument-metric" id="ma-metric" style="color: var(--green);">
-          <div class="instrument-metric-id" data-i18n="miTrend">02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg</div>
+          <div class="instrument-metric-id" data-i18n="miTrend">02 / Long-term trend<span class="mi-sep"> · </span><span class="mi-tech">vs. 200-day avg</span></div>
           <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ma-value">—</div>
             <span id="ma-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
@@ -2439,7 +2502,7 @@
 
         <!-- FROM ATH -->
         <div class="instrument-metric" id="ath-metric" style="color: var(--amber);">
-          <div class="instrument-metric-id" data-i18n="miPeak">03 / From the peak · <span style="white-space:nowrap">all-time</span> high</div>
+          <div class="instrument-metric-id" data-i18n="miPeak">03 / From the peak<span class="mi-sep"> · </span><span class="mi-tech">all-time high</span></div>
           <div style="display:flex;align-items:baseline;gap:0.4rem;">
             <div class="instrument-value loading" id="ath-value">—</div>
             <span id="ath-arrow" style="font-family:var(--title);font-size:2rem;line-height:1;"></span>
@@ -2629,7 +2692,7 @@
 
 <footer>
   <p class="footer-quote">&ldquo;It might make sense just to get some in case it catches on.&rdquo;<cite>Satoshi Nakamoto</cite></p>
-  <p class="footer-copy">© 2026 whentobuybtc.xyz · <span data-i18n="footerBuilt">Built by</span> <a href="https://imobabics.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Imo Babics</a> · <span data-i18n="footerDisclaimer">Not financial advice</span></p>
+  <p class="footer-copy"><span class="fc-part">© 2026 whentobuybtc.xyz</span><span class="fc-sep"> · </span><span class="fc-part"><span data-i18n="footerBuilt">Built by</span> <a href="https://imobabics.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Imo Babics</a></span><span class="fc-sep"> · </span><span class="fc-part" data-i18n="footerDisclaimer">Not financial advice</span></p>
   <div class="footer-awards">
     <a href="https://www.cssdesignawards.com/sites/when-to-buy-btc/49058/" target="_blank" rel="noopener" title="CSSDA Best UI Design">
       <svg id="cssda-ui" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 90 90">
@@ -2882,9 +2945,9 @@
       stateName: {"accumulate": "Cold", "hold": "Mild", "caution": "Hot"},
       heroShareLabel: "Share today's reading",
       heroSince: '{s} since {d} · {n} days', heroSinceToday: '{s} since today', heroSinceLong: '{s} for more than {n} days',
-      miMood: "01 / Market mood · Fear &amp; Greed",
-      miTrend: '02 / Long-term trend · vs. <span style="white-space:nowrap">200-day</span> avg',
-      miPeak: '03 / From the peak · <span style="white-space:nowrap">all-time</span> high',
+      miMood: '01 / Market mood<span class="mi-sep"> · </span><span class="mi-tech">Fear &amp; Greed</span>',
+      miTrend: '02 / Long-term trend<span class="mi-sep"> · </span><span class="mi-tech">vs. 200-day avg</span>',
+      miPeak: '03 / From the peak<span class="mi-sep"> · </span><span class="mi-tech">all-time high</span>',
       signalAccumulate: [
         "Fear is high and the price sits below its long-term trend.",
         "Prices are low against recent history. The same money buys more sats.",
@@ -3081,9 +3144,9 @@
       stateName: {"accumulate": "Kalt", "hold": "Mild", "caution": "Heiß"},
       heroShareLabel: "Heutige Lage teilen",
       heroSince: '{s} seit {d} · {n} Tage', heroSinceToday: '{s} seit heute', heroSinceLong: '{s} seit mehr als {n} Tagen',
-      miMood: "01 / Marktstimmung · Fear &amp; Greed",
-      miTrend: '02 / Langfristiger Trend · vs. <span style="white-space:nowrap">200-Tage</span>-Schnitt',
-      miPeak: '03 / Vom Hoch · <span style="white-space:nowrap">Allzeit</span>hoch',
+      miMood: '01 / Marktstimmung<span class="mi-sep"> · </span><span class="mi-tech">Fear &amp; Greed</span>',
+      miTrend: '02 / Langfristiger Trend<span class="mi-sep"> · </span><span class="mi-tech">vs. 200-Tage-Schnitt</span>',
+      miPeak: '03 / Vom Hoch<span class="mi-sep"> · </span><span class="mi-tech">Allzeithoch</span>',
       signalAccumulate: [
         "Die Angst ist hoch, und der Kurs liegt unter seinem langfristigen Trend.",
         "Die Preise sind niedrig im Vergleich zur jüngsten Vergangenheit. Für dasselbe Geld gibt es mehr Sats.",
