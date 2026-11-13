@@ -35,6 +35,6 @@ test('homepage: every number has one source (no second count-up, previews read d
   assert.ok(!/parseInt\(fgEl\.textContent\)/.test(raw), 'a count-up must never take its target from on-screen text');
   assert.equal((raw.match(/animateValue\(ready\('fg-value'\)/g) || []).length, 1, 'exactly one count-up for the mood number');
   assert.ok(raw.includes("animateValue(ready('fg-value'), () => fgValue"), 'count-up must land on the live value');
-  assert.ok(!/vtxt\('ma-value'\), parts\.ma/.test(raw), 'email preview must compute its numbers from data');
+  assert.ok(raw.includes("(currentPrice != null && maPrice) ? fmtPct((currentPrice - maPrice) / maPrice * 100)"), 'email preview must compute its numbers from data');
   assert.ok(!/if \(ageHrs > 0\.5\)/.test(raw), 'chart must always end at the live price');
 });
