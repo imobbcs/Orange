@@ -74,3 +74,11 @@ test('home hero: a sharp day in a Mild market never reads as calm', () => {
       for (const line of tr[l][k]) assert.ok(!/—/.test(line) && !/\bcalm\b|ruhiger Markt/i.test(line), `${l}.${k}: ${line}`);
     }
 });
+
+test('why section: the fourth input (the 24h move) has its copy in both languages', () => {
+  for (const l of ['en', 'de'] as const) {
+    assert.ok(tr[l].fpMoveId, `${l}.fpMoveId missing`);
+    for (const k of ['1', '0', '-1']) assert.ok(tr[l].fpLineMove?.[k], `${l}.fpLineMove[${k}] missing`);
+  }
+  assert.ok(raw.includes("el('fp-move-line')"), 'Today row is no longer rendered');
+});
