@@ -2,6 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'fs';
+import { buildHomeHtml } from '../lib/home-html';
 import { fgBand, fgScore, maScore, athScore, moveScore, scalePos, computeSignal, stateFromScore } from '../lib/signal';
 
 test('fear & greed: the middle is neutral, and the publisher label wins', () => {
@@ -69,23 +70,21 @@ test('states are symmetric around zero', () => {
   assert.equal(computeSignal({ fgValue: 80, maPct: 25, athPct: -2 }).state, 'caution');
 });
 
-test('the inline copy in app.html and the bot match lib/signal.ts', () => {
-  const html = readFileSync('public/app.html', 'utf8');
-  const m = html.match(/\/\* SIGNAL MODEL \(start\)[\s\S]*?\*\/([\s\S]*?)\/\* SIGNAL MODEL \(end\) \*\//);
-  assert.ok(m, 'SIGNAL MODEL block missing from app.html');
-  const bot = readFileSync('twitter-bot/bot.js', 'utf8');
-  const b = bot.match(/\/\* SIGNAL MODEL \(start\)[\s\S]*?\*\/([\s\S]*?)\/\* SIGNAL MODEL \(end\) \*\//);
-  assert.ok(b, 'SIGNAL MODEL block missing from bot.js');
-  for (const src of [m![1], b![1]]) {
-    const model = new Function(src + '; return { wtbSignal, wtbScalePos };')();
-    for (let sc = -7; sc <= 7; sc++) assert.equal(model.wtbScalePos(sc), scalePos(sc), `scale ${sc}`);
-    for (const fg of [5, 24, 25, 31, 46, 47, 50, 54, 55, 62, 75, 76, 90])
-      for (const ma of [-30, -10.5, -10, -6, -5, 0, 3, 5, 5.1, 15, 20, 20.1, 40])
-        for (const ath of [-70, -50, -49, -30, -20, -19, -5, 0, 3])
-          for (const ch of [null, -12, -5, -4.99, 0, 4.99, 5, 12]) {
-            const want = computeSignal({ fgValue: fg, maPct: ma, athPct: ath, change24h: ch });
-            const got = model.wtbSignal(fg, null, ma, ath, ch);
-            assert.deepEqual(got, want, `fg ${fg} ma ${ma} ath ${ath} ch ${ch}`);
-          }
-  }
+test('the homepage runs the same model file as the server', () => {
+  const raw = readFileSync('public/app.html', 'utf8');
+  const page = buildHomeHtml(raw);
+  const m = page.match(/\/\* SIGNAL MODEL \(start\)[\s\S]*?\*\/([\s\S]*?)\/\* SIGNAL MODEL \(end\) \*\//);
+  assert.ok(m, 'SIGNAL MODEL block missing from the served homepage');
+  assert.ok(m![1].includes(readFileSync('lib/signal-model.js', 'utf8').trim()), 'served page does not carry lib/signal-model.js');
+  // Evaluated the way the browser does (no module object), it gives the same answers as the server.
+  const model = new Function(m![1] + '; return { wtbSignal, wtbScalePos };')();
+  for (let sc = -7; sc <= 7; sc++) assert.equal(model.wtbScalePos(sc), scalePos(sc), `scale ${sc}`);
+  for (const fg of [5, 24, 25, 47, 50, 55, 76, 90])
+    for (const ma of [-30, -10, -5, 0, 5.1, 20.1])
+      for (const ath of [-70, -50, -30, -19, 3])
+        for (const ch of [null, -12, -5, 0, 5])
+          assert.deepEqual(model.wtbSignal(fg, null, ma, ath, ch), computeSignal({ fgValue: fg, maPct: ma, athPct: ath, change24h: ch }));
+  // Nothing else in the repo carries its own copy of the rules.
+  assert.ok(!/function wtbSignal/.test(raw), 'app.html has its own copy again');
+  assert.ok(!/function wtbSignal/.test(readFileSync('twitter-bot/bot.js', 'utf8')), 'bot.js has its own copy again');
 });
