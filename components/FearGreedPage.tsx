@@ -34,13 +34,13 @@ export default function FearGreedPage({ m, lang }: { m: MarketSnapshot; lang: La
     { q: 'Wo steht der Bitcoin Fear & Greed Index heute?', a: `Heute bei ${fgText} von 100 (${label}). Der Wert auf dieser Seite wird automatisch aktualisiert, die Quelle ist CoinMarketCap mit alternative.me als Ausweichquelle.` },
     { q: 'Was bedeutet extreme Angst bei Bitcoin?', a: 'Ein Wert unter 25 zeigt, dass die meisten Marktteilnehmer pessimistisch sind. Solche Phasen folgten in der Vergangenheit oft auf starke Kursrückgänge. Das beschreibt die Stimmung, nicht den künftigen Kurs.' },
     { q: 'Wie wird der Angst und Gier Index berechnet?', a: 'CoinMarketCap kombiniert Kursdynamik, Volatilität, Derivatedaten und Social-Media-Signale. Der ursprüngliche Index von alternative.me gewichtet Volatilität, Handelsvolumen, Social Media, Bitcoin-Dominanz und Google Trends. Beide ergeben einen Wert von 0 bis 100.' },
-    { q: 'Ist der Fear & Greed Index ein Kaufsignal?', a: 'Nein. Er misst die Stimmung, nicht den fairen Preis. When to Buy BTC nutzt ihn als einen von drei Messwerten für die Markttemperatur und sagt niemandem, wann er kaufen oder verkaufen soll.' },
+    { q: 'Ist der Fear & Greed Index ein Kaufsignal?', a: 'Nein. Er misst die Stimmung, nicht den fairen Preis. When to Buy BTC nutzt ihn als einen von drei Messwerten (plus einen Schritt an Tagen mit 5 % Bewegung) für die Markttemperatur und sagt niemandem, wann er kaufen oder verkaufen soll.' },
     { q: 'Wie oft wird der Index aktualisiert?', a: 'Die Quellen veröffentlichen einmal täglich einen neuen Wert. Diese Seite fragt ihn alle paar Stunden ab.' },
   ] : [
     { q: "What is the Bitcoin Fear and Greed Index today?", a: `Today it is at ${fgText} out of 100 (${label}). The value on this page updates automatically. The source is CoinMarketCap, with alternative.me as a fallback.` },
     { q: 'What does extreme fear mean for Bitcoin?', a: 'A reading below 25 means most market participants are pessimistic. In the past, readings like that often followed sharp price drops. It describes the mood, not where the price goes next.' },
     { q: 'How is the Fear and Greed Index calculated?', a: "CoinMarketCap blends price momentum, volatility, derivatives data and social media signals. alternative.me's original index weighs volatility, trading volume, social media, Bitcoin dominance and Google Trends. Both produce a score from 0 to 100." },
-    { q: 'Is the Fear and Greed Index a buy signal?', a: 'No. It measures mood, not fair value. When to Buy BTC uses it as one of three readings for its market temperature and never tells anyone when to buy or sell.' },
+    { q: 'Is the Fear and Greed Index a buy signal?', a: 'No. It measures mood, not fair value. When to Buy BTC uses it as one of three readings (plus a step for any 5% day) for its market temperature and never tells anyone when to buy or sell.' },
     { q: 'How often does the Fear and Greed Index update?', a: 'The sources publish a new value once a day. This page checks for it every few hours.' },
   ];
 
