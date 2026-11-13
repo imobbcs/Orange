@@ -24,7 +24,7 @@ const SITE = 'https://whentobuybtc.xyz';
 const TEMP: Record<SignalState, { hex: string; rgb: string; light: string; emoji: string }> = {
   accumulate: { hex: '#8EC9FF', rgb: '142,201,255', light: '#2F6FA8', emoji: '❄️' },
   hold:       { hex: '#F2C46B', rgb: '242,196,107', light: '#8A6208', emoji: '🌤️' },
-  caution:    { hex: '#F7931A', rgb: '247,147,26',  light: '#B35A00', emoji: '🔥' },
+  caution:    { hex: '#F7931A', rgb: '247,147,26',  light: '#A14F00', emoji: '🔥' },
 };
 const LEAN_STATE = (n: number): SignalState => (n > 0 ? 'accumulate' : n < 0 ? 'caution' : 'hold');
 
@@ -142,8 +142,10 @@ function shell(opts: {
       .et{color:#1A1612!important}
       .em{color:#3D342C!important}
       .em2{color:#6E625A!important}
-      .ed{color:#8E827A!important}
-      .el{color:#B35A00!important}
+      .ed{color:#756A62!important}
+      .el{color:#A14F00!important}
+      .c-up{color:#15803D!important}
+      .c-down{color:#B91C1C!important}
       .lb{border-color:rgba(0,0,0,0.10)!important}
       .lr{background-color:rgba(0,0,0,0.10)!important}
       .card{background-color:#F7F3EE!important;border-color:rgba(0,0,0,0.08)!important}
@@ -173,22 +175,22 @@ ${top}
   <tr>
     <td class="eheader lb" style="padding:20px 32px;border-bottom:1px solid rgba(237,232,222,0.08);">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
-        <td><a href="${SITE}/?utm_source=email&utm_medium=logo" style="text-decoration:none;"><img src="${SITE}/bitcoin-logo_48.png" width="22" height="22" alt="&#8383;" style="vertical-align:middle;display:inline-block;border:0;" /><span class="et" style="${SANS}font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${INK};padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></a></td>
-        ${headerRight ? `<td align="right"><span class="em2" style="${MONO}font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">${headerRight}</span></td>` : ''}
+        <td><a href="${SITE}/?utm_source=email&utm_medium=logo" style="text-decoration:none;"><img src="${SITE}/bitcoin-logo_48.png" width="22" height="22" alt="&#8383;" style="vertical-align:middle;display:inline-block;border:0;" /><span class="et" style="${SANS}font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${INK};padding-left:8px;vertical-align:middle;">WHEN TO BUY BTC</span></a></td>
+        ${headerRight ? `<td align="right"><span class="em2" style="${MONO}font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">${headerRight}</span></td>` : ''}
       </tr></table>
     </td>
   </tr>
   <tr><td class="ebody" style="padding:32px 32px 12px;">${body}</td></tr>
   <tr>
     <td class="efooter lb" style="padding:22px 32px 26px;border-top:1px solid rgba(237,232,222,0.08);">
-      ${replyLine ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;line-height:1.7;color:${MUTED};">${replyLine}</p>` : ''}
-      <p class="ed" style="margin:0 0 8px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason}</p>
-      <p class="ed" style="margin:0 0 10px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">${disclaimer}</p>
-      <p class="ed" style="margin:0;${MONO}font-size:11px;line-height:1.9;color:rgba(237,232,222,0.58);">
-        <a href="${unsubscribeUrl}" class="el" style="color:#F7931A;text-decoration:none;">${lang === 'de' ? 'E-Mails wählen oder abmelden' : 'Choose emails or unsubscribe'}</a>
-        &nbsp;&#183;&nbsp; <a href="${SITE}" class="el" style="color:#F7931A;text-decoration:none;">whentobuybtc.xyz</a>
-        &nbsp;&#183;&nbsp; <a href="https://x.com/WhenToBuyBTC" class="el" style="color:#F7931A;text-decoration:none;">@WhenToBuyBTC</a>
-        &nbsp;&#183;&nbsp; ${lang === 'de' ? 'Wien, &#214;sterreich' : 'Vienna, Austria'}
+      ${replyLine ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:12px;line-height:1.7;color:${MUTED};">${replyLine}</p>` : ''}
+      <p class="ed" style="margin:0 0 8px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">${footerReason}</p>
+      <p class="ed" style="margin:0 0 10px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">${disclaimer}</p>
+      <p class="ed" style="margin:0;${MONO}font-size:12px;line-height:1.5;color:rgba(237,232,222,0.58);">
+        <a href="${unsubscribeUrl}" class="el" style="display:inline-block;padding:8px 0;color:#F7931A;text-decoration:none;">${lang === 'de' ? 'E-Mails wählen oder abmelden' : 'Choose emails or unsubscribe'}</a><br />
+        <a href="${SITE}" class="el" style="display:inline-block;padding:8px 0;color:#F7931A;text-decoration:none;">whentobuybtc.xyz</a>
+        &nbsp;&#183;&nbsp; <a href="https://x.com/WhenToBuyBTC" class="el" style="display:inline-block;padding:8px 0;color:#F7931A;text-decoration:none;">@WhenToBuyBTC</a><br />
+        <span style="display:inline-block;padding:8px 0 0;white-space:nowrap;">${lang === 'de' ? 'Wien, &#214;sterreich' : 'Vienna, Austria'}</span>
       </p>
     </td>
   </tr>
@@ -204,7 +206,7 @@ ${top}
 const spacer = (h: number) => `<div style="height:${h}px;line-height:${h}px;font-size:1px;mso-line-height-rule:exactly;">&nbsp;</div>`;
 
 function eyebrow(text: string, mb = 10): string {
-  return `<p class="em2" style="margin:0 0 ${mb}px;${MONO}font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};">${text}</p>`;
+  return `<p class="em2" style="margin:0 0 ${mb}px;${MONO}font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">${text}</p>`;
 }
 function para(text: string, opts: { size?: number; italic?: boolean; mb?: number; cls?: string; color?: string } = {}): string {
   const { size = 16, italic = false, mb = 18, cls = 'em', color = SOFT } = opts;
@@ -230,7 +232,7 @@ function button(href: string, label: string, state: SignalState = 'caution', wid
 function outlineButton(href: string, label: string): string {
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>
     <td class="lb" style="border:1px solid rgba(237,232,222,0.25);">
-      <a href="${href}" target="_blank" class="et" style="display:inline-block;padding:12px 22px;color:${INK};${SANS}font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;">${label}</a>
+      <a href="${href}" target="_blank" class="et" style="display:inline-block;padding:15px 22px;color:${INK};${SANS}font-size:12px;line-height:14px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;">${label}</a>
     </td>
   </tr></table>`;
 }
@@ -241,7 +243,7 @@ const rule = `<table role="presentation" border="0" cellpadding="0" cellspacing=
 function tempScale(state: SignalState, lang: Lang): string {
   const order: SignalState[] = ['accumulate', 'hold', 'caution'];
   const seg = order.map((s, i) => `<td width="33%" class="tb-${s}" style="height:4px;font-size:1px;line-height:4px;background-color:${TEMP[s].hex};${s === state ? '' : 'opacity:0.28;'}${i ? 'border-left:3px solid transparent;' : ''}">&nbsp;</td>`).join('');
-  const lab = order.map((s, i) => `<td width="33%" align="${i === 0 ? 'left' : i === 1 ? 'center' : 'right'}" style="padding-top:8px;${MONO}font-size:11px;letter-spacing:0.16em;text-transform:uppercase;">${s === state
+  const lab = order.map((s, i) => `<td width="33%" align="${i === 0 ? 'left' : i === 1 ? 'center' : 'right'}" style="padding-top:8px;${MONO}font-size:12px;letter-spacing:0.16em;text-transform:uppercase;">${s === state
     ? `<b class="tc-${s}" style="color:${TEMP[s].hex};">${signalLabel(s, lang)}</b>`
     : `<span class="ed" style="color:rgba(237,232,222,0.58);">${signalLabel(s, lang)}</span>`}</td>`).join('');
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>${seg}</tr><tr>${lab}</tr></table>`;
@@ -251,8 +253,9 @@ function tempScale(state: SignalState, lang: Lang): string {
 function tempHero(o: { state: SignalState; lang: Lang; eyebrow: string; sentence: string; price: number; changeLabel: string; change: number | null }): string {
   const c = TEMP[o.state];
   const chColor = o.change == null ? MUTED : o.change >= 0 ? '#4ADE80' : '#F87171';
+  const chCls = o.change == null ? '' : o.change >= 0 ? 'c-up' : 'c-down';
   const change = o.change == null ? '' :
-    `<span style="${MONO}font-size:13px;font-weight:700;color:${chColor};">${pct(o.change, o.lang, 1)}</span> <span class="em2" style="${MONO}font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${MUTED};">${o.changeLabel}</span>`;
+    `<span class="${chCls}" style="${MONO}font-size:14px;font-weight:700;color:${chColor};">${pct(o.change, o.lang, 1)}</span> <span class="em2" style="${MONO}font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:${MUTED};">${o.changeLabel}</span>`;
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="card" style="background-color:rgba(${c.rgb},0.09);border:1px solid rgba(${c.rgb},0.35);">
     <tr><td class="hpad" style="padding:26px 26px 20px;">
       ${eyebrow(o.eyebrow, 6)}
@@ -271,23 +274,23 @@ function tempHero(o: { state: SignalState; lang: Lang; eyebrow: string; sentence
 function readings(o: { lang: Lang; fgValue: number; fgClass?: string | null; maPct: number; athPct?: number | null; prev?: { fg?: number; ma?: number; ath?: number } }): string {
   const { lang } = o;
   const was = lang === 'de' ? 'war' : 'was';
-  const rows: { label: string; value: string; score: number; line: string; prev?: string }[] = [];
+  const rows: { label: string; tech: string; value: string; score: number; line: string; prev?: string }[] = [];
   const fs = fgScore(o.fgValue, o.fgClass);
   rows.push({
-    label: lang === 'de' ? 'Marktstimmung &#183; Fear &amp; Greed' : 'Market mood &#183; Fear &amp; Greed',
+    label: lang === 'de' ? 'Marktstimmung' : 'Market mood', tech: 'Fear &amp; Greed',
     value: String(o.fgValue), score: fs, line: (fgBand(o.fgValue, o.fgClass) === 'neutral' ? '' : `${FG_WORD[lang][fgBand(o.fgValue, o.fgClass)]}. `) + LINE_FG[lang][String(fs)],
     prev: o.prev?.fg != null && o.prev.fg !== o.fgValue ? `${was} ${o.prev.fg}` : undefined,
   });
   const ms = maScore(o.maPct);
   rows.push({
-    label: lang === 'de' ? 'Langfristiger Trend &#183; 200-Tage-Schnitt' : 'Long-term trend &#183; 200-day average',
+    label: lang === 'de' ? 'Langfristiger Trend' : 'Long-term trend', tech: lang === 'de' ? '200-Tage-Schnitt' : '200-day average',
     value: pct(o.maPct, lang), score: ms, line: LINE_MA[lang][String(ms)],
     prev: o.prev?.ma != null && Math.abs(o.prev.ma - o.maPct) >= 0.05 ? `${was} ${pct(o.prev.ma, lang)}` : undefined,
   });
   if (o.athPct != null) {
     const as = computeSignal({ fgValue: 50, maPct: 0, athPct: o.athPct }).parts.ath;
     rows.push({
-      label: lang === 'de' ? 'Vom Hoch &#183; Allzeithoch' : 'From the peak &#183; all-time high',
+      label: lang === 'de' ? 'Vom Hoch' : 'From the peak', tech: lang === 'de' ? 'Allzeithoch' : 'All-time high',
       value: pct(o.athPct, lang), score: as, line: LINE_ATH[lang][String(as)],
       prev: o.prev?.ath != null && Math.abs(o.prev.ath - o.athPct) >= 0.05 ? `${was} ${pct(o.prev.ath, lang)}` : undefined,
     });
@@ -297,15 +300,15 @@ function readings(o: { lang: Lang; fgValue: number; fgClass?: string | null; maP
     return `<tr><td class="lb" style="padding:16px 0;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
         <td valign="top" style="padding-right:14px;">
-          <p class="em2" style="margin:0 0 6px;${MONO}font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">${r.label}</p>
-          <p class="em" style="margin:0;${SERIF}font-size:15px;line-height:1.55;color:${SOFT};">${r.line}</p>
+          <p class="em2" style="margin:2px 0 0;${MONO}font-size:12px;line-height:1.5;letter-spacing:0.14em;text-transform:uppercase;color:${MUTED};">${r.label}</p>
+          <p class="ed" style="margin:0;${MONO}font-size:12px;line-height:1.5;letter-spacing:0.06em;color:rgba(237,232,222,0.58);">${r.tech}${r.prev ? ` &#183; ${r.prev}` : ''}</p>
         </td>
-        <td valign="top" align="right" width="104" style="width:104px;">
+        <td valign="top" align="right">
           <p class="rv et" style="margin:0;${SANS}font-size:24px;line-height:1.1;color:${INK};white-space:nowrap;">${r.value}</p>
-          <p class="tc-${ls}" style="margin:5px 0 0;${MONO}font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${TEMP[ls].hex};white-space:nowrap;">${LEAN[lang][ls]}</p>
-          ${r.prev ? `<p class="ed" style="margin:3px 0 0;${MONO}font-size:11px;color:rgba(237,232,222,0.58);white-space:nowrap;">${r.prev}</p>` : ''}
+          <p class="tc-${ls}" style="margin:5px 0 0;${MONO}font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:${TEMP[ls].hex};white-space:nowrap;">${LEAN[lang][ls]}</p>
         </td>
       </tr></table>
+      <p class="em" style="margin:10px 0 0;${SERIF}font-size:15px;line-height:1.55;color:${SOFT};">${r.line}</p>
     </td></tr>`;
   }).join('');
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">${body}</table>`;
@@ -315,10 +318,10 @@ function readings(o: { lang: Lang; fgValue: number; fgClass?: string | null; maP
 function forwardStrip(lang: Lang, medium: string): string {
   const url = `${SITE}/?utm_source=email&utm_medium=forward&utm_campaign=${medium}#alerts`;
   const text = lang === 'de'
-    ? `Weitergeleitet bekommen? Das Bitcoin-Wetter jeden Sonntag, kostenlos. <a href="${url}" class="el" style="color:#F7931A;text-decoration:none;font-weight:700;">Abonnieren&nbsp;&#8594;</a>`
-    : `Forwarded to you? Get the Bitcoin weather every Sunday, free. <a href="${url}" class="el" style="color:#F7931A;text-decoration:none;font-weight:700;">Subscribe&nbsp;&#8594;</a>`;
+    ? `Weitergeleitet bekommen? Das Bitcoin-Wetter jeden Sonntag, kostenlos.<br /><a href="${url}" class="el" style="display:inline-block;padding:6px 0 4px;color:#F7931A;text-decoration:none;font-weight:700;">Abonnieren&nbsp;&#8594;</a>`
+    : `Forwarded to you? Get the Bitcoin weather every Sunday, free.<br /><a href="${url}" class="el" style="display:inline-block;padding:6px 0 4px;color:#F7931A;text-decoration:none;font-weight:700;">Subscribe&nbsp;&#8594;</a>`;
   return `<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="580" style="max-width:580px;width:100%;"><tr>
-    <td align="center" style="padding:0 12px 12px;"><p class="em2" style="margin:0;${MONO}font-size:11px;line-height:1.6;color:${MUTED};">${text}</p></td>
+    <td align="center" style="padding:0 12px 6px;"><p class="em2" style="margin:0;${MONO}font-size:12px;line-height:1.6;color:${MUTED};">${text}</p></td>
   </tr></table>`;
 }
 
@@ -347,13 +350,13 @@ function spreadSection(o: { lang: Lang; shareText: string; campaign: string; sub
     ['X', `https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(shareUrl(lang, 'x', o.campaign))}`],
   ];
   const pills = links.map(([name, href]) => `<td style="padding:0 8px 8px 0;"><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="lb" style="border:1px solid rgba(237,232,222,0.25);">
-      <a href="${href}" target="_blank" class="et" style="display:inline-block;padding:10px 16px;color:${INK};${SANS}font-size:12px;font-weight:700;letter-spacing:0.06em;text-decoration:none;">${name}</a>
+      <a href="${href}" target="_blank" class="et" style="display:inline-block;padding:14px 18px;color:${INK};${SANS}font-size:13px;line-height:16px;font-weight:700;letter-spacing:0.06em;text-decoration:none;">${name}</a>
     </td></tr></table></td>`).join('');
   return `${rule}${spacer(24)}
     ${eyebrow(lang === 'de' ? 'Weitersagen' : 'Pass it on', 8)}
-    ${c ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;letter-spacing:0.06em;color:${MUTED};">${c}</p>` : ''}
+    ${c ? `<p class="em2" style="margin:0 0 10px;${MONO}font-size:12px;letter-spacing:0.06em;color:${MUTED};">${c}</p>` : ''}
     ${para(lead, { size: 15, mb: 14 })}
-    <p class="em2" style="margin:0 0 10px;${MONO}font-size:11px;letter-spacing:0.06em;color:${MUTED};">${lang === 'de' ? 'Oder die heutige Lage mit einem Tipp teilen:' : 'Or share today&#39;s reading in one tap:'}</p>
+    <p class="em2" style="margin:0 0 10px;${MONO}font-size:12px;line-height:1.6;letter-spacing:0.06em;color:${MUTED};">${lang === 'de' ? 'Oder die heutige Lage mit einem Tipp teilen:' : 'Or share today&#39;s reading in one tap:'}</p>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr>${pills}</tr></table>
     ${spacer(16)}`;
 }
@@ -386,7 +389,7 @@ export function confirmationEmail(
     ? 'Du erhältst diese E-Mail, weil sich jemand mit dieser Adresse auf whentobuybtc.xyz angemeldet hat. Ohne Bestätigung bekommst du nichts weiter.'
     : 'You&#39;re getting this because someone signed up with this address at whentobuybtc.xyz. Without a confirmation, nothing else is sent.';
   const now = opts?.signal
-    ? `<p class="em2" style="margin:0 0 22px;${MONO}font-size:11px;letter-spacing:0.06em;color:${MUTED};">${lang === 'de' ? 'Bitcoin gerade' : 'Bitcoin right now'}: <b class="tc-${state}" style="color:${TEMP[state].hex};">${signalLabel(state, lang)}</b></p>`
+    ? `<p class="em2" style="margin:0 0 22px;${MONO}font-size:12px;letter-spacing:0.06em;color:${MUTED};">${lang === 'de' ? 'Bitcoin gerade' : 'Bitcoin right now'}: <b class="tc-${state}" style="color:${TEMP[state].hex};">${signalLabel(state, lang)}</b></p>`
     : '';
   const body = `
     ${eyebrow(lang === 'de' ? 'Ein Schritt fehlt' : 'One step left', 12)}
@@ -397,11 +400,11 @@ export function confirmationEmail(
     ${now}
     ${button(confirmUrl, lang === 'de' ? 'E-Mail bestätigen' : 'Confirm my email', state, 240)}
     ${spacer(22)}
-    <p class="ed" style="margin:0 0 14px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">
+    <p class="ed" style="margin:0 0 14px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">
       ${lang === 'de' ? 'Button geht nicht? Diesen Link öffnen:' : 'Button not working? Open this link:'}<br />
       <a href="${confirmUrl}" class="el" style="color:#F7931A;word-break:break-all;text-decoration:none;">${confirmUrl}</a>
     </p>
-    <p class="ed" style="margin:0 0 18px;${MONO}font-size:11px;line-height:1.7;color:rgba(237,232,222,0.58);">
+    <p class="ed" style="margin:0 0 18px;${MONO}font-size:12px;line-height:1.7;color:rgba(237,232,222,0.58);">
       ${lang === 'de' ? 'Nicht angemeldet? Dann einfach ignorieren.' : 'Didn&#39;t sign up? Just ignore this.'}
     </p>`;
   const html = shell({ lang, preheader, body, footerReason, unsubscribeUrl, replyTo });
@@ -489,7 +492,7 @@ function calcCard(h: CalcHook, lang: Lang): string {
     <tr><td style="padding:18px 20px;">
       ${eyebrow(lang === 'de' ? 'Was wäre, wenn?' : 'What if?', 8)}
       ${para(line, { size: 15, mb: 12 })}
-      <p style="margin:0;${MONO}font-size:11px;letter-spacing:0.06em;"><a href="${url}" class="el" style="color:#F7931A;text-decoration:none;font-weight:700;">${lang === 'de' ? 'Mit eigenen Zahlen ausprobieren&nbsp;&#8594;' : 'Try your own numbers&nbsp;&#8594;'}</a></p>
+      <p style="margin:0;${MONO}font-size:12px;letter-spacing:0.06em;"><a href="${url}" class="el" style="display:inline-block;padding:8px 0;color:#F7931A;text-decoration:none;font-weight:700;">${lang === 'de' ? 'Mit eigenen Zahlen ausprobieren&nbsp;&#8594;' : 'Try your own numbers&nbsp;&#8594;'}</a></p>
     </td></tr>
   </table>`;
 }
@@ -617,7 +620,7 @@ export function digestEmail(opts: {
   const body = `
     ${para(hello, { mb: 22 })}
     ${tempHero({ state: signal, lang, eyebrow: (lang === 'de' ? 'Diese Woche &#183; ' : 'This week &#183; ') + sendDate(lang, opts.now), sentence: togetherLine(signal, parts, lang), price, change, changeLabel })}
-    ${changed ? spacer(14) + `<p class="em2" style="margin:0;${MONO}font-size:11px;line-height:1.6;color:${MUTED};">${changed}</p>` : ''}
+    ${changed ? spacer(14) + `<p class="em2" style="margin:0;${MONO}font-size:12px;line-height:1.6;color:${MUTED};">${changed}</p>` : ''}
     ${opts.week ? spacer(22) + eyebrow(lang === 'de' ? 'Die Woche' : 'The week', 8) + para(weekLine(opts.week, lang, weekChange, prevFgValue, fgValue), { mb: 6 }) : spacer(8)}
     ${readings({ lang, fgValue, fgClass, maPct, athPct, prev: { fg: prevFgValue, ma: prevMaPct, ath: prevAthPct } })}
     ${spacer(16)}
@@ -625,7 +628,7 @@ export function digestEmail(opts: {
     ${marketBlock ? marketBlock : ''}
     ${button(cta, lang === 'de' ? 'Ganze Lage ansehen &#8594;' : 'See the full picture &#8594;', signal)}
     ${spacer(14)}
-    <p class="ed" style="margin:0 0 26px;${MONO}font-size:11px;line-height:1.6;color:rgba(237,232,222,0.58);">${cycle}</p>
+    <p class="ed" style="margin:0 0 26px;${MONO}font-size:12px;line-height:1.6;color:rgba(237,232,222,0.58);">${cycle}</p>
     ${signOff(lang, lang === 'de' ? 'Bis nächsten Sonntag,' : 'See you next Sunday,')}
     ${spreadSection({ lang, campaign: 'digest', shareText: shareText(signal, lang, price, fgValue, fgClass), subscriberCount: opts.subscriberCount, subscriberGoal: opts.subscriberGoal })}`;
 
@@ -703,9 +706,9 @@ export function welcomeEmail(
     : [['/bitcoin-fear-and-greed-index', 'Fear &amp; Greed Index', 'Today&#39;s market mood, and what each zone means.'],
        ['/bitcoin-200-day-moving-average', '200-day moving average', 'Where the price sits against its long-term trend, with a chart.'],
        ['/bitcoin-dca-calculator', 'DCA calculator', 'What a fixed monthly amount since 2015 would have done.']];
-  const toolRows = tools.map(([path, name, line], i) => `<tr><td class="lb" style="padding:12px 0;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
-      <a href="${SITE}${path}?${utm('tools')}" class="el" style="color:#F7931A;text-decoration:none;${SANS}font-size:14px;font-weight:700;">${name}&nbsp;&#8594;</a>
-      <p class="em" style="margin:4px 0 0;${SERIF}font-size:15px;line-height:1.5;color:${SOFT};">${line}</p>
+  const toolRows = tools.map(([path, name, line], i) => `<tr><td class="lb" style="padding:6px 0 12px;${i ? 'border-top:1px solid rgba(237,232,222,0.10);' : ''}">
+      <a href="${SITE}${path}?${utm('tools')}" class="el" style="display:inline-block;padding:7px 0;color:#F7931A;text-decoration:none;${SANS}font-size:14px;font-weight:700;">${name}&nbsp;&#8594;</a>
+      <p class="em" style="margin:0;${SERIF}font-size:15px;line-height:1.5;color:${SOFT};">${line}</p>
     </td></tr>`).join('');
 
   const body = `
