@@ -1,6 +1,6 @@
 # When to Buy BTC
 
-The Bitcoin weather for long-term holders. Three readings (market mood, the 200-day average and distance from the all-time high) add up to one temperature: **Cold, Mild or Hot**. Descriptive only, never advice.
+The Bitcoin weather for long-term holders. Three readings (market mood, the 200-day average and distance from the all-time high), plus one step for a 5% day, add up to one temperature: **Cold, Mild or Hot**. Descriptive only, never advice.
 
 🌐 [whentobuybtc.xyz](https://whentobuybtc.xyz) · 🇩🇪 [whentobuybtc.xyz/wann-bitcoin-kaufen](https://whentobuybtc.xyz/wann-bitcoin-kaufen)
 

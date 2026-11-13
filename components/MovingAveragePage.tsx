@@ -60,13 +60,13 @@ export default function MovingAveragePage({ m, lang }: { m: MarketSnapshot; lang
     { q: 'Wo liegt die 200-Tage-Linie von Bitcoin heute?', a: `Bei ${eur(m.ma200, lang)}. Der Kurs liegt ${dist} ${dir} der Linie. Berechnet aus den Tageskursen der letzten 200 Tage in Euro (Quelle: CoinGecko).` },
     { q: 'Was bedeutet es, wenn Bitcoin unter der 200-Tage-Linie liegt?', a: 'Der Kurs ist günstiger als im Schnitt der letzten gut sechs Monate. In der Vergangenheit lagen Bärenmärkte wie 2018, 2022 und das Frühjahr 2020 klar unter der Linie. Das beschreibt den Trend, nicht den nächsten Kurs.' },
     { q: 'Was ist der Unterschied zwischen GD 200 und 200-Wochen-Linie?', a: 'Der GD 200 (200-Tage-Durchschnitt) zeigt den mittelfristigen Trend der letzten gut sechs Monate. Die 200-Wochen-Linie umfasst knapp vier Jahre und damit etwa einen ganzen Halving-Zyklus. Sie reagiert viel langsamer.' },
-    { q: 'Ist die 200-Tage-Linie ein Kaufsignal?', a: 'Nein. Sie zeigt, wo der Kurs im Vergleich zu seinem eigenen Trend steht. When to Buy BTC nutzt sie als einen von drei Messwerten für die Markttemperatur und gibt keine Kauf- oder Verkaufsempfehlung.' },
+    { q: 'Ist die 200-Tage-Linie ein Kaufsignal?', a: 'Nein. Sie zeigt, wo der Kurs im Vergleich zu seinem eigenen Trend steht. When to Buy BTC nutzt sie als einen von drei Messwerten (plus einen Schritt an Tagen mit 5 % Bewegung) für die Markttemperatur und gibt keine Kauf- oder Verkaufsempfehlung.' },
     { q: 'Wie oft wird der Wert aktualisiert?', a: 'Der Kurs wird laufend abgefragt, die 200-Tage-Linie mit jedem neuen Tageskurs neu berechnet.' },
   ] : [
     { q: "What is Bitcoin's 200-day moving average today?", a: `It is ${eur(m.ma200, lang)}. The price is ${dist} ${dir} it. Calculated from the last 200 daily prices in euros (source: CoinGecko).` },
     { q: 'What does it mean when Bitcoin is below the 200-day moving average?', a: 'The price is cheaper than its average over the last six-plus months. In the past, bear markets such as 2018, 2022 and spring 2020 traded clearly below the line. It describes the trend, not the next move.' },
     { q: 'What is the difference between the 200-day and the 200-week moving average?', a: 'The 200-day average tracks the medium-term trend over roughly six and a half months. The 200-week average covers almost four years, about one full halving cycle, and moves far more slowly.' },
-    { q: 'Is the 200-day moving average a buy signal?', a: 'No. It shows where the price sits against its own trend. When to Buy BTC uses it as one of three readings for its market temperature and never tells anyone to buy or sell.' },
+    { q: 'Is the 200-day moving average a buy signal?', a: 'No. It shows where the price sits against its own trend. When to Buy BTC uses it as one of three readings (plus a step for any 5% day) for its market temperature and never tells anyone to buy or sell.' },
     { q: 'How often does it update?', a: 'The price is checked continuously and the 200-day average is recalculated with every new daily price.' },
   ];
 
