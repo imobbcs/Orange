@@ -1962,6 +1962,96 @@
     .chart-tf.active, .chart-tf:hover { color: var(--temp); border-color: rgba(var(--temp-rgb),0.35); background: rgba(var(--temp-rgb),0.05); }
   </style>
   <!-- ═══ FULL PAGE V2: CSS (end) ═══ -->
+  <!-- ═══ POLISH: studio pass (start) ═══ -->
+  <style>
+  /* Same look, tightened: alignment, fit, readability, focus. Nothing here changes colours, type or content. */
+
+  /* 1. One grid. The Why section (was 1400 wide) and the footer (was edge to edge) now share the 1200 column
+        every other section uses, so every left edge on the page lines up. */
+  #signal .section-inner { max-width: 1200px; }
+  @media (min-width: 769px) { footer { padding-inline: max(4rem, calc((100vw - 1200px) / 2)); } }
+
+  /* 2. The hero fits the screen. On laptops the price and the word were sized by width only, which pushed the
+        three readings and the signup below the fold. Their size now also follows the screen height. */
+  @media (min-width: 769px) and (max-height: 980px) {
+    .temp-hero .hero-content { padding-top: calc(var(--bar-height) + 68px); padding-bottom: 48px; }
+    .temp-hero #hero-price { font-size: clamp(4.4rem, min(calc((100vw - 56px) / (var(--chars) * 0.5)), 19svh), 13rem); }
+    .temp-hero .hero-state { font-size: clamp(4rem, 13.5svh, 9rem); margin-top: 0.7rem; }
+    .temp-hero .hero-sentence { font-size: clamp(1.15rem, 2.9svh, 1.6rem); min-height: 0; margin-top: 0.4rem; }
+    .temp-hero .hero-scale { margin-top: clamp(0.9rem, 2.4svh, 1.9rem); }
+    .temp-hero .hero-strip { margin-top: clamp(0.7rem, 1.8svh, 1.6rem); }
+    .temp-hero .hero-strip-cell, .temp-hero .hero-strip-cell.fg { padding-block: clamp(8px, 1.4svh, 14px); }
+    .hero-since { margin-top: 8px; }
+    .hero-capture { margin-top: clamp(0.6rem, 1.6svh, 1.4rem); }
+  }
+  @media (min-width: 769px) and (max-height: 820px) {
+    .temp-hero .hero-content { padding-top: calc(var(--bar-height) + 56px); padding-bottom: 36px; }
+    .temp-hero #hero-price { font-size: clamp(4.4rem, min(calc((100vw - 56px) / (var(--chars) * 0.5)), 16.5svh), 13rem); }
+    .temp-hero .hero-state { font-size: clamp(3.6rem, 11.5svh, 9rem); margin-top: 0.5rem; }
+    .temp-hero .hero-price-change { margin-top: 0.4rem; }
+  }
+
+  /* 3. The top bar stays readable while scrolling: content used to slide under the logo and language switch. */
+  nav.is-scrolled { background: rgba(9,8,10,0.88); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  @media (min-width: 769px) { nav.is-scrolled { padding-block: 1rem; } }
+
+  /* 4. Tablet: the Sunday-email block sat centred and narrow while every other section starts at the left edge. */
+  @media (max-width: 768px) {
+    .push-inner { align-items: stretch; }
+    .push-copy { flex: none; width: 100%; max-width: 560px; }
+    .push-preview-col { align-self: center; }
+  }
+
+  /* 5. Desktop reading cards: the same row sits at the same height in all three, whatever wraps. */
+  @media (min-width: 769px) {
+    @supports (grid-template-rows: subgrid) {
+      .why-v2 .instrument-metric, .why-v2 .instrument-metric.primary { display: grid; grid-template-rows: subgrid; grid-row: span 7; row-gap: 0; align-content: start; }
+      .why-v2 .instrument-metric-id { grid-row: 1; }
+      .why-v2 .instrument-metric > .instrument-value, .why-v2 .instrument-metric > div[style] { grid-row: 2; }
+      .why-v2 .instrument-sub { grid-row: 3; }
+      .why-v2 .fp-line { grid-row: 4; }
+      .why-v2 .fp-scale { grid-row: 5; }
+      .why-v2 .fp-scale-l { grid-row: 6; }
+      .why-v2 .fp-more { grid-row: 7; }
+      .why-v2 .instrument-desc { grid-row: 8; }
+    }
+    .fp-move { padding: 16px 20px; }
+  }
+
+  /* 6. Readable answers. FAQ answers ran 12.5px type across the full 1200px (about 190 characters a line). */
+  .faq-answer-inner { font-size: 0.875rem; max-width: 68ch; }
+  @media (max-width: 768px) { .faq-answer-inner { font-size: 0.8125rem; } }
+
+  /* 7. No stranded last words. */
+  .section-title, .push-title { text-wrap: balance; }
+  .section-sub, .push-sub, .fp-line, .fp-move-line, .fp-together p, .faq-answer-inner p, .instrument-desc, .cx-fine { text-wrap: pretty; }
+
+  /* 8. Small phones: the top-bar sentence was cut off with "…". Under 400px it shows the short name instead. */
+  .announce-text-short { display: none; }
+  @media (max-width: 400px) {
+    .announce-text { display: none; }
+    .announce-text-short { display: inline; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; color: rgba(237,232,222,0.72); white-space: nowrap; }
+  }
+  /*    …and the calculator's "BTC · put in" line breaks cleanly into two lines instead of stranding "in". */
+  .cx-sub span { white-space: nowrap; }
+  @media (max-width: 380px) { .cx-sub .cx-dot { display: none; } .cx-sub #cx-btc, .cx-sub #cx-put { display: block; } }
+  /*    …and the chart legend stops spreading over three tall rows. */
+  @media (max-width: 480px) { .chart-legend { row-gap: 0.5rem; } .chart-annotation-ma { display: none !important; } /* it sat on top of the price-axis label; the legend already names the dashed line */ }
+
+  /* 9. One clear keyboard focus everywhere (it was a faint 1px line, and missing on the share links and the amount field). */
+  :focus-visible { outline: 2px solid var(--temp, #F2C46B); outline-offset: 3px; }
+  .hero-share button:focus-visible, .cx-share button:focus-visible, #cx-amt:focus-visible { outline: 2px solid var(--temp, #F2C46B); outline-offset: 4px; }
+  .email-row.quiet .email-input:focus-visible { outline: none; }
+  .email-row.quiet:focus-within { border-bottom-color: var(--temp); box-shadow: 0 1px 0 0 var(--temp); }
+
+  /* 10. No data at all (first load with every source down): a quiet placeholder, never a verdict. */
+  .temp-hero.no-data #hero-price, .temp-hero.no-data .hero-state, .temp-hero.no-data .hero-sentence, .temp-hero.no-data .hero-scale,
+  .temp-hero.no-data .hero-since, .temp-hero.no-data .hero-strip, .temp-hero.no-data .hero-actions, .temp-hero.no-data .hero-share { display: none; }
+  .temp-hero.no-data .hero-price-change { font-family: var(--display); font-style: italic; font-size: 1.3rem; letter-spacing: 0; margin-top: 2.5rem; color: var(--muted) !important; }
+  .temp-hero.no-data .hero-capture { opacity: 1; margin-top: 2.5rem; }
+  .hero.temp-hero.no-data { min-height: 0; padding-bottom: 2rem; }
+  </style>
+  <!-- ═══ POLISH: studio pass (end) ═══ -->
 
   <!-- ═══ SITE V3: CSS (start) ═══ -->
   <style>
@@ -2159,6 +2249,7 @@
 <div class="announce-bar" role="banner">
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64" style="display:inline-block;vertical-align:middle;flex-shrink:0;" aria-hidden="true"><g transform="translate(0.006,-0.003)"><path fill="#f7931a" d="m63.033,39.744c-4.274,17.143-21.637,27.576-38.782,23.301-17.138-4.274-27.571-21.638-23.295-38.78,4.272-17.145,21.635-27.579,38.775-23.305,17.144,4.274,27.576,21.64,23.302,38.784z"/><path fill="#ffffff" d="m46.103,27.444c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4,5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439,5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934,3.75s2.605,0.597,2.55,0.634c1.422,0.355,1.679,1.296,1.636,2.042l-1.638,6.571c0.098,0.025,0.225,0.061,0.365,0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296,9.205c-0.174,0.432-0.615,1.08-1.609,0.834,0.035,0.051-2.552-0.637-2.552-0.637l-1.743,4.019,4.569,1.139c0.85,0.213,1.683,0.436,2.503,0.646l-1.453,5.834,3.507,0.875,1.439-5.772c0.958,0.26,1.888,0.5,2.798,0.726l-1.434,5.745,3.511,0.875,1.453-5.823c5.987,1.133,10.489,0.676,12.384-4.739,1.527-4.36-0.076-6.875-3.226-8.515,2.294-0.529,4.022-2.038,4.483-5.155zm-8.022,11.249c-1.085,4.36-8.426,2.003-10.806,1.412l1.928-7.729c2.38,0.594,10.012,1.77,8.878,6.317zm1.086-11.312c-0.99,3.966-7.1,1.951-9.082,1.457l1.748-7.01c1.982,0.494,8.365,1.416,7.334,5.553z"/></g></svg>
   <span class="announce-text" data-i18n="announceText">The Bitcoin weather, every Sunday.</span>
+  <span class="announce-text-short" data-i18n="alertsLabel">The Sunday email</span>
   <a href="#alerts" class="announce-link" data-i18n="announceLink" data-umami-event="announce-bar-click">Get it free →</a>
 </div>
 
@@ -2896,6 +2987,7 @@
       emailOk: 'Check your inbox to confirm.',
       emailErr: 'Something went wrong. Please try again.',
       emailInvalid: 'Please enter a valid email address.',
+      emailTooMany: 'Too many tries. Please wait a little, then try again.',
       // Calculator inline CTA
       emailConfirmed: 'You\'re in. The first email arrives on Sunday.',
       emailUnsubscribed: 'You\'ve been unsubscribed.',
@@ -3094,6 +3186,7 @@
       emailOk: 'Bitte bestätige die Mail in deinem Postfach.',
       emailErr: 'Etwas ist schiefgelaufen. Bitte versuch es noch einmal.',
       emailInvalid: 'Bitte eine gültige E-Mail-Adresse eingeben.',
+      emailTooMany: 'Zu viele Versuche. Bitte warte kurz und versuch es dann noch einmal.',
       emailConfirmed: 'Du bist dabei. Die erste Mail kommt am Sonntag.',
       emailUnsubscribed: 'Du wurdest abgemeldet.',
       emailLinkError: 'Der Link hat nicht funktioniert. Bitte melde dich unten erneut an.',
@@ -3290,16 +3383,23 @@
 
   // ── PRICE FETCH ──
   async function fetchPrice() {
+    const hero = document.querySelector('.temp-hero');
     try {
       const res = await fetch('/api/price');
+      if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
+      if (typeof data.eur !== 'number' || !isFinite(data.eur)) throw new Error('No price in response');
       applyPrice(data);
+      if (hero) hero.classList.remove('no-data');
     } catch (e) {
-      document.getElementById('price-value').textContent = '—';
+      // A failed refresh never throws away numbers already on screen (server snapshot or an earlier fetch).
+      if (typeof currentPrice === 'number' && isFinite(currentPrice)) return;
+      document.getElementById('price-value').textContent = '–';
       const changeEl = document.getElementById('price-change');
-      changeEl.textContent = 'Data temporarily unavailable';
+      changeEl.textContent = currentLang === 'de' ? 'Daten gerade nicht verfügbar' : 'Data temporarily unavailable';
       changeEl.className = 'change';
-      changeEl.style.color = 'var(--grey)';
+      changeEl.style.color = '#8A837A';
+      if (hero) hero.classList.add('no-data');
     }
   }
   // Renders an /api response; also fed the server snapshot (see SERVER SNAPSHOT below) so the hero paints at once
@@ -3528,7 +3628,7 @@
 
   // ── SIGNAL ENGINE ──
   function updateSignal() {
-    if (fgValue === null || maPrice === null || currentPrice === null || athDropPct === null) return;
+    if (![fgValue, maPrice, currentPrice, athDropPct].every(v => typeof v === 'number' && isFinite(v))) return;
 
     const diffPct = (currentPrice - maPrice) / maPrice * 100;
     const sig = wtbSignal(fgValue, window._fgLabel, diffPct, athDropPct, currentChange24h);
@@ -3935,8 +4035,8 @@
     const dataMax = Math.max(...vals);
     const dataMin = Math.min(...vals);
     const dataMid = (dataMax + dataMin) / 2;
-    ctx.fillStyle = 'rgba(74,69,64,0.8)';
-    ctx.font = '10px "DM Mono", monospace';
+    ctx.fillStyle = 'rgba(138,131,122,0.95)';
+    ctx.font = '11px "DM Mono", monospace';
     ctx.textAlign = 'right';
     [dataMax, dataMid, dataMin].forEach(v => {
       const y = toY(v);
@@ -3946,16 +4046,17 @@
     });
 
     // X-axis: month/year labels — subtle
-    ctx.fillStyle = 'rgba(74,69,64,0.5)';
+    ctx.fillStyle = 'rgba(138,131,122,0.8)';
     ctx.textAlign = 'center';
-    ctx.font = '9px "DM Mono", monospace';
+    ctx.font = '11px "DM Mono", monospace';
     const step = Math.max(1, Math.floor(stitchedPrices.length / 6));
+    let lastLabelRight = -Infinity; // skip a label that would touch the previous one (narrow phones)
     stitchedPrices.forEach((p, i) => {
       if (i % step === 0 || i === stitchedPrices.length - 1) {
         const d = new Date(p[0]);
-        const label = d.toLocaleDateString('en', { month: 'short', year: '2-digit' }).replace(' ', "'");
-        const x = toX(i);
-        if (x > 20 && x < W - pad.right - 10) ctx.fillText(label, x, H - 6);
+        const label = d.toLocaleDateString(currentLang === 'de' ? 'de' : 'en', { month: 'short', year: '2-digit' }).replace(' ', "'");
+        const x = toX(i), half = ctx.measureText(label).width / 2;
+        if (x - half > 4 && x + half < W - pad.right - 4 && x - half > lastLabelRight + 12) { ctx.fillText(label, x, H - 6); lastLabelRight = x + half; }
       }
     });
     // Hide loading skeleton once chart has rendered
@@ -4064,8 +4165,15 @@
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ email, lang: currentLang }),
     })
-      .then(r => r.json())
+      .then(r => r.json().then(data => { if (r.status === 429) data.tooMany = true; return data; }))
       .then(data => {
+        if (data.tooMany) {
+          msg.textContent = t.emailTooMany || t.emailErr;
+          msg.className   = 'email-msg err';
+          btn.disabled    = false;
+          btn.textContent = t[resetKey];
+          return;
+        }
         if (data.ok) {
           msg.textContent = t.emailOk;
           msg.className   = 'email-msg ok';
@@ -4227,6 +4335,15 @@
 
   init();
   setInterval(fetchPrice, 5 * 60 * 1000);
+
+  // Top bar gets a backdrop once the page scrolls, so content never shows through the logo
+  (function () {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    const set = () => nav.classList.toggle('is-scrolled', window.scrollY > 24);
+    window.addEventListener('scroll', set, { passive: true });
+    set();
+  })();
 
   // ── INSTRUMENT PANEL: scan-in + count-up on first reveal ──
   (function() {
